@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="ShellView"
     Width="800"
     Height="900"
@@ -65,23 +66,68 @@
                     MinWidth="100"
                     Margin="0,5"
                     Content="Loses" />
-                <!--  Attack spear  -->
-                <Label
-                    x:Name="SelectedCalculatorData_AtkSpear"
+                <!--  Unit Image row  -->
+                <ItemsControl
                     Grid.Row="0"
                     Grid.Column="1"
-                    MinWidth="100"
-                    Margin="0,5" />
-                <Label
+                    ItemsSource="{Binding SelectedCalculatorData.Units, Mode=OneWay, PresentationTraceSources.TraceLevel=High}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Image
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Width="40">
+                                    <Image.Source>
+                                        <BitmapImage DecodePixelWidth="300" UriSource="{Binding ImagePath}" />
+                                    </Image.Source>
+                                </Image>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <!--  Unit Amount row  -->
+                <ItemsControl
                     Grid.Row="1"
                     Grid.Column="1"
-                    MinWidth="100"
-                    Margin="0,5" />
-                <Label
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    MinWidth="100"
-                    Margin="0,5" />
+                    ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay, PresentationTraceSources.TraceLevel=High}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="2,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    MinWidth="45"
+                                    MaxWidth="45"
+                                    HorizontalContentAlignment="Center"
+                                    Content="{Binding NumberOnAttack}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
 
             </Grid>
 
@@ -91,7 +137,7 @@
 
             <!--  Input table  -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
 
@@ -118,6 +164,7 @@
             <ItemsControl
                 Grid.Row="1"
                 Grid.Column="0"
+                Grid.ColumnSpan="3"
                 ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay, PresentationTraceSources.TraceLevel=High}">
 
                 <ItemsControl.ItemTemplate>
@@ -151,12 +198,16 @@
                                 Grid.Column="1"
                                 Width="100"
                                 Margin="5,5"
+                                MaxLength="5"
+                                MaxLines="1"
                                 Text="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBox
                                 Grid.Row="0"
                                 Grid.Column="2"
                                 Width="100"
                                 Margin="5,5"
+                                MaxLength="5"
+                                MaxLines="1"
                                 Text="{Binding NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                     </DataTemplate>

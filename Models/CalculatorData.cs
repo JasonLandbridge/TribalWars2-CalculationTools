@@ -8,20 +8,7 @@ namespace TribalWars2_CalculationTools.Models
 {
     public class CalculatorData : INotifyPropertyChanged
     {
-        private int _atkSpear;
-        public int AtkSpear
-        {
-            get => _atkSpear;
-            set
-            {
-                if (_atkSpear != value)
-                {
-                    _atkSpear = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        
+      
         public Spearman Spearman { get; set; }
         public Swordsman Swordsman { get; set; }
 

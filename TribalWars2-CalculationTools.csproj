@@ -23,6 +23,8 @@
 
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.89-alpha" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="3.5.0" />
+    <PackageReference Include="MiqM.Xceed.Wpf.Toolkit.NETCore" Version="3.4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
