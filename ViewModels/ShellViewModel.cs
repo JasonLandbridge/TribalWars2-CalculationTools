@@ -10,12 +10,9 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         public ShellViewModel()
         {
-            CalculatorData.Add(new CalculatorData
-            {
-                AtkSpear = 999,
-                DefSpear = 888
-            });
+            CalculatorData.Add(new CalculatorData());
             SelectedCalculatorData = CalculatorData[0];
+
         }
 
         public BindableCollection<CalculatorData> CalculatorData

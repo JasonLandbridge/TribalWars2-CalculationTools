@@ -17,11 +17,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Img\unit_spearman.png" />
+    <None Remove="Resources\Img\unit_swordsman.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.89-alpha" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Class\" />
+    <Resource Include="Resources\Img\unit_spearman.png" />
+    <Resource Include="Resources\Img\unit_swordsman.png" />
   </ItemGroup>
 
 </Project>
