@@ -17,8 +17,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Img\unit_archer.png" />
+    <None Remove="Resources\Img\unit_axe_fighter.png" />
+    <None Remove="Resources\Img\unit_berserker.png" />
+    <None Remove="Resources\Img\unit_catapult.png" />
+    <None Remove="Resources\Img\unit_heavy_cavalry.png" />
+    <None Remove="Resources\Img\unit_light_cavalry.png" />
+    <None Remove="Resources\Img\unit_mounted_archer.png" />
+    <None Remove="Resources\Img\unit_nobleman.png" />
+    <None Remove="Resources\Img\unit_paladin.png" />
+    <None Remove="Resources\Img\unit_ram.png" />
     <None Remove="Resources\Img\unit_spearman.png" />
     <None Remove="Resources\Img\unit_swordsman.png" />
+    <None Remove="Resources\Img\unit_trebuchet.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,8 +39,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Img\unit_archer.png" />
+    <Resource Include="Resources\Img\unit_axe_fighter.png" />
+    <Resource Include="Resources\Img\unit_berserker.png" />
+    <Resource Include="Resources\Img\unit_catapult.png" />
+    <Resource Include="Resources\Img\unit_heavy_cavalry.png" />
+    <Resource Include="Resources\Img\unit_light_cavalry.png" />
+    <Resource Include="Resources\Img\unit_mounted_archer.png" />
+    <Resource Include="Resources\Img\unit_nobleman.png" />
+    <Resource Include="Resources\Img\unit_paladin.png" />
+    <Resource Include="Resources\Img\unit_ram.png" />
     <Resource Include="Resources\Img\unit_spearman.png" />
     <Resource Include="Resources\Img\unit_swordsman.png" />
+    <Resource Include="Resources\Img\unit_trebuchet.png" />
   </ItemGroup>
 
 </Project>

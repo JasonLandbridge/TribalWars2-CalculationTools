@@ -8,9 +8,6 @@ namespace TribalWars2_CalculationTools.Models
 {
     public class CalculatorData : INotifyPropertyChanged
     {
-      
-        public Spearman Spearman { get; set; }
-        public Swordsman Swordsman { get; set; }
 
         public BindableCollection<BaseUnit> Units { get; set; } = new BindableCollection<BaseUnit>();
 
@@ -18,9 +15,18 @@ namespace TribalWars2_CalculationTools.Models
         {
             Units.Add(new Spearman());
             Units.Add(new Swordsman());
+            Units.Add(new AxeFighter());
+            Units.Add(new Archer());
+            Units.Add(new LightCavalry());
+            Units.Add(new MountedArcher());
+            Units.Add(new HeavyCavalry());
+            Units.Add(new Ram());
+            Units.Add(new Catapult());
+            Units.Add(new Berserker());
+            Units.Add(new Trebuchet());
+            Units.Add(new Nobleman());
+            Units.Add(new Paladin());
         }
-
-        public int DefSpear { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
