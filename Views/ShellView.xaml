@@ -1,0 +1,141 @@
+﻿<Window
+    x:Class="TribalWars2_CalculationTools.Views.ShellView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="ShellView"
+    Width="800"
+    Height="450"
+    PresentationTraceSources.TraceLevel="High"
+    mc:Ignorable="d">
+    <!--  Main Grid  -->
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Result Grid  -->
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--  Attack Grid  -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!--  Attack header  -->
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    MinWidth="100"
+                    Margin="0,5"
+                    Content="Attacker" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    MinWidth="100"
+                    Margin="0,5"
+                    Content="Amount" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    MinWidth="100"
+                    Margin="0,5"
+                    Content="Loses" />
+                <!--  Attack spear  -->
+                <Label
+                    x:Name="SelectedCalculatorData_AtkSpear"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    MinWidth="100"
+                    Margin="0,5"/>
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    MinWidth="100"
+                    Margin="0,5" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    MinWidth="100"
+                    Margin="0,5" />
+
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+
+            <!--  Input table  -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                MinWidth="100"
+                Margin="0,5"
+                Content="Attack" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="2"
+                MinWidth="100"
+                Margin="0,5"
+                Content="Defense" />
+
+            <!--  Spearman row  -->
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                MinWidth="100"
+                Margin="0,5"
+                Content="Spearman" />
+            <TextBox
+                Grid.Row="1"
+                Grid.Column="1"
+                Width="100"
+                Margin="5,5"
+                Text="{Binding SelectedCalculatorData.AtkSpear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, PresentationTraceSources.TraceLevel=High}" />
+            <TextBox
+                x:Name="DefSpear"
+                Grid.Row="1"
+                Grid.Column="2"
+                Width="100"
+                Margin="5,5"
+                Text="{Binding SelectedCalculatorData.DefSpear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        </Grid>
+
+    </Grid>
+</Window>

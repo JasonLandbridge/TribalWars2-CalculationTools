@@ -5,6 +5,23 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>TribalWars2_CalculationTools</RootNamespace>
     <UseWPF>true</UseWPF>
+    <StartupObject>TribalWars2_CalculationTools.App</StartupObject>
+    <AssemblyName>TribalWars2-CalculationTools</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Design\**" />
+    <EmbeddedResource Remove="Design\**" />
+    <None Remove="Design\**" />
+    <Page Remove="Design\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Caliburn.Micro" Version="4.0.89-alpha" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Class\" />
+  </ItemGroup>
 
 </Project>
