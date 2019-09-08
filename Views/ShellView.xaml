@@ -6,10 +6,9 @@
     xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    Title="ShellView"
-    Width="800"
-    Height="900"
-    PresentationTraceSources.TraceLevel="High"
+    Title="Tribal Wars 2 Calculation Tools"
+    Width="1000"
+    Height="1200"
     mc:Ignorable="d">
     <!--  Main Grid  -->
 
@@ -43,8 +42,8 @@
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <!--  Attack header  -->
@@ -109,7 +108,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="2,0">
+                            <Grid Margin="2.5,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
@@ -240,6 +239,10 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Label
@@ -257,6 +260,7 @@
 
             <!--  Units input rows  -->
             <ItemsControl
+                x:Name="UnitsInputRows"
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
@@ -316,10 +320,83 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
+            <!--  Church input rows  -->
             <ContentControl
-                x:Name="InputRowHeaderViewModel"
+                x:Name="InputChurch"
                 Grid.Row="2"
                 Grid.Column="0" />
+            <CheckBox
+                Grid.Row="2"
+                Grid.Column="1"
+                IsChecked="{Binding SelectedCalculatorData.InputAtkChurch, Mode=TwoWay}" />
+            <CheckBox
+                Grid.Row="2"
+                Grid.Column="2"
+                IsChecked="{Binding SelectedCalculatorData.InputDefChurch, Mode=TwoWay}" />
+
+            <!--  Morale input rows  -->
+            <ContentControl
+                x:Name="InputMorale"
+                Grid.Row="3"
+                Grid.Column="0" />
+
+            <xctk:DecimalUpDown
+                Grid.Row="3"
+                Grid.Column="1"
+                Width="100"
+                Margin="5,5"
+                AllowSpin="True"
+                FormatString="P0"
+                Increment=".01"
+                Maximum="1"
+                Minimum="0"
+                Value="{Binding SelectedCalculatorData.InputMorale, Mode=TwoWay}" />
+
+            <!--  Luck input rows  -->
+            <ContentControl
+                x:Name="InputLuck"
+                Grid.Row="4"
+                Grid.Column="0" />
+
+            <xctk:IntegerUpDown
+                Grid.Row="4"
+                Grid.Column="1"
+                Width="100"
+                Margin="5,5"
+                AllowSpin="True"
+                FormatString="N0"
+                Increment="1"
+                Maximum="15"
+                Minimum="-15"
+                Value="{Binding SelectedCalculatorData.InputLuck, Mode=TwoWay}" />
+
+            <!--  Wall input rows  -->
+            <ContentControl
+                x:Name="InputWall"
+                Grid.Row="5"
+                Grid.Column="0" />
+
+            <xctk:IntegerUpDown
+                Grid.Row="5"
+                Grid.Column="1"
+                Width="100"
+                Margin="5,5"
+                AllowSpin="True"
+                FormatString="N0"
+                Increment="1"
+                Maximum="20"
+                Minimum="0"
+                Value="{Binding SelectedCalculatorData.InputWall, Mode=TwoWay}" />
+
+            <!--  Nightbonus input rows  -->
+            <ContentControl
+                x:Name="InputNightBonus"
+                Grid.Row="6"
+                Grid.Column="0" />
+            <CheckBox
+                Grid.Row="6"
+                Grid.Column="2"
+                IsChecked="{Binding SelectedCalculatorData.InputNightBonus, Mode=TwoWay}" />
 
         </Grid>
 

@@ -17,6 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Img\buildings\buildings_church.png" />
+    <None Remove="Resources\Img\buildings\buildings_wall.png" />
+    <None Remove="Resources\Img\info\info_luck.png" />
+    <None Remove="Resources\Img\info\info_morale.png" />
+    <None Remove="Resources\Img\info\info_nightbonus.png" />
     <None Remove="Resources\Img\unit_archer.png" />
     <None Remove="Resources\Img\unit_axe_fighter.png" />
     <None Remove="Resources\Img\unit_berserker.png" />
@@ -39,6 +44,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Img\buildings\buildings_church.png" />
+    <Resource Include="Resources\Img\buildings\buildings_wall.png" />
+    <Resource Include="Resources\Img\info\info_luck.png" />
+    <Resource Include="Resources\Img\info\info_morale.png" />
+    <Resource Include="Resources\Img\info\info_nightbonus.png" />
     <Resource Include="Resources\Img\unit_archer.png" />
     <Resource Include="Resources\Img\unit_axe_fighter.png" />
     <Resource Include="Resources\Img\unit_berserker.png" />
