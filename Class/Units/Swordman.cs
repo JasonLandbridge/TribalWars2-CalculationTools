@@ -14,7 +14,6 @@ namespace TribalWars2_CalculationTools.Class.Units
         public override int ClayCost { get; } = 30;
         public override int IronCost { get; } = 70;
         public override int ProvisionCost { get; } = 1;
-        public override int NumberOnDefense { get; set; } = 0;
         public override int FightingPower { get; set; } = 25;
         public override int DefenseFromInfantry { get; set; } = 55;
         public override int DefenseFromCavalry { get; set; } = 5;

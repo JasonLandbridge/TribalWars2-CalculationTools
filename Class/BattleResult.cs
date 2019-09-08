@@ -78,6 +78,8 @@ namespace TribalWars2_CalculationTools.Class
         public int LostOnDefPaladin { get; set; }
         #endregion
 
+        #region ResultList
+
         public BindableCollection<ValueType> ListOfAtkNumbers =>
             new BindableCollection<ValueType>
             {
@@ -95,7 +97,62 @@ namespace TribalWars2_CalculationTools.Class
                 new ValueType(AtkNobleman),
                 new ValueType(AtkPaladin),
             };
+        public BindableCollection<ValueType> ListOfAtkLostNumbers =>
+            new BindableCollection<ValueType>
+            {
+                new ValueType(LostOnAtkSpearman),
+                new ValueType(LostOnAtkSwordsman),
+                new ValueType(LostOnAtkAxeFighter),
+                new ValueType(LostOnAtkArcher),
+                new ValueType(LostOnAtkLightCavalry),
+                new ValueType(LostOnAtkMountedArcher),
+                new ValueType(LostOnAtkHeavyCavalry),
+                new ValueType(LostOnAtkRam),
+                new ValueType(LostOnAtkCatapult),
+                new ValueType(LostOnAtkBerserker),
+                new ValueType(LostOnAtkTrebuchet),
+                new ValueType(LostOnAtkNobleman),
+                new ValueType(LostOnAtkPaladin),
+            };
 
+        public BindableCollection<ValueType> ListOfDefNumbers =>
+            new BindableCollection<ValueType>
+            {
+                new ValueType(DefSpearman),
+                new ValueType(DefSwordsman),
+                new ValueType(DefAxeFighter),
+                new ValueType(DefArcher),
+                new ValueType(DefLightCavalry),
+                new ValueType(DefMountedArcher),
+                new ValueType(DefHeavyCavalry),
+                new ValueType(DefRam),
+                new ValueType(DefCatapult),
+                new ValueType(DefBerserker),
+                new ValueType(DefTrebuchet),
+                new ValueType(DefNobleman),
+                new ValueType(DefPaladin),
+            };
+
+        public BindableCollection<ValueType> ListOfDefLostNumbers =>
+            new BindableCollection<ValueType>
+            {
+                new ValueType(LostOnDefSpearman),
+                new ValueType(LostOnDefSwordsman),
+                new ValueType(LostOnDefAxeFighter),
+                new ValueType(LostOnDefArcher),
+                new ValueType(LostOnDefLightCavalry),
+                new ValueType(LostOnDefMountedArcher),
+                new ValueType(LostOnDefHeavyCavalry),
+                new ValueType(LostOnDefRam),
+                new ValueType(LostOnDefCatapult),
+                new ValueType(LostOnDefBerserker),
+                new ValueType(LostOnDefTrebuchet),
+                new ValueType(LostOnDefNobleman),
+                new ValueType(LostOnDefPaladin),
+            };
+        
+
+        #endregion
         public BattleResult()
         {
 
@@ -140,6 +197,21 @@ namespace TribalWars2_CalculationTools.Class
 
             this.AtkPaladin = list[12].NumberOnAttack;
             this.DefPaladin = list[12].NumberOnDefense;
+        }
+
+        public void KillAllAtkInfantry()
+        {
+            LostOnAtkSpearman = AtkSpearman;
+            LostOnAtkSwordsman = AtkSwordsman;
+            LostOnAtkAxeFighter = AtkAxeFighter;
+            LostOnAtkArcher = AtkArcher;
+        }
+        public void KillAllDefInfantry()
+        {
+            LostOnDefSpearman = DefSpearman;
+            LostOnDefSwordsman = DefSwordsman;
+            LostOnDefAxeFighter = DefAxeFighter;
+            LostOnDefArcher = DefArcher;
         }
     }
 }

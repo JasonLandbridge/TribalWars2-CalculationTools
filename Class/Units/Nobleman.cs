@@ -22,8 +22,6 @@ namespace TribalWars2_CalculationTools.Class.Units
         public override TimeSpan BaseRecruitmentTime { get; set; } = new TimeSpan(3, 0, 0);
         public override TimeSpan TravelTimePerTile { get; set; } = new TimeSpan(0, 35, 0);
 
-        public override int NumberOnDefense { get; set; } = 0;
-
         public Nobleman(CalculatorData parent) : base(parent)
         {
 

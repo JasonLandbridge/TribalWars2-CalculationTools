@@ -13,6 +13,7 @@ namespace TribalWars2_CalculationTools.Class.Units
 
         private int _numberOnAttackLost;
         private int _numberOnAttack;
+        private int _numberOnDefense;
         private CalculatorData _parent;
         public abstract string Name { get; }
         public abstract UnitType UnitType { get; set; }
@@ -47,20 +48,16 @@ namespace TribalWars2_CalculationTools.Class.Units
             }
         }
 
-        public abstract int NumberOnDefense { get; set; }
-
-        public int NumberOnAttackLost
+        public int NumberOnDefense
         {
-            get => _numberOnAttackLost;
+            get => _numberOnDefense;
             set
             {
-                _numberOnAttackLost = value;
-                NotifyOfPropertyChange(() => NumberOnAttackLost);
-
+                _numberOnDefense = value;
+                NotifyOfPropertyChange(() => NumberOnDefense);
+                this.PropertyUpdated();
             }
         }
-
-        public int NumberOnDefenseLost { get; set; }
 
         public string ImagePath => $"/Resources/Img/unit_{this.Name.ToLower().Replace(' ', '_')}.png";
 

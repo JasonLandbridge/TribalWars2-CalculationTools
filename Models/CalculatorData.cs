@@ -295,11 +295,24 @@ namespace TribalWars2_CalculationTools.Models
         }
         public void SimulateBattle()
         {
+            // Based on: https://www.youtube.com/watch?v=SG_qI1-go88
+
             BattleResult result = new BattleResult(Units.ToList());
 
+            // First Round - Infantry
+            int atkInfantry = GetTotalAttackInfantry();
+            int defInfantry = GetTotalDefenseInfantry();
 
-            Spearman.NumberOnAttackLost = Spearman.NumberOnAttack;
-            Swordsman.NumberOnAttackLost = Swordsman.NumberOnAttack;
+            if (atkInfantry > defInfantry)
+            {
+                // Attack won, kill off all defense infantry
+                result.KillAllDefInfantry();
+            }
+            else if (atkInfantry < defInfantry)
+            {
+                // Defense won, kill off all attack infantry
+                result.KillAllAtkInfantry();
+            }
 
             LastBattleResult = result;
 

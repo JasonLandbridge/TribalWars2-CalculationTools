@@ -20,8 +20,6 @@ namespace TribalWars2_CalculationTools.Class.Units
         public override TimeSpan BaseRecruitmentTime { get; set; } = new TimeSpan(0, 20, 0);
         public override TimeSpan TravelTimePerTile { get; set; } = new TimeSpan(0, 14, 0);
 
-        public override int NumberOnDefense { get; set; } = 0;
-
         public Berserker(CalculatorData parent) : base(parent)
         {
 

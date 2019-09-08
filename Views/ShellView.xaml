@@ -132,7 +132,7 @@
                     <ItemsControl
                         Grid.Row="2"
                         Grid.Column="1"
-                        ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay}">
+                        ItemsSource="{Binding SelectedCalculatorData.LastBattleResult.ListOfAtkLostNumbers}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -153,15 +153,14 @@
                                         MinWidth="45"
                                         MaxWidth="45"
                                         HorizontalContentAlignment="Center"
-                                        Content="{Binding NumberOnAttackLost}" />
+                                        Content="{Binding Value}" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-
                 </Grid>
-
             </GroupBox>
+
             <!--  Defend Grid  -->
             <GroupBox
                 Grid.Row="1"
@@ -231,7 +230,7 @@
                     <ItemsControl
                         Grid.Row="1"
                         Grid.Column="1"
-                        ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay}">
+                        ItemsSource="{Binding SelectedCalculatorData.LastBattleResult.ListOfDefNumbers}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -252,7 +251,37 @@
                                         MinWidth="45"
                                         MaxWidth="45"
                                         HorizontalContentAlignment="Center"
-                                        Content="{Binding NumberOnDefense}" />
+                                        Content="{Binding Value}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <!--  Unit Number Lost row  -->
+                    <ItemsControl
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        ItemsSource="{Binding SelectedCalculatorData.LastBattleResult.ListOfDefLostNumbers}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="2.5,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        MinWidth="45"
+                                        MaxWidth="45"
+                                        HorizontalContentAlignment="Center"
+                                        Content="{Binding Value}" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
