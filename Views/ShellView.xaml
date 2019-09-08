@@ -34,7 +34,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <!--  Attack Grid  -->
-            <Grid>
+            <Grid Grid.Row="0" Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="auto" />
@@ -128,14 +128,108 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
+            </Grid>
+            <!--  Defend Grid  -->
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!--  Attack header  -->
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    MinWidth="100"
+                    Margin="0,5"
+                    Content="Defender" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    MinWidth="100"
+                    Margin="0,5"
+                    Content="Amount" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    MinWidth="100"
+                    Margin="0,5"
+                    Content="Loses" />
+                <!--  Unit Image row  -->
+                <ItemsControl
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    ItemsSource="{Binding SelectedCalculatorData.Units, Mode=OneWay, PresentationTraceSources.TraceLevel=High}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Image
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Width="40">
+                                    <Image.Source>
+                                        <BitmapImage DecodePixelWidth="300" UriSource="{Binding ImagePath}" />
+                                    </Image.Source>
+                                </Image>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <!--  Unit Amount row  -->
+                <ItemsControl
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay, PresentationTraceSources.TraceLevel=High}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="2,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    MinWidth="45"
+                                    MaxWidth="45"
+                                    HorizontalContentAlignment="Center"
+                                    Content="{Binding NumberOnDefense}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
             </Grid>
 
         </Grid>
 
+        <!--  Input table  -->
         <Grid Grid.Row="1" Grid.Column="1">
-
-            <!--  Input table  -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="auto" />
@@ -143,6 +237,7 @@
 
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -192,27 +287,39 @@
                                     Margin="0,5"
                                     Content="{Binding Name}" />
                             </StackPanel>
-
-                            <TextBox
+                            <xctk:IntegerUpDown
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Width="100"
                                 Margin="5,5"
-                                MaxLength="5"
-                                MaxLines="1"
-                                Text="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <TextBox
+                                AllowSpin="True"
+                                FormatString="N0"
+                                Increment="1"
+                                Maximum="99999"
+                                Minimum="0"
+                                TextAlignment="Center"
+                                Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <xctk:IntegerUpDown
                                 Grid.Row="0"
                                 Grid.Column="2"
                                 Width="100"
                                 Margin="5,5"
-                                MaxLength="5"
-                                MaxLines="1"
-                                Text="{Binding NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                AllowSpin="True"
+                                FormatString="N0"
+                                Increment="1"
+                                Maximum="99999"
+                                Minimum="0"
+                                TextAlignment="Center"
+                                Value="{Binding NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <ContentControl
+                x:Name="InputRowHeaderViewModel"
+                Grid.Row="2"
+                Grid.Column="0" />
 
         </Grid>
 

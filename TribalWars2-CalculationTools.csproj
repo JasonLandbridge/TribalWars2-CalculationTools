@@ -54,4 +54,8 @@
     <Resource Include="Resources\Img\unit_trebuchet.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\UserControls\" />
+  </ItemGroup>
+
 </Project>

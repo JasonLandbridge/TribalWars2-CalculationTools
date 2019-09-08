@@ -4,23 +4,20 @@ using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.ViewModels
 {
-    public class ShellViewModel : Screen
+    public class ShellViewModel : Conductor<object>
     {
         private CalculatorData _selectedCalculatorData;
-        private BindableCollection<CalculatorData> _calculatorData = new BindableCollection<CalculatorData>();
 
         public ShellViewModel()
         {
+            this.InputRowHeaderViewModel = new InputRowHeaderViewModel("ViewModel First Set Content", "");
+
             CalculatorData.Add(new CalculatorData());
             SelectedCalculatorData = CalculatorData[0];
 
         }
 
-        public BindableCollection<CalculatorData> CalculatorData
-        {
-            get => _calculatorData;
-            set => _calculatorData = value;
-        }
+        public BindableCollection<CalculatorData> CalculatorData { get; set; } = new BindableCollection<CalculatorData>();
 
         public CalculatorData SelectedCalculatorData
         {
@@ -30,6 +27,15 @@ namespace TribalWars2_CalculationTools.ViewModels
                 _selectedCalculatorData = value;
                 NotifyOfPropertyChange(() => SelectedCalculatorData);
             }
+        }
+
+
+        /// <summary>Gets the ViewModelFirst test control view model.</summary>
+        /// <value>The ViewModelFirst test control view model.</value>
+        public InputRowHeaderViewModel InputRowHeaderViewModel
+        {
+            get;
+            private set;
         }
     }
 }
