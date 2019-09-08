@@ -33,197 +33,234 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <!--  Attack Grid  -->
-            <Grid Grid.Row="0" Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <!--  Attack header  -->
-                <Label
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    MinWidth="100"
-                    Margin="0,5"
-                    Content="Attacker" />
-                <Label
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    MinWidth="100"
-                    Margin="0,5"
-                    Content="Amount" />
-                <Label
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    MinWidth="100"
-                    Margin="0,5"
-                    Content="Loses" />
-                <!--  Unit Image row  -->
-                <ItemsControl
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    ItemsSource="{Binding SelectedCalculatorData.Units, Mode=OneWay, PresentationTraceSources.TraceLevel=High}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Image
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    Width="40">
-                                    <Image.Source>
-                                        <BitmapImage DecodePixelWidth="300" UriSource="{Binding ImagePath}" />
-                                    </Image.Source>
-                                </Image>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <!--  Unit Amount row  -->
-                <ItemsControl
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay, PresentationTraceSources.TraceLevel=High}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="2.5,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    MinWidth="45"
-                                    MaxWidth="45"
-                                    HorizontalContentAlignment="Center"
-                                    Content="{Binding NumberOnAttack}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+            <GroupBox
+                Grid.Row="0"
+                Grid.Column="0"
+                Header="Attacking units">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <!--  Attack header  -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        MinWidth="100"
+                        Margin="0,5"
+                        Content="Attacker" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        MinWidth="100"
+                        Margin="0,5"
+                        Content="Amount" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        MinWidth="100"
+                        Margin="0,5"
+                        Content="Loses" />
+                    <!--  Unit Image row  -->
+                    <ItemsControl
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        ItemsSource="{Binding SelectedCalculatorData.Units, Mode=OneWay}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Width="40"
+                                        Source="{Binding ImagePath}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <!--  Unit Amount row  -->
+                    <ItemsControl
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        ItemsSource="{Binding SelectedCalculatorData.LastBattleResult.ListOfAtkNumbers}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="2.5,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        MinWidth="45"
+                                        MaxWidth="45"
+                                        HorizontalContentAlignment="Center"
+                                        Content="{Binding Value}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <!--  Unit Number Lost row  -->
+                    <ItemsControl
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="2.5,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        MinWidth="45"
+                                        MaxWidth="45"
+                                        HorizontalContentAlignment="Center"
+                                        Content="{Binding NumberOnAttackLost}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-            </Grid>
+                </Grid>
+
+            </GroupBox>
             <!--  Defend Grid  -->
-            <Grid Grid.Row="1" Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <!--  Attack header  -->
-                <Label
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    MinWidth="100"
-                    Margin="0,5"
-                    Content="Defender" />
-                <Label
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    MinWidth="100"
-                    Margin="0,5"
-                    Content="Amount" />
-                <Label
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    MinWidth="100"
-                    Margin="0,5"
-                    Content="Loses" />
-                <!--  Unit Image row  -->
-                <ItemsControl
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    ItemsSource="{Binding SelectedCalculatorData.Units, Mode=OneWay, PresentationTraceSources.TraceLevel=High}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Image
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    Width="40">
-                                    <Image.Source>
-                                        <BitmapImage DecodePixelWidth="300" UriSource="{Binding ImagePath}" />
-                                    </Image.Source>
-                                </Image>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <!--  Unit Amount row  -->
-                <ItemsControl
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay, PresentationTraceSources.TraceLevel=High}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="2,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    MinWidth="45"
-                                    MaxWidth="45"
-                                    HorizontalContentAlignment="Center"
-                                    Content="{Binding NumberOnDefense}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+            <GroupBox
+                Grid.Row="1"
+                Grid.Column="0"
+                Header="Defending units">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <!--  Attack header  -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        MinWidth="100"
+                        Margin="0,5"
+                        Content="Defender" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        MinWidth="100"
+                        Margin="0,5"
+                        Content="Amount" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        MinWidth="100"
+                        Margin="0,5"
+                        Content="Loses" />
+                    <!--  Unit Image row  -->
+                    <ItemsControl
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        ItemsSource="{Binding SelectedCalculatorData.Units, Mode=OneWay}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Width="40"
+                                        Source="{Binding ImagePath}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <!--  Unit Amount row  -->
+                    <ItemsControl
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="2,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        MinWidth="45"
+                                        MaxWidth="45"
+                                        HorizontalContentAlignment="Center"
+                                        Content="{Binding NumberOnDefense}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-            </Grid>
+                </Grid>
+
+            </GroupBox>
 
         </Grid>
 
@@ -258,13 +295,62 @@
                 Margin="0,5"
                 Content="Defense" />
 
+            <!--<Grid
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Orientation="Horizontal">
+                    <Image Width="40" Source="{Binding SelectedCalculatorData.Spearman.ImagePath}" />
+                    <Label
+                        MinWidth="100"
+                        Margin="0,5"
+                        Content="{Binding SelectedCalculatorData.Spearman.Name}" />
+                </StackPanel>
+                <xctk:IntegerUpDown
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Width="100"
+                    Margin="5,5"
+                    AllowSpin="True"
+                    FormatString="N0"
+                    Increment="1"
+                    Maximum="99999"
+                    Minimum="0"
+                    TextAlignment="Center"
+                    Value="{Binding SelectedCalculatorData.Spearman.NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <xctk:IntegerUpDown
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Width="100"
+                    Margin="5,5"
+                    AllowSpin="True"
+                    FormatString="N0"
+                    Increment="1"
+                    Maximum="99999"
+                    Minimum="0"
+                    TextAlignment="Center"
+                    Value="{Binding SelectedCalculatorData.Spearman.NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>-->
+
             <!--  Units input rows  -->
             <ItemsControl
                 x:Name="UnitsInputRows"
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
-                ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay, PresentationTraceSources.TraceLevel=High}">
+                ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay}">
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -281,11 +367,7 @@
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Orientation="Horizontal">
-                                <Image Width="40">
-                                    <Image.Source>
-                                        <BitmapImage DecodePixelWidth="300" UriSource="{Binding ImagePath}" />
-                                    </Image.Source>
-                                </Image>
+                                <Image Width="40" Source="{Binding ImagePath}" />
                                 <Label
                                     MinWidth="100"
                                     Margin="0,5"

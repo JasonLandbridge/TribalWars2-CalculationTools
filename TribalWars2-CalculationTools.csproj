@@ -7,6 +7,8 @@
     <UseWPF>true</UseWPF>
     <StartupObject>TribalWars2_CalculationTools.App</StartupObject>
     <AssemblyName>TribalWars2-CalculationTools</AssemblyName>
+    <Platforms>AnyCPU;x86</Platforms>
+    <Configurations>Debug;Release;Fix</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,7 +41,6 @@
 
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.89-alpha" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="3.5.0" />
     <PackageReference Include="MiqM.Xceed.Wpf.Toolkit.NETCore" Version="3.4.0.1" />
   </ItemGroup>
 

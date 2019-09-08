@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TribalWars2_CalculationTools.Class.Enum;
+using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Class.Units
 {
@@ -21,10 +22,9 @@ namespace TribalWars2_CalculationTools.Class.Units
         public override TimeSpan BaseRecruitmentTime { get; set; } = new TimeSpan(0, 7, 30);
         public override TimeSpan TravelTimePerTile { get; set; } = new TimeSpan(0, 8, 0);
 
-        public override int NumberOnAttack { get; set; } = 0;
         public override int NumberOnDefense { get; set; } = 0;
 
-        public MountedArcher()
+        public MountedArcher(CalculatorData parent) : base(parent)
         {
 
         }

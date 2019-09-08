@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TribalWars2_CalculationTools.Class.Enum;
+using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Class.Units
 {
@@ -13,7 +14,6 @@ namespace TribalWars2_CalculationTools.Class.Units
         public override int ClayCost { get; } = 30;
         public override int IronCost { get; } = 20;
         public override int ProvisionCost { get; } = 1;
-        public override int NumberOnAttack { get; set; } = 0;
         public override int NumberOnDefense { get; set; } = 0;
         public override int FightingPower { get; set; } = 10;
         public override int DefenseFromInfantry { get; set; } = 25;
@@ -21,10 +21,10 @@ namespace TribalWars2_CalculationTools.Class.Units
         public override int DefenseFromArchers { get; set; } = 10;
         public override int LoadCapacity { get; set; } = 25;
         public override TimeSpan BaseRecruitmentTime { get; set; } = new TimeSpan(0, 1, 30);
-        public override TimeSpan TravelTimePerTile { get; set; } = new TimeSpan(0, 14,0);
+        public override TimeSpan TravelTimePerTile { get; set; } = new TimeSpan(0, 14, 0);
 
 
-        public Spearman()
+        public Spearman(CalculatorData parent) : base(parent)
         {
 
         }

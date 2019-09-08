@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System.Diagnostics;
+using Caliburn.Micro;
 using Xceed.Wpf.Toolkit;
 using TribalWars2_CalculationTools.Models;
 
