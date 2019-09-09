@@ -152,10 +152,14 @@ namespace TribalWars2_CalculationTools.Class
             };
 
 
+
+
         #endregion
+
+
+
         public BattleResult()
         {
-
         }
         public BattleResult(List<BaseUnit> list)
         {
@@ -199,7 +203,7 @@ namespace TribalWars2_CalculationTools.Class
             this.DefPaladin = list[12].NumberOnDefense;
         }
 
-        public int ToLossUnit(float lostCoefficient, int currentNumber)
+        public int ToLossUnit(decimal lostCoefficient, int currentNumber)
         {
             return (int)Math.Round(currentNumber * lostCoefficient, MidpointRounding.ToZero);
         }
@@ -212,7 +216,7 @@ namespace TribalWars2_CalculationTools.Class
             LostOnAtkArcher = AtkArcher;
         }
 
-        public void KillAtkInfantry(float lostCoefficient)
+        public void KillAtkInfantry(decimal lostCoefficient)
         {
             LostOnAtkSpearman = ToLossUnit(lostCoefficient, AtkSpearman);
             LostOnAtkSwordsman = ToLossUnit(lostCoefficient, AtkSwordsman);
@@ -229,12 +233,161 @@ namespace TribalWars2_CalculationTools.Class
             LostOnDefArcher = DefArcher;
         }
 
-        public void KillDefInfantry(float lostCoefficient)
+        public void KillDefInfantry(decimal lostCoefficient)
         {
             LostOnDefSpearman = ToLossUnit(lostCoefficient, DefSpearman);
             LostOnDefSwordsman = ToLossUnit(lostCoefficient, DefSwordsman);
             LostOnDefAxeFighter = ToLossUnit(lostCoefficient, DefAxeFighter);
             LostOnDefArcher = ToLossUnit(lostCoefficient, DefArcher);
         }
+
+
+        #region AtkProvisions
+
+        public int GetTotalInfantryProvisions()
+        {
+            int totalProvisions = 0;
+            // Count all units that are NOT Cavalry and NOT archers
+            totalProvisions += AtkSpearman * GameData.Spearman.ProvisionCost;
+            totalProvisions += AtkSwordsman * GameData.Swordsman.ProvisionCost;
+            totalProvisions += AtkAxeFighter * GameData.AxeFighter.ProvisionCost;
+
+            totalProvisions += AtkRam * GameData.Ram.ProvisionCost;
+            totalProvisions += AtkCatapult * GameData.Catapult.ProvisionCost;
+            totalProvisions += AtkTrebuchet * GameData.Trebuchet.ProvisionCost;
+
+            totalProvisions += AtkBerserker * GameData.Berserker.ProvisionCost;
+
+            totalProvisions += AtkNobleman * GameData.Nobleman.ProvisionCost;
+
+            return totalProvisions;
+        }
+
+        public int GetTotalCavalryProvisions()
+        {
+            int totalProvisions = 0;
+
+            totalProvisions += AtkLightCavalry * GameData.LightCavalry.ProvisionCost;
+            totalProvisions += AtkHeavyCavalry * GameData.HeavyCavalry.ProvisionCost;
+
+            return totalProvisions;
+        }
+
+        public int GetTotalArcherProvisions()
+        {
+            int totalProvisions = 0;
+
+            totalProvisions += AtkArcher * GameData.Archer.ProvisionCost;
+            totalProvisions += AtkMountedArcher * GameData.MountedArcher.ProvisionCost;
+
+            return totalProvisions;
+        }
+
+        #endregion
+
+
+        public int GetTotalAtkProvisions()
+        {
+            int provisions = 0;
+
+            for (int i = 0; i < GameData.UnitList.Count; i++)
+            {
+                provisions += ListOfAtkNumbers[i].Value * GameData.UnitList[i].ProvisionCost;
+            }
+
+            return provisions;
+        }
+
+        public int GetTotalInfantryAttack(bool defenseIsSuperior)
+        {
+            int totalAttack = 0;
+
+            totalAttack += AtkSpearman * GameData.Spearman.FightingPower;
+            totalAttack += AtkSwordsman * GameData.Swordsman.FightingPower;
+            totalAttack += AtkAxeFighter * GameData.AxeFighter.FightingPower;
+            totalAttack += AtkNobleman * GameData.Nobleman.FightingPower;
+
+            // Take into account that berserkers
+            // are twice as strong when fighting a superior army
+            if (defenseIsSuperior)
+            {
+                totalAttack += AtkBerserker * (GameData.Berserker.FightingPower * 2);
+            }
+            else
+            {
+                totalAttack += AtkBerserker * GameData.Berserker.FightingPower;
+            }
+
+            return totalAttack;
+        }
+
+        public int GetTotalCavalryAttack()
+        {
+            int totalAttack = 0;
+
+            totalAttack += AtkLightCavalry * GameData.LightCavalry.FightingPower;
+            totalAttack += AtkHeavyCavalry * GameData.HeavyCavalry.FightingPower;
+
+            return totalAttack;
+        }
+
+        public int GetTotalArcherAttack()
+        {
+            int totalAttack = 0;
+
+            totalAttack += AtkArcher * GameData.Archer.FightingPower;
+            totalAttack += AtkMountedArcher * GameData.MountedArcher.FightingPower;
+
+            return totalAttack;
+        }
+
+        public int GetTotalDefProvisions()
+        {
+            int provisions = 0;
+
+            for (int i = 0; i < GameData.UnitList.Count; i++)
+            {
+                provisions += ListOfDefNumbers[i].Value * GameData.UnitList[i].ProvisionCost;
+            }
+
+            return provisions;
+        }
+
+        public int GetTotalDefFromInfantry()
+        {
+            int defenseFromInfantry = 0;
+
+            for (int i = 0; i < GameData.UnitList.Count; i++)
+            {
+                defenseFromInfantry += ListOfDefNumbers[i].Value * GameData.UnitList[i].DefenseFromInfantry;
+            }
+
+            return defenseFromInfantry;
+        }
+
+        public int GetTotalDefFromCavalry()
+        {
+            int defenseFromCavalry = 0;
+
+            for (int i = 0; i < GameData.UnitList.Count; i++)
+            {
+                defenseFromCavalry += ListOfDefNumbers[i].Value * GameData.UnitList[i].DefenseFromCavalry;
+            }
+
+            return defenseFromCavalry;
+        }
+
+        public int GetTotalDefFromArchers()
+        {
+            int defenseFromArchers = 0;
+
+            for (int i = 0; i < GameData.UnitList.Count; i++)
+            {
+                defenseFromArchers += ListOfDefNumbers[i].Value * GameData.UnitList[i].DefenseFromArchers;
+            }
+
+            return defenseFromArchers;
+        }
+
     }
 }

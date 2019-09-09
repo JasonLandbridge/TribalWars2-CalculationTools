@@ -11,10 +11,8 @@ namespace TribalWars2_CalculationTools.Class.Units
     public abstract class BaseUnit : PropertyChangedBase
     {
 
-        private int _numberOnAttackLost;
         private int _numberOnAttack;
         private int _numberOnDefense;
-        private CalculatorData _parent;
         public abstract string Name { get; }
         public abstract UnitType UnitType { get; set; }
 
@@ -34,8 +32,6 @@ namespace TribalWars2_CalculationTools.Class.Units
 
         public abstract TimeSpan BaseRecruitmentTime { get; set; }
         public abstract TimeSpan TravelTimePerTile { get; set; }
-
-        public CalculatorData Parent => _parent;
 
         public int NumberOnAttack
         {
@@ -61,15 +57,11 @@ namespace TribalWars2_CalculationTools.Class.Units
 
         public string ImagePath => $"/Resources/Img/unit_{this.Name.ToLower().Replace(' ', '_')}.png";
 
-        protected BaseUnit(CalculatorData parent)
-        {
-            this._parent = parent;
-        }
 
         // Used as a signal to update the calculation 
         public void PropertyUpdated()
         {
-            this.Parent.ValueUpdated();
+            //this.Parent.ValueUpdated();
         }
 
         public int GetTotalInfantryAtkStrength => FightingPower * NumberOnAttack;

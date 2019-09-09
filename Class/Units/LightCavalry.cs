@@ -22,9 +22,6 @@ namespace TribalWars2_CalculationTools.Class.Units
         public override TimeSpan BaseRecruitmentTime { get; set; } = new TimeSpan(0, 6, 0);
         public override TimeSpan TravelTimePerTile { get; set; } = new TimeSpan(0, 8, 0);
 
-        public LightCavalry(CalculatorData parent) : base(parent)
-        {
 
-        }
     }
 }

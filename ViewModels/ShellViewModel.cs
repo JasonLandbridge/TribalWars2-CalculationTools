@@ -1,14 +1,19 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
 using Caliburn.Micro;
+using TribalWars2_CalculationTools.Class;
 using Xceed.Wpf.Toolkit;
 using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.ViewModels
 {
-    public class ShellViewModel : Conductor<object>
+    public class ShellViewModel : Screen, INotifyPropertyChanged
     {
         private CalculatorData _selectedCalculatorData;
 
+        private InputCalculatorClass _inputCalculatorClass = new InputCalculatorClass();
         public ShellViewModel()
         {
             CalculatorData.Add(new CalculatorData());
@@ -27,6 +32,21 @@ namespace TribalWars2_CalculationTools.ViewModels
             }
         }
 
+        public InputCalculatorClass InputCalculatorData
+        {
+            get => _inputCalculatorClass;
+            set
+            {
+                _inputCalculatorClass = value;
+                Debug.WriteLine("Property updated!");
+
+                NotifyOfPropertyChange(() => InputCalculatorData);
+            }
+        }
+
+        private void UpdateProperty(object sender, SelectionChangedEventArgs e)
+        {
+        }
 
         public InputRowHeaderViewModel InputChurch
         {

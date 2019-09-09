@@ -6,6 +6,8 @@
     xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:cal="http://www.caliburnproject.org"
     Title="Tribal Wars 2 Calculation Tools"
     Width="1000"
     Height="1200"
@@ -379,7 +381,7 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
-                ItemsSource="{Binding SelectedCalculatorData.Units, Mode=TwoWay}">
+                ItemsSource="{Binding InputCalculatorData.Units, Mode=TwoWay}">
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -413,7 +415,8 @@
                                 Maximum="99999"
                                 Minimum="0"
                                 TextAlignment="Center"
-                                Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                cm:Message.Attach="[Event ValueChanged]=[Action UpdateProperty($source,$eventArgs)]"
+                                Value="{Binding NumberOnAttack, Mode=TwoWay}" />
                             <xctk:IntegerUpDown
                                 Grid.Row="0"
                                 Grid.Column="2"

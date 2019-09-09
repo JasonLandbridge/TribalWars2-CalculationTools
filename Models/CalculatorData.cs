@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Documents;
 using Caliburn.Micro;
 using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class;
@@ -31,6 +33,8 @@ namespace TribalWars2_CalculationTools.Models
                 NotifyOfPropertyChange(() => LastBattleResult);
             }
         }
+
+
 
         public bool InputAtkChurch
         {
@@ -241,22 +245,22 @@ namespace TribalWars2_CalculationTools.Models
         public CalculatorData()
         {
             // Do not change the order!
-            Units.Add(new Spearman(this));
-            Units.Add(new Swordsman(this));
-            Units.Add(new AxeFighter(this));
-            Units.Add(new Archer(this));
+            Units.Add(new Spearman());
+            Units.Add(new Swordsman());
+            Units.Add(new AxeFighter());
+            Units.Add(new Archer());
 
-            Units.Add(new LightCavalry(this));
-            Units.Add(new MountedArcher(this));
-            Units.Add(new HeavyCavalry(this));
-            Units.Add(new Ram(this));
+            Units.Add(new LightCavalry());
+            Units.Add(new MountedArcher());
+            Units.Add(new HeavyCavalry());
+            Units.Add(new Ram());
 
-            Units.Add(new Catapult(this));
-            Units.Add(new Berserker(this));
-            Units.Add(new Trebuchet(this));
+            Units.Add(new Catapult());
+            Units.Add(new Berserker());
+            Units.Add(new Trebuchet());
 
-            Units.Add(new Nobleman(this));
-            Units.Add(new Paladin(this));
+            Units.Add(new Nobleman());
+            Units.Add(new Paladin());
 
             LastBattleResult = new BattleResult(Units.ToList());
 
@@ -267,70 +271,128 @@ namespace TribalWars2_CalculationTools.Models
             this.SimulateBattle();
         }
 
-        public int GetTotalAttackInfantry()
+        public int WallLevelBeforeBattle(int ramNumber, int wallLevel, decimal faithBonus, bool paladinMorningStar)
         {
-            int totalAttack = 0;
-            foreach (BaseUnit unit in Units)
-            {
-                if (unit.UnitType == UnitType.Infantry)
-                {
-                    totalAttack += unit.GetTotalInfantryAtkStrength;
-                }
-            }
+            //Taken from http://www.ds-pro.de/2/simulator.php
+            //Todo take into account the MorningStar weapon levels
 
-            return totalAttack;
+            decimal morningStarModifier = (paladinMorningStar ? 2 : 1);
+
+            decimal ramAtkStrength = (ramNumber * faithBonus * morningStarModifier);
+
+            decimal a = wallLevel - Math.Round(ramAtkStrength / (4 * (decimal)Math.Pow(1.09, wallLevel)));
+            decimal b = Math.Round(wallLevel / (2 * morningStarModifier));
+            int newWall = (int)Math.Round(Math.Max(a, b), MidpointRounding.ToZero);
+            return newWall;
         }
 
-        public int GetTotalDefenseInfantry()
-        {
-            int totalDefense = 0;
-            foreach (BaseUnit unit in Units)
-            {
-                if (unit.UnitType == UnitType.Infantry)
-                {
-                    totalDefense += unit.GetTotalDefFromInfantry;
-                }
-            }
-            return totalDefense;
-        }
         public void SimulateBattle()
         {
             // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
-
             BattleResult result = new BattleResult(Units.ToList());
 
-            // First Round - Infantry
-            int atkInfantry = GetTotalAttackInfantry();
-            int defInfantry = GetTotalDefenseInfantry();
 
+            decimal faithBonus = (InputAtkChurch ? 1.0m : 0.5m) * (InputDefChurch ? 1.0m : 0.5m);
+            int wallLevel = InputWall;
+            decimal morale = InputMorale / 100m;
+            decimal luck = 1m + InputLuck / 100m;
+            decimal nightBonus = (InputNightBonus ? 2m : 1m);
+
+            int totalAtkProvisions = result.GetTotalAtkProvisions();
+            int totalDefProvisions = result.GetTotalDefProvisions();
+
+            bool defSuperior = (totalAtkProvisions < totalDefProvisions / 2);
+
+            int resultingWallLevel = WallLevelBeforeBattle(result.AtkRam, wallLevel, faithBonus, false);
+
+            // 5% for every wall level
+            decimal wallBonus = 1m + wallLevel * 0.05m;
+
+            int wallDefense = 0;
+
+            if (resultingWallLevel > 0)
+            {
+                wallDefense = (int)Math.Round(Math.Pow(1.24, resultingWallLevel) * 20, MidpointRounding.AwayFromZero);
+            }
+
+
+            // First Round - Infantry
+            int atkInfantryProvisions = result.GetTotalInfantryProvisions();
+            int atkCavalryProvisions = result.GetTotalCavalryProvisions();
+            int atkArchersProvisions = result.GetTotalArcherProvisions();
+            List<int> provisionTypeList = new List<int>
+            {
+                atkInfantryProvisions,
+                atkCavalryProvisions,
+                atkArchersProvisions
+            };
+            int atkProvisions = result.GetTotalAtkProvisions();
+
+
+            int atkInfantry = result.GetTotalInfantryAttack(defSuperior);
+            int atkCavalry = result.GetTotalCavalryAttack();
+            int atkArchers = result.GetTotalArcherAttack();
+            List<int> attackTypeList = new List<int>
+            {
+                atkInfantry,
+                atkCavalry,
+                atkArchers
+            };
+            int atkStrength = atkInfantry + atkCavalry + atkArchers;
+
+            int defInfantry = result.GetTotalDefFromInfantry();
+            int defCavalry = result.GetTotalDefFromCavalry();
+            int defArchers = result.GetTotalDefFromArchers();
+            List<int> defenseTypeList = new List<int>
+            {
+                defInfantry,
+                defCavalry,
+                defArchers
+            };
+
+            int defenseStrength = defInfantry + defCavalry + defArchers;
+
+            // Simulate for 3 rounds (infantry, cavalry and archers)
+            for (int i = 0; i < 2; i++)
+            {
+                if (attackTypeList[i] == 0)
+                {
+                    continue;
+                }
+
+                decimal ratio = provisionTypeList[i] / (decimal)atkProvisions;
+                decimal defense = (defenseTypeList[i] * ratio * wallBonus * nightBonus) + (wallDefense * ratio);
+                decimal attack = (attackTypeList[i] * morale * luck * faithBonus);
+                decimal victor = attack / defense;
+
+                if (victor < 1)
+                {
+                    // Defense won, kill off all attack infantry
+                    result.KillAllAtkInfantry();
+
+                    decimal lostCoefficient = (decimal)Math.Sqrt((double)attack) * attack;
+                    // Set the loses of the defending infantry
+                    result.KillDefInfantry(lostCoefficient);
+                }
+                else
+                {
+                    // Attack won, kill off all defense infantry
+                    result.KillAllDefInfantry();
+
+                    decimal lostCoefficient = (decimal)Math.Sqrt(1 / (double)attack) / attack;
+                    // Set the loses of the attacking infantry
+                    result.KillAtkInfantry(lostCoefficient);
+                }
+            }
 
 
             //100 Axt vs 100 Spear , 
             //4500 power vs 2500 power.
-
             //coef will be a = 4500 / 2500;
             //c = sqrt(1 / a) / a;
             //axt losses are calculated
             //(round) total_number_of_loosing_units* c
-            // 41.
-            float a = (float)atkInfantry / (float)defInfantry;
-            float lostCoefficient = (float)Math.Sqrt(1 / a) / a;
-
-
-            if (atkInfantry > defInfantry)
-            {
-                // Attack won, kill off all defense infantry
-                result.KillAllDefInfantry();
-                // Set the loses of the attacking infantry
-                result.KillAtkInfantry(lostCoefficient);
-            }
-            else if (atkInfantry < defInfantry)
-            {
-                // Defense won, kill off all attack infantry
-                result.KillAllAtkInfantry();
-                // Set the loses of the defending infantry
-                result.KillDefInfantry(lostCoefficient);
-            }
+            //float lostCoefficient = (float)Math.Sqrt(1 / a) / a;
 
             LastBattleResult = result;
 
