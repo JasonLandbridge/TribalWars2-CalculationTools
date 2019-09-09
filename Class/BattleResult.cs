@@ -150,7 +150,7 @@ namespace TribalWars2_CalculationTools.Class
                 new ValueType(LostOnDefNobleman),
                 new ValueType(LostOnDefPaladin),
             };
-        
+
 
         #endregion
         public BattleResult()
@@ -199,6 +199,11 @@ namespace TribalWars2_CalculationTools.Class
             this.DefPaladin = list[12].NumberOnDefense;
         }
 
+        public int ToLossUnit(float lostCoefficient, int currentNumber)
+        {
+            return (int)Math.Round(currentNumber * lostCoefficient, MidpointRounding.ToZero);
+        }
+
         public void KillAllAtkInfantry()
         {
             LostOnAtkSpearman = AtkSpearman;
@@ -206,12 +211,30 @@ namespace TribalWars2_CalculationTools.Class
             LostOnAtkAxeFighter = AtkAxeFighter;
             LostOnAtkArcher = AtkArcher;
         }
+
+        public void KillAtkInfantry(float lostCoefficient)
+        {
+            LostOnAtkSpearman = ToLossUnit(lostCoefficient, AtkSpearman);
+            LostOnAtkSwordsman = ToLossUnit(lostCoefficient, AtkSwordsman);
+            LostOnAtkAxeFighter = ToLossUnit(lostCoefficient, AtkAxeFighter);
+            LostOnAtkArcher = ToLossUnit(lostCoefficient, AtkArcher);
+
+        }
+
         public void KillAllDefInfantry()
         {
             LostOnDefSpearman = DefSpearman;
             LostOnDefSwordsman = DefSwordsman;
             LostOnDefAxeFighter = DefAxeFighter;
             LostOnDefArcher = DefArcher;
+        }
+
+        public void KillDefInfantry(float lostCoefficient)
+        {
+            LostOnDefSpearman = ToLossUnit(lostCoefficient, DefSpearman);
+            LostOnDefSwordsman = ToLossUnit(lostCoefficient, DefSwordsman);
+            LostOnDefAxeFighter = ToLossUnit(lostCoefficient, DefAxeFighter);
+            LostOnDefArcher = ToLossUnit(lostCoefficient, DefArcher);
         }
     }
 }

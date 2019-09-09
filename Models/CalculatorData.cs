@@ -295,7 +295,7 @@ namespace TribalWars2_CalculationTools.Models
         }
         public void SimulateBattle()
         {
-            // Based on: https://www.youtube.com/watch?v=SG_qI1-go88
+            // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
 
             BattleResult result = new BattleResult(Units.ToList());
 
@@ -303,15 +303,33 @@ namespace TribalWars2_CalculationTools.Models
             int atkInfantry = GetTotalAttackInfantry();
             int defInfantry = GetTotalDefenseInfantry();
 
+
+
+            //100 Axt vs 100 Spear , 
+            //4500 power vs 2500 power.
+
+            //coef will be a = 4500 / 2500;
+            //c = sqrt(1 / a) / a;
+            //axt losses are calculated
+            //(round) total_number_of_loosing_units* c
+            // 41.
+            float a = (float)atkInfantry / (float)defInfantry;
+            float lostCoefficient = (float)Math.Sqrt(1 / a) / a;
+
+
             if (atkInfantry > defInfantry)
             {
                 // Attack won, kill off all defense infantry
                 result.KillAllDefInfantry();
+                // Set the loses of the attacking infantry
+                result.KillAtkInfantry(lostCoefficient);
             }
             else if (atkInfantry < defInfantry)
             {
                 // Defense won, kill off all attack infantry
                 result.KillAllAtkInfantry();
+                // Set the loses of the defending infantry
+                result.KillDefInfantry(lostCoefficient);
             }
 
             LastBattleResult = result;
