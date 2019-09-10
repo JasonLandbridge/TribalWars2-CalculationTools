@@ -9,12 +9,12 @@ namespace TribalWars2_CalculationTools.Views.UserControls
     /// <summary>
     /// Interaction logic for InputRowHeader.xaml
     /// </summary>
-    public partial class InputRowHeader : UserControl, INotifyPropertyChanged
+    public partial class InputRowHeader : UserControl
     {
         #region Fields
 
         public static readonly DependencyProperty ImagePathProperty =
-            DependencyProperty.Register("ImagePath", typeof(string), typeof(InputRowHeader), new PropertyMetadata(""));
+            DependencyProperty.Register("ImagePath", typeof(string), typeof(InputRowHeader), new PropertyMetadata("Default ViewModel first caption"));
 
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register("Title", typeof(string), typeof(InputRowHeader), new PropertyMetadata(""));
@@ -30,53 +30,27 @@ namespace TribalWars2_CalculationTools.Views.UserControls
         public InputRowHeader()
         {
             InitializeComponent();
-        }
-        public InputRowHeader(string title, string imagePath)
-        {
-            this._title = title;
-            this._imagePath = imagePath;
+
         }
 
         #endregion Constructors
 
-        #region Events
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion Events
 
         #region Properties
 
         public string ImagePath
         {
             get => (string)GetValue(ImagePathProperty);
-            set
-            {
-                SetValue(ImagePathProperty, value);
-                OnPropertyChanged();
-            }
+            set => SetValue(ImagePathProperty, value);
         }
 
         public string Title
         {
             get => (string)GetValue(TitleProperty);
-            set
-            {
-                SetValue(TitleProperty, value);
-                OnPropertyChanged();
-            }
+            set => SetValue(TitleProperty, value);
         }
 
         #endregion Properties
 
-        #region Methods
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion Methods
     }
 }

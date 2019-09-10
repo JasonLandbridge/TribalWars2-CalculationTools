@@ -5,17 +5,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="parent"
     d:DesignHeight="50"
     d:DesignWidth="150"
     mc:Ignorable="d">
     <Grid>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel DataContext="{Binding ElementName=parent}" Orientation="Horizontal">
 
-            <Image Width="40" Source="{Binding ImagePath}" />
+            <Image Width="40" Source="{Binding Path=ImagePath}" />
             <Label
                 MinWidth="100"
                 Margin="0,5"
-                Content="{Binding Title}" />
+                Content="{Binding Path=Title}" />
         </StackPanel>
     </Grid>
 </UserControl>

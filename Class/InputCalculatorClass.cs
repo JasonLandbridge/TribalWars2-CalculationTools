@@ -27,6 +27,13 @@ namespace TribalWars2_CalculationTools.Class
         private InputUnitRow _nobleman;
         private InputUnitRow _paladin;
 
+        private bool _inputDefChurch = true;
+        private bool _inputAtkChurch = true;
+        private decimal _inputMorale = 1;
+        private int _inputLuck = 0;
+        private int _inputWall = 0;
+        private bool _inputNightBonus = true;
+
         public InputUnitRow Spearman
         {
             get => _spearman;
@@ -153,8 +160,75 @@ namespace TribalWars2_CalculationTools.Class
             }
         }
 
+        public string InputChurchLabel { get; } = "Church";
+        public string InputChurchImagePath { get; } = "/Resources/Img/buildings/buildings_church.png";
+        public string InputMoraleLabel { get; } = "Morale";
+        public string InputMoraleImagePath { get; } = "/Resources/Img/info/info_morale.png";
+        public string InputLuckLabel { get; } = "Luck";
+        public string InputLuckImagePath { get; } = "/Resources/Img/info/info_luck.png";
+        public string InputWallLabel { get; } = "Wall";
+        public string InputWallImagePath { get; } = "/Resources/Img/buildings/buildings_wall.png";
+        public string InputNightBonusLabel { get; } = "Night bonus";
+        public string InputNightBonusImagePath { get; } = "/Resources/Img/info/info_nightbonus.png";
+
+        public bool InputAtkChurch
+        {
+            get => _inputAtkChurch;
+            set
+            {
+                _inputAtkChurch = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool InputDefChurch
+        {
+            get => _inputDefChurch;
+            set
+            {
+                _inputDefChurch = value;
+                OnPropertyChanged();
+            }
+        }
+        public int InputWall
+        {
+            get => _inputWall;
+            set
+            {
+                _inputWall = value;
+                OnPropertyChanged();
+            }
+        }
 
 
+        public bool InputNightBonus
+        {
+            get => _inputNightBonus;
+            set
+            {
+                _inputNightBonus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public decimal InputMorale
+        {
+            get => _inputMorale;
+            set
+            {
+                _inputMorale = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int InputLuck
+        {
+            get => _inputLuck;
+            set
+            {
+                _inputLuck = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public ObservableCollection<InputUnitRow> Units
@@ -246,6 +320,7 @@ namespace TribalWars2_CalculationTools.Class
                 ImagePath = GameData.Paladin.ImagePath,
                 Name = GameData.Paladin.Name,
             });
+
 
         }
 

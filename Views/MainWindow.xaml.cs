@@ -1,10 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class;
+using TribalWars2_CalculationTools.Class.Utilities;
 using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Views
@@ -20,16 +23,9 @@ namespace TribalWars2_CalculationTools.Views
             InitializeComponent();
             this.DataContext = this;
 
+            // TODO make a list
             CalculatorData.Add(new CalculatorData());
             SelectedCalculatorData = CalculatorData[0];
-
-            this.InputChurch.Title = "Church";
-            this.InputChurch.ImagePath = "/Resources/Img/buildings/buildings_church.png";
-            //InputMorale = new InputRowHeaderViewModel("Morale", "/Resources/Img/info/info_morale.png");
-            //InputLuck = new InputRowHeaderViewModel("Luck", "/Resources/Img/info/info_luck.png");
-            //InputWall = new InputRowHeaderViewModel("Wall", "/Resources/Img/buildings/buildings_wall.png");
-            //InputNightBonus = new InputRowHeaderViewModel("Night bonus", "/Resources/Img/info/info_nightbonus.png");
-
 
             //PresentationTraceSources.TraceLevel=High
         }
@@ -66,9 +62,24 @@ namespace TribalWars2_CalculationTools.Views
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-
-
-
         }
+
+        public void UpdateBattleCalculator()
+        {
+            Debug.WriteLine("Battle Calculator updated!");
+            SelectedCalculatorData.SimulateBattle(InputCalculatorData);
+        }
+
+        private void InputChangedInteger(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            UpdateBattleCalculator();
+        }
+
+        private void InputChangedCheckBox(object sender, RoutedEventArgs e)
+        {
+            UpdateBattleCalculator();
+        }
+
+
     }
 }

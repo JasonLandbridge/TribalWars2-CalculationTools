@@ -161,46 +161,46 @@ namespace TribalWars2_CalculationTools.Class
         public BattleResult()
         {
         }
-        public BattleResult(List<BaseUnit> list)
+        public BattleResult(InputCalculatorClass input)
         {
-            this.AtkSpearman = list[0].NumberOnAttack;
-            this.DefSpearman = list[0].NumberOnDefense;
+            this.AtkSpearman = input.Spearman.NumberOnAttack;
+            this.DefSpearman = input.Spearman.NumberOnDefense;
 
-            this.AtkSwordsman = list[1].NumberOnAttack;
-            this.DefSwordsman = list[1].NumberOnDefense;
+            this.AtkSwordsman = input.Swordsman.NumberOnAttack;
+            this.DefSwordsman = input.Swordsman.NumberOnDefense;
 
-            this.AtkAxeFighter = list[2].NumberOnAttack;
-            this.DefAxeFighter = list[2].NumberOnDefense;
+            this.AtkAxeFighter = input.AxeFighter.NumberOnAttack;
+            this.DefAxeFighter = input.AxeFighter.NumberOnDefense;
 
-            this.AtkArcher = list[3].NumberOnAttack;
-            this.DefArcher = list[3].NumberOnDefense;
+            this.AtkArcher = input.Archer.NumberOnAttack;
+            this.DefArcher = input.Archer.NumberOnDefense;
 
-            this.AtkLightCavalry = list[4].NumberOnAttack;
-            this.DefLightCavalry = list[4].NumberOnDefense;
+            this.AtkLightCavalry = input.LightCavalry.NumberOnAttack;
+            this.DefLightCavalry = input.LightCavalry.NumberOnDefense;
 
-            this.AtkMountedArcher = list[5].NumberOnAttack;
-            this.DefMountedArcher = list[5].NumberOnDefense;
+            this.AtkMountedArcher = input.MountedArcher.NumberOnAttack;
+            this.DefMountedArcher = input.MountedArcher.NumberOnDefense;
 
-            this.AtkHeavyCavalry = list[6].NumberOnAttack;
-            this.DefHeavyCavalry = list[6].NumberOnDefense;
+            this.AtkHeavyCavalry = input.HeavyCavalry.NumberOnAttack;
+            this.DefHeavyCavalry = input.HeavyCavalry.NumberOnDefense;
 
-            this.AtkRam = list[7].NumberOnAttack;
-            this.DefRam = list[7].NumberOnDefense;
+            this.AtkRam = input.Ram.NumberOnAttack;
+            this.DefRam = input.Ram.NumberOnDefense;
 
-            this.AtkCatapult = list[8].NumberOnAttack;
-            this.DefCatapult = list[8].NumberOnDefense;
+            this.AtkCatapult = input.Catapult.NumberOnAttack;
+            this.DefCatapult = input.Catapult.NumberOnDefense;
 
-            this.AtkBerserker = list[9].NumberOnAttack;
-            this.DefBerserker = list[9].NumberOnDefense;
+            this.AtkBerserker = input.Berserker.NumberOnAttack;
+            this.DefBerserker = input.Berserker.NumberOnDefense;
 
-            this.AtkTrebuchet = list[10].NumberOnAttack;
-            this.DefTrebuchet = list[10].NumberOnDefense;
+            this.AtkTrebuchet = input.Trebuchet.NumberOnAttack;
+            this.DefTrebuchet = input.Trebuchet.NumberOnDefense;
 
-            this.AtkNobleman = list[11].NumberOnAttack;
-            this.DefNobleman = list[11].NumberOnDefense;
+            this.AtkNobleman = input.Nobleman.NumberOnAttack;
+            this.DefNobleman = input.Nobleman.NumberOnDefense;
 
-            this.AtkPaladin = list[12].NumberOnAttack;
-            this.DefPaladin = list[12].NumberOnDefense;
+            this.AtkPaladin = input.Paladin.NumberOnAttack;
+            this.DefPaladin = input.Paladin.NumberOnDefense;
         }
 
         public int ToLossUnit(decimal lostCoefficient, int currentNumber)

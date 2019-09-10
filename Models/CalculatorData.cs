@@ -14,12 +14,7 @@ namespace TribalWars2_CalculationTools.Models
 {
     public class CalculatorData : INotifyPropertyChanged
     {
-        private bool _inputDefChurch = true;
-        private bool _inputAtkChurch = true;
-        private decimal _inputMorale = 1;
-        private int _inputLuck = 0;
-        private int _inputWall = 0;
-        private bool _inputNightBonus = true;
+
         private BindingList<BaseUnit> _units = new BindingList<BaseUnit>();
         private BattleResult _lastBattleResult;
 
@@ -35,64 +30,7 @@ namespace TribalWars2_CalculationTools.Models
 
 
 
-        public bool InputAtkChurch
-        {
-            get => _inputAtkChurch;
-            set
-            {
-                _inputAtkChurch = value;
-                OnPropertyChanged();
-            }
-        }
-        public bool InputDefChurch
-        {
-            get => _inputDefChurch;
-            set
-            {
-                _inputDefChurch = value;
-                OnPropertyChanged();
-            }
-        }
-        public int InputWall
-        {
-            get => _inputWall;
-            set
-            {
-                _inputWall = value;
-                OnPropertyChanged();
-            }
-        }
 
-
-        public bool InputNightBonus
-        {
-            get => _inputNightBonus;
-            set
-            {
-                _inputNightBonus = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public decimal InputMorale
-        {
-            get => _inputMorale;
-            set
-            {
-                _inputMorale = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int InputLuck
-        {
-            get => _inputLuck;
-            set
-            {
-                _inputLuck = value;
-                OnPropertyChanged();
-            }
-        }
 
         //public BindingList<BaseUnit> Units
         //{
@@ -261,10 +199,6 @@ namespace TribalWars2_CalculationTools.Models
 
         }
 
-        public void ValueUpdated()
-        {
-            this.SimulateBattle();
-        }
 
         public int WallLevelBeforeBattle(int ramNumber, int wallLevel, decimal faithBonus, bool paladinMorningStar)
         {
@@ -281,17 +215,17 @@ namespace TribalWars2_CalculationTools.Models
             return newWall;
         }
 
-        public void SimulateBattle()
+        public void SimulateBattle(InputCalculatorClass input)
         {
             // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
-            BattleResult result = new BattleResult();
+            BattleResult result = new BattleResult(input);
 
 
-            decimal faithBonus = (InputAtkChurch ? 1.0m : 0.5m) * (InputDefChurch ? 1.0m : 0.5m);
-            int wallLevel = InputWall;
-            decimal morale = InputMorale / 100m;
-            decimal luck = 1m + InputLuck / 100m;
-            decimal nightBonus = (InputNightBonus ? 2m : 1m);
+            decimal faithBonus = (input.InputAtkChurch ? 1.0m : 0.5m) * (input.InputDefChurch ? 1.0m : 0.5m);
+            int wallLevel = input.InputWall;
+            decimal morale = input.InputMorale / 100m;
+            decimal luck = 1m + input.InputLuck / 100m;
+            decimal nightBonus = (input.InputNightBonus ? 2m : 1m);
 
             int totalAtkProvisions = result.GetTotalAtkProvisions();
             int totalDefProvisions = result.GetTotalDefProvisions();
@@ -358,6 +292,13 @@ namespace TribalWars2_CalculationTools.Models
                 decimal ratio = provisionTypeList[i] / (decimal)atkProvisions;
                 decimal defense = (defenseTypeList[i] * ratio * wallBonus * nightBonus) + (wallDefense * ratio);
                 decimal attack = (attackTypeList[i] * morale * luck * faithBonus);
+
+                // Prevent dividing by zero
+                if (defense == 0)
+                {
+                    continue;
+                }
+
                 decimal victor = attack / defense;
 
                 if (victor < 1)
