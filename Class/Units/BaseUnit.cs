@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using Caliburn.Micro;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class.Enum;
-using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Class.Units
 {
-    public abstract class BaseUnit : PropertyChangedBase
+    public abstract class BaseUnit : INotifyPropertyChanged
     {
 
         private int _numberOnAttack;
@@ -39,7 +37,7 @@ namespace TribalWars2_CalculationTools.Class.Units
             set
             {
                 _numberOnAttack = value;
-                NotifyOfPropertyChange(() => NumberOnAttack);
+                OnPropertyChanged();
                 this.PropertyUpdated();
             }
         }
@@ -50,7 +48,7 @@ namespace TribalWars2_CalculationTools.Class.Units
             set
             {
                 _numberOnDefense = value;
-                NotifyOfPropertyChange(() => NumberOnDefense);
+                OnPropertyChanged();
                 this.PropertyUpdated();
             }
         }
@@ -68,5 +66,12 @@ namespace TribalWars2_CalculationTools.Class.Units
 
         public int GetTotalDefFromInfantry => DefenseFromInfantry * NumberOnDefense;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

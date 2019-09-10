@@ -1,13 +1,11 @@
 ﻿<Window
-    x:Class="TribalWars2_CalculationTools.Views.ShellView"
+    x:Class="TribalWars2_CalculationTools.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    xmlns:cm="http://caliburnmicro.com"
-    xmlns:cal="http://www.caliburnproject.org"
     Title="Tribal Wars 2 Calculation Tools"
     Width="1000"
     Height="1200"
@@ -326,55 +324,6 @@
                 Margin="0,5"
                 Content="Defense" />
 
-            <!--<Grid
-                Grid.Row="1"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Margin="0,0,0,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <StackPanel
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Orientation="Horizontal">
-                    <Image Width="40" Source="{Binding SelectedCalculatorData.Spearman.ImagePath}" />
-                    <Label
-                        MinWidth="100"
-                        Margin="0,5"
-                        Content="{Binding SelectedCalculatorData.Spearman.Name}" />
-                </StackPanel>
-                <xctk:IntegerUpDown
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Width="100"
-                    Margin="5,5"
-                    AllowSpin="True"
-                    FormatString="N0"
-                    Increment="1"
-                    Maximum="99999"
-                    Minimum="0"
-                    TextAlignment="Center"
-                    Value="{Binding SelectedCalculatorData.Spearman.NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <xctk:IntegerUpDown
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    Width="100"
-                    Margin="5,5"
-                    AllowSpin="True"
-                    FormatString="N0"
-                    Increment="1"
-                    Maximum="99999"
-                    Minimum="0"
-                    TextAlignment="Center"
-                    Value="{Binding SelectedCalculatorData.Spearman.NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            </Grid>-->
-
             <!--  Units input rows  -->
             <ItemsControl
                 x:Name="UnitsInputRows"
@@ -393,17 +342,13 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
+
                             </Grid.RowDefinitions>
-                            <StackPanel
+                            <userControls:InputRowHeader
                                 Grid.Row="0"
-                                Grid.Column="0"
-                                Orientation="Horizontal">
-                                <Image Width="40" Source="{Binding ImagePath}" />
-                                <Label
-                                    MinWidth="100"
-                                    Margin="0,5"
-                                    Content="{Binding Name}" />
-                            </StackPanel>
+                                Grid.Column="0" 
+                                ImagePath="{Binding ImagePath}"
+                                Title="{Binding Title}"/>
                             <xctk:IntegerUpDown
                                 Grid.Row="0"
                                 Grid.Column="1"
@@ -415,8 +360,7 @@
                                 Maximum="99999"
                                 Minimum="0"
                                 TextAlignment="Center"
-                                cm:Message.Attach="[Event ValueChanged]=[Action UpdateProperty($source,$eventArgs)]"
-                                Value="{Binding NumberOnAttack, Mode=TwoWay}" />
+                                Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <xctk:IntegerUpDown
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -435,10 +379,11 @@
             </ItemsControl>
 
             <!--  Church input rows  -->
-            <ContentControl
+            <userControls:InputRowHeader
                 x:Name="InputChurch"
                 Grid.Row="2"
                 Grid.Column="0" />
+
             <CheckBox
                 Grid.Row="2"
                 Grid.Column="1"
@@ -453,7 +398,6 @@
                 x:Name="InputMorale"
                 Grid.Row="3"
                 Grid.Column="0" />
-
             <xctk:DecimalUpDown
                 Grid.Row="3"
                 Grid.Column="1"
@@ -515,4 +459,5 @@
         </Grid>
 
     </Grid>
+
 </Window>

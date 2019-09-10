@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
-using Caliburn.Micro;
+using TribalWars2_CalculationTools.Annotations;
 
 namespace TribalWars2_CalculationTools.Class
 {
-    public class InputUnitRow : PropertyChangedBase
+    public class InputUnitRow : INotifyPropertyChanged
     {
         private int _numberOnAttack = 0;
         private int _numberOnDefense = 0;
@@ -14,15 +16,15 @@ namespace TribalWars2_CalculationTools.Class
 
         public string Name { get; set; }
 
+        public string Title => Name;
+
         public int NumberOnAttack
         {
             get => _numberOnAttack;
             set
             {
                 _numberOnAttack = value;
-                Debug.WriteLine("SUCCESS NumberOnAttack!!! " + value);
-
-                NotifyOfPropertyChange(() => NumberOnAttack);
+                OnPropertyChanged();
             }
         }
 
@@ -32,9 +34,16 @@ namespace TribalWars2_CalculationTools.Class
             set
             {
                 _numberOnDefense = value;
-                Debug.WriteLine("SUCCESS NumberOnDefense!!! " + value);
-                NotifyOfPropertyChange(() => NumberOnDefense);
+                OnPropertyChanged();
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

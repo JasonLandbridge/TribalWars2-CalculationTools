@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
-using Caliburn.Micro;
 using TribalWars2_CalculationTools.Class.Units;
 
 namespace TribalWars2_CalculationTools.Class
@@ -80,8 +80,8 @@ namespace TribalWars2_CalculationTools.Class
 
         #region ResultList
 
-        public BindableCollection<ValueType> ListOfAtkNumbers =>
-            new BindableCollection<ValueType>
+        public BindingList<ValueType> ListOfAtkNumbers =>
+            new BindingList<ValueType>
             {
                 new ValueType(AtkSpearman),
                 new ValueType(AtkSwordsman),
@@ -97,8 +97,8 @@ namespace TribalWars2_CalculationTools.Class
                 new ValueType(AtkNobleman),
                 new ValueType(AtkPaladin),
             };
-        public BindableCollection<ValueType> ListOfAtkLostNumbers =>
-            new BindableCollection<ValueType>
+        public BindingList<ValueType> ListOfAtkLostNumbers =>
+            new BindingList<ValueType>
             {
                 new ValueType(LostOnAtkSpearman),
                 new ValueType(LostOnAtkSwordsman),
@@ -115,8 +115,8 @@ namespace TribalWars2_CalculationTools.Class
                 new ValueType(LostOnAtkPaladin),
             };
 
-        public BindableCollection<ValueType> ListOfDefNumbers =>
-            new BindableCollection<ValueType>
+        public BindingList<ValueType> ListOfDefNumbers =>
+            new BindingList<ValueType>
             {
                 new ValueType(DefSpearman),
                 new ValueType(DefSwordsman),
@@ -133,8 +133,8 @@ namespace TribalWars2_CalculationTools.Class
                 new ValueType(DefPaladin),
             };
 
-        public BindableCollection<ValueType> ListOfDefLostNumbers =>
-            new BindableCollection<ValueType>
+        public BindingList<ValueType> ListOfDefLostNumbers =>
+            new BindingList<ValueType>
             {
                 new ValueType(LostOnDefSpearman),
                 new ValueType(LostOnDefSwordsman),

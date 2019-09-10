@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Documents;
-using Caliburn.Micro;
 using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class;
 using TribalWars2_CalculationTools.Class.Enum;
@@ -13,7 +12,7 @@ using TribalWars2_CalculationTools.Class.Units;
 
 namespace TribalWars2_CalculationTools.Models
 {
-    public class CalculatorData : PropertyChangedBase
+    public class CalculatorData : INotifyPropertyChanged
     {
         private bool _inputDefChurch = true;
         private bool _inputAtkChurch = true;
@@ -21,7 +20,7 @@ namespace TribalWars2_CalculationTools.Models
         private int _inputLuck = 0;
         private int _inputWall = 0;
         private bool _inputNightBonus = true;
-        private BindableCollection<BaseUnit> _units = new BindableCollection<BaseUnit>();
+        private BindingList<BaseUnit> _units = new BindingList<BaseUnit>();
         private BattleResult _lastBattleResult;
 
         public BattleResult LastBattleResult
@@ -30,7 +29,7 @@ namespace TribalWars2_CalculationTools.Models
             set
             {
                 _lastBattleResult = value;
-                NotifyOfPropertyChange(() => LastBattleResult);
+                OnPropertyChanged();
             }
         }
 
@@ -42,7 +41,7 @@ namespace TribalWars2_CalculationTools.Models
             set
             {
                 _inputAtkChurch = value;
-                NotifyOfPropertyChange(() => InputAtkChurch);
+                OnPropertyChanged();
             }
         }
         public bool InputDefChurch
@@ -51,7 +50,7 @@ namespace TribalWars2_CalculationTools.Models
             set
             {
                 _inputDefChurch = value;
-                NotifyOfPropertyChange(() => InputDefChurch);
+                OnPropertyChanged();
             }
         }
         public int InputWall
@@ -60,7 +59,7 @@ namespace TribalWars2_CalculationTools.Models
             set
             {
                 _inputWall = value;
-                NotifyOfPropertyChange(() => InputWall);
+                OnPropertyChanged();
             }
         }
 
@@ -71,7 +70,7 @@ namespace TribalWars2_CalculationTools.Models
             set
             {
                 _inputNightBonus = value;
-                NotifyOfPropertyChange(() => InputNightBonus);
+                OnPropertyChanged();
             }
         }
 
@@ -81,7 +80,7 @@ namespace TribalWars2_CalculationTools.Models
             set
             {
                 _inputMorale = value;
-                NotifyOfPropertyChange(() => InputMorale);
+                OnPropertyChanged();
             }
         }
 
@@ -91,178 +90,174 @@ namespace TribalWars2_CalculationTools.Models
             set
             {
                 _inputLuck = value;
-                NotifyOfPropertyChange(() => InputLuck);
+                OnPropertyChanged();
             }
         }
 
-        public BindableCollection<BaseUnit> Units
-        {
-            get => _units;
-            set
-            {
-                Debug.WriteLine("SUCCESS!!!");
+        //public BindingList<BaseUnit> Units
+        //{
+        //    get => _units;
+        //    set
+        //    {
+        //        Debug.WriteLine("SUCCESS!!!");
 
-                _units = value;
-            }
-        }
+        //        _units = value;
+        //    }
+        //}
 
-        public Spearman Spearman
-        {
-            get => (Spearman)Units[0];
-            set
-            {
-                Units[0] = value;
-                NotifyOfPropertyChange(() => Spearman);
-                ValueUpdated();
-            }
-        }
-        public Swordsman Swordsman
-        {
-            get => (Swordsman)Units[1];
-            set
-            {
-                Units[1] = value;
-                NotifyOfPropertyChange(() => Swordsman);
-                ValueUpdated();
-            }
-        }
-        public AxeFighter AxeFighter
-        {
-            get => (AxeFighter)Units[2];
-            set
-            {
-                Units[2] = value;
-                NotifyOfPropertyChange(() => AxeFighter);
-                ValueUpdated();
-            }
-        }
-        public Archer Archer
-        {
-            get => (Archer)Units[3];
-            set
-            {
-                Units[3] = value;
-                NotifyOfPropertyChange(() => Archer);
-                ValueUpdated();
-            }
-        }
-        public LightCavalry LightCavalry
-        {
-            get => (LightCavalry)Units[4];
-            set
-            {
-                Units[4] = value;
-                NotifyOfPropertyChange(() => LightCavalry);
-                ValueUpdated();
-            }
-        }
-        public MountedArcher MountedArcher
-        {
-            get => (MountedArcher)Units[5];
-            set
-            {
-                Units[5] = value;
-                NotifyOfPropertyChange(() => MountedArcher);
-                ValueUpdated();
-            }
-        }
-        public HeavyCavalry HeavyCavalry
-        {
-            get => (HeavyCavalry)Units[6];
-            set
-            {
-                Units[6] = value;
-                NotifyOfPropertyChange(() => HeavyCavalry);
-                ValueUpdated();
-            }
-        }
-        public Ram Ram
-        {
-            get => (Ram)Units[7];
-            set
-            {
-                Units[7] = value;
-                NotifyOfPropertyChange(() => Ram);
-                ValueUpdated();
-            }
-        }
+        //public Spearman Spearman
+        //{
+        //    get => (Spearman)Units[0];
+        //    set
+        //    {
+        //        Units[0] = value;
+        //        OnPropertyChanged(); ValueUpdated();
+        //    }
+        //}
+        //public Swordsman Swordsman
+        //{
+        //    get => (Swordsman)Units[1];
+        //    set
+        //    {
+        //        Units[1] = value;
+        //        OnPropertyChanged(); ValueUpdated();
+        //    }
+        //}
+        //public AxeFighter AxeFighter
+        //{
+        //    get => (AxeFighter)Units[2];
+        //    set
+        //    {
+        //        Units[2] = value;
+        //        OnPropertyChanged(); ValueUpdated();
+        //    }
+        //}
+        //public Archer Archer
+        //{
+        //    get => (Archer)Units[3];
+        //    set
+        //    {
+        //        Units[3] = value;
+        //        OnPropertyChanged(); ValueUpdated();
+        //    }
+        //}
+        //public LightCavalry LightCavalry
+        //{
+        //    get => (LightCavalry)Units[4];
+        //    set
+        //    {
+        //        Units[4] = value;
+        //        NotifyOfPropertyChange(() => LightCavalry);
+        //        ValueUpdated();
+        //    }
+        //}
+        //public MountedArcher MountedArcher
+        //{
+        //    get => (MountedArcher)Units[5];
+        //    set
+        //    {
+        //        Units[5] = value;
+        //        NotifyOfPropertyChange(() => MountedArcher);
+        //        ValueUpdated();
+        //    }
+        //}
+        //public HeavyCavalry HeavyCavalry
+        //{
+        //    get => (HeavyCavalry)Units[6];
+        //    set
+        //    {
+        //        Units[6] = value;
+        //        NotifyOfPropertyChange(() => HeavyCavalry);
+        //        ValueUpdated();
+        //    }
+        //}
+        //public Ram Ram
+        //{
+        //    get => (Ram)Units[7];
+        //    set
+        //    {
+        //        Units[7] = value;
+        //        NotifyOfPropertyChange(() => Ram);
+        //        ValueUpdated();
+        //    }
+        //}
 
-        public Catapult Catapult
-        {
-            get => (Catapult)Units[8];
-            set
-            {
-                Units[8] = value;
-                NotifyOfPropertyChange(() => Catapult);
-                ValueUpdated();
-            }
-        }
+        //public Catapult Catapult
+        //{
+        //    get => (Catapult)Units[8];
+        //    set
+        //    {
+        //        Units[8] = value;
+        //        NotifyOfPropertyChange(() => Catapult);
+        //        ValueUpdated();
+        //    }
+        //}
 
-        public Berserker Berserker
-        {
-            get => (Berserker)Units[9];
-            set
-            {
-                Units[9] = value;
-                NotifyOfPropertyChange(() => Berserker);
-                ValueUpdated();
-            }
-        }
+        //public Berserker Berserker
+        //{
+        //    get => (Berserker)Units[9];
+        //    set
+        //    {
+        //        Units[9] = value;
+        //        NotifyOfPropertyChange(() => Berserker);
+        //        ValueUpdated();
+        //    }
+        //}
 
-        public Trebuchet Trebuchet
-        {
-            get => (Trebuchet)Units[10];
-            set
-            {
-                Units[10] = value;
-                NotifyOfPropertyChange(() => Trebuchet);
-                ValueUpdated();
-            }
-        }
+        //public Trebuchet Trebuchet
+        //{
+        //    get => (Trebuchet)Units[10];
+        //    set
+        //    {
+        //        Units[10] = value;
+        //        NotifyOfPropertyChange(() => Trebuchet);
+        //        ValueUpdated();
+        //    }
+        //}
 
-        public Nobleman Nobleman
-        {
-            get => (Nobleman)Units[11];
-            set
-            {
-                Units[11] = value;
-                NotifyOfPropertyChange(() => Nobleman);
-                ValueUpdated();
-            }
-        }
+        //public Nobleman Nobleman
+        //{
+        //    get => (Nobleman)Units[11];
+        //    set
+        //    {
+        //        Units[11] = value;
+        //        NotifyOfPropertyChange(() => Nobleman);
+        //        ValueUpdated();
+        //    }
+        //}
 
-        public Paladin Paladin
-        {
-            get => (Paladin)Units[12];
-            set
-            {
-                Units[12] = value;
-                NotifyOfPropertyChange(() => Paladin);
-                ValueUpdated();
-            }
-        }
+        //public Paladin Paladin
+        //{
+        //    get => (Paladin)Units[12];
+        //    set
+        //    {
+        //        Units[12] = value;
+        //        NotifyOfPropertyChange(() => Paladin);
+        //        ValueUpdated();
+        //    }
+        //}
 
         public CalculatorData()
         {
             // Do not change the order!
-            Units.Add(new Spearman());
-            Units.Add(new Swordsman());
-            Units.Add(new AxeFighter());
-            Units.Add(new Archer());
+            //Units.Add(new Spearman());
+            //Units.Add(new Swordsman());
+            //Units.Add(new AxeFighter());
+            //Units.Add(new Archer());
 
-            Units.Add(new LightCavalry());
-            Units.Add(new MountedArcher());
-            Units.Add(new HeavyCavalry());
-            Units.Add(new Ram());
+            //Units.Add(new LightCavalry());
+            //Units.Add(new MountedArcher());
+            //Units.Add(new HeavyCavalry());
+            //Units.Add(new Ram());
 
-            Units.Add(new Catapult());
-            Units.Add(new Berserker());
-            Units.Add(new Trebuchet());
+            //Units.Add(new Catapult());
+            //Units.Add(new Berserker());
+            //Units.Add(new Trebuchet());
 
-            Units.Add(new Nobleman());
-            Units.Add(new Paladin());
+            //Units.Add(new Nobleman());
+            //Units.Add(new Paladin());
 
-            LastBattleResult = new BattleResult(Units.ToList());
+            LastBattleResult = new BattleResult();
 
         }
 
@@ -289,7 +284,7 @@ namespace TribalWars2_CalculationTools.Models
         public void SimulateBattle()
         {
             // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
-            BattleResult result = new BattleResult(Units.ToList());
+            BattleResult result = new BattleResult();
 
 
             decimal faithBonus = (InputAtkChurch ? 1.0m : 0.5m) * (InputDefChurch ? 1.0m : 0.5m);
@@ -399,5 +394,12 @@ namespace TribalWars2_CalculationTools.Models
         }
 
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

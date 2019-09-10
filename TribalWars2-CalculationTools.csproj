@@ -6,7 +6,7 @@
     <RootNamespace>TribalWars2_CalculationTools</RootNamespace>
     <UseWPF>true</UseWPF>
     <StartupObject>TribalWars2_CalculationTools.App</StartupObject>
-    <AssemblyName>TribalWars2-CalculationTools</AssemblyName>
+    <AssemblyName>TribalWars2_CalculationTools</AssemblyName>
     <Platforms>AnyCPU;x86</Platforms>
     <Configurations>Debug;Release;Fix</Configurations>
   </PropertyGroup>
@@ -40,8 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Caliburn.Micro" Version="4.0.89-alpha" />
-    <PackageReference Include="MiqM.Xceed.Wpf.Toolkit.NETCore" Version="3.4.0.1" />
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.5.71" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,7 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\UserControls\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>
