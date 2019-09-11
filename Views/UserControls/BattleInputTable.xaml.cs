@@ -19,25 +19,25 @@ namespace TribalWars2_CalculationTools.Views.UserControls
     /// </summary>
     public partial class BattleInputTable : UserControl
     {
-        public InputCalculatorClass InputCalculator
+        public InputCalculatorData InputCalculatorData
         {
-            get { return (InputCalculatorClass)GetValue(InputCalculatorProperty); }
-            set { SetValue(InputCalculatorProperty, value); }
+            get { return (InputCalculatorData)GetValue(InputCalculatorDataProperty); }
+            set { SetValue(InputCalculatorDataProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty InputCalculatorProperty =
-            DependencyProperty.Register("InputCalculator",
-                typeof(InputCalculatorClass),
+        public static readonly DependencyProperty InputCalculatorDataProperty =
+            DependencyProperty.Register("InputCalculatorData",
+                typeof(InputCalculatorData),
                 typeof(BattleInputTable),
-                new PropertyMetadata(0, SetValues));
+                new PropertyMetadata(new InputCalculatorData(), SetValues));
 
         private static void SetValues(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BattleInputTable inputTable = d as BattleInputTable;
-            InputCalculatorClass inputCalculator = e.NewValue as InputCalculatorClass;
+            InputCalculatorData inputCalculator = e.NewValue as InputCalculatorData;
 
-            if (inputTable != null)
+            if (inputTable != null && inputCalculator != null)
             {
                 inputTable.UnitsInputRows.ItemsSource = inputCalculator.Units;
                 inputTable.InputChurchHeader.Title = inputCalculator.InputChurchLabel;
@@ -45,6 +45,7 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             }
         }
 
+        public event EventHandler ValueChanged;
 
         public BattleInputTable()
         {
@@ -53,12 +54,12 @@ namespace TribalWars2_CalculationTools.Views.UserControls
 
         private void InputChangedCheckBox(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void InputChangedInteger(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            ValueChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

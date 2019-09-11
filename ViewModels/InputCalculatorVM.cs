@@ -9,13 +9,13 @@ namespace TribalWars2_CalculationTools.ViewModels
 {
     public class InputCalculatorVM
     {
-        public InputCalculatorClass InputCalculatorClass { get; set; }
+        public InputCalculatorData InputCalculatorData { get; set; }
 
         public InputCalculatorVM()
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                InputCalculatorClass = new InputCalculatorClass();
+                InputCalculatorData = new InputCalculatorData();
             }
         }
     }

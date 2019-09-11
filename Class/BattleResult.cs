@@ -161,7 +161,7 @@ namespace TribalWars2_CalculationTools.Class
         public BattleResult()
         {
         }
-        public BattleResult(InputCalculatorClass input)
+        public BattleResult(InputCalculatorData input)
         {
             this.AtkSpearman = input.Spearman.NumberOnAttack;
             this.DefSpearman = input.Spearman.NumberOnDefense;

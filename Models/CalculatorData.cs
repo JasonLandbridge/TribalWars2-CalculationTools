@@ -215,7 +215,7 @@ namespace TribalWars2_CalculationTools.Models
             return newWall;
         }
 
-        public void SimulateBattle(InputCalculatorClass input)
+        public void SimulateBattle(InputCalculatorData input)
         {
 
             if (!input.IsValid)
@@ -286,7 +286,7 @@ namespace TribalWars2_CalculationTools.Models
 
             // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
             decimal atkModifier = 100m * (faithBonus * morale * luck) + officerBonus;
-           // decimal defModifier = 100m * (faithBonus)
+            // decimal defModifier = 100m * (faithBonus)
             // Simulate for 3 rounds (infantry, cavalry and archers)
             for (int i = 0; i < 2; i++)
             {

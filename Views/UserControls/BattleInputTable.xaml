@@ -98,29 +98,29 @@
         <!--  Church input rows  -->
         <uc:InputRowHeader
             x:Name="InputChurchHeader"
-            Title="{Binding InputCalculatorClass.InputChurchLabel}"
+            Title="{Binding InputChurchLabel}"
             Grid.Row="2"
             Grid.Column="0"
-            ImagePath="{Binding InputCalculatorClass.InputChurchImagePath}" />
+            ImagePath="{Binding InputChurchImagePath}" />
 
         <CheckBox
             Grid.Row="2"
             Grid.Column="1"
             Click="InputChangedCheckBox"
-            IsChecked="{Binding InputCalculatorClass.InputAtkChurch, Mode=TwoWay}" />
+            IsChecked="{Binding InputAtkChurch, Mode=TwoWay}" />
         <CheckBox
             Grid.Row="2"
             Grid.Column="2"
             Click="InputChangedCheckBox"
-            IsChecked="{Binding InputCalculatorClass.InputDefChurch, Mode=TwoWay}" />
+            IsChecked="{Binding InputDefChurch, Mode=TwoWay}" />
 
         <!--  Morale input rows  -->
         <uc:InputRowHeader
             x:Name="InputMoraleHeader"
-            Title="{Binding InputCalculatorClass.InputMoraleLabel}"
+            Title="{Binding InputMoraleLabel}"
             Grid.Row="3"
             Grid.Column="0"
-            ImagePath="{Binding InputCalculatorClass.InputMoraleImagePath}" />
+            ImagePath="{Binding InputMoraleImagePath}" />
         <!--<toolkit:DecimalUpDown
                 Grid.Row="3"
                 Grid.Column="1"
@@ -137,10 +137,10 @@
         <!--  Luck input rows  -->
         <uc:InputRowHeader
             x:Name="InputLuckHeader"
-            Title="{Binding InputCalculatorClass.InputLuckLabel}"
+            Title="{Binding InputLuckLabel}"
             Grid.Row="4"
             Grid.Column="0"
-            ImagePath="{Binding InputCalculatorClass.InputLuckImagePath}" />
+            ImagePath="{Binding InputLuckImagePath}" />
 
         <!--<toolkit:IntegerUpDown
                 Grid.Row="4"
@@ -158,7 +158,7 @@
         <!--  Wall input rows  -->
         <uc:InputRowHeader
             x:Name="InputWallHeader"
-            Title="{Binding InputCalculatorClass.InputWallLabel}"
+            Title="{Binding InputWallLabel}"
             Grid.Row="5"
             Grid.Column="0"
             ImagePath="{Binding InputWallImagePath}" />

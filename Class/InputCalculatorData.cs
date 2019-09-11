@@ -10,7 +10,7 @@ using TribalWars2_CalculationTools.Annotations;
 
 namespace TribalWars2_CalculationTools.Class
 {
-    public class InputCalculatorClass : INotifyPropertyChanged
+    public class InputCalculatorData : INotifyPropertyChanged
     {
         private ObservableCollection<InputUnitRow> _units = new ObservableCollection<InputUnitRow>();
 
@@ -274,7 +274,7 @@ namespace TribalWars2_CalculationTools.Class
             }
         }
 
-        public InputCalculatorClass()
+        public InputCalculatorData()
         {
             Units.Add(Spearman = new InputUnitRow
             {

@@ -15,7 +15,7 @@ namespace TribalWars2_CalculationTools.Views
     {
         private CalculatorData _selectedCalculatorData;
 
-        private InputCalculatorClass _inputCalculatorClass = new InputCalculatorClass();
+        private InputCalculatorData _inputCalculatorData = new InputCalculatorData();
 
         public MainWindow()
         {
@@ -25,6 +25,15 @@ namespace TribalWars2_CalculationTools.Views
             // TODO make a list
             CalculatorData.Add(new CalculatorData());
             SelectedCalculatorData = CalculatorData[0];
+
+
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+            }
+            else
+            {
+                InputTable.DataContext = this;
+            }
 
             //PresentationTraceSources.TraceLevel=High
         }
@@ -44,12 +53,12 @@ namespace TribalWars2_CalculationTools.Views
             }
         }
 
-        public InputCalculatorClass InputCalculatorData
+        public InputCalculatorData InputCalculatorData
         {
-            get => _inputCalculatorClass;
+            get => _inputCalculatorData;
             set
             {
-                _inputCalculatorClass = value;
+                _inputCalculatorData = value;
                 Debug.WriteLine("Property updated!");
                 OnPropertyChanged();
 
@@ -63,20 +72,10 @@ namespace TribalWars2_CalculationTools.Views
 
         }
 
-        public void UpdateBattleCalculator()
+        public void UpdateBattleCalculator(object sender, EventArgs e)
         {
             Debug.WriteLine("Battle Calculator updated!");
             SelectedCalculatorData.SimulateBattle(InputCalculatorData);
-        }
-
-        private void InputChangedInteger(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            UpdateBattleCalculator();
-        }
-
-        private void InputChangedCheckBox(object sender, RoutedEventArgs e)
-        {
-            UpdateBattleCalculator();
         }
 
 
