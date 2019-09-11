@@ -46,6 +46,9 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             {
                 inputTable.UnitsInputRows.ItemsSource = inputCalculator.Units;
 
+                inputTable.InputGrandMasterHeader.Title = inputCalculator.InputGrandmasterBonusLabel;
+                inputTable.InputGrandMasterHeader.ImagePath = inputCalculator.InputGrandmasterBonusImagePath;
+
                 inputTable.InputChurchHeader.Title = inputCalculator.InputChurchLabel;
                 inputTable.InputChurchHeader.ImagePath = inputCalculator.InputChurchImagePath;
 

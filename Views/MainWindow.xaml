@@ -8,8 +8,8 @@
     xmlns:sync="http://schemas.syncfusion.com/wpf"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     Title="Tribal Wars 2 Calculation Tools"
-    Width="1000"
-    Height="1200"
+    Width="1920"
+    Height="1480"
     mc:Ignorable="d">
     <Window.Resources>
         <class:InputCalculatorData x:Key="vm" />

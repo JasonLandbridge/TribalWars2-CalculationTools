@@ -53,7 +53,7 @@ namespace TribalWars2_CalculationTools.Class.Units
             }
         }
 
-        public string ImagePath => $"/Resources/Img/unit_{this.Name.ToLower().Replace(' ', '_')}.png";
+        public string ImagePath => $"/Resources/Img/units/unit_{this.Name.ToLower().Replace(' ', '_')}.png";
 
 
         // Used as a signal to update the calculation 

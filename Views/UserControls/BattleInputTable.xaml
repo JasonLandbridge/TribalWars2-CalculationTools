@@ -36,12 +36,16 @@
             Grid.Column="1"
             MinWidth="100"
             Margin="0,5"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
             Content="Attack" />
         <Label
             Grid.Row="0"
             Grid.Column="2"
             MinWidth="100"
             Margin="0,5"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
             Content="Defense" />
 
         <!--  Units input rows  -->
@@ -50,51 +54,79 @@
             Grid.Column="0"
             Grid.ColumnSpan="3"
             Header="Units">
-            <ItemsControl x:Name="UnitsInputRows">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,0,0,5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ItemsControl
+                    x:Name="UnitsInputRows"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
 
-                            </Grid.RowDefinitions>
-                            <uc:InputRowHeader
-                                Title="{Binding Name}"
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                ImagePath="{Binding ImagePath}" />
-                            <sync:UpDown
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Width="{Binding ComponentWidth, FallbackValue=120}"
-                                Margin="5,5"
-                                MaxValue="99999"
-                                MinValue="0"
-                                NumberDecimalDigits="0"
-                                Step="1"
-                                ValueChanged="InputChangedInteger"
-                                Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <sync:UpDown
-                                Grid.Row="0"
-                                Grid.Column="2"
-                                Width="{Binding ComponentWidth, FallbackValue=120}"
-                                Margin="5,5"
-                                MaxValue="99999"
-                                MinValue="0"
-                                NumberDecimalDigits="0"
-                                Step="1"
-                                ValueChanged="InputChangedInteger"
-                                Value="{Binding NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                                </Grid.RowDefinitions>
+                                <uc:InputRowHeader
+                                    Title="{Binding Name}"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    ImagePath="{Binding ImagePath}" />
+                                <sync:UpDown
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                                    Margin="5,5"
+                                    MaxValue="99999"
+                                    MinValue="0"
+                                    NumberDecimalDigits="0"
+                                    Step="1"
+                                    ValueChanged="InputChangedInteger"
+                                    Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <sync:UpDown
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                                    Margin="5,5"
+                                    MaxValue="99999"
+                                    MinValue="0"
+                                    NumberDecimalDigits="0"
+                                    Step="1"
+                                    ValueChanged="InputChangedInteger"
+                                    Value="{Binding NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <uc:InputRowHeader
+                    x:Name="InputGrandMasterHeader"
+                    Title="{Binding InputGrandmasterBonusLabel}"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    ImagePath="{Binding InputGrandmasterBonusImagePath}" />
+                <CheckBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Checked="InputChangedCheckBox"
+                    IsChecked="{Binding InputGrandmasterBonus, Mode=TwoWay}" />
 
+            </Grid>
         </GroupBox>
         <!--  Buildings input rows  -->
         <GroupBox
@@ -208,7 +240,7 @@
                     MaxValue="100"
                     MinValue="1"
                     PercentDecimalDigits="0"
-                    PercentValue="{Binding InputMorale, Mode=TwoWay}"
+                    PercentValue="{Binding InputMorale, Mode=TwoWay, FallbackValue=100}"
                     PercentValueChanged="InputChangedInteger"
                     PercentageSymbol="%" />
 

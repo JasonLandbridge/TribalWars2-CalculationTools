@@ -155,6 +155,8 @@ namespace TribalWars2_CalculationTools.Class
             }
         }
 
+        public string InputGrandmasterBonusLabel { get; } = "Grand Master";
+        public string InputGrandmasterBonusImagePath { get; } = "/Resources/Img/units/unit_grandmaster.png";
         public string InputChurchLabel { get; } = "Church";
         public string InputChurchImagePath { get; } = "/Resources/Img/buildings/buildings_church.png";
         public string InputMoraleLabel { get; } = "Morale";
