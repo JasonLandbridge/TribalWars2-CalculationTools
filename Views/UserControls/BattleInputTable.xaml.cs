@@ -40,8 +40,22 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             if (inputTable != null && inputCalculator != null)
             {
                 inputTable.UnitsInputRows.ItemsSource = inputCalculator.Units;
+
                 inputTable.InputChurchHeader.Title = inputCalculator.InputChurchLabel;
                 inputTable.InputChurchHeader.ImagePath = inputCalculator.InputChurchImagePath;
+
+                inputTable.InputMoraleHeader.Title = inputCalculator.InputMoraleLabel;
+                inputTable.InputMoraleHeader.ImagePath = inputCalculator.InputMoraleImagePath;
+
+                inputTable.InputLuckHeader.Title = inputCalculator.InputLuckLabel;
+                inputTable.InputLuckHeader.ImagePath = inputCalculator.InputLuckImagePath;
+
+                inputTable.InputWallHeader.Title = inputCalculator.InputWallLabel;
+                inputTable.InputWallHeader.ImagePath = inputCalculator.InputWallImagePath;
+
+                inputTable.InputNightBonusHeader.Title = inputCalculator.InputNightBonusLabel;
+                inputTable.InputNightBonusHeader.ImagePath = inputCalculator.InputNightBonusImagePath;
+
             }
         }
 

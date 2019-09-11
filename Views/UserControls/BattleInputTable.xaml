@@ -106,11 +106,15 @@
         <CheckBox
             Grid.Row="2"
             Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Click="InputChangedCheckBox"
             IsChecked="{Binding InputAtkChurch, Mode=TwoWay}" />
         <CheckBox
             Grid.Row="2"
             Grid.Column="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Click="InputChangedCheckBox"
             IsChecked="{Binding InputDefChurch, Mode=TwoWay}" />
 
@@ -121,18 +125,18 @@
             Grid.Row="3"
             Grid.Column="0"
             ImagePath="{Binding InputMoraleImagePath}" />
-        <!--<toolkit:DecimalUpDown
-                Grid.Row="3"
-                Grid.Column="1"
-                Width="100"
-                Margin="5,5"
-                AllowSpin="True"
-                FormatString="P0"
-                Increment=".01"
-                Maximum="1"
-                Minimum="0"
-                ValueChanged="InputChangedInteger"
-                Value="{Binding InputMorale, Mode=TwoWay}" />-->
+
+        <sync:PercentTextBox
+            Grid.Row="3"
+            Grid.Column="1"
+            Width="100"
+            Margin="5,5"
+            MaxValue="1"
+            MinValue="0.41"
+            PercentDecimalDigits="1"
+            PercentValue="{Binding InputMorale, Mode=TwoWay}"
+            PercentValueChanged="InputChangedInteger"
+            PercentageSymbol="%" />
 
         <!--  Luck input rows  -->
         <uc:InputRowHeader
@@ -142,18 +146,17 @@
             Grid.Column="0"
             ImagePath="{Binding InputLuckImagePath}" />
 
-        <!--<toolkit:IntegerUpDown
-                Grid.Row="4"
-                Grid.Column="1"
-                Width="100"
-                Margin="5,5"
-                AllowSpin="True"
-                FormatString="N0"
-                Increment="1"
-                Maximum="15"
-                Minimum="-15"
-                ValueChanged="InputChangedInteger"
-                Value="{Binding InputLuck, Mode=TwoWay}" />-->
+        <sync:UpDown
+            Grid.Row="4"
+            Grid.Column="1"
+            Width="100"
+            Margin="5,5"
+            MaxValue="15"
+            MinValue="-15"
+            NumberDecimalDigits="0"
+            Step="1"
+            ValueChanged="InputChangedInteger"
+            Value="{Binding InputLuck, Mode=TwoWay}" />
 
         <!--  Wall input rows  -->
         <uc:InputRowHeader
@@ -162,18 +165,18 @@
             Grid.Row="5"
             Grid.Column="0"
             ImagePath="{Binding InputWallImagePath}" />
-        <!--<toolkit:IntegerUpDown
-                Grid.Row="5"
-                Grid.Column="2"
-                Width="100"
-                Margin="5,5"
-                AllowSpin="True"
-                FormatString="N0"
-                Increment="1"
-                Maximum="20"
-                Minimum="0"
-                ValueChanged="InputChangedInteger"
-                Value="{Binding InputWall, Mode=TwoWay}" />-->
+
+        <sync:UpDown
+            Grid.Row="5"
+            Grid.Column="2"
+            Width="100"
+            Margin="5,5"
+            MaxValue="20"
+            MinValue="0"
+            NumberDecimalDigits="0"
+            Step="1"
+            ValueChanged="InputChangedInteger"
+            Value="{Binding InputWall, Mode=TwoWay}" />
 
         <!--  Nightbonus input rows  -->
 
@@ -186,6 +189,8 @@
         <CheckBox
             Grid.Row="6"
             Grid.Column="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Checked="InputChangedCheckBox"
             IsChecked="{Binding InputNightBonus, Mode=TwoWay}" />
 

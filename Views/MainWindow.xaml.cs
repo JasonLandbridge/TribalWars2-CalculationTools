@@ -79,6 +79,9 @@ namespace TribalWars2_CalculationTools.Views
             SelectedCalculatorData.SimulateBattle(InputCalculatorData);
         }
 
+        private void InputTable_Loaded(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }

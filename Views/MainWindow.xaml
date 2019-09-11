@@ -2,11 +2,11 @@
     x:Class="TribalWars2_CalculationTools.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:class="clr-namespace:TribalWars2_CalculationTools.Class"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
-    xmlns:class="clr-namespace:TribalWars2_CalculationTools.Class"
     Title="Tribal Wars 2 Calculation Tools"
     Width="1000"
     Height="1200"
@@ -304,6 +304,7 @@
             Grid.Column="1"
             DataContext="{StaticResource vm}"
             InputCalculatorData="{StaticResource vm}"
+            Loaded="InputTable_Loaded"
             ValueChanged="UpdateBattleCalculator" />
 
     </Grid>
