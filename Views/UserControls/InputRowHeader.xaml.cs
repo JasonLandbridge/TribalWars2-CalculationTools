@@ -19,10 +19,6 @@ namespace TribalWars2_CalculationTools.Views.UserControls
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register("Title", typeof(string), typeof(InputRowHeader), new PropertyMetadata(""));
 
-        private string _imagePath = "";
-
-        private string _title = "Default ViewModel first caption";
-
         #endregion Fields
 
         #region Constructors

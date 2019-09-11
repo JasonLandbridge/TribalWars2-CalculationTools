@@ -1,0 +1,194 @@
+﻿<UserControl
+    x:Class="TribalWars2_CalculationTools.Views.UserControls.BattleInputTable"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
+    xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
+    x:Name="parent"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid
+        x:Name="InputTable"
+        Grid.Row="1"
+        Grid.Column="1"
+        DataContext="{Binding ElementName=parent}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Label
+            Grid.Row="0"
+            Grid.Column="1"
+            MinWidth="100"
+            Margin="0,5"
+            Content="Attack" />
+        <Label
+            Grid.Row="0"
+            Grid.Column="2"
+            MinWidth="100"
+            Margin="0,5"
+            Content="Defense" />
+
+        <!--  Units input rows  -->
+        <ItemsControl
+            x:Name="UnitsInputRows"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+
+                        </Grid.RowDefinitions>
+                        <uc:InputRowHeader
+                            Title="{Binding Name}"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            ImagePath="{Binding ImagePath}" />
+                        <sync:UpDown
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Width="100"
+                            Margin="5,5"
+                            MaxValue="99999"
+                            MinValue="0"
+                            NumberDecimalDigits="0"
+                            Step="1"
+                            ValueChanged="InputChangedInteger"
+                            Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <sync:UpDown
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Width="100"
+                            Margin="5,5"
+                            MaxValue="99999"
+                            MinValue="0"
+                            NumberDecimalDigits="0"
+                            Step="1"
+                            ValueChanged="InputChangedInteger"
+                            Value="{Binding NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!--  Church input rows  -->
+        <uc:InputRowHeader
+            x:Name="InputChurchHeader"
+            Title="{Binding InputCalculatorClass.InputChurchLabel}"
+            Grid.Row="2"
+            Grid.Column="0"
+            ImagePath="{Binding InputCalculatorClass.InputChurchImagePath}" />
+
+        <CheckBox
+            Grid.Row="2"
+            Grid.Column="1"
+            Click="InputChangedCheckBox"
+            IsChecked="{Binding InputCalculatorClass.InputAtkChurch, Mode=TwoWay}" />
+        <CheckBox
+            Grid.Row="2"
+            Grid.Column="2"
+            Click="InputChangedCheckBox"
+            IsChecked="{Binding InputCalculatorClass.InputDefChurch, Mode=TwoWay}" />
+
+        <!--  Morale input rows  -->
+        <uc:InputRowHeader
+            x:Name="InputMoraleHeader"
+            Title="{Binding InputCalculatorClass.InputMoraleLabel}"
+            Grid.Row="3"
+            Grid.Column="0"
+            ImagePath="{Binding InputCalculatorClass.InputMoraleImagePath}" />
+        <!--<toolkit:DecimalUpDown
+                Grid.Row="3"
+                Grid.Column="1"
+                Width="100"
+                Margin="5,5"
+                AllowSpin="True"
+                FormatString="P0"
+                Increment=".01"
+                Maximum="1"
+                Minimum="0"
+                ValueChanged="InputChangedInteger"
+                Value="{Binding InputMorale, Mode=TwoWay}" />-->
+
+        <!--  Luck input rows  -->
+        <uc:InputRowHeader
+            x:Name="InputLuckHeader"
+            Title="{Binding InputCalculatorClass.InputLuckLabel}"
+            Grid.Row="4"
+            Grid.Column="0"
+            ImagePath="{Binding InputCalculatorClass.InputLuckImagePath}" />
+
+        <!--<toolkit:IntegerUpDown
+                Grid.Row="4"
+                Grid.Column="1"
+                Width="100"
+                Margin="5,5"
+                AllowSpin="True"
+                FormatString="N0"
+                Increment="1"
+                Maximum="15"
+                Minimum="-15"
+                ValueChanged="InputChangedInteger"
+                Value="{Binding InputLuck, Mode=TwoWay}" />-->
+
+        <!--  Wall input rows  -->
+        <uc:InputRowHeader
+            x:Name="InputWallHeader"
+            Title="{Binding InputCalculatorClass.InputWallLabel}"
+            Grid.Row="5"
+            Grid.Column="0"
+            ImagePath="{Binding InputWallImagePath}" />
+        <!--<toolkit:IntegerUpDown
+                Grid.Row="5"
+                Grid.Column="2"
+                Width="100"
+                Margin="5,5"
+                AllowSpin="True"
+                FormatString="N0"
+                Increment="1"
+                Maximum="20"
+                Minimum="0"
+                ValueChanged="InputChangedInteger"
+                Value="{Binding InputWall, Mode=TwoWay}" />-->
+
+        <!--  Nightbonus input rows  -->
+
+        <uc:InputRowHeader
+            x:Name="InputNightBonusHeader"
+            Title="{Binding InputNightBonusLabel}"
+            Grid.Row="6"
+            Grid.Column="0"
+            ImagePath="{Binding InputNightBonusImagePath}" />
+        <CheckBox
+            Grid.Row="6"
+            Grid.Column="2"
+            Checked="InputChangedCheckBox"
+            IsChecked="{Binding InputNightBonus, Mode=TwoWay}" />
+
+    </Grid>
+
+</UserControl>

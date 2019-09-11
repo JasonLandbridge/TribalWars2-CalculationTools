@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using TribalWars2_CalculationTools.Annotations;
@@ -32,7 +33,8 @@ namespace TribalWars2_CalculationTools.Class
         private decimal _inputMorale = 1;
         private int _inputLuck = 0;
         private int _inputWall = 0;
-        private bool _inputNightBonus = true;
+        private bool _inputNightBonus = false;
+        private bool _grandmasterBonus = false;
 
         public InputUnitRow Spearman
         {
@@ -210,6 +212,16 @@ namespace TribalWars2_CalculationTools.Class
             }
         }
 
+        public bool InputGrandmasterBonus
+        {
+            get => _grandmasterBonus;
+            set
+            {
+                _grandmasterBonus = value;
+                OnPropertyChanged();
+            }
+        }
+
         public decimal InputMorale
         {
             get => _inputMorale;
@@ -230,6 +242,27 @@ namespace TribalWars2_CalculationTools.Class
             }
         }
 
+
+        public int TotalAtkUnits
+        {
+            get
+            {
+                return Units.Sum(unit => unit.NumberOnAttack);
+            }
+        }
+
+        public int TotalDefUnits
+        {
+            get
+            {
+                return Units.Sum(unit => unit.NumberOnDefense);
+            }
+        }
+
+        public int TotalUnits => TotalAtkUnits + TotalDefUnits;
+
+
+        public bool IsValid => (TotalUnits != 0);
 
         public ObservableCollection<InputUnitRow> Units
         {

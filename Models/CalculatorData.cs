@@ -217,46 +217,37 @@ namespace TribalWars2_CalculationTools.Models
 
         public void SimulateBattle(InputCalculatorClass input)
         {
-            // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
-            BattleResult result = new BattleResult(input);
 
-
-            decimal faithBonus = (input.InputAtkChurch ? 1.0m : 0.5m) * (input.InputDefChurch ? 1.0m : 0.5m);
-            int wallLevel = input.InputWall;
-            decimal morale = input.InputMorale / 100m;
-            decimal luck = 1m + input.InputLuck / 100m;
-            decimal nightBonus = (input.InputNightBonus ? 2m : 1m);
-
-            int totalAtkProvisions = result.GetTotalAtkProvisions();
-            int totalDefProvisions = result.GetTotalDefProvisions();
-
-            bool defSuperior = (totalAtkProvisions < totalDefProvisions / 2);
-
-            int resultingWallLevel = WallLevelBeforeBattle(result.AtkRam, wallLevel, faithBonus, false);
-
-            // 5% for every wall level
-            decimal wallBonus = 1m + wallLevel * 0.05m;
-
-            int wallDefense = 0;
-
-            if (resultingWallLevel > 0)
+            if (!input.IsValid)
             {
-                wallDefense = (int)Math.Round(Math.Pow(1.24, resultingWallLevel) * 20, MidpointRounding.AwayFromZero);
+                return;
             }
 
+            // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
+            // Based on: Battle Simulator - http://www.ds-pro.de/2/simulator.php
+            BattleResult result = new BattleResult(input);
 
-            // First Round - Infantry
+            decimal faithBonus = (input.InputAtkChurch ? 0.5m : 1m) * (input.InputDefChurch ? 2.0m : 1m);
+            int wallLevel = input.InputWall;
+            decimal morale = input.InputMorale;
+            decimal luck = 1m + (input.InputLuck / 100m);
+            decimal nightBonus = (input.InputNightBonus ? 2m : 1m);
+            decimal officerBonus = (input.InputGrandmasterBonus ? 0.1m : 0m);
+
             int atkInfantryProvisions = result.GetTotalInfantryProvisions();
             int atkCavalryProvisions = result.GetTotalCavalryProvisions();
             int atkArchersProvisions = result.GetTotalArcherProvisions();
-            List<int> provisionTypeList = new List<int>
+            List<int> atkProvisionTypeList = new List<int>
             {
                 atkInfantryProvisions,
                 atkCavalryProvisions,
                 atkArchersProvisions
             };
-            int atkProvisions = result.GetTotalAtkProvisions();
+            int totalAtkProvisions = atkInfantryProvisions + atkCavalryProvisions + atkArchersProvisions;
+            int totalDefProvisions = result.GetTotalDefProvisions();
 
+            // Determines if the Berserker fights with double strength
+            bool defSuperior = (totalAtkProvisions < totalDefProvisions / 2);
 
             int atkInfantry = result.GetTotalInfantryAttack(defSuperior);
             int atkCavalry = result.GetTotalCavalryAttack();
@@ -278,20 +269,51 @@ namespace TribalWars2_CalculationTools.Models
                 defCavalry,
                 defArchers
             };
-
             int defenseStrength = defInfantry + defCavalry + defArchers;
 
+
+            int resultingWallLevel = WallLevelBeforeBattle(result.AtkRam, wallLevel, faithBonus, false);
+
+            // 5% for every wall level
+            decimal wallBonus = 1m + wallLevel * 0.05m;
+
+            int wallDefense = 0;
+
+            if (resultingWallLevel > 0)
+            {
+                wallDefense = (int)Math.Round(Math.Pow(1.24, resultingWallLevel) * 20, MidpointRounding.AwayFromZero);
+            }
+
+            // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
+            decimal atkModifier = 100m * (faithBonus * morale * luck) + officerBonus;
+           // decimal defModifier = 100m * (faithBonus)
             // Simulate for 3 rounds (infantry, cavalry and archers)
             for (int i = 0; i < 2; i++)
             {
-                if (attackTypeList[i] == 0)
+                int attackStrength = attackTypeList[i];
+                int attackProvisions = atkProvisionTypeList[i];
+
+                // The Paladin fights with the strongest (highest fighting power) group. 
+                // The weapon boost is applied based on the type and not if he joins the round or not. 
+                if (attackStrength == attackTypeList.Max())
+                {
+                    attackStrength += GameData.Paladin.FightingPower;
+                    // TODO It is assumed that the Paladin provision is counted towards the group it joins
+                    attackProvisions += GameData.Paladin.ProvisionCost;
+
+                }
+
+                // If the attackStrength is zero then skip this attack round.
+                if (attackStrength == 0)
                 {
                     continue;
                 }
 
-                decimal ratio = provisionTypeList[i] / (decimal)atkProvisions;
+                decimal ratio = attackProvisions / (decimal)totalAtkProvisions;
+
+
+                decimal attack = (attackStrength * morale * luck * faithBonus);
                 decimal defense = (defenseTypeList[i] * ratio * wallBonus * nightBonus) + (wallDefense * ratio);
-                decimal attack = (attackTypeList[i] * morale * luck * faithBonus);
 
                 // Prevent dividing by zero
                 if (defense == 0)
@@ -306,7 +328,7 @@ namespace TribalWars2_CalculationTools.Models
                     // Defense won, kill off all attack infantry
                     result.KillAllAtkInfantry();
 
-                    decimal lostCoefficient = (decimal)Math.Sqrt((double)attack) * attack;
+                    decimal lostCoefficient = (decimal)Math.Sqrt((double)victor) * victor;
                     // Set the loses of the defending infantry
                     result.KillDefInfantry(lostCoefficient);
                 }
@@ -315,7 +337,7 @@ namespace TribalWars2_CalculationTools.Models
                     // Attack won, kill off all defense infantry
                     result.KillAllDefInfantry();
 
-                    decimal lostCoefficient = (decimal)Math.Sqrt(1 / (double)attack) / attack;
+                    decimal lostCoefficient = (decimal)Math.Sqrt(1 / (double)victor) / victor;
                     // Set the loses of the attacking infantry
                     result.KillAtkInfantry(lostCoefficient);
                 }

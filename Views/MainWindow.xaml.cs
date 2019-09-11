@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Input;
 using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class;
-using TribalWars2_CalculationTools.Class.Utilities;
 using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Views
@@ -70,7 +69,7 @@ namespace TribalWars2_CalculationTools.Views
             SelectedCalculatorData.SimulateBattle(InputCalculatorData);
         }
 
-        private void InputChangedInteger(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void InputChangedInteger(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             UpdateBattleCalculator();
         }

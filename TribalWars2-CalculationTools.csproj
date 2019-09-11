@@ -44,6 +44,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Syncfusion.SfInput.Wpf">
+      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.SfInput.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfShared.Wpf">
+      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.SfShared.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.WPF">
+      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.Shared.WPF.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Img\buildings\buildings_church.png" />
     <Resource Include="Resources\Img\buildings\buildings_wall.png" />
     <Resource Include="Resources\Img\info\info_luck.png" />
@@ -65,7 +77,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\" />
+    <Folder Include="Class\Utilities\" />
   </ItemGroup>
 
 </Project>

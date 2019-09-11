@@ -259,6 +259,8 @@ namespace TribalWars2_CalculationTools.Class
             totalProvisions += AtkBerserker * GameData.Berserker.ProvisionCost;
 
             totalProvisions += AtkNobleman * GameData.Nobleman.ProvisionCost;
+            totalProvisions += AtkPaladin * GameData.Paladin.ProvisionCost;
+
 
             return totalProvisions;
         }
@@ -285,18 +287,6 @@ namespace TribalWars2_CalculationTools.Class
 
         #endregion
 
-
-        public int GetTotalAtkProvisions()
-        {
-            int provisions = 0;
-
-            for (int i = 0; i < GameData.UnitList.Count; i++)
-            {
-                provisions += ListOfAtkNumbers[i].Value * GameData.UnitList[i].ProvisionCost;
-            }
-
-            return provisions;
-        }
 
         public int GetTotalInfantryAttack(bool defenseIsSuperior)
         {
