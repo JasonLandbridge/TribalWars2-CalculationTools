@@ -33,6 +33,7 @@ namespace TribalWars2_CalculationTools.Views
             else
             {
                 InputTable.DataContext = this;
+                InputTable.InputCalculatorData = InputCalculatorData;
             }
 
             //PresentationTraceSources.TraceLevel=High

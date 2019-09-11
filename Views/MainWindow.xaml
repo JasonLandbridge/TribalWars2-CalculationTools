@@ -6,14 +6,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
-    xmlns:vm="clr-namespace:TribalWars2_CalculationTools.ViewModels"
+    xmlns:class="clr-namespace:TribalWars2_CalculationTools.Class"
     Title="Tribal Wars 2 Calculation Tools"
     Width="1000"
     Height="1200"
     mc:Ignorable="d">
     <!--  Main Grid  -->
     <Window.Resources>
-        <vm:InputCalculatorVM x:Key="vm" />
+        <class:InputCalculatorData x:Key="vm" />
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -303,7 +303,7 @@
             Grid.Row="1"
             Grid.Column="1"
             DataContext="{StaticResource vm}"
-            InputCalculatorData="{Binding InputCalculatorData}"
+            InputCalculatorData="{StaticResource vm}"
             ValueChanged="UpdateBattleCalculator" />
 
     </Grid>
