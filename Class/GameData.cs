@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TribalWars2_CalculationTools.Class.Units;
+using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Class
 {
@@ -36,6 +37,41 @@ namespace TribalWars2_CalculationTools.Class
             Trebuchet,
             Nobleman,
             Paladin,
+        };
+
+        public static List<FaithLevel> FaithOptions { get; } = new List<FaithLevel>
+        {
+            new FaithLevel
+            {
+                Code ="Faith_0",
+                Name = "None",
+                Modifier = 0.5m
+            },
+            new FaithLevel
+            {
+                Code ="Faith_1",
+                Name = "Chapel",
+                Modifier = 1m
+            },
+            new FaithLevel
+            {
+                Code ="Faith_2",
+                Name = "Church Level 1",
+                Modifier = 1m
+            },
+            new FaithLevel
+            {
+                Code ="Faith_3",
+                Name = "Church Level 2",
+                Modifier = 1.05m,
+
+            },
+            new FaithLevel
+            {
+                Code ="Faith_4",
+                Name = "Church Level 3",
+                Modifier = 1.1m
+            }
         };
     }
 }

@@ -5,19 +5,20 @@
     xmlns:class="clr-namespace:TribalWars2_CalculationTools.Class"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
+    xmlns:sync="http://schemas.syncfusion.com/wpf"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     Title="Tribal Wars 2 Calculation Tools"
     Width="1000"
     Height="1200"
     mc:Ignorable="d">
-    <!--  Main Grid  -->
     <Window.Resources>
         <class:InputCalculatorData x:Key="vm" />
     </Window.Resources>
+
+    <!--  Main Grid  -->
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition Width="auto" />
 
         </Grid.ColumnDefinitions>
@@ -25,6 +26,14 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <GroupBox
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Header="Battle Calculations">
+            <sync:TreeViewAdv />
+        </GroupBox>
 
         <!--  Result Grid  -->
         <Grid Grid.Row="0" Grid.Column="1">

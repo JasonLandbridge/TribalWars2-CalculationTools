@@ -19,12 +19,13 @@ namespace TribalWars2_CalculationTools.Views
 
         public MainWindow()
         {
-            InitializeComponent();
-            this.DataContext = this;
-
             // TODO make a list
             CalculatorData.Add(new CalculatorData());
             SelectedCalculatorData = CalculatorData[0];
+
+            InitializeComponent();
+            this.DataContext = this;
+
 
 
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))

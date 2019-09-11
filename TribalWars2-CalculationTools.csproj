@@ -41,7 +41,6 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.5.71" />
-    <PackageReference Include="ToggleSwitch" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +52,9 @@
     </Reference>
     <Reference Include="Syncfusion.Shared.WPF">
       <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.Shared.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.Wpf">
+      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.Tools.WPF.dll</HintPath>
     </Reference>
   </ItemGroup>
 

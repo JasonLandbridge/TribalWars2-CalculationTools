@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
+    xmlns:sync1="http://schemas.syncfusion.com/wpf"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     x:Name="parent"
     d:DesignHeight="450"
@@ -15,17 +16,15 @@
         x:Name="InputTable"
         Grid.Row="1"
         Grid.Column="1"
+        Background="White"
         DataContext="{Binding ElementName=parent}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="150" />
 
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -46,153 +45,210 @@
             Content="Defense" />
 
         <!--  Units input rows  -->
-        <ItemsControl
-            x:Name="UnitsInputRows"
+        <GroupBox
             Grid.Row="1"
             Grid.Column="0"
-            Grid.ColumnSpan="3">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,0,0,5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
+            Grid.ColumnSpan="3"
+            Header="Units">
+            <ItemsControl x:Name="UnitsInputRows">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
 
-                        </Grid.RowDefinitions>
-                        <uc:InputRowHeader
-                            Title="{Binding Name}"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            ImagePath="{Binding ImagePath}" />
-                        <sync:UpDown
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Width="100"
-                            Margin="5,5"
-                            MaxValue="99999"
-                            MinValue="0"
-                            NumberDecimalDigits="0"
-                            Step="1"
-                            ValueChanged="InputChangedInteger"
-                            Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <sync:UpDown
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Width="100"
-                            Margin="5,5"
-                            MaxValue="99999"
-                            MinValue="0"
-                            NumberDecimalDigits="0"
-                            Step="1"
-                            ValueChanged="InputChangedInteger"
-                            Value="{Binding NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                            </Grid.RowDefinitions>
+                            <uc:InputRowHeader
+                                Title="{Binding Name}"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                ImagePath="{Binding ImagePath}" />
+                            <sync:UpDown
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="{Binding ComponentWidth, FallbackValue=120}"
+                                Margin="5,5"
+                                MaxValue="99999"
+                                MinValue="0"
+                                NumberDecimalDigits="0"
+                                Step="1"
+                                ValueChanged="InputChangedInteger"
+                                Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <sync:UpDown
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Width="{Binding ComponentWidth, FallbackValue=120}"
+                                Margin="5,5"
+                                MaxValue="99999"
+                                MinValue="0"
+                                NumberDecimalDigits="0"
+                                Step="1"
+                                ValueChanged="InputChangedInteger"
+                                Value="{Binding NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-        <!--  Church input rows  -->
-        <uc:InputRowHeader
-            x:Name="InputChurchHeader"
-            Title="{Binding InputChurchLabel}"
+        </GroupBox>
+        <!--  Buildings input rows  -->
+        <GroupBox
             Grid.Row="2"
             Grid.Column="0"
-            ImagePath="{Binding InputChurchImagePath}" />
+            Grid.ColumnSpan="3"
+            Header="Buildings">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
 
-        <CheckBox
-            Grid.Row="2"
-            Grid.Column="1"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Click="InputChangedCheckBox"
-            IsChecked="{Binding InputAtkChurch, Mode=TwoWay}" />
-        <CheckBox
-            Grid.Row="2"
-            Grid.Column="2"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Click="InputChangedCheckBox"
-            IsChecked="{Binding InputDefChurch, Mode=TwoWay}" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-        <!--  Morale input rows  -->
-        <uc:InputRowHeader
-            x:Name="InputMoraleHeader"
-            Title="{Binding InputMoraleLabel}"
+                <!--  Church input rows  -->
+                <uc:InputRowHeader
+                    x:Name="InputChurchHeader"
+                    Title="{Binding InputChurchLabel}"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    ImagePath="{Binding InputChurchImagePath}" />
+
+                <sync1:ComboBoxAdv
+                    x:Name="InputComboChurchAtk"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Height="28"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    DisplayMemberPath="Name"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    SelectedIndex="1"
+                    SelectedValuePath="{Binding InputAtkChurch, Mode=TwoWay}"
+                    SelectionChanged="InputChangedCheckBox" />
+
+                <sync1:ComboBoxAdv
+                    x:Name="InputComboChurchDef"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Height="28"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    DisplayMemberPath="Name"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    SelectedIndex="1"
+                    SelectedValuePath="{Binding InputDefChurch, Mode=TwoWay}"
+                    SelectionChanged="InputChangedCheckBox" />
+
+                <!--  Wall input rows  -->
+                <uc:InputRowHeader
+                    x:Name="InputWallHeader"
+                    Title="{Binding InputWallLabel}"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    ImagePath="{Binding InputWallImagePath}" />
+
+                <sync:UpDown
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Margin="5,5"
+                    MaxValue="20"
+                    MinValue="0"
+                    NumberDecimalDigits="0"
+                    Step="1"
+                    ValueChanged="InputChangedInteger"
+                    Value="{Binding InputWall, Mode=TwoWay}" />
+            </Grid>
+        </GroupBox>
+        <!--  Meta input rows  -->
+        <GroupBox
             Grid.Row="3"
             Grid.Column="0"
-            ImagePath="{Binding InputMoraleImagePath}" />
+            Grid.ColumnSpan="3"
+            Header="Meta">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
 
-        <sync:PercentTextBox
-            Grid.Row="3"
-            Grid.Column="1"
-            Width="100"
-            Margin="5,5"
-            MaxValue="1"
-            MinValue="0.41"
-            PercentDecimalDigits="1"
-            PercentValue="{Binding InputMorale, Mode=TwoWay}"
-            PercentValueChanged="InputChangedInteger"
-            PercentageSymbol="%" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!--  Morale input rows  -->
+                <uc:InputRowHeader
+                    x:Name="InputMoraleHeader"
+                    Title="{Binding InputMoraleLabel}"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    ImagePath="{Binding InputMoraleImagePath}" />
 
-        <!--  Luck input rows  -->
-        <uc:InputRowHeader
-            x:Name="InputLuckHeader"
-            Title="{Binding InputLuckLabel}"
-            Grid.Row="4"
-            Grid.Column="0"
-            ImagePath="{Binding InputLuckImagePath}" />
+                <sync:PercentTextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Margin="5,5"
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    EnableExtendedScrolling="True"
+                    MaxValue="100"
+                    MinValue="1"
+                    PercentDecimalDigits="0"
+                    PercentValue="{Binding InputMorale, Mode=TwoWay}"
+                    PercentValueChanged="InputChangedInteger"
+                    PercentageSymbol="%" />
 
-        <sync:UpDown
-            Grid.Row="4"
-            Grid.Column="1"
-            Width="100"
-            Margin="5,5"
-            MaxValue="15"
-            MinValue="-15"
-            NumberDecimalDigits="0"
-            Step="1"
-            ValueChanged="InputChangedInteger"
-            Value="{Binding InputLuck, Mode=TwoWay}" />
+                <!--  Luck input rows  -->
+                <uc:InputRowHeader
+                    x:Name="InputLuckHeader"
+                    Title="{Binding InputLuckLabel}"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    ImagePath="{Binding InputLuckImagePath}" />
 
-        <!--  Wall input rows  -->
-        <uc:InputRowHeader
-            x:Name="InputWallHeader"
-            Title="{Binding InputWallLabel}"
-            Grid.Row="5"
-            Grid.Column="0"
-            ImagePath="{Binding InputWallImagePath}" />
+                <sync:UpDown
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Margin="5,5"
+                    MaxValue="15"
+                    MinValue="-15"
+                    NumberDecimalDigits="0"
+                    Step="1"
+                    ValueChanged="InputChangedInteger"
+                    Value="{Binding InputLuck, Mode=TwoWay}" />
 
-        <sync:UpDown
-            Grid.Row="5"
-            Grid.Column="2"
-            Width="100"
-            Margin="5,5"
-            MaxValue="20"
-            MinValue="0"
-            NumberDecimalDigits="0"
-            Step="1"
-            ValueChanged="InputChangedInteger"
-            Value="{Binding InputWall, Mode=TwoWay}" />
+                <!--  Nightbonus input rows  -->
 
-        <!--  Nightbonus input rows  -->
-
-        <uc:InputRowHeader
-            x:Name="InputNightBonusHeader"
-            Title="{Binding InputNightBonusLabel}"
-            Grid.Row="6"
-            Grid.Column="0"
-            ImagePath="{Binding InputNightBonusImagePath}" />
-        <CheckBox
-            Grid.Row="6"
-            Grid.Column="2"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Checked="InputChangedCheckBox"
-            IsChecked="{Binding InputNightBonus, Mode=TwoWay}" />
+                <uc:InputRowHeader
+                    x:Name="InputNightBonusHeader"
+                    Title="{Binding InputNightBonusLabel}"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    ImagePath="{Binding InputNightBonusImagePath}" />
+                <CheckBox
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Checked="InputChangedCheckBox"
+                    IsChecked="{Binding InputNightBonus, Mode=TwoWay}" />
+            </Grid>
+        </GroupBox>
 
     </Grid>
 

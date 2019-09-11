@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using TribalWars2_CalculationTools.Annotations;
+using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Class
 {
@@ -28,9 +29,9 @@ namespace TribalWars2_CalculationTools.Class
         private InputUnitRow _nobleman;
         private InputUnitRow _paladin;
 
-        private bool _inputDefChurch = true;
-        private bool _inputAtkChurch = true;
-        private decimal _inputMorale = 1;
+        private FaithLevel _inputDefChurch = GameData.FaithOptions[1];
+        private FaithLevel _inputAtkChurch = GameData.FaithOptions[1];
+        private int _inputMorale = 100;
         private int _inputLuck = 0;
         private int _inputWall = 0;
         private bool _inputNightBonus = false;
@@ -45,7 +46,6 @@ namespace TribalWars2_CalculationTools.Class
                 this.OnPropertyChanged();
             }
         }
-
         public InputUnitRow Swordsman
         {
             get => _swordsman;
@@ -55,7 +55,6 @@ namespace TribalWars2_CalculationTools.Class
                 this.OnPropertyChanged();
             }
         }
-
         public InputUnitRow AxeFighter
         {
             get => _axeFighter;
@@ -101,7 +100,6 @@ namespace TribalWars2_CalculationTools.Class
                 this.OnPropertyChanged();
             }
         }
-
         public InputUnitRow Ram
         {
             get => _ram;
@@ -111,7 +109,6 @@ namespace TribalWars2_CalculationTools.Class
                 this.OnPropertyChanged();
             }
         }
-
         public InputUnitRow Catapult
         {
             get => _catapult;
@@ -121,7 +118,6 @@ namespace TribalWars2_CalculationTools.Class
                 this.OnPropertyChanged();
             }
         }
-
         public InputUnitRow Berserker
         {
             get => _berserker;
@@ -131,7 +127,6 @@ namespace TribalWars2_CalculationTools.Class
                 this.OnPropertyChanged();
             }
         }
-
         public InputUnitRow Trebuchet
         {
             get => _trebuchet;
@@ -141,7 +136,6 @@ namespace TribalWars2_CalculationTools.Class
                 this.OnPropertyChanged();
             }
         }
-
         public InputUnitRow Nobleman
         {
             get => _nobleman;
@@ -151,7 +145,6 @@ namespace TribalWars2_CalculationTools.Class
                 this.OnPropertyChanged();
             }
         }
-
         public InputUnitRow Paladin
         {
             get => _paladin;
@@ -173,7 +166,7 @@ namespace TribalWars2_CalculationTools.Class
         public string InputNightBonusLabel { get; } = "Night bonus";
         public string InputNightBonusImagePath { get; } = "/Resources/Img/info/info_nightbonus.png";
 
-        public bool InputAtkChurch
+        public FaithLevel InputAtkChurch
         {
             get => _inputAtkChurch;
             set
@@ -182,7 +175,7 @@ namespace TribalWars2_CalculationTools.Class
                 OnPropertyChanged();
             }
         }
-        public bool InputDefChurch
+        public FaithLevel InputDefChurch
         {
             get => _inputDefChurch;
             set
@@ -222,7 +215,7 @@ namespace TribalWars2_CalculationTools.Class
             }
         }
 
-        public decimal InputMorale
+        public int InputMorale
         {
             get => _inputMorale;
             set

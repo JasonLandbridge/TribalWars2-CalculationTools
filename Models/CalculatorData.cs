@@ -227,7 +227,7 @@ namespace TribalWars2_CalculationTools.Models
             // Based on: Battle Simulator - http://www.ds-pro.de/2/simulator.php
             BattleResult result = new BattleResult(input);
 
-            decimal faithBonus = (input.InputAtkChurch ? 0.5m : 1m) * (input.InputDefChurch ? 2.0m : 1m);
+            decimal faithBonus = 0m; //(input.InputAtkChurch ? 0.5m : 1m) * (input.InputDefChurch ? 2.0m : 1m);
             int wallLevel = input.InputWall;
             decimal morale = input.InputMorale;
             decimal luck = 1m + (input.InputLuck / 100m);

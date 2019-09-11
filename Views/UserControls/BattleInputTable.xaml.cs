@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TribalWars2_CalculationTools.Class;
+using Syncfusion.Windows.Tools.Controls;
 
 namespace TribalWars2_CalculationTools.Views.UserControls
 {
@@ -19,6 +20,10 @@ namespace TribalWars2_CalculationTools.Views.UserControls
     /// </summary>
     public partial class BattleInputTable : UserControl
     {
+
+        public int ComponentWidth { get; } = 120;
+
+
         public InputCalculatorData InputCalculatorData
         {
             get { return (InputCalculatorData)GetValue(InputCalculatorDataProperty); }
@@ -64,6 +69,8 @@ namespace TribalWars2_CalculationTools.Views.UserControls
         public BattleInputTable()
         {
             InitializeComponent();
+            InputComboChurchAtk.ItemsSource = GameData.FaithOptions;
+            InputComboChurchDef.ItemsSource = GameData.FaithOptions;
         }
 
         private void InputChangedCheckBox(object sender, RoutedEventArgs e)
