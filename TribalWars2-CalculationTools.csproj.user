@@ -5,6 +5,12 @@
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\UserControls\BattleResultRow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\UserControls\BattleResultTable.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\UserControls\InputRowHeader.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -14,6 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\UserControls\BattleResultRow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\UserControls\BattleResultTable.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\UserControls\InputRowHeader.xaml">

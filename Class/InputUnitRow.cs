@@ -8,15 +8,10 @@ using TribalWars2_CalculationTools.Annotations;
 
 namespace TribalWars2_CalculationTools.Class
 {
-    public class InputUnitRow : INotifyPropertyChanged
+    public class InputUnitRow : UnitRow, INotifyPropertyChanged
     {
         private int _numberOnAttack = 0;
         private int _numberOnDefense = 0;
-        public string ImagePath { get; set; }
-
-        public string Name { get; set; }
-
-        public string Title => Name;
 
         public int NumberOnAttack
         {

@@ -89,7 +89,7 @@
                                 <sync:UpDown
                                     Grid.Row="0"
                                     Grid.Column="1"
-                                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                                    Width="120"
                                     Margin="5,5"
                                     MaxValue="99999"
                                     MinValue="0"
@@ -100,7 +100,7 @@
                                 <sync:UpDown
                                     Grid.Row="0"
                                     Grid.Column="2"
-                                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                                    Width="120"
                                     Margin="5,5"
                                     MaxValue="99999"
                                     MinValue="0"

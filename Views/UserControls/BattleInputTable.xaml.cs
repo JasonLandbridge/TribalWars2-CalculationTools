@@ -26,8 +26,8 @@ namespace TribalWars2_CalculationTools.Views.UserControls
 
         public InputCalculatorData InputCalculatorData
         {
-            get { return (InputCalculatorData)GetValue(InputCalculatorDataProperty); }
-            set { SetValue(InputCalculatorDataProperty, value); }
+            get => (InputCalculatorData)GetValue(InputCalculatorDataProperty);
+            set => SetValue(InputCalculatorDataProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...

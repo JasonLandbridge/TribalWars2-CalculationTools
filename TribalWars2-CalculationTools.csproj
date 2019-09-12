@@ -54,20 +54,48 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Img\units\unit_archer.png" />
-    <Resource Include="Resources\Img\units\unit_axe_fighter.png" />
-    <Resource Include="Resources\Img\units\unit_berserker.png" />
-    <Resource Include="Resources\Img\units\unit_catapult.png" />
-    <Resource Include="Resources\Img\units\unit_grandmaster.png" />
-    <Resource Include="Resources\Img\units\unit_heavy_cavalry.png" />
-    <Resource Include="Resources\Img\units\unit_light_cavalry.png" />
-    <Resource Include="Resources\Img\units\unit_mounted_archer.png" />
-    <Resource Include="Resources\Img\units\unit_nobleman.png" />
-    <Resource Include="Resources\Img\units\unit_paladin.png" />
-    <Resource Include="Resources\Img\units\unit_ram.png" />
-    <Resource Include="Resources\Img\units\unit_spearman.png" />
-    <Resource Include="Resources\Img\units\unit_swordsman.png" />
-    <Resource Include="Resources\Img\units\unit_trebuchet.png" />
+    <Resource Include="Resources\Img\units\unit_archer.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_axe_fighter.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_berserker.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_catapult.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_grandmaster.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_heavy_cavalry.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_light_cavalry.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_mounted_archer.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_nobleman.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_paladin.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_ram.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_spearman.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_swordsman.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\units\unit_trebuchet.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -90,11 +118,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Img\buildings\buildings_church.png" />
-    <Resource Include="Resources\Img\buildings\buildings_wall.png" />
-    <Resource Include="Resources\Img\info\info_luck.png" />
-    <Resource Include="Resources\Img\info\info_morale.png" />
-    <Resource Include="Resources\Img\info\info_nightbonus.png" />
+    <Resource Include="Resources\Img\buildings\buildings_church.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\buildings\buildings_wall.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\info\info_luck.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\info\info_morale.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\info\info_nightbonus.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using TribalWars2_CalculationTools.Class;
 using TribalWars2_CalculationTools.Class.Units;
 using TribalWars2_CalculationTools.Models;
 
@@ -39,6 +41,25 @@ namespace TribalWars2_CalculationTools.Class
             Paladin,
         };
 
+        public static ObservableCollection<UnitRow> UnitImageList
+        {
+            get
+            {
+                ObservableCollection<UnitRow> unitImageList = new ObservableCollection<UnitRow>();
+
+                foreach (BaseUnit baseUnit in UnitList)
+                {
+                    unitImageList.Add(new UnitRow
+                    {
+                        ImagePath = baseUnit.ImagePath,
+                        Name = baseUnit.Name,
+                    });
+                }
+
+                return unitImageList;
+            }
+        }
+
         public static List<FaithLevel> FaithOptions { get; } = new List<FaithLevel>
         {
             new FaithLevel
@@ -73,5 +94,12 @@ namespace TribalWars2_CalculationTools.Class
                 Modifier = 1.1m
             }
         };
+
+        public static int NumberOfUnits => UnitList.Count;
+
+        static GameData()
+        {
+
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace TribalWars2_CalculationTools.Views.UserControls
         #region Fields
 
         public static readonly DependencyProperty ImagePathProperty =
-            DependencyProperty.Register("ImagePath", typeof(string), typeof(InputRowHeader), new PropertyMetadata("Default ViewModel first caption"));
+            DependencyProperty.Register("ImagePath", typeof(string), typeof(InputRowHeader), new PropertyMetadata(""));
 
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register("Title", typeof(string), typeof(InputRowHeader), new PropertyMetadata(""));
