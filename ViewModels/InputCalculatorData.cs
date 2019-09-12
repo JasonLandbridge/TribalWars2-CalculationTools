@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using TribalWars2_CalculationTools.Annotations;
+using TribalWars2_CalculationTools.Class;
 using TribalWars2_CalculationTools.Models;
 
-namespace TribalWars2_CalculationTools.Class
+namespace TribalWars2_CalculationTools.ViewModels
 {
     public class InputCalculatorData : INotifyPropertyChanged
     {

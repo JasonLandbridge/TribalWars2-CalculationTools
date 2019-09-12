@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using TribalWars2_CalculationTools.Class.Units;
+using TribalWars2_CalculationTools.ViewModels;
 
 namespace TribalWars2_CalculationTools.Class
 {

@@ -9,6 +9,7 @@ using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class;
 using TribalWars2_CalculationTools.Class.Enum;
 using TribalWars2_CalculationTools.Class.Units;
+using TribalWars2_CalculationTools.ViewModels;
 
 namespace TribalWars2_CalculationTools.Models
 {

@@ -42,7 +42,7 @@ namespace TribalWars2_CalculationTools.ViewModels
         {
             for (int i = 0; i < GameData.NumberOfUnits; i++)
             {
-                BattleResultValue defaultValue = new BattleResultValue { Value = 5 };
+                BattleResultValue defaultValue = new BattleResultValue { Value = 0 };
 
                 AttackBattleResultTable.UnitAmount.Add(defaultValue);
                 AttackBattleResultTable.UnitLost.Add(defaultValue);

@@ -29,7 +29,7 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     Width="100"
-                    Content="Units" />
+                    Content="Units" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <ItemsControl
                     x:Name="UnitImageRow"
                     Grid.Row="0"

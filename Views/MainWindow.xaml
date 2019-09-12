@@ -7,12 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sync="http://schemas.syncfusion.com/wpf"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
+    xmlns:vm="clr-namespace:TribalWars2_CalculationTools.ViewModels"
     Title="Tribal Wars 2 Calculation Tools"
     Width="1920"
     Height="1480"
     mc:Ignorable="d">
     <Window.Resources>
-        <class:InputCalculatorData x:Key="vm" />
+        <vm:InputCalculatorData x:Key="vm" />
     </Window.Resources>
 
     <!--  Main Grid  -->

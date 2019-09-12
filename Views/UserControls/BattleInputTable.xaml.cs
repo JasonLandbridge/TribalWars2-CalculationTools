@@ -10,8 +10,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TribalWars2_CalculationTools.Class;
+using TribalWars2_CalculationTools.ViewModels;
 using Syncfusion.Windows.Tools.Controls;
+using TribalWars2_CalculationTools.Class;
 
 namespace TribalWars2_CalculationTools.Views.UserControls
 {
