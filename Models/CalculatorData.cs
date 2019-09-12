@@ -16,8 +16,7 @@ namespace TribalWars2_CalculationTools.Models
     public class CalculatorData : INotifyPropertyChanged
     {
 
-        private BindingList<BaseUnit> _units = new BindingList<BaseUnit>();
-        private BattleResult _lastBattleResult;
+        private BattleResult _lastBattleResult = new BattleResult();
 
         public BattleResult LastBattleResult
         {
@@ -26,178 +25,15 @@ namespace TribalWars2_CalculationTools.Models
             {
                 _lastBattleResult = value;
                 OnPropertyChanged();
+
             }
         }
 
+        private BattleResultViewModel _battleResultViewModel;
 
-
-
-
-        //public BindingList<BaseUnit> Units
-        //{
-        //    get => _units;
-        //    set
-        //    {
-        //        Debug.WriteLine("SUCCESS!!!");
-
-        //        _units = value;
-        //    }
-        //}
-
-        //public Spearman Spearman
-        //{
-        //    get => (Spearman)Units[0];
-        //    set
-        //    {
-        //        Units[0] = value;
-        //        OnPropertyChanged(); ValueUpdated();
-        //    }
-        //}
-        //public Swordsman Swordsman
-        //{
-        //    get => (Swordsman)Units[1];
-        //    set
-        //    {
-        //        Units[1] = value;
-        //        OnPropertyChanged(); ValueUpdated();
-        //    }
-        //}
-        //public AxeFighter AxeFighter
-        //{
-        //    get => (AxeFighter)Units[2];
-        //    set
-        //    {
-        //        Units[2] = value;
-        //        OnPropertyChanged(); ValueUpdated();
-        //    }
-        //}
-        //public Archer Archer
-        //{
-        //    get => (Archer)Units[3];
-        //    set
-        //    {
-        //        Units[3] = value;
-        //        OnPropertyChanged(); ValueUpdated();
-        //    }
-        //}
-        //public LightCavalry LightCavalry
-        //{
-        //    get => (LightCavalry)Units[4];
-        //    set
-        //    {
-        //        Units[4] = value;
-        //        NotifyOfPropertyChange(() => LightCavalry);
-        //        ValueUpdated();
-        //    }
-        //}
-        //public MountedArcher MountedArcher
-        //{
-        //    get => (MountedArcher)Units[5];
-        //    set
-        //    {
-        //        Units[5] = value;
-        //        NotifyOfPropertyChange(() => MountedArcher);
-        //        ValueUpdated();
-        //    }
-        //}
-        //public HeavyCavalry HeavyCavalry
-        //{
-        //    get => (HeavyCavalry)Units[6];
-        //    set
-        //    {
-        //        Units[6] = value;
-        //        NotifyOfPropertyChange(() => HeavyCavalry);
-        //        ValueUpdated();
-        //    }
-        //}
-        //public Ram Ram
-        //{
-        //    get => (Ram)Units[7];
-        //    set
-        //    {
-        //        Units[7] = value;
-        //        NotifyOfPropertyChange(() => Ram);
-        //        ValueUpdated();
-        //    }
-        //}
-
-        //public Catapult Catapult
-        //{
-        //    get => (Catapult)Units[8];
-        //    set
-        //    {
-        //        Units[8] = value;
-        //        NotifyOfPropertyChange(() => Catapult);
-        //        ValueUpdated();
-        //    }
-        //}
-
-        //public Berserker Berserker
-        //{
-        //    get => (Berserker)Units[9];
-        //    set
-        //    {
-        //        Units[9] = value;
-        //        NotifyOfPropertyChange(() => Berserker);
-        //        ValueUpdated();
-        //    }
-        //}
-
-        //public Trebuchet Trebuchet
-        //{
-        //    get => (Trebuchet)Units[10];
-        //    set
-        //    {
-        //        Units[10] = value;
-        //        NotifyOfPropertyChange(() => Trebuchet);
-        //        ValueUpdated();
-        //    }
-        //}
-
-        //public Nobleman Nobleman
-        //{
-        //    get => (Nobleman)Units[11];
-        //    set
-        //    {
-        //        Units[11] = value;
-        //        NotifyOfPropertyChange(() => Nobleman);
-        //        ValueUpdated();
-        //    }
-        //}
-
-        //public Paladin Paladin
-        //{
-        //    get => (Paladin)Units[12];
-        //    set
-        //    {
-        //        Units[12] = value;
-        //        NotifyOfPropertyChange(() => Paladin);
-        //        ValueUpdated();
-        //    }
-        //}
-
-        public CalculatorData()
+        public CalculatorData(BattleResultViewModel BattleResultViewModel)
         {
-            // Do not change the order!
-            //Units.Add(new Spearman());
-            //Units.Add(new Swordsman());
-            //Units.Add(new AxeFighter());
-            //Units.Add(new Archer());
-
-            //Units.Add(new LightCavalry());
-            //Units.Add(new MountedArcher());
-            //Units.Add(new HeavyCavalry());
-            //Units.Add(new Ram());
-
-            //Units.Add(new Catapult());
-            //Units.Add(new Berserker());
-            //Units.Add(new Trebuchet());
-
-            //Units.Add(new Nobleman());
-            //Units.Add(new Paladin());
-
-            LastBattleResult = new BattleResult();
-
+            _battleResultViewModel = BattleResultViewModel;
         }
 
 
@@ -219,22 +55,42 @@ namespace TribalWars2_CalculationTools.Models
         public void SimulateBattle(InputCalculatorData input)
         {
 
-            if (!input.IsValid)
-            {
-                return;
-            }
 
             // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
             // Based on: Battle Simulator - http://www.ds-pro.de/2/simulator.php
             BattleResult result = new BattleResult(input);
 
-            decimal faithBonus = 0m; //(input.InputAtkChurch ? 0.5m : 1m) * (input.InputDefChurch ? 2.0m : 1m);
+            decimal atkFaithBonus = input.InputAtkChurch.Modifier;
+            decimal defFaithBonus = input.InputDefChurch.Modifier;
+
             int wallLevel = input.InputWall;
-            decimal morale = input.InputMorale;
+            decimal morale = input.InputMorale / 100m;
             decimal luck = 1m + (input.InputLuck / 100m);
             decimal nightBonus = (input.InputNightBonus ? 2m : 1m);
             decimal officerBonus = (input.InputGrandmasterBonus ? 0.1m : 0m);
 
+            // 5% for every wall level
+            decimal wallBonus = 1m + wallLevel * 0.05m;
+
+            // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
+            // Math round is important 0.545 -> 0.55
+            decimal x = Math.Round(atkFaithBonus * morale * luck, 2, MidpointRounding.AwayFromZero);
+            decimal atkModifier = 1m * x + officerBonus;
+            result.AtkBattleModifier = (int)(atkModifier * 100m);
+
+            decimal y = Math.Round(defFaithBonus * wallBonus * nightBonus, 2, MidpointRounding.AwayFromZero);
+            decimal defModifier = 1m * y;
+            result.DefBattleModifier = (int)(defModifier * 100m);
+
+            // Stop here if there are no units given
+            if (!input.IsValid)
+            {
+                LastBattleResult = result;
+
+                _battleResultViewModel.UpdateBattleResult(LastBattleResult);
+
+                return;
+            }
             int atkInfantryProvisions = result.GetTotalInfantryProvisions();
             int atkCavalryProvisions = result.GetTotalCavalryProvisions();
             int atkArchersProvisions = result.GetTotalArcherProvisions();
@@ -273,10 +129,9 @@ namespace TribalWars2_CalculationTools.Models
             int defenseStrength = defInfantry + defCavalry + defArchers;
 
 
-            int resultingWallLevel = WallLevelBeforeBattle(result.AtkRam, wallLevel, faithBonus, false);
+            int resultingWallLevel = WallLevelBeforeBattle(result.AtkRam, wallLevel, atkFaithBonus, false);
 
-            // 5% for every wall level
-            decimal wallBonus = 1m + wallLevel * 0.05m;
+
 
             int wallDefense = 0;
 
@@ -285,9 +140,8 @@ namespace TribalWars2_CalculationTools.Models
                 wallDefense = (int)Math.Round(Math.Pow(1.24, resultingWallLevel) * 20, MidpointRounding.AwayFromZero);
             }
 
-            // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
-            decimal atkModifier = 100m * (faithBonus * morale * luck) + officerBonus;
-            // decimal defModifier = 100m * (faithBonus)
+
+
             // Simulate for 3 rounds (infantry, cavalry and archers)
             for (int i = 0; i < 2; i++)
             {
@@ -310,11 +164,12 @@ namespace TribalWars2_CalculationTools.Models
                     continue;
                 }
 
+                // Todo split up based on provision ratio
                 decimal ratio = attackProvisions / (decimal)totalAtkProvisions;
 
 
-                decimal attack = (attackStrength * morale * luck * faithBonus);
-                decimal defense = (defenseTypeList[i] * ratio * wallBonus * nightBonus) + (wallDefense * ratio);
+                decimal attack = attackStrength * atkModifier;
+                decimal defense = (defenseTypeList[i] * ratio * defModifier) + (wallDefense * ratio);
 
                 // Prevent dividing by zero
                 if (defense == 0)
@@ -355,6 +210,7 @@ namespace TribalWars2_CalculationTools.Models
 
             LastBattleResult = result;
 
+            _battleResultViewModel.UpdateBattleResult(LastBattleResult);
         }
 
 

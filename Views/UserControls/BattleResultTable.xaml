@@ -29,7 +29,10 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     Width="100"
-                    Content="Units" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    x:Name="UnitModifier"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="{Binding BattleModifier}" />
                 <ItemsControl
                     x:Name="UnitImageRow"
                     Grid.Row="0"
@@ -52,14 +55,10 @@
 
             </Grid>
             <!--  Unit Amount row  -->
-            <uc:BattleResultRow
-                x:Name="UnitsAmount"
-                Header="Amount" />
+            <uc:BattleResultRow x:Name="UnitsAmount" Header="Amount" />
 
             <!--  Units Lost row  -->
-            <uc:BattleResultRow
-                x:Name="UnitsLost"
-                Header="Losses" />
+            <uc:BattleResultRow x:Name="UnitsLost" Header="Losses" />
         </StackPanel>
     </GroupBox>
 </UserControl>

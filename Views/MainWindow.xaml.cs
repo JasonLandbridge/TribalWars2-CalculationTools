@@ -25,7 +25,8 @@ namespace TribalWars2_CalculationTools.Views
         public MainWindow()
         {
             // TODO make a list
-            CalculatorData.Add(new CalculatorData());
+
+            CalculatorData.Add(new CalculatorData(BattleResultViewModel));
             SelectedCalculatorData = CalculatorData[0];
 
             InitializeComponent();
@@ -43,6 +44,7 @@ namespace TribalWars2_CalculationTools.Views
                 DefenseBattleResultTable.DataContext = BattleResultViewModel;
             }
 
+            UpdateBattleCalculator(null, null);
             //PresentationTraceSources.TraceLevel=High
         }
 

@@ -51,6 +51,7 @@
                 x:Name="AttackBattleResultTable"
                 Grid.Row="0"
                 Grid.Column="0"
+                BattleModifier="{Binding AtkBattleModifier}"
                 BattleResultTableViewModel="{Binding AttackBattleResultTable}"
                 Header="Attacking units" />
 
@@ -59,6 +60,7 @@
                 x:Name="DefenseBattleResultTable"
                 Grid.Row="1"
                 Grid.Column="0"
+                BattleModifier="{Binding DefBattleModifier}"
                 BattleResultTableViewModel="{Binding DefenseBattleResultTable}"
                 Header="Defending units" />
 

@@ -79,77 +79,80 @@ namespace TribalWars2_CalculationTools.Class
         public int LostOnDefPaladin { get; set; }
         #endregion
 
+        public int AtkBattleModifier { get; set; }
+        public int DefBattleModifier { get; set; }
+
         #region ResultList
 
-        public BindingList<ValueType> ListOfAtkNumbers =>
-            new BindingList<ValueType>
+        public List<BattleResultValue> ListOfAtkNumbers =>
+            new List<BattleResultValue>
             {
-                new ValueType(AtkSpearman),
-                new ValueType(AtkSwordsman),
-                new ValueType(AtkAxeFighter),
-                new ValueType(AtkArcher),
-                new ValueType(AtkLightCavalry),
-                new ValueType(AtkMountedArcher),
-                new ValueType(AtkHeavyCavalry),
-                new ValueType(AtkRam),
-                new ValueType(AtkCatapult),
-                new ValueType(AtkBerserker),
-                new ValueType(AtkTrebuchet),
-                new ValueType(AtkNobleman),
-                new ValueType(AtkPaladin),
+                new BattleResultValue(AtkSpearman),
+                new BattleResultValue(AtkSwordsman),
+                new BattleResultValue(AtkAxeFighter),
+                new BattleResultValue(AtkArcher),
+                new BattleResultValue(AtkLightCavalry),
+                new BattleResultValue(AtkMountedArcher),
+                new BattleResultValue(AtkHeavyCavalry),
+                new BattleResultValue(AtkRam),
+                new BattleResultValue(AtkCatapult),
+                new BattleResultValue(AtkBerserker),
+                new BattleResultValue(AtkTrebuchet),
+                new BattleResultValue(AtkNobleman),
+                new BattleResultValue(AtkPaladin),
             };
-        public BindingList<ValueType> ListOfAtkLostNumbers =>
-            new BindingList<ValueType>
+        public List<BattleResultValue> ListOfAtkLostNumbers =>
+            new List<BattleResultValue>
             {
-                new ValueType(LostOnAtkSpearman),
-                new ValueType(LostOnAtkSwordsman),
-                new ValueType(LostOnAtkAxeFighter),
-                new ValueType(LostOnAtkArcher),
-                new ValueType(LostOnAtkLightCavalry),
-                new ValueType(LostOnAtkMountedArcher),
-                new ValueType(LostOnAtkHeavyCavalry),
-                new ValueType(LostOnAtkRam),
-                new ValueType(LostOnAtkCatapult),
-                new ValueType(LostOnAtkBerserker),
-                new ValueType(LostOnAtkTrebuchet),
-                new ValueType(LostOnAtkNobleman),
-                new ValueType(LostOnAtkPaladin),
-            };
-
-        public BindingList<ValueType> ListOfDefNumbers =>
-            new BindingList<ValueType>
-            {
-                new ValueType(DefSpearman),
-                new ValueType(DefSwordsman),
-                new ValueType(DefAxeFighter),
-                new ValueType(DefArcher),
-                new ValueType(DefLightCavalry),
-                new ValueType(DefMountedArcher),
-                new ValueType(DefHeavyCavalry),
-                new ValueType(DefRam),
-                new ValueType(DefCatapult),
-                new ValueType(DefBerserker),
-                new ValueType(DefTrebuchet),
-                new ValueType(DefNobleman),
-                new ValueType(DefPaladin),
+                new BattleResultValue(LostOnAtkSpearman),
+                new BattleResultValue(LostOnAtkSwordsman),
+                new BattleResultValue(LostOnAtkAxeFighter),
+                new BattleResultValue(LostOnAtkArcher),
+                new BattleResultValue(LostOnAtkLightCavalry),
+                new BattleResultValue(LostOnAtkMountedArcher),
+                new BattleResultValue(LostOnAtkHeavyCavalry),
+                new BattleResultValue(LostOnAtkRam),
+                new BattleResultValue(LostOnAtkCatapult),
+                new BattleResultValue(LostOnAtkBerserker),
+                new BattleResultValue(LostOnAtkTrebuchet),
+                new BattleResultValue(LostOnAtkNobleman),
+                new BattleResultValue(LostOnAtkPaladin),
             };
 
-        public BindingList<ValueType> ListOfDefLostNumbers =>
-            new BindingList<ValueType>
+        public List<BattleResultValue> ListOfDefNumbers =>
+            new List<BattleResultValue>
             {
-                new ValueType(LostOnDefSpearman),
-                new ValueType(LostOnDefSwordsman),
-                new ValueType(LostOnDefAxeFighter),
-                new ValueType(LostOnDefArcher),
-                new ValueType(LostOnDefLightCavalry),
-                new ValueType(LostOnDefMountedArcher),
-                new ValueType(LostOnDefHeavyCavalry),
-                new ValueType(LostOnDefRam),
-                new ValueType(LostOnDefCatapult),
-                new ValueType(LostOnDefBerserker),
-                new ValueType(LostOnDefTrebuchet),
-                new ValueType(LostOnDefNobleman),
-                new ValueType(LostOnDefPaladin),
+                new BattleResultValue(DefSpearman),
+                new BattleResultValue(DefSwordsman),
+                new BattleResultValue(DefAxeFighter),
+                new BattleResultValue(DefArcher),
+                new BattleResultValue(DefLightCavalry),
+                new BattleResultValue(DefMountedArcher),
+                new BattleResultValue(DefHeavyCavalry),
+                new BattleResultValue(DefRam),
+                new BattleResultValue(DefCatapult),
+                new BattleResultValue(DefBerserker),
+                new BattleResultValue(DefTrebuchet),
+                new BattleResultValue(DefNobleman),
+                new BattleResultValue(DefPaladin),
+            };
+
+        public List<BattleResultValue> ListOfDefLostNumbers =>
+            new List<BattleResultValue>
+            {
+                new BattleResultValue(LostOnDefSpearman),
+                new BattleResultValue(LostOnDefSwordsman),
+                new BattleResultValue(LostOnDefAxeFighter),
+                new BattleResultValue(LostOnDefArcher),
+                new BattleResultValue(LostOnDefLightCavalry),
+                new BattleResultValue(LostOnDefMountedArcher),
+                new BattleResultValue(LostOnDefHeavyCavalry),
+                new BattleResultValue(LostOnDefRam),
+                new BattleResultValue(LostOnDefCatapult),
+                new BattleResultValue(LostOnDefBerserker),
+                new BattleResultValue(LostOnDefTrebuchet),
+                new BattleResultValue(LostOnDefNobleman),
+                new BattleResultValue(LostOnDefPaladin),
             };
 
 

@@ -6,6 +6,15 @@ namespace TribalWars2_CalculationTools.Class
 {
     public class BattleResultValue
     {
-        public int Value { get; set; }
+        public int Value { get; set; } = 0;
+
+        public BattleResultValue()
+        {
+
+        }
+        public BattleResultValue(int value)
+        {
+            Value = value;
+        }
     }
 }

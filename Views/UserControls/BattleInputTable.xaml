@@ -123,8 +123,8 @@
                     Grid.Column="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Checked="InputChangedCheckBox"
-                    IsChecked="{Binding InputGrandmasterBonus, Mode=TwoWay}" />
+                    Click="InputChangedCheckBox"
+                    IsChecked="{Binding InputCalculatorData.InputGrandmasterBonus, Mode=TwoWay}" />
 
             </Grid>
         </GroupBox>
@@ -165,8 +165,8 @@
                     DisplayMemberPath="Name"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                     SelectedIndex="1"
-                    SelectedValuePath="{Binding InputAtkChurch, Mode=TwoWay}"
-                    SelectionChanged="InputChangedCheckBox" />
+                    SelectedValue="{Binding InputCalculatorData.InputAtkChurch, Mode=TwoWay}"
+                    SelectionChanged="InputComboChurchAtk_OnSelectionChanged" />
 
                 <sync1:ComboBoxAdv
                     x:Name="InputComboChurchDef"
@@ -179,8 +179,8 @@
                     DisplayMemberPath="Name"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                     SelectedIndex="1"
-                    SelectedValuePath="{Binding InputDefChurch, Mode=TwoWay}"
-                    SelectionChanged="InputChangedCheckBox" />
+                    SelectedValue="{Binding InputCalculatorData.InputDefChurch, Mode=TwoWay}"
+                    SelectionChanged="InputComboChurchDef_OnSelectionChanged" />
 
                 <!--  Wall input rows  -->
                 <uc:InputRowHeader
@@ -200,7 +200,7 @@
                     NumberDecimalDigits="0"
                     Step="1"
                     ValueChanged="InputChangedInteger"
-                    Value="{Binding InputWall, Mode=TwoWay}" />
+                    Value="{Binding InputCalculatorData.InputWall, Mode=TwoWay}" />
             </Grid>
         </GroupBox>
         <!--  Meta input rows  -->
@@ -236,13 +236,13 @@
                     Margin="5,5"
                     HorizontalAlignment="Center"
                     HorizontalContentAlignment="Center"
-                    EnableExtendedScrolling="True"
                     MaxValue="100"
                     MinValue="1"
                     PercentDecimalDigits="0"
-                    PercentValue="{Binding InputMorale, Mode=TwoWay, FallbackValue=100}"
-                    PercentValueChanged="InputChangedInteger"
-                    PercentageSymbol="%" />
+                    PercentValue="{Binding InputMoraleProxy, Mode=TwoWay}"
+                    PercentValueChanged="InputMoralChanged"
+                    PercentageSymbol="%"
+                    TextSelectionOnFocus="True" />
 
                 <!--  Luck input rows  -->
                 <uc:InputRowHeader
@@ -250,7 +250,7 @@
                     Title="{Binding InputLuckLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputLuckImagePath}" />
+                    ImagePath="{Binding InputCalculatorData.InputLuckImagePath}" />
 
                 <sync:UpDown
                     Grid.Row="1"
@@ -262,7 +262,7 @@
                     NumberDecimalDigits="0"
                     Step="1"
                     ValueChanged="InputChangedInteger"
-                    Value="{Binding InputLuck, Mode=TwoWay}" />
+                    Value="{Binding InputCalculatorData.InputLuck, Mode=TwoWay}" />
 
                 <!--  Nightbonus input rows  -->
 
@@ -277,8 +277,8 @@
                     Grid.Column="2"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Checked="InputChangedCheckBox"
-                    IsChecked="{Binding InputNightBonus, Mode=TwoWay}" />
+                    Click="InputChangedCheckBox"
+                    IsChecked="{Binding InputCalculatorData.InputNightBonus, Mode=TwoWay}" />
             </Grid>
         </GroupBox>
 

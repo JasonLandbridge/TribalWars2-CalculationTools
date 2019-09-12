@@ -19,11 +19,19 @@ namespace TribalWars2_CalculationTools.Views.UserControls
     public partial class BattleResultTable : UserControl
     {
 
-        public string Header
-        {
-            get => (string)GetValue(HeaderProperty);
-            set => SetValue(HeaderProperty, value);
-        }
+        #region Fields
+
+        public static readonly DependencyProperty BattleModifierProperty =
+            DependencyProperty.Register("BattleModifier",
+                typeof(int),
+                typeof(BattleResultTable),
+                new PropertyMetadata(0));
+
+        public static readonly DependencyProperty BattleResultTableViewModelProperty =
+            DependencyProperty.Register("BattleResultTableViewModel",
+                typeof(BattleResultTableViewModel),
+                typeof(BattleResultTable),
+                new PropertyMetadata(SetProperty));
 
         public static readonly DependencyProperty HeaderProperty =
             DependencyProperty.Register("Header",
@@ -31,6 +39,25 @@ namespace TribalWars2_CalculationTools.Views.UserControls
                 typeof(BattleResultTable),
                 new PropertyMetadata("No Title"));
 
+        #endregion Fields
+
+        #region Constructors
+
+        public BattleResultTable()
+        {
+            InitializeComponent();
+            UnitImageRow.ItemsSource = GameData.UnitImageList;
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public int BattleModifier
+        {
+            get => (int)GetValue(BattleModifierProperty);
+            set => SetValue(BattleModifierProperty, value);
+        }
 
         public BattleResultTableViewModel BattleResultTableViewModel
         {
@@ -38,18 +65,19 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             set => SetValue(BattleResultTableViewModelProperty, value);
         }
 
-        public static readonly DependencyProperty BattleResultTableViewModelProperty =
-            DependencyProperty.Register("BattleResultTableViewModel",
-                typeof(BattleResultTableViewModel),
-                typeof(BattleResultTable),
-                new PropertyMetadata(new BattleResultTableViewModel(), SetProperty));
+        public string Header
+        {
+            get => (string)GetValue(HeaderProperty);
+            set => SetValue(HeaderProperty, value);
+        }
+
+        #endregion Properties
+
+        #region Methods
 
         private static void SetProperty(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            BattleResultTable resultTable = d as BattleResultTable;
-            BattleResultTableViewModel battleResultTableViewModel = e.NewValue as BattleResultTableViewModel;
-
-            if (resultTable != null && battleResultTableViewModel != null)
+            if (d is BattleResultTable resultTable && e.NewValue is BattleResultTableViewModel battleResultTableViewModel)
             {
                 resultTable.UnitsAmount.BattleResultValues = battleResultTableViewModel.UnitAmount;
                 resultTable.UnitsLost.BattleResultValues = battleResultTableViewModel.UnitLost;
@@ -57,11 +85,6 @@ namespace TribalWars2_CalculationTools.Views.UserControls
 
         }
 
-
-        public BattleResultTable()
-        {
-            InitializeComponent();
-            UnitImageRow.ItemsSource = GameData.UnitImageList;
-        }
+        #endregion Methods
     }
 }

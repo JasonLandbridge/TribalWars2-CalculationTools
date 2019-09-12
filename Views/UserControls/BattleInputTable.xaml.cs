@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,7 @@ using System.Windows.Shapes;
 using TribalWars2_CalculationTools.ViewModels;
 using Syncfusion.Windows.Tools.Controls;
 using TribalWars2_CalculationTools.Class;
+using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Views.UserControls
 {
@@ -23,7 +25,6 @@ namespace TribalWars2_CalculationTools.Views.UserControls
     {
 
         public int ComponentWidth { get; } = 120;
-
 
         public InputCalculatorData InputCalculatorData
         {
@@ -85,6 +86,41 @@ namespace TribalWars2_CalculationTools.Views.UserControls
         private void InputChangedInteger(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void InputComboChurchDef_DragLeave(object sender, DragEventArgs e)
+        {
+            ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void InputComboChurchAtk_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void InputMoralChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            InputCalculatorData.InputMorale = Convert.ToInt32(e.NewValue);
+            ValueChanged?.Invoke(this, EventArgs.Empty);
+
+        }
+
+        private void InputComboChurchAtk_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e != null && e.AddedItems.Count > 0)
+            {
+                InputCalculatorData.InputAtkChurch = e.AddedItems[0] as FaithLevel;
+                ValueChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private void InputComboChurchDef_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e != null && e.AddedItems.Count > 0)
+            {
+                InputCalculatorData.InputDefChurch = e.AddedItems[0] as FaithLevel;
+                ValueChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }
