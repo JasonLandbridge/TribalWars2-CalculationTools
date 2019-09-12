@@ -45,6 +45,23 @@ namespace TribalWars2_CalculationTools.Class
 
         #endregion
 
+        #region LeftOnAttackingInput
+
+        public int LeftOnAtkSpearman => AtkSpearman - LostOnAtkSpearman;
+        public int LeftOnAtkSwordsman => AtkSwordsman - LostOnAtkSwordsman;
+        public int LeftOnAtkAxeFighter => AtkAxeFighter - LostOnAtkAxeFighter;
+        public int LeftOnAtkArcher => AtkArcher - LostOnAtkArcher;
+        public int LeftOnAtkLightCavalry => AtkLightCavalry - LostOnAtkLightCavalry;
+        public int LeftOnAtkMountedArcher => AtkMountedArcher - LostOnAtkMountedArcher;
+        public int LeftOnAtkHeavyCavalry => AtkHeavyCavalry - LostOnAtkHeavyCavalry;
+        public int LeftOnAtkRam => AtkRam - LostOnAtkRam;
+        public int LeftOnAtkCatapult => AtkCatapult - LostOnAtkCatapult;
+        public int LeftOnAtkBerserker => AtkBerserker - LostOnAtkBerserker;
+        public int LeftOnAtkTrebuchet => AtkTrebuchet - LostOnAtkTrebuchet;
+        public int LeftOnAtkNobleman => AtkNobleman - LostOnAtkNobleman;
+        public int LeftOnAtkPaladin => AtkPaladin - LostOnAtkPaladin;
+
+        #endregion
 
         #region DefendingInput
 
@@ -77,6 +94,25 @@ namespace TribalWars2_CalculationTools.Class
         public int LostOnDefTrebuchet { get; set; }
         public int LostOnDefNobleman { get; set; }
         public int LostOnDefPaladin { get; set; }
+        #endregion
+
+
+        #region LeftOnDefendingInput
+
+        public int LeftOnDefSpearman => DefSpearman - LostOnDefSpearman;
+        public int LeftOnDefSwordsman => DefSwordsman - LostOnDefSwordsman;
+        public int LeftOnDefAxeFighter => DefAxeFighter - LostOnDefAxeFighter;
+        public int LeftOnDefArcher => DefArcher - LostOnDefArcher;
+        public int LeftOnDefLightCavalry => DefLightCavalry - LostOnDefLightCavalry;
+        public int LeftOnDefMountedArcher => DefMountedArcher - LostOnDefMountedArcher;
+        public int LeftOnDefHeavyCavalry => DefHeavyCavalry - LostOnDefHeavyCavalry;
+        public int LeftOnDefRam => DefRam - LostOnDefRam;
+        public int LeftOnDefCatapult => DefCatapult - LostOnDefCatapult;
+        public int LeftOnDefBerserker => DefBerserker - LostOnDefBerserker;
+        public int LeftOnDefTrebuchet => DefTrebuchet - LostOnDefTrebuchet;
+        public int LeftOnDefNobleman => DefNobleman - LostOnDefNobleman;
+        public int LeftOnDefPaladin => DefPaladin - LostOnDefPaladin;
+
         #endregion
 
         public int AtkBattleModifier { get; set; }
@@ -212,12 +248,30 @@ namespace TribalWars2_CalculationTools.Class
             return (int)Math.Round(currentNumber * lostCoefficient, MidpointRounding.ToZero);
         }
 
+        public BattleResult Copy()
+        {
+            return (BattleResult)this.MemberwiseClone();
+        }
+
         public void KillAllAtkInfantry()
         {
             LostOnAtkSpearman = AtkSpearman;
             LostOnAtkSwordsman = AtkSwordsman;
             LostOnAtkAxeFighter = AtkAxeFighter;
+            LostOnAtkBerserker = AtkBerserker;
+
+        }
+
+        public void KillAllAtkCavalry()
+        {
+            LostOnAtkLightCavalry = AtkLightCavalry;
+            LostOnAtkHeavyCavalry = AtkHeavyCavalry;
+        }
+
+        public void KillAllAtkArchers()
+        {
             LostOnAtkArcher = AtkArcher;
+            LostOnAtkMountedArcher = AtkMountedArcher;
         }
 
         public void KillAtkInfantry(decimal lostCoefficient)
@@ -226,7 +280,6 @@ namespace TribalWars2_CalculationTools.Class
             LostOnAtkSwordsman = ToLossUnit(lostCoefficient, AtkSwordsman);
             LostOnAtkAxeFighter = ToLossUnit(lostCoefficient, AtkAxeFighter);
             LostOnAtkArcher = ToLossUnit(lostCoefficient, AtkArcher);
-
         }
 
         public void KillAllDefInfantry()
@@ -295,21 +348,21 @@ namespace TribalWars2_CalculationTools.Class
         public int GetTotalInfantryAttack(bool defenseIsSuperior)
         {
             int totalAttack = 0;
-
-            totalAttack += AtkSpearman * GameData.Spearman.FightingPower;
-            totalAttack += AtkSwordsman * GameData.Swordsman.FightingPower;
-            totalAttack += AtkAxeFighter * GameData.AxeFighter.FightingPower;
-            totalAttack += AtkNobleman * GameData.Nobleman.FightingPower;
+            // Use the LeftOn to reuse this method every battle round with leftover units
+            totalAttack += LeftOnAtkSpearman * GameData.Spearman.FightingPower;
+            totalAttack += LeftOnAtkSwordsman * GameData.Swordsman.FightingPower;
+            totalAttack += LeftOnAtkAxeFighter * GameData.AxeFighter.FightingPower;
+            totalAttack += LeftOnAtkNobleman * GameData.Nobleman.FightingPower;
 
             // Take into account that berserkers
             // are twice as strong when fighting a superior army
             if (defenseIsSuperior)
             {
-                totalAttack += AtkBerserker * (GameData.Berserker.FightingPower * 2);
+                totalAttack += LeftOnAtkBerserker * (GameData.Berserker.FightingPower * 2);
             }
             else
             {
-                totalAttack += AtkBerserker * GameData.Berserker.FightingPower;
+                totalAttack += LeftOnAtkBerserker * GameData.Berserker.FightingPower;
             }
 
             return totalAttack;
@@ -318,9 +371,9 @@ namespace TribalWars2_CalculationTools.Class
         public int GetTotalCavalryAttack()
         {
             int totalAttack = 0;
-
-            totalAttack += AtkLightCavalry * GameData.LightCavalry.FightingPower;
-            totalAttack += AtkHeavyCavalry * GameData.HeavyCavalry.FightingPower;
+            // Use the Left on to reuse this method every battle round with leftover units
+            totalAttack += LeftOnAtkLightCavalry * GameData.LightCavalry.FightingPower;
+            totalAttack += LeftOnAtkHeavyCavalry * GameData.HeavyCavalry.FightingPower;
 
             return totalAttack;
         }
@@ -328,9 +381,9 @@ namespace TribalWars2_CalculationTools.Class
         public int GetTotalArcherAttack()
         {
             int totalAttack = 0;
-
-            totalAttack += AtkArcher * GameData.Archer.FightingPower;
-            totalAttack += AtkMountedArcher * GameData.MountedArcher.FightingPower;
+            // Use the Left on to reuse this method every battle round with leftover units
+            totalAttack += LeftOnAtkArcher * GameData.Archer.FightingPower;
+            totalAttack += LeftOnAtkMountedArcher * GameData.MountedArcher.FightingPower;
 
             return totalAttack;
         }

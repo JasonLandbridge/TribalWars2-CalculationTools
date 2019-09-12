@@ -91,6 +91,7 @@ namespace TribalWars2_CalculationTools.Models
 
                 return;
             }
+
             int atkInfantryProvisions = result.GetTotalInfantryProvisions();
             int atkCavalryProvisions = result.GetTotalCavalryProvisions();
             int atkArchersProvisions = result.GetTotalArcherProvisions();
@@ -106,16 +107,13 @@ namespace TribalWars2_CalculationTools.Models
             // Determines if the Berserker fights with double strength
             bool defSuperior = (totalAtkProvisions < totalDefProvisions / 2);
 
-            int atkInfantry = result.GetTotalInfantryAttack(defSuperior);
-            int atkCavalry = result.GetTotalCavalryAttack();
-            int atkArchers = result.GetTotalArcherAttack();
+
             List<int> attackTypeList = new List<int>
             {
                 atkInfantry,
                 atkCavalry,
                 atkArchers
             };
-            int atkStrength = atkInfantry + atkCavalry + atkArchers;
 
             int defInfantry = result.GetTotalDefFromInfantry();
             int defCavalry = result.GetTotalDefFromCavalry();
@@ -131,8 +129,6 @@ namespace TribalWars2_CalculationTools.Models
 
             int resultingWallLevel = WallLevelBeforeBattle(result.AtkRam, wallLevel, atkFaithBonus, false);
 
-
-
             int wallDefense = 0;
 
             if (resultingWallLevel > 0)
@@ -140,11 +136,20 @@ namespace TribalWars2_CalculationTools.Models
                 wallDefense = (int)Math.Round(Math.Pow(1.24, resultingWallLevel) * 20, MidpointRounding.AwayFromZero);
             }
 
-
+            List<BattleResult> BattleHistory = new List<BattleResult>();
 
             // Simulate for 3 rounds (infantry, cavalry and archers)
             for (int i = 0; i < 2; i++)
             {
+                BattleHistory.Add(result.Copy());
+                BattleResult currentRound = BattleHistory[i];
+
+
+
+                int atkInfantry = currentRound.GetTotalInfantryAttack(defSuperior);
+                int atkCavalry = currentRound.GetTotalCavalryAttack();
+                int atkArchers = currentRound.GetTotalArcherAttack();
+
                 int attackStrength = attackTypeList[i];
                 int attackProvisions = atkProvisionTypeList[i];
 
@@ -181,21 +186,33 @@ namespace TribalWars2_CalculationTools.Models
 
                 if (victor < 1)
                 {
+
                     // Defense won, kill off all attack infantry
-                    result.KillAllAtkInfantry();
+                    switch (i)
+                    {
+                        case 0:
+                            currentRound.KillAllAtkInfantry();
+                            break;
+                        case 1:
+                            currentRound.KillAllAtkCavalry();
+                            break;
+                        case 2:
+                            currentRound.KillAllAtkArchers();
+                            break;
+                    }
 
                     decimal lostCoefficient = (decimal)Math.Sqrt((double)victor) * victor;
                     // Set the loses of the defending infantry
-                    result.KillDefInfantry(lostCoefficient);
+                    currentRound.KillDefInfantry(lostCoefficient);
                 }
                 else
                 {
                     // Attack won, kill off all defense infantry
-                    result.KillAllDefInfantry();
+                    currentRound.KillAllDefInfantry();
 
                     decimal lostCoefficient = (decimal)Math.Sqrt(1 / (double)victor) / victor;
                     // Set the loses of the attacking infantry
-                    result.KillAtkInfantry(lostCoefficient);
+                    currentRound.KillAtkInfantry(lostCoefficient);
                 }
             }
 
