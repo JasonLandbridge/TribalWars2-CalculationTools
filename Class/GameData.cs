@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using TribalWars2_CalculationTools.Class;
 using TribalWars2_CalculationTools.Class.Units;
@@ -101,5 +102,26 @@ namespace TribalWars2_CalculationTools.Class
         {
 
         }
+
+        public static BaseUnit GetUnit(string code)
+        {
+            return UnitList.First(unit => unit.Code == code);
+        }
+
+
+        #region Formulas
+        /// <summary>
+        /// Applies the killRate to the number of units and returns the number of killed units.
+        /// </summary>
+        /// <param name="numberOfUnits"></param>
+        /// <param name="killRate"></param>
+        /// <returns></returns>
+        public static int GetUnitsKilled(int numberOfUnits, decimal killRate)
+        {
+            decimal x = numberOfUnits * killRate;
+            return (int)Math.Round(x + 0.000001m, MidpointRounding.AwayFromZero);
+        }
+
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class.Enum;
 
@@ -11,7 +12,9 @@ namespace TribalWars2_CalculationTools.Class.Units
 
         private int _numberOnAttack;
         private int _numberOnDefense;
-        public abstract string Name { get; }
+        public abstract string Code { get; }
+        public string Name => Regex.Replace(this.Code, "([A-Z])", " $1").Trim();
+
         public abstract UnitType UnitType { get; set; }
 
         /*Unit Cost*/

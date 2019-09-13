@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class;
+using TribalWars2_CalculationTools.Class.Units;
 using TribalWars2_CalculationTools.Models;
 using TribalWars2_CalculationTools.ViewModels;
 
@@ -25,6 +26,7 @@ namespace TribalWars2_CalculationTools.Views
         public MainWindow()
         {
             // TODO make a list
+
 
             CalculatorData.Add(new CalculatorData(BattleResultViewModel));
             SelectedCalculatorData = CalculatorData[0];

@@ -272,18 +272,21 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.Spearman.ImagePath,
                 Name = GameData.Spearman.Name,
+                NumberOnDefense = 100
             });
 
             Units.Add(Swordsman = new InputUnitRow
             {
                 ImagePath = GameData.Swordsman.ImagePath,
                 Name = GameData.Swordsman.Name,
+                NumberOnDefense = 100
             });
 
             Units.Add(AxeFighter = new InputUnitRow
             {
                 ImagePath = GameData.AxeFighter.ImagePath,
                 Name = GameData.AxeFighter.Name,
+                NumberOnAttack = 100
             });
 
             Units.Add(Archer = new InputUnitRow
@@ -296,12 +299,14 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.LightCavalry.ImagePath,
                 Name = GameData.LightCavalry.Name,
+                NumberOnAttack = 5,
             });
 
             Units.Add(MountedArcher = new InputUnitRow
             {
                 ImagePath = GameData.MountedArcher.ImagePath,
                 Name = GameData.MountedArcher.Name,
+                NumberOnAttack = 5
             });
 
             Units.Add(HeavyCavalry = new InputUnitRow

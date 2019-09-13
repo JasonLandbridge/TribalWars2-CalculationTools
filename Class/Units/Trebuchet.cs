@@ -6,7 +6,7 @@ namespace TribalWars2_CalculationTools.Class.Units
 {
     public class Trebuchet : BaseUnit
     {
-        public override string Name { get; } = "Trebuchet";
+        public override string Code { get; } = "Trebuchet";
         public override UnitType UnitType { get; set; } = UnitType.Trebuchet;
         public override int WoodCost { get; } = 4000;
         public override int ClayCost { get; } = 2000;

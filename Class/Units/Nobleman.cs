@@ -8,7 +8,7 @@ namespace TribalWars2_CalculationTools.Class.Units
 {
     public class Nobleman : BaseUnit
     {
-        public override string Name { get; } = "Nobleman";
+        public override string Code { get; } = "Nobleman";
         public override UnitType UnitType { get; set; } = UnitType.Nobleman;
         public override int WoodCost { get; } = 40000;
         public override int ClayCost { get; } = 50000;

@@ -8,7 +8,7 @@ namespace TribalWars2_CalculationTools.Class.Units
 {
     public class Ram : BaseUnit
     {
-        public override string Name { get; } = "Ram";
+        public override string Code { get; } = "Ram";
         public override UnitType UnitType { get; set; } = UnitType.Ram;
         public override int WoodCost { get; } = 300;
         public override int ClayCost { get; } = 200;

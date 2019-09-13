@@ -6,7 +6,7 @@ namespace TribalWars2_CalculationTools.Class.Units
 {
     public class Berserker : BaseUnit
     {
-        public override string Name { get; } = "Berserker";
+        public override string Code { get; } = "Berserker";
         public override UnitType UnitType { get; set; } = UnitType.Berserker;
         public override int WoodCost { get; } = 1200;
         public override int ClayCost { get; } = 1200;

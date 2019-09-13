@@ -8,7 +8,7 @@ namespace TribalWars2_CalculationTools.Class.Units
 {
     public class Catapult : BaseUnit
     {
-        public override string Name { get; } = "Catapult";
+        public override string Code { get; } = "Catapult";
         public override UnitType UnitType { get; set; } = UnitType.Catapult;
         public override int WoodCost { get; } = 320;
         public override int ClayCost { get; } = 400;

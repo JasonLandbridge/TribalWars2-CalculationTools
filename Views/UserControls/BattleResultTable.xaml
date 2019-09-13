@@ -26,10 +26,10 @@
                     <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
                 <Label
+                    x:Name="UnitModifier"
                     Grid.Row="0"
                     Grid.Column="0"
                     Width="100"
-                    x:Name="UnitModifier"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Content="{Binding BattleModifier}" />

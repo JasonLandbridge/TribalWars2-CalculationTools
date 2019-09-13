@@ -8,7 +8,7 @@ namespace TribalWars2_CalculationTools.Class.Units
 {
     public class AxeFighter : BaseUnit
     {
-        public override string Name { get; } = "Axe Fighter";
+        public override string Code { get; } = "AxeFighter";
         public override UnitType UnitType { get; set; } = UnitType.Infantry;
         public override int WoodCost { get; } = 60;
         public override int ClayCost { get; } = 30;

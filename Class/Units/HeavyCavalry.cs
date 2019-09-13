@@ -8,7 +8,8 @@ namespace TribalWars2_CalculationTools.Class.Units
 {
     public class HeavyCavalry : BaseUnit
     {
-        public override string Name { get; } = "Heavy Cavalry";
+
+        public override string Code { get; } = "HeavyCavalry";
         public override UnitType UnitType { get; set; } = UnitType.Cavalry;
         public override int WoodCost { get; } = 200;
         public override int ClayCost { get; } = 150;
