@@ -97,17 +97,22 @@ namespace TribalWars2_CalculationTools.ViewModels
 
             AttackBattleResultTable.UnitAmount.Clear();
             AttackBattleResultTable.UnitLost.Clear();
+            AttackBattleResultTable.UnitsLeft.Clear();
 
             DefenseBattleResultTable.UnitAmount.Clear();
             DefenseBattleResultTable.UnitLost.Clear();
+            DefenseBattleResultTable.UnitsLeft.Clear();
 
             for (int i = 0; i < battleResult.ListOfAtkNumbers.Count; i++)
             {
                 AttackBattleResultTable.UnitAmount.Add(battleResult.ListOfAtkNumbers[i]);
                 AttackBattleResultTable.UnitLost.Add(battleResult.ListOfAtkLostNumbers[i]);
+                AttackBattleResultTable.UnitsLeft.Add(battleResult.ListOfAtkLeftNumbers[i]);
 
                 DefenseBattleResultTable.UnitAmount.Add(battleResult.ListOfDefNumbers[i]);
                 DefenseBattleResultTable.UnitLost.Add(battleResult.ListOfDefLostNumbers[i]);
+                DefenseBattleResultTable.UnitsLeft.Add(battleResult.ListOfDefLeftNumbers[i]);
+
 
             }
         }

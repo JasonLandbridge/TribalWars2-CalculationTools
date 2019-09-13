@@ -122,6 +122,31 @@ namespace TribalWars2_CalculationTools.Class
             return (int)Math.Round(x + 0.000001m, MidpointRounding.AwayFromZero);
         }
 
+        public static decimal GetDefKillRate(int atkStrength, int defStrength)
+        {
+            if (atkStrength == 0 || defStrength == 0)
+            {
+                return 0;
+            }
+
+            decimal atkDefRatio = Math.Round(defStrength / (decimal)atkStrength, 9, MidpointRounding.AwayFromZero);
+            decimal atkKillRate = defStrength <= atkStrength ? 1 : (decimal)Math.Sqrt(1 / (double)atkDefRatio) / atkDefRatio;
+
+            return Math.Round(atkKillRate, 6, MidpointRounding.AwayFromZero);
+        }
+
+        public static decimal GetAtkKillRate(int atkStrength, int defStrength)
+        {
+            if (atkStrength == 0 || defStrength == 0)
+            {
+                return 0;
+            }
+
+            decimal atkDefRatio = Math.Round(atkStrength / (decimal)defStrength, 9, MidpointRounding.AwayFromZero);
+            decimal defKillRate = atkStrength <= defStrength ? 1 : (decimal)Math.Sqrt(1 / (double)atkDefRatio) / atkDefRatio;
+
+            return Math.Round(defKillRate, 6, MidpointRounding.AwayFromZero);
+        }
         #endregion
     }
 }

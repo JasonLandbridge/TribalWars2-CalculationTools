@@ -20,6 +20,50 @@ namespace TribalWars2_CalculationTools.Class.Structs
         public int Nobleman { get; set; }
         public int Paladin { get; set; }
 
+        public List<int> UnitList
+        {
+            get =>
+                new List<int>
+                {
+                    Spearman     ,
+                    Swordsman    ,
+                    AxeFighter   ,
+                    Archer       ,
+                    LightCavalry ,
+                    MountedArcher,
+                    HeavyCavalry ,
+                    Ram          ,
+                    Catapult     ,
+                    Berserker    ,
+                    Trebuchet    ,
+                    Nobleman     ,
+                    Paladin      ,
+
+                };
+            set
+            {
+                if (value.Count == 13)
+                {
+                    Spearman = value[0];
+                    Swordsman = value[1];
+                    AxeFighter = value[2];
+                    Archer = value[3];
+                    LightCavalry = value[4];
+                    MountedArcher = value[5];
+                    HeavyCavalry = value[6];
+                    Ram = value[7];
+                    Catapult = value[8];
+                    Berserker = value[9];
+                    Trebuchet = value[10];
+                    Nobleman = value[11];
+                    Paladin = value[12];
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException("UnitList needs to exactly contain 13 entries!");
+                }
+            }
+        }
 
         public UnitSet(int defaultValue = 0)
         {
@@ -36,6 +80,24 @@ namespace TribalWars2_CalculationTools.Class.Structs
             Trebuchet = defaultValue;
             Nobleman = defaultValue;
             Paladin = defaultValue;
+        }
+
+        public UnitSet(List<int> unitList)
+        {
+            Spearman = 0;
+            Swordsman = 0;
+            AxeFighter = 0;
+            Archer = 0;
+            LightCavalry = 0;
+            MountedArcher = 0;
+            HeavyCavalry = 0;
+            Ram = 0;
+            Catapult = 0;
+            Berserker = 0;
+            Trebuchet = 0;
+            Nobleman = 0;
+            Paladin = 0;
+            UnitList = unitList;
         }
 
         public int GetTotalDefFromInfantry()
@@ -98,24 +160,88 @@ namespace TribalWars2_CalculationTools.Class.Structs
             return totalDefense;
         }
 
-        public void ApplyKillRate(decimal killRate)
+        public UnitSet GetUnitsLost(decimal killRate)
         {
-            // Subtract the loses from the current number of units
-            Spearman -= GameData.GetUnitsKilled(Spearman, killRate);
-            Swordsman -= GameData.GetUnitsKilled(Swordsman, killRate);
-            AxeFighter -= GameData.GetUnitsKilled(AxeFighter, killRate);
-            Archer -= GameData.GetUnitsKilled(Archer, killRate);
-            LightCavalry -= GameData.GetUnitsKilled(LightCavalry, killRate);
-            MountedArcher -= GameData.GetUnitsKilled(MountedArcher, killRate);
-            HeavyCavalry -= GameData.GetUnitsKilled(HeavyCavalry, killRate);
-            Ram -= GameData.GetUnitsKilled(Ram, killRate);
-            Catapult -= GameData.GetUnitsKilled(Catapult, killRate);
-            Berserker -= GameData.GetUnitsKilled(Berserker, killRate);
-            Trebuchet -= GameData.GetUnitsKilled(Trebuchet, killRate);
-            Nobleman -= GameData.GetUnitsKilled(Nobleman, killRate);
-            Paladin -= GameData.GetUnitsKilled(Paladin, killRate);
+            return new UnitSet
+            {
+                Spearman = GameData.GetUnitsKilled(Spearman, killRate),
+                Swordsman = GameData.GetUnitsKilled(Swordsman, killRate),
+                AxeFighter = GameData.GetUnitsKilled(AxeFighter, killRate),
+                Archer = GameData.GetUnitsKilled(Archer, killRate),
+                LightCavalry = GameData.GetUnitsKilled(LightCavalry, killRate),
+                MountedArcher = GameData.GetUnitsKilled(MountedArcher, killRate),
+                HeavyCavalry = GameData.GetUnitsKilled(HeavyCavalry, killRate),
+                Ram = GameData.GetUnitsKilled(Ram, killRate),
+                Catapult = GameData.GetUnitsKilled(Catapult, killRate),
+                Berserker = GameData.GetUnitsKilled(Berserker, killRate),
+                Trebuchet = GameData.GetUnitsKilled(Trebuchet, killRate),
+                Nobleman = GameData.GetUnitsKilled(Nobleman, killRate),
+                Paladin = GameData.GetUnitsKilled(Paladin, killRate),
+            };
         }
 
+        /// <summary>
+        /// Applies the kill rate to this UnitSet and returns another UnitSet with the number of lost units.
+        /// </summary>
+        /// <param name="killRate"></param>
+        /// <returns></returns>
+        public UnitSet ApplyKillRate(decimal killRate)
+        {
+            List<int> newList = new List<int>();
+            List<int> lostList = GetUnitsLost(killRate).UnitList;
+
+            // Subtract the loses from the current number of units
+            for (int i = 0; i < this.UnitList.Count; i++)
+            {
+                newList.Add(UnitList[i] - lostList[i]);
+            }
+
+            UnitList = newList;
+            return new UnitSet(lostList);
+        }
+
+        public UnitSet ApplyKillRateAtkInfantry(decimal killRate)
+        {
+            UnitSet newLostUnitSet = new UnitSet
+            {
+                Spearman = GameData.GetUnitsKilled(Spearman, killRate),
+                Swordsman = GameData.GetUnitsKilled(Swordsman, killRate),
+                AxeFighter = GameData.GetUnitsKilled(AxeFighter, killRate),
+            };
+
+            Spearman -= newLostUnitSet.Spearman;
+            Swordsman -= newLostUnitSet.Swordsman;
+            AxeFighter -= newLostUnitSet.AxeFighter;
+
+            return newLostUnitSet;
+        }
+
+        public UnitSet ApplyKillRateAtkCavalry(decimal killRate)
+        {
+            UnitSet newLostUnitSet = new UnitSet
+            {
+                LightCavalry = GameData.GetUnitsKilled(LightCavalry, killRate),
+                HeavyCavalry = GameData.GetUnitsKilled(HeavyCavalry, killRate),
+            };
+
+            LightCavalry -= newLostUnitSet.LightCavalry;
+            HeavyCavalry -= newLostUnitSet.HeavyCavalry;
+
+            return newLostUnitSet;
+        }
+        public UnitSet ApplyKillRateAtkArchers(decimal killRate)
+        {
+            UnitSet newLostUnitSet = new UnitSet
+            {
+                Archer = GameData.GetUnitsKilled(Archer, killRate),
+                MountedArcher = GameData.GetUnitsKilled(MountedArcher, killRate),
+            };
+
+            Archer -= newLostUnitSet.Archer;
+            MountedArcher -= newLostUnitSet.MountedArcher;
+
+            return newLostUnitSet;
+        }
 
         public static UnitSet operator +(UnitSet u1, UnitSet u2) => new UnitSet
         {
@@ -150,5 +276,15 @@ namespace TribalWars2_CalculationTools.Class.Structs
             Nobleman = u1.Nobleman - u2.Nobleman,
             Paladin = u1.Paladin - u2.Paladin,
         };
+
+        public List<BattleResultValue> ToBattleResultList()
+        {
+            List<BattleResultValue> list = new List<BattleResultValue>();
+            foreach (int value in UnitList)
+            {
+                list.Add(new BattleResultValue(value));
+            }
+            return list;
+        }
     }
 }

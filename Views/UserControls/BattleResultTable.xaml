@@ -59,6 +59,9 @@
 
             <!--  Units Lost row  -->
             <uc:BattleResultRow x:Name="UnitsLost" Header="Losses" />
+
+            <!--  Units Left row  -->
+            <uc:BattleResultRow x:Name="UnitsLeft" Header="Survivors" />
         </StackPanel>
     </GroupBox>
 </UserControl>

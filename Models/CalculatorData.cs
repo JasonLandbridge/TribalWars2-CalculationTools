@@ -98,36 +98,8 @@ namespace TribalWars2_CalculationTools.Models
             }
 
 
-            List<int> atkProvisionTypeList = new List<int>
-            {
-            };
 
-            //// Determines if the Berserker fights with double strength
-            //bool defSuperior = (totalAtkProvisions < totalDefProvisions / 2);
-            //int atkInfantry = result.GetTotalInfantryAttack(defSuperior);
-            //int atkCavalry = result.GetTotalCavalryAttack();
-            //int atkArchers = result.GetTotalArcherAttack();
-
-            //List<int> attackTypeList = new List<int>
-            //{
-            //    atkInfantry,
-            //    atkCavalry,
-            //    atkArchers
-            //};
-
-            //int defInfantry = result.GetTotalDefFromInfantry();
-            //int defCavalry = result.GetTotalDefFromCavalry();
-            //int defArchers = result.GetTotalDefFromArchers();
-            //List<int> defenseTypeList = new List<int>
-            //{
-            //    defInfantry,
-            //    defCavalry,
-            //    defArchers
-            //};
-            //int defenseStrength = defInfantry + defCavalry + defArchers;
-
-
-            int resultingWallLevel = WallLevelBeforeBattle(result.AtkRam, wallLevel, atkFaithBonus, false);
+            int resultingWallLevel = WallLevelBeforeBattle(result.AtkUnits.Ram, wallLevel, atkFaithBonus, false);
 
             int wallDefense = 0;
 
@@ -158,9 +130,9 @@ namespace TribalWars2_CalculationTools.Models
                 decimal atkCavalryRatio = atkCavalryProvisions / (decimal)totalAtkProvisions;
                 decimal atkArchersRatio = atkArchersProvisions / (decimal)totalAtkProvisions;
 
-                atkInfantryRatio = Math.Round(atkInfantryRatio, 4, MidpointRounding.AwayFromZero);
-                atkCavalryRatio = Math.Round(atkCavalryRatio, 4, MidpointRounding.AwayFromZero);
-                atkArchersRatio = Math.Round(atkArchersRatio, 4, MidpointRounding.AwayFromZero);
+                atkInfantryRatio = Math.Round(atkInfantryRatio, 6, MidpointRounding.AwayFromZero);
+                atkCavalryRatio = Math.Round(atkCavalryRatio, 6, MidpointRounding.AwayFromZero);
+                atkArchersRatio = Math.Round(atkArchersRatio, 6, MidpointRounding.AwayFromZero);
                 decimal totalRatio = atkInfantryRatio + atkCavalryRatio + atkArchersRatio;
 
                 bool defSuperior = (totalAtkProvisions * 2 <= totalDefProvisions);
@@ -172,10 +144,16 @@ namespace TribalWars2_CalculationTools.Models
                 int totalDefFromCavalry = currentRound.GetTotalDefFromCavalry(atkCavalryRatio);
                 int totalDefFromArchers = currentRound.GetTotalDefFromArchers(atkArchersRatio);
 
+                UnitSet atkUnits = currentRound.AtkUnits;
+                UnitSet atkUnitsLost = currentRound.AtkUnitsLost;
+
                 // These units sets contains the defensive units proportionate to the atkInfantry ratio
                 UnitSet infantryGroupDefUnitSet = currentRound.GetDefUnitSet(atkInfantryRatio);
                 UnitSet cavalryGroupDefUnitSet = currentRound.GetDefUnitSet(atkCavalryRatio);
                 UnitSet archerGroupDefUnitSet = currentRound.GetDefUnitSet(atkArchersRatio);
+
+                // Used to keep track of how many units are lost this round
+                UnitSet infantryGroupDefUnitSetLost, cavalryGroupDefUnitSetLost, archerGroupDefUnitSetLost;
 
                 bool atkWonRound1 = (atkInfantry >= totalDefFromInfantry);
                 bool atkWonRound2 = (atkCavalry >= totalDefFromCavalry);
@@ -183,52 +161,71 @@ namespace TribalWars2_CalculationTools.Models
 
                 // For every round that Defense won, kill the attacking party and vice versa
                 // General / Infantry round
-                if (!atkWonRound1)
+                decimal killRate;
+                if (atkWonRound1)
                 {
-                    currentRound.KillAtkInfantry(1);
-                    infantryGroupDefUnitSet.ApplyKillRate(GetDefKillRate(atkInfantry, totalDefFromInfantry));
+                    killRate = GameData.GetAtkKillRate(atkInfantry, totalDefFromInfantry);
+                    atkUnitsLost += atkUnits.ApplyKillRateAtkInfantry(killRate);
+                    infantryGroupDefUnitSetLost = infantryGroupDefUnitSet.ApplyKillRate(1);
                 }
                 else
                 {
-                    currentRound.KillAtkInfantry(GetAtkKillRate(atkInfantry, totalDefFromInfantry));
-                    infantryGroupDefUnitSet.ApplyKillRate(1);
+                    killRate = GameData.GetDefKillRate(atkInfantry, totalDefFromInfantry);
+                    atkUnitsLost += atkUnits.ApplyKillRateAtkInfantry(1);
+                    infantryGroupDefUnitSetLost = infantryGroupDefUnitSet.ApplyKillRate(killRate);
                 }
 
                 // Cavalry round
-                if (!atkWonRound2)
+                if (atkWonRound2)
                 {
-                    currentRound.KillAtkCavalry(1);
-                    cavalryGroupDefUnitSet.ApplyKillRate(GetDefKillRate(atkCavalry, totalDefFromCavalry));
+                    killRate = GameData.GetAtkKillRate(atkCavalry, totalDefFromCavalry);
+                    atkUnitsLost += atkUnits.ApplyKillRateAtkCavalry(killRate);
+                    cavalryGroupDefUnitSetLost = cavalryGroupDefUnitSet.ApplyKillRate(1);
                 }
                 else
                 {
-                    currentRound.KillAtkCavalry(GetAtkKillRate(atkCavalry, totalDefFromCavalry));
-                    cavalryGroupDefUnitSet.ApplyKillRate(1);
+                    killRate = GameData.GetDefKillRate(atkCavalry, totalDefFromCavalry);
+                    atkUnitsLost += atkUnits.ApplyKillRateAtkCavalry(1);
+                    cavalryGroupDefUnitSetLost = cavalryGroupDefUnitSet.ApplyKillRate(killRate);
                 }
 
                 // Archer round
-                if (!atkWonRound3)
+                if (atkWonRound3)
                 {
-                    currentRound.KillAtkArchers(1);
-                    archerGroupDefUnitSet.ApplyKillRate(GetDefKillRate(atkArchers, totalDefFromArchers));
+                    killRate = GameData.GetAtkKillRate(atkArchers, totalDefFromArchers);
+                    atkUnitsLost += atkUnits.ApplyKillRateAtkArchers(killRate);
+                    archerGroupDefUnitSetLost = archerGroupDefUnitSet.ApplyKillRate(1);
                 }
                 else
                 {
-                    currentRound.KillAtkArchers(GetAtkKillRate(atkArchers, totalDefFromArchers));
-                    archerGroupDefUnitSet.ApplyKillRate(1);
+                    killRate = GameData.GetDefKillRate(atkArchers, totalDefFromArchers);
+                    atkUnitsLost += atkUnits.ApplyKillRateAtkArchers(1);
+                    archerGroupDefUnitSetLost = archerGroupDefUnitSet.ApplyKillRate(killRate);
+
                 }
 
                 UnitSet survivingDefUnits = infantryGroupDefUnitSet + cavalryGroupDefUnitSet + archerGroupDefUnitSet;
+                UnitSet DefUnitsLost = infantryGroupDefUnitSetLost + cavalryGroupDefUnitSetLost + archerGroupDefUnitSetLost;
 
-                currentRound.SetDefUnits(survivingDefUnits);
+                currentRound.AtkUnits = atkUnits;
+                currentRound.AtkUnitsLost = atkUnitsLost;
+                currentRound.DefUnits = survivingDefUnits;
+                currentRound.DefUnitsLost = DefUnitsLost;
 
                 // Check if during the 3 mini-battles either attack of defense won all mini-battles
                 battleDetermined = (atkWonRound1 && atkWonRound2 && atkWonRound3) || (!atkWonRound1 && !atkWonRound2 && !atkWonRound3);
 
                 BattleHistory.Add(currentRound.Copy());
 
-                loop++;
+                loop = 8;
             }
+
+            BattleResult finalResult = BattleHistory.Last().Copy();
+            finalResult.DefUnits = result.DefUnits;
+            finalResult.AtkUnits = result.AtkUnits;
+
+            LastBattleResult = finalResult;
+            _battleResultViewModel.UpdateBattleResult(LastBattleResult);
 
             //int attackStrength = attackTypeList[i];
             //int attackProvisions = atkProvisionTypeList[i];
@@ -257,29 +254,6 @@ namespace TribalWars2_CalculationTools.Models
             //// + (wallDefense * ratio)
             //decimal defense = (defenseTypeList[i] * ratio * defModifier);
 
-            // Prevent dividing by zero
-            //if (defense == 0)
-            //{
-            //    continue;
-            //}
-
-            //decimal victor = 0m; // attack / defense;
-
-            //if (victor < 1)
-            //{
-            //    // Defense won, kill off all attack infantry
-            //    switch (i)
-            //    {
-            //        case 0:
-            //            currentRound.KillAllAtkInfantry();
-            //            break;
-            //        case 1:
-            //            currentRound.KillAllAtkCavalry();
-            //            break;
-            //        case 2:
-            //            currentRound.KillAllAtkArchers();
-            //            break;
-            //    }
 
             //    decimal lostCoefficient = (decimal)Math.Sqrt((double)victor) * victor;
             //    // Set the loses of the defending infantry
@@ -296,36 +270,9 @@ namespace TribalWars2_CalculationTools.Models
             //}
 
 
-
-            LastBattleResult = BattleHistory.Last();
-            _battleResultViewModel.UpdateBattleResult(LastBattleResult);
         }
 
-        private decimal GetDefKillRate(int atkStrength, int defStrength)
-        {
-            if (atkStrength == 0 || defStrength == 0)
-            {
-                return 0;
-            }
 
-            decimal atkDefRatio = defStrength / (decimal)atkStrength;
-            decimal atkKillRate = defStrength <= atkStrength ? 1 : (decimal)Math.Sqrt(1 / (double)atkDefRatio) / atkDefRatio;
-
-            return Math.Round(atkKillRate, 4, MidpointRounding.AwayFromZero);
-        }
-
-        private decimal GetAtkKillRate(int atkStrength, int defStrength)
-        {
-            if (atkStrength == 0 || defStrength == 0)
-            {
-                return 0;
-            }
-
-            decimal atkDefRatio = atkStrength / (decimal)defStrength;
-            decimal defKillRate = atkStrength <= defStrength ? 1 : (decimal)Math.Sqrt(1 / (double)atkDefRatio) / atkDefRatio;
-
-            return Math.Round(defKillRate, 4, MidpointRounding.AwayFromZero);
-        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

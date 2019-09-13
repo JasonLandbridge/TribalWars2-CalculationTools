@@ -81,6 +81,8 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             {
                 resultTable.UnitsAmount.BattleResultValues = battleResultTableViewModel.UnitAmount;
                 resultTable.UnitsLost.BattleResultValues = battleResultTableViewModel.UnitLost;
+                resultTable.UnitsLeft.BattleResultValues = battleResultTableViewModel.UnitsLeft;
+
             }
 
         }
