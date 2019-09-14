@@ -21,6 +21,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
             <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
 
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -37,7 +38,7 @@
         </GroupBox>
 
         <!--  Result Grid  -->
-        <Grid Grid.Row="0" Grid.Column="1">
+        <Grid Grid.Row="0" Grid.Column="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
@@ -70,7 +71,7 @@
 
         <uc:BattleInputTable
             x:Name="InputTable"
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="1"
             DataContext="{StaticResource vm}"
             InputCalculatorData="{StaticResource vm}"

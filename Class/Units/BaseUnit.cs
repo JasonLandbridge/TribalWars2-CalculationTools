@@ -65,10 +65,6 @@ namespace TribalWars2_CalculationTools.Class.Units
             //this.Parent.ValueUpdated();
         }
 
-        public int GetTotalInfantryAtkStrength => FightingPower * NumberOnAttack;
-
-        public int GetTotalDefFromInfantry => DefenseFromInfantry * NumberOnDefense;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

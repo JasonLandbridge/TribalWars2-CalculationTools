@@ -14,6 +14,8 @@ namespace TribalWars2_CalculationTools.ViewModels
         private ObservableCollection<BattleResultValue> _unitLost = new ObservableCollection<BattleResultValue>();
         private ObservableCollection<BattleResultValue> _unitAmount = new ObservableCollection<BattleResultValue>();
         private ObservableCollection<BattleResultValue> _unitsLeft = new ObservableCollection<BattleResultValue>();
+        private string _wallResult = "";
+        private bool _showWallResult = false;
 
         public ObservableCollection<BattleResultValue> UnitAmount
         {
@@ -41,6 +43,25 @@ namespace TribalWars2_CalculationTools.ViewModels
             set
             {
                 _unitsLeft = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string WallResult
+        {
+            get => _wallResult;
+            set
+            {
+                _wallResult = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool ShowWallResult
+        {
+            get => _showWallResult;
+            set
+            {
+                _showWallResult = value;
                 OnPropertyChanged();
             }
         }

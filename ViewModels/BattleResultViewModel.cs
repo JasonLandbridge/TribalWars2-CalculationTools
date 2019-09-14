@@ -95,6 +95,7 @@ namespace TribalWars2_CalculationTools.ViewModels
             AtkBattleModifier = battleResult.AtkBattleModifier;
             DefBattleModifier = battleResult.DefBattleModifier;
 
+
             AttackBattleResultTable.UnitAmount.Clear();
             AttackBattleResultTable.UnitLost.Clear();
             AttackBattleResultTable.UnitsLeft.Clear();
@@ -102,6 +103,11 @@ namespace TribalWars2_CalculationTools.ViewModels
             DefenseBattleResultTable.UnitAmount.Clear();
             DefenseBattleResultTable.UnitLost.Clear();
             DefenseBattleResultTable.UnitsLeft.Clear();
+            if (battleResult.ShowWallResult)
+            {
+                DefenseBattleResultTable.WallResult = battleResult.WallResult;
+            }
+
 
             for (int i = 0; i < battleResult.ListOfAtkNumbers.Count; i++)
             {

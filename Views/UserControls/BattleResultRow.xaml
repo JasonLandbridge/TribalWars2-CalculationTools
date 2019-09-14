@@ -54,5 +54,10 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
+        <Label
+            x:Name="WallResult"
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="2.5,5" />
     </Grid>
 </UserControl>

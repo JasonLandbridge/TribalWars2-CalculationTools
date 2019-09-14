@@ -62,6 +62,10 @@
 
             <!--  Units Left row  -->
             <uc:BattleResultRow x:Name="UnitsLeft" Header="Survivors" />
+
+            <!--  Units Left row  -->
+            <uc:BattleResultRow x:Name="WallResult" Header="Survivors" Visibility="{Binding ShowWallResult}" />
+
         </StackPanel>
     </GroupBox>
 </UserControl>

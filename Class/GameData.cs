@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using TribalWars2_CalculationTools.Class;
+using TribalWars2_CalculationTools.Class.Buildings;
 using TribalWars2_CalculationTools.Class.Units;
 using TribalWars2_CalculationTools.Models;
 
@@ -11,6 +12,8 @@ namespace TribalWars2_CalculationTools.Class
 {
     public static class GameData
     {
+        #region Units
+
         public static Spearman Spearman { get; } = new Spearman();
         public static Swordsman Swordsman { get; } = new Swordsman();
         public static AxeFighter AxeFighter { get; } = new AxeFighter();
@@ -24,7 +27,13 @@ namespace TribalWars2_CalculationTools.Class
         public static Trebuchet Trebuchet { get; } = new Trebuchet();
         public static Nobleman Nobleman { get; } = new Nobleman();
         public static Paladin Paladin { get; } = new Paladin();
+        #endregion
 
+        #region Buildings
+
+        public static Wall Wall { get; } = new Wall();
+
+        #endregion
         public static List<BaseUnit> UnitList => new List<BaseUnit>
         {
             Spearman,
@@ -124,7 +133,7 @@ namespace TribalWars2_CalculationTools.Class
 
         public static decimal GetDefKillRate(int atkStrength, int defStrength)
         {
-            if (atkStrength == 0 || defStrength == 0)
+            if (atkStrength <= 0 || defStrength <= 0)
             {
                 return 0;
             }
@@ -137,7 +146,7 @@ namespace TribalWars2_CalculationTools.Class
 
         public static decimal GetAtkKillRate(int atkStrength, int defStrength)
         {
-            if (atkStrength == 0 || defStrength == 0)
+            if (atkStrength <= 0 || defStrength <= 0)
             {
                 return 0;
             }
@@ -166,21 +175,43 @@ namespace TribalWars2_CalculationTools.Class
 
         public static decimal GetAtkBattleModifier(decimal faithBonus, decimal morale, decimal luck, decimal officerBonus)
         {
+            // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
+            // Math round is important 0.545 -> 0.55
             decimal y = Math.Round(faithBonus * morale * luck, 2, MidpointRounding.AwayFromZero);
             return 1m * y + officerBonus;
         }
 
-        public static decimal GetDefBattleModifier(decimal faithBonus, decimal wallBonus, decimal nightBonus)
+        public static decimal GetDefBattleModifier(decimal faithBonus, int wallLevel, decimal nightBonus)
         {
+            // 5% for every wall level
+            decimal wallBonus = 1m + wallLevel * 0.05m;
+            // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
+            // Math round is important 0.545 -> 0.55
             decimal y = Math.Round(faithBonus * wallBonus * nightBonus, 2, MidpointRounding.AwayFromZero);
             return 1m * y;
         }
 
         public static int GetWallDefense(int wallLevel)
         {
+            if (wallLevel == 0)
+            {
+                return 0;
+            }
             return (int)Math.Round(Math.Pow(1.2515, wallLevel - 1) * 20, MidpointRounding.AwayFromZero);
 
         }
+
+        public static int AddAtkModifier(int attackStrength, decimal atkModifier)
+        {
+            return (int)Math.Round(attackStrength * atkModifier, MidpointRounding.AwayFromZero);
+
+        }
+        public static int GetRamsKilled(int numberOfRams, int numberOfCatapults, int numberOfTrebuchet)
+        {
+            decimal x = numberOfTrebuchet * (numberOfRams / (numberOfRams + (decimal)numberOfCatapults));
+            return (int)Math.Round(x, MidpointRounding.AwayFromZero);
+        }
+
         #endregion
     }
 }

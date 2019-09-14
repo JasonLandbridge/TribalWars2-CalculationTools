@@ -58,6 +58,8 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             set => SetValue(BattleResultValuesProperty, value);
         }
 
+
+
         #endregion Properties
 
         #region Methods

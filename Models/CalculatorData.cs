@@ -57,6 +57,65 @@ namespace TribalWars2_CalculationTools.Models
             return newWall;
         }
 
+        public int PreRound(ref BattleResult result)
+        {
+            // Based on https://en.forum.tribalwars2.com/index.php?threads/unraveling-some-myths-regarding-the-battle-engine.3959/
+
+            int wallLevel = result.WallLevelBefore;
+            decimal atkModifier = result.AtkBattleModifier / 100m;
+            int ironWall = 0; //TODO Need to make an input that takes the Tribe skill Iron wall into account
+            decimal paladinModifier = 1m; //TODO take the paladin weapon into account
+
+            UnitSet atkUnits = result.AtkUnits;
+            UnitSet defUnits = result.DefUnits;
+            UnitSet atkUnitsLost = result.AtkUnitsLost;
+
+            // Calculate how many rams were killed by the Trebuchet
+            int ramsKilled = GameData.GetRamsKilled(atkUnits.Ram, atkUnits.Catapult, defUnits.Trebuchet);
+            atkUnits.Ram -= ramsKilled;
+            atkUnitsLost.Ram = ramsKilled;
+
+            // Get the total attacking provisions without the ram provisions included.
+            int totalProvisionsWithNoRams = atkUnits.GetTotalProvisions() - atkUnits.GetTotalRamProvisions();
+
+            // Get base wall defense
+            int wallDefense = GameData.GetWallDefense(wallLevel);
+
+            // This is meant to calculate the "active" rams that will do damage in relation to the attacking force. 
+            // More infantry = more damage with the rams
+            decimal ramRatio = (decimal)totalProvisionsWithNoRams / (defUnits.GetTotalProvisions() + wallDefense);
+            int wallHitPoints = (GameData.Wall.GetHitPoints(wallLevel) * 2);
+
+            // This is the net wall damage done by the rams
+            decimal wallDamage = (atkUnits.Ram * ramRatio * atkModifier * paladinModifier) / wallHitPoints;
+
+            // Calculate the new wall level after damage applied
+            int resultingWallLevel;
+            // If the wall is already below the Iron Wall threshold then don't change anything. 
+            if (wallLevel <= ironWall)
+            {
+                resultingWallLevel = wallLevel;
+            }
+            else
+            {
+                if (wallLevel - ironWall < -wallDamage)
+                {
+                    resultingWallLevel = wallLevel < ironWall ? wallLevel : ironWall;
+                }
+                else
+                {
+                    decimal rawLevel = wallLevel - wallDamage;
+                    resultingWallLevel = (int)Math.Round(rawLevel, MidpointRounding.ToZero);
+                }
+            }
+
+            result.WallLevelAfter = resultingWallLevel;
+            result.WallDefenseAfter = GameData.GetWallDefense(resultingWallLevel);
+            result.AtkUnitsLost = atkUnitsLost;
+            return result.WallLevelAfter;
+
+        }
+
         public void SimulateBattle(InputCalculatorData input)
         {
 
@@ -67,25 +126,20 @@ namespace TribalWars2_CalculationTools.Models
 
             decimal atkFaithBonus = input.InputAtkChurch.Modifier;
             decimal defFaithBonus = input.InputDefChurch.Modifier;
-
-            int wallLevel = input.InputWall;
             decimal morale = input.InputMorale / 100m;
             decimal luck = 1m + (input.InputLuck / 100m);
             decimal nightBonus = (input.InputNightBonus ? 2m : 1m);
             decimal officerBonus = (input.InputGrandmasterBonus ? 0.1m : 0m);
 
-            // 5% for every wall level
-            decimal wallBonus = 1m + wallLevel * 0.05m;
-
-            // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
-            // Math round is important 0.545 -> 0.55
-            decimal x = Math.Round(atkFaithBonus * morale * luck, 2, MidpointRounding.AwayFromZero);
-
             decimal atkModifier = GameData.GetAtkBattleModifier(atkFaithBonus, morale, luck, officerBonus);
             result.AtkBattleModifier = (int)(atkModifier * 100m);
 
-            decimal defModifier = GameData.GetDefBattleModifier(defFaithBonus, wallBonus, nightBonus);
+            int resultingWallLevel = PreRound(ref result);
+
+            int wallDefense = result.WallDefenseAfter;
+            decimal defModifier = GameData.GetDefBattleModifier(defFaithBonus, resultingWallLevel, nightBonus);
             result.DefBattleModifier = (int)(defModifier * 100m);
+
 
             // Stop here if there are no units given
             if (!input.IsValid)
@@ -97,29 +151,13 @@ namespace TribalWars2_CalculationTools.Models
                 return;
             }
 
-
-
-            int resultingWallLevel = WallLevelBeforeBattle(result.AtkUnits.Ram, wallLevel, atkFaithBonus, false);
-
-            int wallDefense = 0;
-
-            if (resultingWallLevel > 0)
-            {
-                wallDefense = GameData.GetWallDefense(resultingWallLevel);
-            }
-
-            List<BattleResult> BattleHistory = new List<BattleResult>();
-
-            BattleHistory.Add(result.Copy());
+            List<BattleResult> BattleHistory = new List<BattleResult> { result.Copy() };
 
             // Simulate for 3 rounds (infantry, cavalry and archers)
             bool battleDetermined = false;
             while (!battleDetermined)
             {
                 BattleResult currentRound = BattleHistory.Last();
-                //Reset the UnitLost for subsequent rounds
-                currentRound.AtkUnitsLost = new UnitSet();
-                currentRound.DefUnitsLost = new UnitSet();
 
                 UnitSet atkUnits = currentRound.AtkUnits;
                 UnitSet atkUnitsLost = currentRound.AtkUnitsLost;
@@ -128,7 +166,9 @@ namespace TribalWars2_CalculationTools.Models
                 int atkInfantryProvisions = atkUnits.GetTotalInfantryProvisions();
                 int atkCavalryProvisions = atkUnits.GetTotalCavalryProvisions();
                 int atkArchersProvisions = atkUnits.GetTotalArcherProvisions();
-                int totalAtkProvisions = atkInfantryProvisions + atkCavalryProvisions + atkArchersProvisions;
+                int atkSpecialProvisions = atkUnits.GetTotalSpecialProvisions();
+
+                int totalAtkProvisions = atkInfantryProvisions + atkCavalryProvisions + atkArchersProvisions + atkSpecialProvisions;
 
                 int totalDefProvisions = defUnits.GetTotalProvisions();
                 if (totalAtkProvisions == 0)
@@ -136,17 +176,48 @@ namespace TribalWars2_CalculationTools.Models
                     break;
                 }
 
+                bool defSuperior = (totalAtkProvisions * 2 <= totalDefProvisions);
+                int atkInfantry = atkUnits.GetTotalInfantryAttack(defSuperior);
+                int atkCavalry = atkUnits.GetTotalCavalryAttack();
+                int atkArchers = atkUnits.GetTotalArcherAttack();
+                int atkSpecial = atkUnits.GetTotalSpecialAtk();
+                int totalAtk = atkInfantry + atkCavalry + atkArchers + atkSpecial;
+
+                int strongestGroupIndex = 0;
+
+                // Determine which group the special units join during battle, the strongest one gets them
+                if (atkInfantry > atkCavalry && atkInfantry > atkArchers)
+                {
+                    //AtkInfantry is the strongest group
+                    atkInfantry += atkSpecial;
+                    atkInfantryProvisions += atkSpecialProvisions;
+                    strongestGroupIndex = 1;
+                }
+                else if (atkCavalry > atkInfantry && atkCavalry > atkInfantry)
+                {
+                    //atkCavalry is the strongest group
+                    atkCavalry += atkSpecial;
+                    atkCavalryProvisions += atkSpecialProvisions;
+                    strongestGroupIndex = 2;
+                }
+                else
+                {
+                    //AtkArchers is the strongest group
+                    atkArchers += atkSpecial;
+                    atkArchersProvisions += atkSpecialProvisions;
+                    strongestGroupIndex = 3;
+                }
+
+                // Add Atk modifier
+                atkInfantry = GameData.AddAtkModifier(atkInfantry, atkModifier);
+                atkCavalry = GameData.AddAtkModifier(atkCavalry, atkModifier);
+                atkArchers = GameData.AddAtkModifier(atkArchers, atkModifier);
+
                 decimal atkInfantryRatio = GameData.GetUnitProvisionRatio(atkInfantryProvisions, totalAtkProvisions);
                 decimal atkCavalryRatio = GameData.GetUnitProvisionRatio(atkCavalryProvisions, totalAtkProvisions);
                 decimal atkArchersRatio = GameData.GetUnitProvisionRatio(atkArchersProvisions, totalAtkProvisions);
                 decimal totalRatio = atkInfantryRatio + atkCavalryRatio + atkArchersRatio;
 
-                bool defSuperior = (totalAtkProvisions * 2 <= totalDefProvisions);
-
-                int atkInfantry = atkUnits.GetTotalInfantryAttack(atkModifier, defSuperior);
-                int atkCavalry = atkUnits.GetTotalCavalryAttack(atkModifier);
-                int atkArchers = atkUnits.GetTotalArcherAttack(atkModifier);
-                int totalAtk = atkInfantry + atkCavalry + atkArchers;
 
                 // These units sets contains the defensive units proportionate to the atkInfantry ratio
                 UnitSet infantryGroupDefUnitSet = defUnits.GetUnitsByRatio(atkInfantryRatio);
@@ -157,6 +228,7 @@ namespace TribalWars2_CalculationTools.Models
                 int totalDefFromCavalry = cavalryGroupDefUnitSet.GetTotalDefFromCavalry(defModifier, wallDefense);
                 int totalDefFromArchers = archerGroupDefUnitSet.GetTotalDefFromArchers(defModifier, wallDefense);
                 int totalDef = totalDefFromInfantry + totalDefFromCavalry + totalDefFromArchers;
+
                 // Used to keep track of how many units are lost this round
                 UnitSet infantryGroupDefUnitSetLost, cavalryGroupDefUnitSetLost, archerGroupDefUnitSetLost;
 
@@ -172,6 +244,7 @@ namespace TribalWars2_CalculationTools.Models
                     killRate = GameData.GetAtkKillRate(atkInfantry, totalDefFromInfantry);
                     atkUnitsLost += atkUnits.ApplyKillRateAtkInfantry(killRate);
                     infantryGroupDefUnitSetLost = infantryGroupDefUnitSet.ApplyKillRate(1);
+                    if (strongestGroupIndex == 1) atkUnits.ApplyKillRateAtkSpecial(killRate);
                 }
                 else
                 {
@@ -186,6 +259,7 @@ namespace TribalWars2_CalculationTools.Models
                     killRate = GameData.GetAtkKillRate(atkCavalry, totalDefFromCavalry);
                     atkUnitsLost += atkUnits.ApplyKillRateAtkCavalry(killRate);
                     cavalryGroupDefUnitSetLost = cavalryGroupDefUnitSet.ApplyKillRate(1);
+                    if (strongestGroupIndex == 2) atkUnits.ApplyKillRateAtkSpecial(killRate);
                 }
                 else
                 {
@@ -200,6 +274,8 @@ namespace TribalWars2_CalculationTools.Models
                     killRate = GameData.GetAtkKillRate(atkArchers, totalDefFromArchers);
                     atkUnitsLost += atkUnits.ApplyKillRateAtkArchers(killRate);
                     archerGroupDefUnitSetLost = archerGroupDefUnitSet.ApplyKillRate(1);
+                    if (strongestGroupIndex == 3) atkUnits.ApplyKillRateAtkSpecial(killRate);
+
                 }
                 else
                 {
@@ -224,6 +300,10 @@ namespace TribalWars2_CalculationTools.Models
                     // WallDefense is only added the first round
                     wallDefense = 0;
                     BattleHistory.Add(currentRound.Copy());
+                    //Reset the UnitLost for subsequent rounds
+                    BattleHistory.Last().AtkUnitsLost = new UnitSet();
+                    BattleHistory.Last().DefUnitsLost = new UnitSet();
+
                 }
             }
 
@@ -238,49 +318,6 @@ namespace TribalWars2_CalculationTools.Models
 
             LastBattleResult = finalResult;
             _battleResultViewModel.UpdateBattleResult(LastBattleResult);
-
-            //int attackStrength = attackTypeList[i];
-            //int attackProvisions = atkProvisionTypeList[i];
-
-            //// The Paladin fights with the strongest (highest fighting power) group. 
-            //// The weapon boost is applied based on the type and not if he joins the round or not. 
-            //if (attackStrength == attackTypeList.Max())
-            //{
-            //    attackStrength += GameData.Paladin.FightingPower;
-            //    // TODO It is assumed that the Paladin provision is counted towards the group it joins
-            //    attackProvisions += GameData.Paladin.ProvisionCost;
-
-            //}
-
-            //// If the attackStrength is zero then skip this attack round.
-            //if (attackStrength == 0)
-            //{
-            //    continue;
-            //}
-
-            //// Todo split up based on provision ratio
-            //decimal ratio = attackProvisions / (decimal)totalAtkProvisions;
-
-
-            //decimal attack = attackStrength * atkModifier;
-            //// + (wallDefense * ratio)
-            //decimal defense = (defenseTypeList[i] * ratio * defModifier);
-
-
-            //    decimal lostCoefficient = (decimal)Math.Sqrt((double)victor) * victor;
-            //    // Set the loses of the defending infantry
-            //    // currentRound.KillDefInfantry(lostCoefficient);
-            //}
-            //else
-            //{
-            //    // Attack won, kill off all defense infantry
-            //    currentRound.KillAllDefInfantry();
-
-            //    decimal lostCoefficient = (decimal)Math.Sqrt(1 / (double)victor) / victor;
-            //    // Set the loses of the attacking infantry
-            //    //currentRound.KillAtkInfantry(lostCoefficient);
-            //}
-
 
         }
 

@@ -299,14 +299,12 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.LightCavalry.ImagePath,
                 Name = GameData.LightCavalry.Name,
-                NumberOnAttack = 5,
             });
 
             Units.Add(MountedArcher = new InputUnitRow
             {
                 ImagePath = GameData.MountedArcher.ImagePath,
                 Name = GameData.MountedArcher.Name,
-                NumberOnAttack = 5
             });
 
             Units.Add(HeavyCavalry = new InputUnitRow
@@ -319,6 +317,7 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.Ram.ImagePath,
                 Name = GameData.Ram.Name,
+                NumberOnAttack = 500
             });
 
             Units.Add(Catapult = new InputUnitRow
@@ -337,6 +336,7 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.Trebuchet.ImagePath,
                 Name = GameData.Trebuchet.Name,
+                NumberOnDefense = 100
             });
 
             Units.Add(Nobleman = new InputUnitRow

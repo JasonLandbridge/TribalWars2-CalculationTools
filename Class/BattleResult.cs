@@ -36,6 +36,8 @@ namespace TribalWars2_CalculationTools.Class
 
         public BattleResult(InputCalculatorData input)
         {
+            WallLevelBefore = input.InputWall;
+
             AtkUnits.Spearman = input.Spearman.NumberOnAttack;
             DefUnits.Spearman = input.Spearman.NumberOnDefense;
 
@@ -83,6 +85,13 @@ namespace TribalWars2_CalculationTools.Class
 
         public int AtkBattleModifier { get; set; }
         public int DefBattleModifier { get; set; }
+
+        public int WallLevelBefore { get; set; }
+        public int WallLevelAfter { get; set; }
+        public int WallDefenseAfter { get; set; }
+
+        public bool ShowWallResult => WallLevelBefore != WallLevelAfter;
+        public string WallResult => $"Wall went from level {WallLevelBefore} to {WallLevelAfter}";
 
         #endregion Properties
 

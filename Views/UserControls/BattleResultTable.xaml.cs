@@ -71,18 +71,22 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             set => SetValue(HeaderProperty, value);
         }
 
+
+
         #endregion Properties
 
         #region Methods
 
         private static void SetProperty(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is BattleResultTable resultTable && e.NewValue is BattleResultTableViewModel battleResultTableViewModel)
+            if (d is BattleResultTable resultTable && e.NewValue is BattleResultTableViewModel viewModel)
             {
-                resultTable.UnitsAmount.BattleResultValues = battleResultTableViewModel.UnitAmount;
-                resultTable.UnitsLost.BattleResultValues = battleResultTableViewModel.UnitLost;
-                resultTable.UnitsLeft.BattleResultValues = battleResultTableViewModel.UnitsLeft;
+                resultTable.UnitsAmount.BattleResultValues = viewModel.UnitAmount;
+                resultTable.UnitsLost.BattleResultValues = viewModel.UnitLost;
+                resultTable.UnitsLeft.BattleResultValues = viewModel.UnitsLeft;
 
+                resultTable.WallResult.WallResult.Visibility = (viewModel.ShowWallResult ? Visibility.Visible : Visibility.Hidden);
+                resultTable.WallResult.WallResult.Content = viewModel.WallResult;
             }
 
         }
