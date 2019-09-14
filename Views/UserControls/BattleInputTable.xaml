@@ -239,7 +239,7 @@
                     MaxValue="100"
                     MinValue="1"
                     PercentDecimalDigits="0"
-                    PercentValue="{Binding InputMoraleProxy, Mode=TwoWay}"
+                    PercentValue="{Binding InputCalculatorData.InputMorale, Mode=TwoWay}"
                     PercentValueChanged="InputMoralChanged"
                     PercentageSymbol="%"
                     TextSelectionOnFocus="True" />

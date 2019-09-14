@@ -148,7 +148,7 @@ namespace TribalWars2_CalculationTools.Class
             return Math.Round(defKillRate, 6, MidpointRounding.AwayFromZero);
         }
 
-        public static decimal GetUnitRatio(int unitProvisions, int totalUnitProvisions)
+        public static decimal GetUnitProvisionRatio(int unitProvisions, int totalUnitProvisions)
         {
             if (totalUnitProvisions <= 0)
             {
@@ -156,6 +156,12 @@ namespace TribalWars2_CalculationTools.Class
             }
             decimal x = unitProvisions / (decimal)totalUnitProvisions;
             return Math.Round(x, 6, MidpointRounding.AwayFromZero);
+        }
+        public static int GetUnitRatio(decimal ratio, int numberOfUnits)
+        {
+            decimal unitRatio = ratio * (decimal)numberOfUnits;
+            int unitCount = (int)Math.Round(unitRatio, MidpointRounding.AwayFromZero);
+            return unitCount;
         }
 
         public static decimal GetAtkBattleModifier(decimal faithBonus, decimal morale, decimal luck, decimal officerBonus)
@@ -168,6 +174,12 @@ namespace TribalWars2_CalculationTools.Class
         {
             decimal y = Math.Round(faithBonus * wallBonus * nightBonus, 2, MidpointRounding.AwayFromZero);
             return 1m * y;
+        }
+
+        public static int GetWallDefense(int wallLevel)
+        {
+            return (int)Math.Round(Math.Pow(1.2515, wallLevel - 1) * 20, MidpointRounding.AwayFromZero);
+
         }
         #endregion
     }

@@ -105,7 +105,7 @@ namespace TribalWars2_CalculationTools.Models
 
             if (resultingWallLevel > 0)
             {
-                wallDefense = (int)Math.Round(Math.Pow(1.24, resultingWallLevel) * 20, MidpointRounding.AwayFromZero);
+                wallDefense = GameData.GetWallDefense(resultingWallLevel);
             }
 
             List<BattleResult> BattleHistory = new List<BattleResult>();
@@ -114,47 +114,49 @@ namespace TribalWars2_CalculationTools.Models
 
             // Simulate for 3 rounds (infantry, cavalry and archers)
             bool battleDetermined = false;
-            int loop = 0;
-            while (!battleDetermined && loop <= 5)
+            while (!battleDetermined)
             {
                 BattleResult currentRound = BattleHistory.Last();
                 //Reset the UnitLost for subsequent rounds
                 currentRound.AtkUnitsLost = new UnitSet();
                 currentRound.DefUnitsLost = new UnitSet();
 
-                int atkInfantryProvisions = currentRound.GetTotalInfantryProvisions();
-                int atkCavalryProvisions = currentRound.GetTotalCavalryProvisions();
-                int atkArchersProvisions = currentRound.GetTotalArcherProvisions();
+                UnitSet atkUnits = currentRound.AtkUnits;
+                UnitSet atkUnitsLost = currentRound.AtkUnitsLost;
+                UnitSet defUnits = currentRound.DefUnits;
+
+                int atkInfantryProvisions = atkUnits.GetTotalInfantryProvisions();
+                int atkCavalryProvisions = atkUnits.GetTotalCavalryProvisions();
+                int atkArchersProvisions = atkUnits.GetTotalArcherProvisions();
                 int totalAtkProvisions = atkInfantryProvisions + atkCavalryProvisions + atkArchersProvisions;
 
-                int totalDefProvisions = currentRound.GetTotalDefProvisions();
+                int totalDefProvisions = defUnits.GetTotalProvisions();
                 if (totalAtkProvisions == 0)
                 {
                     break;
                 }
 
-                decimal atkInfantryRatio = GameData.GetUnitRatio(atkInfantryProvisions, totalAtkProvisions);
-                decimal atkCavalryRatio = GameData.GetUnitRatio(atkCavalryProvisions, totalAtkProvisions);
-                decimal atkArchersRatio = GameData.GetUnitRatio(atkArchersProvisions, totalAtkProvisions);
+                decimal atkInfantryRatio = GameData.GetUnitProvisionRatio(atkInfantryProvisions, totalAtkProvisions);
+                decimal atkCavalryRatio = GameData.GetUnitProvisionRatio(atkCavalryProvisions, totalAtkProvisions);
+                decimal atkArchersRatio = GameData.GetUnitProvisionRatio(atkArchersProvisions, totalAtkProvisions);
                 decimal totalRatio = atkInfantryRatio + atkCavalryRatio + atkArchersRatio;
 
                 bool defSuperior = (totalAtkProvisions * 2 <= totalDefProvisions);
-                int atkInfantry = currentRound.GetTotalInfantryAttack(defSuperior);
-                int atkCavalry = currentRound.GetTotalCavalryAttack();
-                int atkArchers = currentRound.GetTotalArcherAttack();
 
-                int totalDefFromInfantry = currentRound.GetTotalDefFromInfantry(atkInfantryRatio);
-                int totalDefFromCavalry = currentRound.GetTotalDefFromCavalry(atkCavalryRatio);
-                int totalDefFromArchers = currentRound.GetTotalDefFromArchers(atkArchersRatio);
-
-                UnitSet atkUnits = currentRound.AtkUnits;
-                UnitSet atkUnitsLost = currentRound.AtkUnitsLost;
+                int atkInfantry = atkUnits.GetTotalInfantryAttack(atkModifier, defSuperior);
+                int atkCavalry = atkUnits.GetTotalCavalryAttack(atkModifier);
+                int atkArchers = atkUnits.GetTotalArcherAttack(atkModifier);
+                int totalAtk = atkInfantry + atkCavalry + atkArchers;
 
                 // These units sets contains the defensive units proportionate to the atkInfantry ratio
-                UnitSet infantryGroupDefUnitSet = currentRound.GetDefUnitSet(atkInfantryRatio);
-                UnitSet cavalryGroupDefUnitSet = currentRound.GetDefUnitSet(atkCavalryRatio);
-                UnitSet archerGroupDefUnitSet = currentRound.GetDefUnitSet(atkArchersRatio);
+                UnitSet infantryGroupDefUnitSet = defUnits.GetUnitsByRatio(atkInfantryRatio);
+                UnitSet cavalryGroupDefUnitSet = defUnits.GetUnitsByRatio(atkCavalryRatio);
+                UnitSet archerGroupDefUnitSet = defUnits.GetUnitsByRatio(atkArchersRatio);
 
+                int totalDefFromInfantry = infantryGroupDefUnitSet.GetTotalDefFromInfantry(defModifier, wallDefense);
+                int totalDefFromCavalry = cavalryGroupDefUnitSet.GetTotalDefFromCavalry(defModifier, wallDefense);
+                int totalDefFromArchers = archerGroupDefUnitSet.GetTotalDefFromArchers(defModifier, wallDefense);
+                int totalDef = totalDefFromInfantry + totalDefFromCavalry + totalDefFromArchers;
                 // Used to keep track of how many units are lost this round
                 UnitSet infantryGroupDefUnitSetLost, cavalryGroupDefUnitSetLost, archerGroupDefUnitSetLost;
 
@@ -208,22 +210,21 @@ namespace TribalWars2_CalculationTools.Models
                 }
 
                 UnitSet survivingDefUnits = infantryGroupDefUnitSet + cavalryGroupDefUnitSet + archerGroupDefUnitSet;
-                UnitSet DefUnitsLost = infantryGroupDefUnitSetLost + cavalryGroupDefUnitSetLost + archerGroupDefUnitSetLost;
+                UnitSet defUnitsLost = infantryGroupDefUnitSetLost + cavalryGroupDefUnitSetLost + archerGroupDefUnitSetLost;
 
                 currentRound.AtkUnits = atkUnits;
                 currentRound.AtkUnitsLost = atkUnitsLost;
                 currentRound.DefUnits = survivingDefUnits;
-                currentRound.DefUnitsLost = DefUnitsLost;
+                currentRound.DefUnitsLost = defUnitsLost;
 
                 // Check if during the 3 mini-battles either attack of defense won all mini-battles
                 battleDetermined = (atkWonRound1 && atkWonRound2 && atkWonRound3) || (!atkWonRound1 && !atkWonRound2 && !atkWonRound3);
-                loop++;
-
-                if (battleDetermined)
+                if (!battleDetermined)
                 {
-                    continue;
+                    // WallDefense is only added the first round
+                    wallDefense = 0;
+                    BattleHistory.Add(currentRound.Copy());
                 }
-                BattleHistory.Add(currentRound.Copy());
             }
 
 

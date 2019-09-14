@@ -24,6 +24,7 @@ namespace TribalWars2_CalculationTools.Class
         public UnitSet DefUnits;
         public UnitSet DefUnitsLost;
         public UnitSet DefUnitsLeft => DefUnits - DefUnitsLost;
+
         #endregion
 
 
@@ -105,67 +106,6 @@ namespace TribalWars2_CalculationTools.Class
             return (BattleResult)this.MemberwiseClone();
         }
 
-        public int GetTotalArcherAttack()
-        {
-            int totalAttack = 0;
-            // Use the Left on to reuse this method every battle round with leftover units
-            totalAttack += AtkUnitsLeft.Archer * GameData.Archer.FightingPower;
-            totalAttack += AtkUnitsLeft.MountedArcher * GameData.MountedArcher.FightingPower;
-
-            return totalAttack;
-        }
-
-        public int GetTotalCavalryAttack()
-        {
-            int totalAttack = 0;
-            // Use the Left on to reuse this method every battle round with leftover units
-            totalAttack += AtkUnitsLeft.LightCavalry * GameData.LightCavalry.FightingPower;
-            totalAttack += AtkUnitsLeft.HeavyCavalry * GameData.HeavyCavalry.FightingPower;
-
-            return totalAttack;
-        }
-
-        public int GetTotalInfantryAttack(bool defenseIsSuperior)
-        {
-            int totalAttack = 0;
-            // Use the LeftOn to reuse this method every battle round with leftover units
-            totalAttack += AtkUnitsLeft.Spearman * GameData.Spearman.FightingPower;
-            totalAttack += AtkUnitsLeft.Swordsman * GameData.Swordsman.FightingPower;
-            totalAttack += AtkUnitsLeft.AxeFighter * GameData.AxeFighter.FightingPower;
-            totalAttack += AtkUnitsLeft.Nobleman * GameData.Nobleman.FightingPower;
-
-            // Take into account that berserkers
-            // are twice as strong when fighting a superior army
-            if (defenseIsSuperior)
-            {
-                totalAttack += AtkUnitsLeft.Berserker * (GameData.Berserker.FightingPower * 2);
-            }
-            else
-            {
-                totalAttack += AtkUnitsLeft.Berserker * GameData.Berserker.FightingPower;
-            }
-
-            return totalAttack;
-        }
-
-        public void KillAtkArchers(decimal lostCoefficient, decimal ratio = 1)
-        {
-            AtkUnitsLost.Archer = ToLossUnit(AtkUnits.Archer, ratio, lostCoefficient);
-            AtkUnitsLost.MountedArcher = ToLossUnit(AtkUnits.MountedArcher, ratio, lostCoefficient);
-        }
-
-        public void KillAtkCavalry(decimal lostCoefficient, decimal ratio = 1)
-        {
-            AtkUnitsLost.LightCavalry = ToLossUnit(AtkUnits.LightCavalry, ratio, lostCoefficient); ;
-            AtkUnitsLost.HeavyCavalry = ToLossUnit(AtkUnits.HeavyCavalry, ratio, lostCoefficient); ;
-        }
-
-        public void KillAtkInfantry(decimal lostCoefficient, decimal ratio = 1)
-        {
-            AtkUnitsLost.Spearman = ToLossUnit(AtkUnitsLost.Spearman, ratio, lostCoefficient);
-            AtkUnitsLost.Swordsman = ToLossUnit(AtkUnitsLost.Swordsman, ratio, lostCoefficient);
-            AtkUnitsLost.AxeFighter = ToLossUnit(AtkUnitsLost.AxeFighter, ratio, lostCoefficient);
-        }
 
         public int ToLossUnit(int currentNumber, decimal ratio, decimal lostCoefficient)
         {
@@ -175,103 +115,5 @@ namespace TribalWars2_CalculationTools.Class
 
         #endregion Methods
 
-        #region AtkProvisions
-
-        public int GetTotalArcherProvisions()
-        {
-            int totalProvisions = 0;
-
-            totalProvisions += AtkUnitsLeft.Archer * GameData.Archer.ProvisionCost;
-            totalProvisions += AtkUnitsLeft.MountedArcher * GameData.MountedArcher.ProvisionCost;
-
-            return totalProvisions;
-        }
-
-        public int GetTotalCavalryProvisions()
-        {
-            int totalProvisions = 0;
-
-            totalProvisions += AtkUnitsLeft.LightCavalry * GameData.LightCavalry.ProvisionCost;
-            totalProvisions += AtkUnitsLeft.HeavyCavalry * GameData.HeavyCavalry.ProvisionCost;
-
-            return totalProvisions;
-        }
-
-        public int GetTotalInfantryProvisions()
-        {
-            int totalProvisions = 0;
-            // Count all units that are NOT Cavalry and NOT archers
-            totalProvisions += AtkUnitsLeft.Spearman * GameData.Spearman.ProvisionCost;
-            totalProvisions += AtkUnitsLeft.Swordsman * GameData.Swordsman.ProvisionCost;
-            totalProvisions += AtkUnitsLeft.AxeFighter * GameData.AxeFighter.ProvisionCost;
-
-            totalProvisions += AtkUnitsLeft.Ram * GameData.Ram.ProvisionCost;
-            totalProvisions += AtkUnitsLeft.Catapult * GameData.Catapult.ProvisionCost;
-            totalProvisions += AtkUnitsLeft.Trebuchet * GameData.Trebuchet.ProvisionCost;
-            totalProvisions += AtkUnitsLeft.Berserker * GameData.Berserker.ProvisionCost;
-
-            totalProvisions += AtkUnitsLeft.Nobleman * GameData.Nobleman.ProvisionCost;
-            totalProvisions += AtkUnitsLeft.Paladin * GameData.Paladin.ProvisionCost;
-
-            return totalProvisions;
-        }
-        #endregion
-        #region Defense
-
-        public UnitSet GetDefUnitSet(decimal ratio = 1m)
-        {
-            // Get proportional units 
-            return new UnitSet
-            {
-                Spearman = GetUnitRatio(ratio, DefUnits.Spearman),
-                Swordsman = GetUnitRatio(ratio, DefUnits.Swordsman),
-                AxeFighter = GetUnitRatio(ratio, DefUnits.AxeFighter),
-                Archer = GetUnitRatio(ratio, DefUnits.Archer),
-                LightCavalry = GetUnitRatio(ratio, DefUnits.LightCavalry),
-                MountedArcher = GetUnitRatio(ratio, DefUnits.MountedArcher),
-                HeavyCavalry = GetUnitRatio(ratio, DefUnits.HeavyCavalry),
-                Ram = GetUnitRatio(ratio, DefUnits.Ram),
-                Catapult = GetUnitRatio(ratio, DefUnits.Catapult),
-                Berserker = GetUnitRatio(ratio, DefUnits.Berserker),
-                Trebuchet = GetUnitRatio(ratio, DefUnits.Trebuchet),
-                Nobleman = GetUnitRatio(ratio, DefUnits.Nobleman),
-                Paladin = GetUnitRatio(ratio, DefUnits.Paladin)
-            };
-        }
-
-        public int GetTotalDefFromArchers(decimal ratio = 1m)
-        {
-            return GetDefUnitSet(ratio).GetTotalDefFromArchers();
-        }
-
-        public int GetTotalDefFromCavalry(decimal ratio = 1m)
-        {
-            return GetDefUnitSet(ratio).GetTotalDefFromCavalry();
-        }
-
-        public int GetTotalDefFromInfantry(decimal ratio = 1m)
-        {
-            return GetDefUnitSet(ratio).GetTotalDefFromInfantry();
-        }
-
-        public int GetTotalDefProvisions()
-        {
-            int provisions = 0;
-
-            for (int i = 0; i < GameData.UnitList.Count; i++)
-            {
-                provisions += ListOfDefNumbers[i].Value * GameData.UnitList[i].ProvisionCost;
-            }
-
-            return provisions;
-        }
-
-        public int GetUnitRatio(decimal ratio, int numberOfUnits)
-        {
-            decimal unitRatio = ratio * (decimal)numberOfUnits;
-            int unitCount = (int)Math.Round(unitRatio, MidpointRounding.AwayFromZero);
-            return unitCount;
-        }
-        #endregion
     }
 }

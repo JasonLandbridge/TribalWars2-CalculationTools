@@ -30,7 +30,7 @@ namespace TribalWars2_CalculationTools.ViewModels
         private FaithLevel _inputAtkChurch = GameData.FaithOptions[1];
         private int _inputMorale = 100;
         private int _inputLuck = 0;
-        private int _inputWall = 0;
+        private int _inputWall = 20;
         private bool _inputNightBonus = false;
         private bool _grandmasterBonus = false;
 
@@ -272,14 +272,14 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.Spearman.ImagePath,
                 Name = GameData.Spearman.Name,
-                NumberOnDefense = 100
+                NumberOnDefense = 1000
             });
 
             Units.Add(Swordsman = new InputUnitRow
             {
                 ImagePath = GameData.Swordsman.ImagePath,
                 Name = GameData.Swordsman.Name,
-                NumberOnDefense = 100
+                NumberOnDefense = 1000
             });
 
             Units.Add(AxeFighter = new InputUnitRow
