@@ -181,8 +181,8 @@ namespace TribalWars2_CalculationTools.Class
         {
             int totalProvisions = 0;
 
-            totalProvisions += AtkUnits.Archer * GameData.Archer.ProvisionCost;
-            totalProvisions += AtkUnits.MountedArcher * GameData.MountedArcher.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.Archer * GameData.Archer.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.MountedArcher * GameData.MountedArcher.ProvisionCost;
 
             return totalProvisions;
         }
@@ -191,8 +191,8 @@ namespace TribalWars2_CalculationTools.Class
         {
             int totalProvisions = 0;
 
-            totalProvisions += AtkUnits.LightCavalry * GameData.LightCavalry.ProvisionCost;
-            totalProvisions += AtkUnits.HeavyCavalry * GameData.HeavyCavalry.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.LightCavalry * GameData.LightCavalry.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.HeavyCavalry * GameData.HeavyCavalry.ProvisionCost;
 
             return totalProvisions;
         }
@@ -201,17 +201,17 @@ namespace TribalWars2_CalculationTools.Class
         {
             int totalProvisions = 0;
             // Count all units that are NOT Cavalry and NOT archers
-            totalProvisions += AtkUnits.Spearman * GameData.Spearman.ProvisionCost;
-            totalProvisions += AtkUnits.Swordsman * GameData.Swordsman.ProvisionCost;
-            totalProvisions += AtkUnits.AxeFighter * GameData.AxeFighter.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.Spearman * GameData.Spearman.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.Swordsman * GameData.Swordsman.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.AxeFighter * GameData.AxeFighter.ProvisionCost;
 
-            totalProvisions += AtkUnits.Ram * GameData.Ram.ProvisionCost;
-            totalProvisions += AtkUnits.Catapult * GameData.Catapult.ProvisionCost;
-            totalProvisions += AtkUnits.Trebuchet * GameData.Trebuchet.ProvisionCost;
-            totalProvisions += AtkUnits.Berserker * GameData.Berserker.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.Ram * GameData.Ram.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.Catapult * GameData.Catapult.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.Trebuchet * GameData.Trebuchet.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.Berserker * GameData.Berserker.ProvisionCost;
 
-            totalProvisions += AtkUnits.Nobleman * GameData.Nobleman.ProvisionCost;
-            totalProvisions += AtkUnits.Paladin * GameData.Paladin.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.Nobleman * GameData.Nobleman.ProvisionCost;
+            totalProvisions += AtkUnitsLeft.Paladin * GameData.Paladin.ProvisionCost;
 
             return totalProvisions;
         }

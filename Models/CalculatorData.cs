@@ -80,11 +80,11 @@ namespace TribalWars2_CalculationTools.Models
             // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
             // Math round is important 0.545 -> 0.55
             decimal x = Math.Round(atkFaithBonus * morale * luck, 2, MidpointRounding.AwayFromZero);
-            decimal atkModifier = 1m * x + officerBonus;
+
+            decimal atkModifier = GameData.GetAtkBattleModifier(atkFaithBonus, morale, luck, officerBonus);
             result.AtkBattleModifier = (int)(atkModifier * 100m);
 
-            decimal y = Math.Round(defFaithBonus * wallBonus * nightBonus, 2, MidpointRounding.AwayFromZero);
-            decimal defModifier = 1m * y;
+            decimal defModifier = GameData.GetDefBattleModifier(defFaithBonus, wallBonus, nightBonus);
             result.DefBattleModifier = (int)(defModifier * 100m);
 
             // Stop here if there are no units given
@@ -118,6 +118,9 @@ namespace TribalWars2_CalculationTools.Models
             while (!battleDetermined && loop <= 5)
             {
                 BattleResult currentRound = BattleHistory.Last();
+                //Reset the UnitLost for subsequent rounds
+                currentRound.AtkUnitsLost = new UnitSet();
+                currentRound.DefUnitsLost = new UnitSet();
 
                 int atkInfantryProvisions = currentRound.GetTotalInfantryProvisions();
                 int atkCavalryProvisions = currentRound.GetTotalCavalryProvisions();
@@ -125,14 +128,14 @@ namespace TribalWars2_CalculationTools.Models
                 int totalAtkProvisions = atkInfantryProvisions + atkCavalryProvisions + atkArchersProvisions;
 
                 int totalDefProvisions = currentRound.GetTotalDefProvisions();
+                if (totalAtkProvisions == 0)
+                {
+                    break;
+                }
 
-                decimal atkInfantryRatio = atkInfantryProvisions / (decimal)totalAtkProvisions;
-                decimal atkCavalryRatio = atkCavalryProvisions / (decimal)totalAtkProvisions;
-                decimal atkArchersRatio = atkArchersProvisions / (decimal)totalAtkProvisions;
-
-                atkInfantryRatio = Math.Round(atkInfantryRatio, 6, MidpointRounding.AwayFromZero);
-                atkCavalryRatio = Math.Round(atkCavalryRatio, 6, MidpointRounding.AwayFromZero);
-                atkArchersRatio = Math.Round(atkArchersRatio, 6, MidpointRounding.AwayFromZero);
+                decimal atkInfantryRatio = GameData.GetUnitRatio(atkInfantryProvisions, totalAtkProvisions);
+                decimal atkCavalryRatio = GameData.GetUnitRatio(atkCavalryProvisions, totalAtkProvisions);
+                decimal atkArchersRatio = GameData.GetUnitRatio(atkArchersProvisions, totalAtkProvisions);
                 decimal totalRatio = atkInfantryRatio + atkCavalryRatio + atkArchersRatio;
 
                 bool defSuperior = (totalAtkProvisions * 2 <= totalDefProvisions);
@@ -214,15 +217,23 @@ namespace TribalWars2_CalculationTools.Models
 
                 // Check if during the 3 mini-battles either attack of defense won all mini-battles
                 battleDetermined = (atkWonRound1 && atkWonRound2 && atkWonRound3) || (!atkWonRound1 && !atkWonRound2 && !atkWonRound3);
+                loop++;
 
+                if (battleDetermined)
+                {
+                    continue;
+                }
                 BattleHistory.Add(currentRound.Copy());
-
-                loop = 8;
             }
 
-            BattleResult finalResult = BattleHistory.Last().Copy();
-            finalResult.DefUnits = result.DefUnits;
-            finalResult.AtkUnits = result.AtkUnits;
+
+            BattleResult finalResult = result.Copy();
+
+            foreach (BattleResult battleResult in BattleHistory)
+            {
+                finalResult.AtkUnitsLost += battleResult.AtkUnitsLost;
+                finalResult.DefUnitsLost += battleResult.DefUnitsLost;
+            }
 
             LastBattleResult = finalResult;
             _battleResultViewModel.UpdateBattleResult(LastBattleResult);

@@ -286,7 +286,7 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.AxeFighter.ImagePath,
                 Name = GameData.AxeFighter.Name,
-                NumberOnAttack = 100
+                NumberOnAttack = 1000
             });
 
             Units.Add(Archer = new InputUnitRow
