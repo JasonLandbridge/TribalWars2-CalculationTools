@@ -5,10 +5,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
+    xmlns:valueConverters="clr-namespace:TribalWars2_CalculationTools.Class.ValueConverters"
     x:Name="parent"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <valueConverters:NullImageConverter x:Key="nullImageConverter"/>
+    </UserControl.Resources>
     <GroupBox
         Grid.Row="0"
         Grid.Column="0"
@@ -48,7 +52,7 @@
                                 Width="40"
                                 Height="40"
                                 Margin="5,5"
-                                Source="{Binding ImagePath}" />
+                                Source="{Binding ImagePath, Converter={StaticResource nullImageConverter}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -64,7 +68,7 @@
             <uc:BattleResultRow x:Name="UnitsLeft" Header="Survivors" />
 
             <!--  Units Left row  -->
-            <uc:BattleResultRow x:Name="WallResult" Header="Survivors" Visibility="{Binding ShowWallResult}" />
+            <uc:BattleResultRow x:Name="WallResult" Header="Survivors" />
 
         </StackPanel>
     </GroupBox>

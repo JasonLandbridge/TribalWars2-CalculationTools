@@ -1,7 +1,9 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class;
 using TribalWars2_CalculationTools.Class.Structs;

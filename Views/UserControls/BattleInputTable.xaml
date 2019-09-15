@@ -8,10 +8,14 @@
     xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:sync1="http://schemas.syncfusion.com/wpf"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
+    xmlns:valueConverters="clr-namespace:TribalWars2_CalculationTools.Class.ValueConverters"
     x:Name="parent"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <valueConverters:NullImageConverter x:Key="nullImageConverter" />
+    </UserControl.Resources>
     <Grid
         x:Name="InputTable"
         Grid.Row="1"
@@ -65,30 +69,46 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <ItemsControl
-                    x:Name="UnitsInputRows"
+                    x:Name="UnitsInputImageRows"
                     Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3">
+                    Grid.Column="0">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,0,0,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-
+                                    <RowDefinition Height="40" />
                                 </Grid.RowDefinitions>
                                 <uc:InputRowHeader
                                     Title="{Binding Name}"
                                     Grid.Row="0"
                                     Grid.Column="0"
                                     ImagePath="{Binding ImagePath}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl
+                    x:Name="UnitsInputRows"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40" />
+                                </Grid.RowDefinitions>
                                 <sync:UpDown
                                     Grid.Row="0"
-                                    Grid.Column="1"
+                                    Grid.Column="0"
                                     Width="120"
                                     Margin="5,5"
                                     MaxValue="99999"
@@ -99,7 +119,7 @@
                                     Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <sync:UpDown
                                     Grid.Row="0"
-                                    Grid.Column="2"
+                                    Grid.Column="1"
                                     Width="120"
                                     Margin="5,5"
                                     MaxValue="99999"
@@ -117,7 +137,7 @@
                     Title="{Binding InputGrandmasterBonusLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputGrandmasterBonusImagePath}" />
+                    ImagePath="{Binding InputGrandmasterBonusImagePath, Converter={StaticResource nullImageConverter}}" />
                 <CheckBox
                     Grid.Row="1"
                     Grid.Column="1"
@@ -147,12 +167,13 @@
                 </Grid.RowDefinitions>
 
                 <!--  Church input rows  -->
+
                 <uc:InputRowHeader
                     x:Name="InputChurchHeader"
                     Title="{Binding InputChurchLabel}"
                     Grid.Row="0"
                     Grid.Column="0"
-                    ImagePath="{Binding InputChurchImagePath}" />
+                    ImagePath="{Binding InputChurchImagePath, Converter={StaticResource nullImageConverter}}" />
 
                 <sync1:ComboBoxAdv
                     x:Name="InputComboChurchAtk"
@@ -181,14 +202,13 @@
                     SelectedIndex="1"
                     SelectedValue="{Binding InputCalculatorData.InputDefChurch, Mode=TwoWay}"
                     SelectionChanged="InputComboChurchDef_OnSelectionChanged" />
-
                 <!--  Wall input rows  -->
                 <uc:InputRowHeader
                     x:Name="InputWallHeader"
                     Title="{Binding InputWallLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputWallImagePath}" />
+                    ImagePath="{Binding InputWallImagePath, Converter={StaticResource nullImageConverter}}" />
 
                 <sync:UpDown
                     Grid.Row="1"
@@ -221,13 +241,15 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+
                 <!--  Morale input rows  -->
+
                 <uc:InputRowHeader
                     x:Name="InputMoraleHeader"
                     Title="{Binding InputMoraleLabel}"
                     Grid.Row="0"
                     Grid.Column="0"
-                    ImagePath="{Binding InputMoraleImagePath}" />
+                    ImagePath="{Binding InputMoraleImagePath, Converter={StaticResource nullImageConverter}}" />
 
                 <sync:PercentTextBox
                     Grid.Row="0"
@@ -245,12 +267,13 @@
                     TextSelectionOnFocus="True" />
 
                 <!--  Luck input rows  -->
+
                 <uc:InputRowHeader
                     x:Name="InputLuckHeader"
                     Title="{Binding InputLuckLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputLuckImagePath}" />
+                    ImagePath="{Binding InputCalculatorData.InputLuckImagePath, Converter={StaticResource nullImageConverter}}" />
 
                 <sync:UpDown
                     Grid.Row="1"
@@ -271,7 +294,7 @@
                     Title="{Binding InputNightBonusLabel}"
                     Grid.Row="2"
                     Grid.Column="0"
-                    ImagePath="{Binding InputNightBonusImagePath}" />
+                    ImagePath="{Binding InputCalculatorData.InputNightBonusImagePath, Converter={StaticResource nullImageConverter}}" />
                 <CheckBox
                     Grid.Row="2"
                     Grid.Column="2"

@@ -352,6 +352,34 @@ namespace TribalWars2_CalculationTools.Models
                 finalResult.AtkUnitsLost += battleResult.AtkUnitsLost;
                 finalResult.DefUnitsLost += battleResult.DefUnitsLost;
             }
+
+            decimal damage = (finalResult.AtkUnitsLeft.Ram * atkModifier); //TODO add paladin weapon
+            int wallHitPoints = (GameData.Wall.GetHitPoints(finalResult.WallLevelAfter) * 2);
+            decimal wallDamage = damage / wallHitPoints;
+
+            // Calculate the new wall level after damage applied
+            int finalWallLevel = 0;
+            int afterBattleWall = finalResult.WallLevelAfter;
+            int ironWall = 0;
+            // If the wall is already below the Iron Wall threshold then don't change anything. 
+            if (afterBattleWall <= ironWall)
+            {
+                finalWallLevel = afterBattleWall;
+            }
+            else
+            {
+                if (afterBattleWall - ironWall < -wallDamage)
+                {
+                    finalWallLevel = afterBattleWall < ironWall ? afterBattleWall : ironWall;
+                }
+                else
+                {
+                    decimal rawLevel = Math.Clamp(afterBattleWall - wallDamage, 0, 20);
+                    finalWallLevel = (int)Math.Round(rawLevel, MidpointRounding.AwayFromZero);
+                }
+            }
+            finalResult.WallLevelFinal = finalWallLevel;
+
             defModifier = GameData.GetDefBattleModifier(defFaithBonus, finalResult.WallLevelBefore, nightBonus);
             finalResult.DefBattleModifier = (int)(defModifier * 100m);
 

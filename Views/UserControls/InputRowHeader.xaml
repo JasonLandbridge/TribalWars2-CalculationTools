@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:valueConverters="clr-namespace:TribalWars2_CalculationTools.Class.ValueConverters"
     x:Name="parent"
     d:DesignHeight="50"
     d:DesignWidth="150"
@@ -12,7 +13,7 @@
     <Grid>
         <StackPanel DataContext="{Binding ElementName=parent}" Orientation="Horizontal">
 
-            <Image Width="40" Source="{Binding Path=ImagePath}" />
+            <Image x:Name="HeaderImage" Width="40" />
             <Label
                 MinWidth="100"
                 Margin="0,5"

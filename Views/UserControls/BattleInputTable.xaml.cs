@@ -24,8 +24,6 @@ namespace TribalWars2_CalculationTools.Views.UserControls
     public partial class BattleInputTable : UserControl
     {
 
-        public int ComponentWidth { get; } = 120;
-
         public InputCalculatorData InputCalculatorData
         {
             get => (InputCalculatorData)GetValue(InputCalculatorDataProperty);
@@ -74,6 +72,7 @@ namespace TribalWars2_CalculationTools.Views.UserControls
         public BattleInputTable()
         {
             InitializeComponent();
+            UnitsInputImageRows.ItemsSource = GameData.UnitImageList;
             InputComboChurchAtk.ItemsSource = GameData.FaithOptions;
             InputComboChurchDef.ItemsSource = GameData.FaithOptions;
         }

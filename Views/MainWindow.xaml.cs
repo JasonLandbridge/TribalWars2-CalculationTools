@@ -47,7 +47,6 @@ namespace TribalWars2_CalculationTools.Views
             }
 
             UpdateBattleCalculator(null, null);
-            //PresentationTraceSources.TraceLevel=High
         }
 
         #endregion Constructors
