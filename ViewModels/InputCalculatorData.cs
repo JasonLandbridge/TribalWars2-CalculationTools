@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class;
+using TribalWars2_CalculationTools.Class.Structs;
 using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.ViewModels
@@ -268,87 +269,154 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         public InputCalculatorData()
         {
+
+            UnitSet AtkUnits = new UnitSet
+            {
+                Spearman = 0,
+                Swordsman = 0,
+                AxeFighter = 10000,
+                Archer = 0,
+                LightCavalry = 0,
+                MountedArcher = 0,
+                HeavyCavalry = 0,
+                Ram = 500,
+                Catapult = 0,
+                Berserker = 0,
+                Trebuchet = 0,
+                Nobleman = 0,
+                Paladin = 0,
+
+            };
+
+            UnitSet DefUnits = new UnitSet
+            {
+                Spearman = 1000,
+                Swordsman = 1000,
+                AxeFighter = 0,
+                Archer = 0,
+                LightCavalry = 0,
+                MountedArcher = 0,
+                HeavyCavalry = 0,
+                Ram = 0,
+                Catapult = 0,
+                Berserker = 0,
+                Trebuchet = 100,
+                Nobleman = 0,
+                Paladin = 0,
+
+            };
+
+
             Units.Add(Spearman = new InputUnitRow
             {
                 ImagePath = GameData.Spearman.ImagePath,
                 Name = GameData.Spearman.Name,
-                NumberOnDefense = 1000
+                NumberOnAttack = AtkUnits.Spearman,
+                NumberOnDefense = DefUnits.Spearman
             });
 
             Units.Add(Swordsman = new InputUnitRow
             {
                 ImagePath = GameData.Swordsman.ImagePath,
                 Name = GameData.Swordsman.Name,
-                NumberOnDefense = 1000
+                NumberOnAttack = AtkUnits.Swordsman,
+                NumberOnDefense = DefUnits.Swordsman
             });
 
             Units.Add(AxeFighter = new InputUnitRow
             {
                 ImagePath = GameData.AxeFighter.ImagePath,
                 Name = GameData.AxeFighter.Name,
-                NumberOnAttack = 1000
+                NumberOnAttack = AtkUnits.AxeFighter,
+                NumberOnDefense = DefUnits.AxeFighter
             });
 
             Units.Add(Archer = new InputUnitRow
             {
                 ImagePath = GameData.Archer.ImagePath,
                 Name = GameData.Archer.Name,
+                NumberOnAttack = AtkUnits.Archer,
+                NumberOnDefense = DefUnits.Archer
+
             });
 
             Units.Add(LightCavalry = new InputUnitRow
             {
                 ImagePath = GameData.LightCavalry.ImagePath,
                 Name = GameData.LightCavalry.Name,
+                NumberOnAttack = AtkUnits.LightCavalry,
+                NumberOnDefense = DefUnits.LightCavalry
+
             });
 
             Units.Add(MountedArcher = new InputUnitRow
             {
                 ImagePath = GameData.MountedArcher.ImagePath,
                 Name = GameData.MountedArcher.Name,
+                NumberOnAttack = AtkUnits.MountedArcher,
+                NumberOnDefense = DefUnits.MountedArcher
+
             });
 
             Units.Add(HeavyCavalry = new InputUnitRow
             {
                 ImagePath = GameData.HeavyCavalry.ImagePath,
                 Name = GameData.HeavyCavalry.Name,
+                NumberOnAttack = AtkUnits.HeavyCavalry,
+                NumberOnDefense = DefUnits.HeavyCavalry
+
             });
 
             Units.Add(Ram = new InputUnitRow
             {
                 ImagePath = GameData.Ram.ImagePath,
                 Name = GameData.Ram.Name,
-                NumberOnAttack = 500
+                NumberOnAttack = AtkUnits.Ram,
+                NumberOnDefense = DefUnits.Ram
             });
 
             Units.Add(Catapult = new InputUnitRow
             {
                 ImagePath = GameData.Catapult.ImagePath,
                 Name = GameData.Catapult.Name,
+                NumberOnAttack = AtkUnits.Catapult,
+                NumberOnDefense = DefUnits.Catapult
+
             });
 
             Units.Add(Berserker = new InputUnitRow
             {
                 ImagePath = GameData.Berserker.ImagePath,
                 Name = GameData.Berserker.Name,
+                NumberOnAttack = AtkUnits.Berserker,
+                NumberOnDefense = DefUnits.Berserker
+
             });
 
             Units.Add(Trebuchet = new InputUnitRow
             {
                 ImagePath = GameData.Trebuchet.ImagePath,
                 Name = GameData.Trebuchet.Name,
-                NumberOnDefense = 100
+                NumberOnAttack = AtkUnits.Trebuchet,
+                NumberOnDefense = DefUnits.Trebuchet
             });
 
             Units.Add(Nobleman = new InputUnitRow
             {
                 ImagePath = GameData.Nobleman.ImagePath,
                 Name = GameData.Nobleman.Name,
+                NumberOnAttack = AtkUnits.Nobleman,
+                NumberOnDefense = DefUnits.Nobleman
+
             });
 
             Units.Add(Paladin = new InputUnitRow
             {
                 ImagePath = GameData.Paladin.ImagePath,
                 Name = GameData.Paladin.Name,
+                NumberOnAttack = AtkUnits.Paladin,
+                NumberOnDefense = DefUnits.Paladin
+
             });
 
 

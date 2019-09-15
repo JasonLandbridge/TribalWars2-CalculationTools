@@ -83,11 +83,12 @@ namespace TribalWars2_CalculationTools.Models
 
             // This is meant to calculate the "active" rams that will do damage in relation to the attacking force. 
             // More infantry = more damage with the rams
-            decimal ramRatio = (decimal)totalProvisionsWithNoRams / (defUnits.GetTotalProvisions() + wallDefense);
+            decimal ramRatio = Math.Clamp((decimal)totalProvisionsWithNoRams / (defUnits.GetTotalProvisions() + wallDefense), 0, 1);
             int wallHitPoints = (GameData.Wall.GetHitPoints(wallLevel) * 2);
 
             // This is the net wall damage done by the rams
             decimal wallDamage = (atkUnits.Ram * ramRatio * atkModifier * paladinModifier) / wallHitPoints;
+
 
             // Calculate the new wall level after damage applied
             int resultingWallLevel;
@@ -105,12 +106,11 @@ namespace TribalWars2_CalculationTools.Models
                 else
                 {
                     decimal rawLevel = wallLevel - wallDamage;
-                    resultingWallLevel = (int)Math.Round(rawLevel, MidpointRounding.ToZero);
+                    resultingWallLevel = (int)Math.Round(rawLevel, MidpointRounding.AwayFromZero);
                 }
             }
 
             result.WallLevelAfter = resultingWallLevel;
-            result.WallDefenseAfter = GameData.GetWallDefense(resultingWallLevel);
             result.AtkUnitsLost = atkUnitsLost;
             return result.WallLevelAfter;
 
@@ -133,11 +133,11 @@ namespace TribalWars2_CalculationTools.Models
 
             decimal atkModifier = GameData.GetAtkBattleModifier(atkFaithBonus, morale, luck, officerBonus);
             result.AtkBattleModifier = (int)(atkModifier * 100m);
+            decimal defModifier = GameData.GetDefBattleModifier(defFaithBonus, result.WallLevelBefore, nightBonus);
+            result.DefBattleModifier = (int)(defModifier * 100m);
 
             int resultingWallLevel = PreRound(ref result);
-
-            int wallDefense = result.WallDefenseAfter;
-            decimal defModifier = GameData.GetDefBattleModifier(defFaithBonus, resultingWallLevel, nightBonus);
+            defModifier = GameData.GetDefBattleModifier(defFaithBonus, resultingWallLevel, nightBonus);
             result.DefBattleModifier = (int)(defModifier * 100m);
 
 
@@ -152,12 +152,18 @@ namespace TribalWars2_CalculationTools.Models
             }
 
             List<BattleResult> BattleHistory = new List<BattleResult> { result.Copy() };
+            BattleResult currentRound = BattleHistory.Last();
 
+            // Set the atkUnits - minus the lost siege units and set that as the attacking group
+            currentRound.AtkUnits -= result.AtkUnitsLost;
+            currentRound.AtkUnitsLost.Clear();
             // Simulate for 3 rounds (infantry, cavalry and archers)
             bool battleDetermined = false;
+            int wallDefense = result.WallDefenseAfter;
+
             while (!battleDetermined)
             {
-                BattleResult currentRound = BattleHistory.Last();
+                currentRound = BattleHistory.Last();
 
                 UnitSet atkUnits = currentRound.AtkUnits;
                 UnitSet atkUnitsLost = currentRound.AtkUnitsLost;
@@ -183,7 +189,7 @@ namespace TribalWars2_CalculationTools.Models
                 int atkSpecial = atkUnits.GetTotalSpecialAtk();
                 int totalAtk = atkInfantry + atkCavalry + atkArchers + atkSpecial;
 
-                int strongestGroupIndex = 0;
+                int strongestGroupIndex;
 
                 // Determine which group the special units join during battle, the strongest one gets them
                 if (atkInfantry > atkCavalry && atkInfantry > atkArchers)
@@ -230,58 +236,89 @@ namespace TribalWars2_CalculationTools.Models
                 int totalDef = totalDefFromInfantry + totalDefFromCavalry + totalDefFromArchers;
 
                 // Used to keep track of how many units are lost this round
-                UnitSet infantryGroupDefUnitSetLost, cavalryGroupDefUnitSetLost, archerGroupDefUnitSetLost;
+                UnitSet infantryGroupDefUnitSetLost = new UnitSet(), cavalryGroupDefUnitSetLost = new UnitSet(), archerGroupDefUnitSetLost = new UnitSet();
 
-                bool atkWonRound1 = (atkInfantry >= totalDefFromInfantry);
-                bool atkWonRound2 = (atkCavalry >= totalDefFromCavalry);
-                bool atkWonRound3 = (atkArchers >= totalDefFromArchers);
+                // Determine the result of each mini-round by comparing the attack vs defense strength.
+                // If both sides have 0 forces then ignore the result and leave the result undefined (null)
+                bool? atkWonRound1 = null, atkWonRound2 = null, atkWonRound3 = null;
+                List<bool> miniBattleResult = new List<bool>();
+                if (atkInfantry > 0 && totalDefFromInfantry > 0)
+                {
+                    atkWonRound1 = atkInfantry >= totalDefFromInfantry;
+                    miniBattleResult.Add((bool)atkWonRound1);
+                }
+
+                if (atkCavalry > 0 && totalDefFromCavalry > 0)
+                {
+                    atkWonRound2 = (atkCavalry >= totalDefFromCavalry);
+                    miniBattleResult.Add((bool)atkWonRound2);
+                }
+
+                if (atkArchers > 0 && totalDefFromArchers > 0)
+                {
+                    atkWonRound3 = (atkArchers >= totalDefFromArchers);
+                    miniBattleResult.Add((bool)atkWonRound3);
+                }
 
                 // For every round that Defense won, kill the attacking party and vice versa
                 // General / Infantry round
                 decimal killRate;
-                if (atkWonRound1)
+                if (atkWonRound1 != null)
                 {
-                    killRate = GameData.GetAtkKillRate(atkInfantry, totalDefFromInfantry);
-                    atkUnitsLost += atkUnits.ApplyKillRateAtkInfantry(killRate);
-                    infantryGroupDefUnitSetLost = infantryGroupDefUnitSet.ApplyKillRate(1);
-                    if (strongestGroupIndex == 1) atkUnits.ApplyKillRateAtkSpecial(killRate);
-                }
-                else
-                {
-                    killRate = GameData.GetDefKillRate(atkInfantry, totalDefFromInfantry);
-                    atkUnitsLost += atkUnits.ApplyKillRateAtkInfantry(1);
-                    infantryGroupDefUnitSetLost = infantryGroupDefUnitSet.ApplyKillRate(killRate);
+                    if ((bool)atkWonRound1)
+                    {
+                        killRate = GameData.GetAtkKillRate(atkInfantry, totalDefFromInfantry);
+                        atkUnitsLost += atkUnits.ApplyKillRateAtkInfantry(killRate);
+                        infantryGroupDefUnitSetLost = infantryGroupDefUnitSet.ApplyKillRate(1);
+                        if (strongestGroupIndex == 1) atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(killRate);
+                    }
+                    else
+                    {
+                        killRate = GameData.GetDefKillRate(atkInfantry, totalDefFromInfantry);
+                        atkUnitsLost += atkUnits.ApplyKillRateAtkInfantry(1);
+                        atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(1);
+                        infantryGroupDefUnitSetLost = infantryGroupDefUnitSet.ApplyKillRate(killRate);
+                    }
                 }
 
                 // Cavalry round
-                if (atkWonRound2)
+                if (atkWonRound2 != null)
                 {
-                    killRate = GameData.GetAtkKillRate(atkCavalry, totalDefFromCavalry);
-                    atkUnitsLost += atkUnits.ApplyKillRateAtkCavalry(killRate);
-                    cavalryGroupDefUnitSetLost = cavalryGroupDefUnitSet.ApplyKillRate(1);
-                    if (strongestGroupIndex == 2) atkUnits.ApplyKillRateAtkSpecial(killRate);
-                }
-                else
-                {
-                    killRate = GameData.GetDefKillRate(atkCavalry, totalDefFromCavalry);
-                    atkUnitsLost += atkUnits.ApplyKillRateAtkCavalry(1);
-                    cavalryGroupDefUnitSetLost = cavalryGroupDefUnitSet.ApplyKillRate(killRate);
+                    if ((bool)atkWonRound2)
+                    {
+                        killRate = GameData.GetAtkKillRate(atkCavalry, totalDefFromCavalry);
+                        atkUnitsLost += atkUnits.ApplyKillRateAtkCavalry(killRate);
+                        cavalryGroupDefUnitSetLost = cavalryGroupDefUnitSet.ApplyKillRate(1);
+                        if (strongestGroupIndex == 2) atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(killRate);
+                    }
+                    else
+                    {
+                        killRate = GameData.GetDefKillRate(atkCavalry, totalDefFromCavalry);
+                        atkUnitsLost += atkUnits.ApplyKillRateAtkCavalry(1);
+                        atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(1);
+                        cavalryGroupDefUnitSetLost = cavalryGroupDefUnitSet.ApplyKillRate(killRate);
+                    }
                 }
 
                 // Archer round
-                if (atkWonRound3)
+                if (atkWonRound3 != null)
                 {
-                    killRate = GameData.GetAtkKillRate(atkArchers, totalDefFromArchers);
-                    atkUnitsLost += atkUnits.ApplyKillRateAtkArchers(killRate);
-                    archerGroupDefUnitSetLost = archerGroupDefUnitSet.ApplyKillRate(1);
-                    if (strongestGroupIndex == 3) atkUnits.ApplyKillRateAtkSpecial(killRate);
+                    if ((bool)atkWonRound3)
+                    {
+                        killRate = GameData.GetAtkKillRate(atkArchers, totalDefFromArchers);
+                        atkUnitsLost += atkUnits.ApplyKillRateAtkArchers(killRate);
+                        archerGroupDefUnitSetLost = archerGroupDefUnitSet.ApplyKillRate(1);
+                        if (strongestGroupIndex == 3) atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(killRate);
 
-                }
-                else
-                {
-                    killRate = GameData.GetDefKillRate(atkArchers, totalDefFromArchers);
-                    atkUnitsLost += atkUnits.ApplyKillRateAtkArchers(1);
-                    archerGroupDefUnitSetLost = archerGroupDefUnitSet.ApplyKillRate(killRate);
+                    }
+                    else
+                    {
+                        killRate = GameData.GetDefKillRate(atkArchers, totalDefFromArchers);
+                        atkUnitsLost += atkUnits.ApplyKillRateAtkArchers(1);
+                        atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(1);
+                        archerGroupDefUnitSetLost = archerGroupDefUnitSet.ApplyKillRate(killRate);
+
+                    }
 
                 }
 
@@ -294,7 +331,7 @@ namespace TribalWars2_CalculationTools.Models
                 currentRound.DefUnitsLost = defUnitsLost;
 
                 // Check if during the 3 mini-battles either attack of defense won all mini-battles
-                battleDetermined = (atkWonRound1 && atkWonRound2 && atkWonRound3) || (!atkWonRound1 && !atkWonRound2 && !atkWonRound3);
+                battleDetermined = !(miniBattleResult.Contains(false) && miniBattleResult.Contains(true));
                 if (!battleDetermined)
                 {
                     // WallDefense is only added the first round
@@ -315,6 +352,8 @@ namespace TribalWars2_CalculationTools.Models
                 finalResult.AtkUnitsLost += battleResult.AtkUnitsLost;
                 finalResult.DefUnitsLost += battleResult.DefUnitsLost;
             }
+            defModifier = GameData.GetDefBattleModifier(defFaithBonus, finalResult.WallLevelBefore, nightBonus);
+            finalResult.DefBattleModifier = (int)(defModifier * 100m);
 
             LastBattleResult = finalResult;
             _battleResultViewModel.UpdateBattleResult(LastBattleResult);

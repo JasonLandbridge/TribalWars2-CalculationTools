@@ -88,7 +88,7 @@ namespace TribalWars2_CalculationTools.Class
 
         public int WallLevelBefore { get; set; }
         public int WallLevelAfter { get; set; }
-        public int WallDefenseAfter { get; set; }
+        public int WallDefenseAfter => GameData.GetWallDefense(WallLevelAfter);
 
         public bool ShowWallResult => WallLevelBefore != WallLevelAfter;
         public string WallResult => $"Wall went from level {WallLevelBefore} to {WallLevelAfter}";

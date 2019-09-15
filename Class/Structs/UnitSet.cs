@@ -444,6 +444,19 @@ namespace TribalWars2_CalculationTools.Class.Structs
         }
         #endregion
 
+        public void Clear()
+        {
+            // Create 0 list and set over the UnitList
+            List<int> zeroList = new List<int>();
+
+            for (int i = 0; i < UnitList.Count; i++)
+            {
+                zeroList.Add(0);
+            }
+
+            UnitList = zeroList;
+        }
+
         #endregion Methods
     }
 }

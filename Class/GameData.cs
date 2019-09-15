@@ -208,10 +208,16 @@ namespace TribalWars2_CalculationTools.Class
         }
         public static int GetRamsKilled(int numberOfRams, int numberOfCatapults, int numberOfTrebuchet)
         {
-            decimal x = numberOfTrebuchet * (numberOfRams / (numberOfRams + (decimal)numberOfCatapults));
+            decimal totalSiege = numberOfRams + (decimal)numberOfCatapults;
+            if (totalSiege == 0)
+            {
+                return 0;
+            }
+            decimal x = numberOfTrebuchet * (numberOfRams / totalSiege);
             return (int)Math.Round(x, MidpointRounding.AwayFromZero);
         }
 
+      
         #endregion
     }
 }
