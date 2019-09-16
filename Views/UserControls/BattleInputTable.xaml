@@ -130,10 +130,10 @@
                 </ItemsControl>
                 <uc:InputRowHeader
                     x:Name="InputGrandMasterHeader"
-                    Title="{Binding InputGrandmasterBonusLabel}"
+                    Title="{Binding InputCalculatorData.InputGrandmasterBonusLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputGrandmasterBonusImagePath}" />
+                    ImagePath="{Binding InputCalculatorData.InputGrandmasterBonusImagePath}" />
                 <CheckBox
                     Grid.Row="1"
                     Grid.Column="1"
@@ -165,16 +165,16 @@
                 <!--  Church input rows  -->
                 <uc:InputRowHeader
                     x:Name="InputChurchHeader"
-                    Title="{Binding InputChurchLabel}"
+                    Title="{Binding InputCalculatorData.InputChurchLabel}"
                     Grid.Row="0"
                     Grid.Column="0"
-                    ImagePath="{Binding InputChurchImagePath}" />
+                    ImagePath="{Binding InputCalculatorData.InputChurchImagePath}" />
 
                 <sync1:ComboBoxAdv
                     x:Name="InputComboChurchAtk"
                     Grid.Row="0"
                     Grid.Column="1"
-                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Width="120"
                     Height="28"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -188,7 +188,7 @@
                     x:Name="InputComboChurchDef"
                     Grid.Row="0"
                     Grid.Column="2"
-                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Width="120"
                     Height="28"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -200,15 +200,15 @@
                 <!--  Wall input rows  -->
                 <uc:InputRowHeader
                     x:Name="InputWallHeader"
-                    Title="{Binding InputWallLabel}"
+                    Title="{Binding InputCalculatorData.InputWallLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputWallImagePath}" />
+                    ImagePath="{Binding InputCalculatorData.InputWallImagePath}" />
 
                 <sync:UpDown
                     Grid.Row="1"
                     Grid.Column="2"
-                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Width="120"
                     Margin="5,5"
                     MaxValue="20"
                     MinValue="0"
@@ -238,18 +238,17 @@
                 </Grid.RowDefinitions>
 
                 <!--  Morale input rows  -->
-
                 <uc:InputRowHeader
                     x:Name="InputMoraleHeader"
-                    Title="{Binding InputMoraleLabel}"
+                    Title="{Binding InputCalculatorData.InputMoraleLabel}"
                     Grid.Row="0"
                     Grid.Column="0"
-                    ImagePath="{Binding InputMoraleImagePath}" />
+                    ImagePath="{Binding InputCalculatorData.InputMoraleImagePath}" />
 
                 <sync:PercentTextBox
                     Grid.Row="0"
                     Grid.Column="1"
-                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Width="120"
                     Margin="5,5"
                     HorizontalAlignment="Center"
                     HorizontalContentAlignment="Center"
@@ -265,7 +264,7 @@
 
                 <uc:InputRowHeader
                     x:Name="InputLuckHeader"
-                    Title="{Binding InputLuckLabel}"
+                    Title="{Binding InputCalculatorData.InputLuckLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
                     ImagePath="{Binding InputCalculatorData.InputLuckImagePath}" />
@@ -273,7 +272,7 @@
                 <sync:UpDown
                     Grid.Row="1"
                     Grid.Column="1"
-                    Width="{Binding ComponentWidth, FallbackValue=120}"
+                    Width="120"
                     Margin="5,5"
                     MaxValue="15"
                     MinValue="-15"
@@ -283,10 +282,9 @@
                     Value="{Binding InputCalculatorData.InputLuck, Mode=TwoWay}" />
 
                 <!--  Nightbonus input rows  -->
-
                 <uc:InputRowHeader
                     x:Name="InputNightBonusHeader"
-                    Title="{Binding InputNightBonusLabel}"
+                    Title="{Binding InputCalculatorData.InputNightBonusLabel}"
                     Grid.Row="2"
                     Grid.Column="0"
                     ImagePath="{Binding InputCalculatorData.InputNightBonusImagePath}" />
