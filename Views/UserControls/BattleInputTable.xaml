@@ -8,14 +8,10 @@
     xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:sync1="http://schemas.syncfusion.com/wpf"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
-    xmlns:valueConverters="clr-namespace:TribalWars2_CalculationTools.Class.ValueConverters"
     x:Name="parent"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <valueConverters:NullImageConverter x:Key="nullImageConverter" />
-    </UserControl.Resources>
     <Grid
         x:Name="InputTable"
         Grid.Row="1"
@@ -137,7 +133,7 @@
                     Title="{Binding InputGrandmasterBonusLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputGrandmasterBonusImagePath, Converter={StaticResource nullImageConverter}}" />
+                    ImagePath="{Binding InputGrandmasterBonusImagePath}" />
                 <CheckBox
                     Grid.Row="1"
                     Grid.Column="1"
@@ -167,13 +163,12 @@
                 </Grid.RowDefinitions>
 
                 <!--  Church input rows  -->
-
                 <uc:InputRowHeader
                     x:Name="InputChurchHeader"
                     Title="{Binding InputChurchLabel}"
                     Grid.Row="0"
                     Grid.Column="0"
-                    ImagePath="{Binding InputChurchImagePath, Converter={StaticResource nullImageConverter}}" />
+                    ImagePath="{Binding InputChurchImagePath}" />
 
                 <sync1:ComboBoxAdv
                     x:Name="InputComboChurchAtk"
@@ -208,7 +203,7 @@
                     Title="{Binding InputWallLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputWallImagePath, Converter={StaticResource nullImageConverter}}" />
+                    ImagePath="{Binding InputWallImagePath}" />
 
                 <sync:UpDown
                     Grid.Row="1"
@@ -249,7 +244,7 @@
                     Title="{Binding InputMoraleLabel}"
                     Grid.Row="0"
                     Grid.Column="0"
-                    ImagePath="{Binding InputMoraleImagePath, Converter={StaticResource nullImageConverter}}" />
+                    ImagePath="{Binding InputMoraleImagePath}" />
 
                 <sync:PercentTextBox
                     Grid.Row="0"
@@ -273,7 +268,7 @@
                     Title="{Binding InputLuckLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputLuckImagePath, Converter={StaticResource nullImageConverter}}" />
+                    ImagePath="{Binding InputCalculatorData.InputLuckImagePath}" />
 
                 <sync:UpDown
                     Grid.Row="1"
@@ -294,7 +289,7 @@
                     Title="{Binding InputNightBonusLabel}"
                     Grid.Row="2"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputNightBonusImagePath, Converter={StaticResource nullImageConverter}}" />
+                    ImagePath="{Binding InputCalculatorData.InputNightBonusImagePath}" />
                 <CheckBox
                     Grid.Row="2"
                     Grid.Column="2"
