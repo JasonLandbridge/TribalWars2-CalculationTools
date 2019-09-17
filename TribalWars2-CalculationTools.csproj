@@ -8,7 +8,16 @@
     <StartupObject>TribalWars2_CalculationTools.App</StartupObject>
     <AssemblyName>TribalWars2_CalculationTools</AssemblyName>
     <Platforms>AnyCPU;x86</Platforms>
-    <Configurations>Debug;Release;Fix</Configurations>
+	<PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<PublishReadyToRun>true</PublishReadyToRun>
+    <Configurations>Debug;Release</Configurations>
+	<PublishTrimmed>true</PublishTrimmed>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -99,22 +108,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="4.1.0" />
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.5.71" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Syncfusion.SfInput.Wpf">
-      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.SfInput.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfShared.Wpf">
-      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.SfShared.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.Shared.WPF">
-      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.Shared.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.Tools.Wpf">
-      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.Tools.WPF.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -137,6 +132,15 @@
 
   <ItemGroup>
     <Folder Include="Class\Utilities\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Syncfusion.Shared.WPF">
+      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.Shared.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.Wpf">
+      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.Tools.WPF.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
