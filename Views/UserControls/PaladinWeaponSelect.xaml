@@ -1,0 +1,40 @@
+﻿<UserControl
+    x:Class="TribalWars2_CalculationTools.Views.UserControls.PaladinWeaponSelect"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    x:Name="parent"
+    d:DesignHeight="50"
+    d:DesignWidth="150"
+    mc:Ignorable="d">
+    <Grid>
+        <StackPanel DataContext="{Binding ElementName=parent}" Orientation="Horizontal">
+            <syncfusion:ComboBoxAdv
+                x:Name="InputWeaponType"
+                Width="110"
+                Height="28"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                DisplayMemberPath="Name"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                SelectedIndex="0"
+                SelectedItem="{Binding WeaponType, Mode=TwoWay}"
+                SelectedValue=""
+                SelectionChanged="WeaponName_OnSelectionChanged" />
+
+            <syncfusion:ComboBoxAdv
+                x:Name="InputWeaponLevel"
+                Width="40"
+                Height="28"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                SelectedIndex="0"
+                SelectedValue="{Binding WeaponLevel, Mode=TwoWay}"
+                SelectionChanged="WeaponLevel_OnSelectionChanged" />
+        </StackPanel>
+    </Grid>
+</UserControl>

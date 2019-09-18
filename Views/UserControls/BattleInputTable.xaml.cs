@@ -69,6 +69,11 @@ namespace TribalWars2_CalculationTools.Views.UserControls
 
         public event EventHandler ValueChanged;
 
+        public void UpdateValueChanged(object sender, EventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
         public BattleInputTable()
         {
             InitializeComponent();
@@ -79,28 +84,28 @@ namespace TribalWars2_CalculationTools.Views.UserControls
 
         private void InputChangedCheckBox(object sender, RoutedEventArgs e)
         {
-            ValueChanged?.Invoke(this, EventArgs.Empty);
+            UpdateValueChanged(this, EventArgs.Empty);
         }
 
         private void InputChangedInteger(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ValueChanged?.Invoke(this, EventArgs.Empty);
+            UpdateValueChanged(this, EventArgs.Empty);
         }
 
         private void InputComboChurchDef_DragLeave(object sender, DragEventArgs e)
         {
-            ValueChanged?.Invoke(this, EventArgs.Empty);
+            UpdateValueChanged(this, EventArgs.Empty);
         }
 
         private void InputComboChurchAtk_LostFocus(object sender, RoutedEventArgs e)
         {
-            ValueChanged?.Invoke(this, EventArgs.Empty);
+            UpdateValueChanged(this, EventArgs.Empty);
         }
 
         private void InputMoralChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             InputCalculatorData.InputMorale = Convert.ToInt32(e.NewValue);
-            ValueChanged?.Invoke(this, EventArgs.Empty);
+            UpdateValueChanged(this, EventArgs.Empty);
 
         }
 
@@ -109,7 +114,7 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             if (e != null && e.AddedItems.Count > 0)
             {
                 InputCalculatorData.InputAtkChurch = e.AddedItems[0] as FaithLevel;
-                ValueChanged?.Invoke(this, EventArgs.Empty);
+                UpdateValueChanged(this, EventArgs.Empty);
             }
         }
 
@@ -118,7 +123,7 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             if (e != null && e.AddedItems.Count > 0)
             {
                 InputCalculatorData.InputDefChurch = e.AddedItems[0] as FaithLevel;
-                ValueChanged?.Invoke(this, EventArgs.Empty);
+                UpdateValueChanged(this, EventArgs.Empty);
             }
         }
     }

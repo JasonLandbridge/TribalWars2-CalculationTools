@@ -56,13 +56,15 @@
             Header="Units">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="130" />
                     <ColumnDefinition Width="150" />
                     <ColumnDefinition Width="150" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+
                 </Grid.RowDefinitions>
                 <ItemsControl
                     x:Name="UnitsInputImageRows"
@@ -72,7 +74,7 @@
                         <DataTemplate>
                             <Grid Margin="0,0,0,5">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="40" />
@@ -128,14 +130,40 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <!--  Paladin weapons  -->
+                <uc:InputRowHeader
+                    x:Name="InputPaladinWeapons"
+                    Title="{Binding InputCalculatorData.InputPaladinWeaponLabel}"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    ImagePath="{Binding InputCalculatorData.InputPaladinWeaponImagePath}" />
+
+                <uc:PaladinWeaponSelect
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="15,0,0,0"
+                    ValueChanged="UpdateValueChanged"
+                    WeaponLevel="{Binding InputCalculatorData.InputAtkWeaponLevel, Mode=TwoWay}"
+                    WeaponType="{Binding InputCalculatorData.InputAtkWeapon, Mode=TwoWay}" />
+                <uc:PaladinWeaponSelect
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="15,0,0,0"
+                    ValueChanged="UpdateValueChanged"
+                    WeaponLevel="{Binding InputCalculatorData.InputDefWeaponLevel, Mode=TwoWay}"
+                    WeaponType="{Binding InputCalculatorData.InputDefWeapon, Mode=TwoWay}" />
+
+                <!--  Grandmaster  -->
+
                 <uc:InputRowHeader
                     x:Name="InputGrandMasterHeader"
                     Title="{Binding InputCalculatorData.InputGrandmasterBonusLabel}"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="0"
                     ImagePath="{Binding InputCalculatorData.InputGrandmasterBonusImagePath}" />
                 <CheckBox
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"

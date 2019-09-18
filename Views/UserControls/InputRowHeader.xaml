@@ -7,15 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="parent"
     d:DesignHeight="50"
-    d:DesignWidth="150"
+    d:DesignWidth="130"
     mc:Ignorable="d">
     <Grid>
         <StackPanel DataContext="{Binding ElementName=parent}" Orientation="Horizontal">
 
             <Image x:Name="HeaderImage" Width="40" />
             <Label
-                MinWidth="100"
-                Margin="0,5"
+                Width="90"
+                Margin="3,10"
+                Padding="0"
                 Content="{Binding Path=Title}" />
         </StackPanel>
     </Grid>

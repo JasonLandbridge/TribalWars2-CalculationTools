@@ -9,7 +9,7 @@ namespace TribalWars2_CalculationTools.Class.Units
     public class Spearman : BaseUnit
     {
         public override string Code { get; } = "Spearman";
-        public override UnitType UnitType { get; set; } = UnitType.Infantry;
+        public override UnitType UnitType { get; set; } = UnitType.Spearman;
         public override int WoodCost { get; } = 50;
         public override int ClayCost { get; } = 30;
         public override int IronCost { get; } = 20;

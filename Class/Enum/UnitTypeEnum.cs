@@ -7,14 +7,18 @@ namespace TribalWars2_CalculationTools.Class.Enum
     public enum UnitType
     {
         None = 0,
-        Infantry = 1,
-        Cavalry = 2,
-        Archer = 3,
-        Ram = 4,
-        Catapult = 5,
-        Trebuchet = 6,
-        Berserker = 7,
-        Paladin = 8,
-        Nobleman = 9,
+        Spearman = 1,
+        Swordsman = 2,
+        AxeFighter = 3,
+        Archer = 4,
+        LightCavalry = 5,
+        MountedArcher = 6,
+        HeavyCavalry = 7,
+        Ram = 8,
+        Catapult = 9,
+        Berserker = 10,
+        Trebuchet = 11,
+        Nobleman = 12,
+        Paladin = 13,
     }
 }

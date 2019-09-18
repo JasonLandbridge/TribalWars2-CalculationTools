@@ -60,6 +60,7 @@
     <None Remove="Resources\Img\unit_spearman.png" />
     <None Remove="Resources\Img\unit_swordsman.png" />
     <None Remove="Resources\Img\unit_trebuchet.png" />
+    <None Remove="Resources\Img\weapons\paladin_weapon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -128,6 +129,9 @@
     <Resource Include="Resources\Img\info\info_nightbonus.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Img\weapons\paladin_weapon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -141,6 +145,18 @@
     <Reference Include="Syncfusion.Tools.Wpf">
       <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.2.0.34\precompiledassemblies\netcoreapp3.0\Syncfusion.Tools.WPF.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\UserControls\PaladinWeaponSelect.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\UserControls\PaladinWeaponSelect.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

@@ -7,11 +7,9 @@ using TribalWars2_CalculationTools.Class.Enum;
 
 namespace TribalWars2_CalculationTools.Class.Units
 {
-    public abstract class BaseUnit : INotifyPropertyChanged
+    public abstract class BaseUnit
     {
 
-        private int _numberOnAttack;
-        private int _numberOnDefense;
         public abstract string Code { get; }
         public string Name => Regex.Replace(this.Code, "([A-Z])", " $1").Trim();
 
@@ -34,43 +32,7 @@ namespace TribalWars2_CalculationTools.Class.Units
         public abstract TimeSpan BaseRecruitmentTime { get; set; }
         public abstract TimeSpan TravelTimePerTile { get; set; }
 
-        public int NumberOnAttack
-        {
-            get => _numberOnAttack;
-            set
-            {
-                _numberOnAttack = value;
-                OnPropertyChanged();
-                this.PropertyUpdated();
-            }
-        }
-
-        public int NumberOnDefense
-        {
-            get => _numberOnDefense;
-            set
-            {
-                _numberOnDefense = value;
-                OnPropertyChanged();
-                this.PropertyUpdated();
-            }
-        }
-
         public string ImagePath => $"/Resources/Img/units/unit_{this.Name.ToLower().Replace(' ', '_')}.png";
 
-
-        // Used as a signal to update the calculation 
-        public void PropertyUpdated()
-        {
-            //this.Parent.ValueUpdated();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

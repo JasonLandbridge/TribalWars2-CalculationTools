@@ -1,0 +1,132 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using TribalWars2_CalculationTools.Class;
+using TribalWars2_CalculationTools.Class.Weapons;
+using TribalWars2_CalculationTools.ViewModels;
+
+namespace TribalWars2_CalculationTools.Views.UserControls
+{
+    /// <summary>
+    /// Interaction logic for PaladinWeaponSelect.xaml
+    /// </summary>
+    public partial class PaladinWeaponSelect : UserControl
+    {
+        #region Fields
+
+        #endregion Fields
+
+
+
+        public int WeaponLevel
+        {
+            get => (int)GetValue(WeaponLevelProperty);
+            set => SetValue(WeaponLevelProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for WeaponLevel.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty WeaponLevelProperty =
+            DependencyProperty.Register("WeaponLevel", typeof(int), typeof(PaladinWeaponSelect), new PropertyMetadata(0));
+
+
+
+        public BaseWeapon WeaponType
+        {
+            get => (BaseWeapon)GetValue(WeaponTypeProperty);
+            set => SetValue(WeaponTypeProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for WeaponType.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty WeaponTypeProperty =
+            DependencyProperty.Register("WeaponType", typeof(BaseWeapon), typeof(PaladinWeaponSelect), new PropertyMetadata(SetWeaponType));
+
+        private static void SetWeaponType(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is PaladinWeaponSelect weaponSelect && e.NewValue is BaseWeapon baseWeapon)
+            {
+                weaponSelect.InputWeaponType.SelectedValue = baseWeapon.UnitId;
+            }
+        }
+
+
+        //public InputCalculatorData InputCalculatorData
+        //{
+        //    get => (InputCalculatorData)GetValue(InputCalculatorDataProperty);
+        //    set => SetValue(InputCalculatorDataProperty, value);
+        //}
+
+        //// Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty InputCalculatorDataProperty =
+        //    DependencyProperty.Register("InputCalculatorData",
+        //        typeof(InputCalculatorData),
+        //        typeof(PaladinWeaponSelect),
+        //        new PropertyMetadata(new InputCalculatorData(), SetValues));
+
+        //private static void SetValues(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    InputCalculatorData inputCalculator = e.NewValue as InputCalculatorData;
+
+        //    if (d is PaladinWeaponSelect weaponSelect && inputCalculator != null)
+        //    {
+
+        //        InputWeaponType.SelectedItem
+        //        weaponSelect.
+
+        //        weaponSelect..ItemsSource = inputCalculator.Units;
+
+        //        weaponSelect.InputGrandMasterHeader.Title = inputCalculator.InputGrandmasterBonusLabel;
+        //        weaponSelect.InputGrandMasterHeader.ImagePath = inputCalculator.InputGrandmasterBonusImagePath;
+
+        //        weaponSelect.InputChurchHeader.Title = inputCalculator.InputChurchLabel;
+        //        weaponSelect.InputChurchHeader.ImagePath = inputCalculator.InputChurchImagePath;
+
+        //        weaponSelect.InputMoraleHeader.Title = inputCalculator.InputMoraleLabel;
+        //        weaponSelect.InputMoraleHeader.ImagePath = inputCalculator.InputMoraleImagePath;
+
+        //        weaponSelect.InputLuckHeader.Title = inputCalculator.InputLuckLabel;
+        //        weaponSelect.InputLuckHeader.ImagePath = inputCalculator.InputLuckImagePath;
+
+        //        weaponSelect.InputWallHeader.Title = inputCalculator.InputWallLabel;
+        //        weaponSelect.InputWallHeader.ImagePath = inputCalculator.InputWallImagePath;
+
+        //        weaponSelect.InputNightBonusHeader.Title = inputCalculator.InputNightBonusLabel;
+        //        weaponSelect.InputNightBonusHeader.ImagePath = inputCalculator.InputNightBonusImagePath;
+
+        //    }
+        //}
+
+        #region Constructors
+
+        public PaladinWeaponSelect()
+        {
+            InitializeComponent();
+            InputWeaponType.ItemsSource = GameData.WeaponOptions;
+            InputWeaponLevel.ItemsSource = new List<int> { 1, 2, 3 };
+        }
+
+        #endregion Constructors
+
+
+        #region Properties
+
+
+        #endregion Properties
+        public event EventHandler ValueChanged;
+
+        private void WeaponLevel_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Debug.WriteLine(e.ToString());
+            ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void WeaponName_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Debug.WriteLine(e.ToString());
+            ValueChanged?.Invoke(this, EventArgs.Empty);
+
+        }
+    }
+}

@@ -28,6 +28,9 @@
     <Page Update="Views\UserControls\BattleResultTable.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\UserControls\PaladinWeaponSelect.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\UserControls\InputRowHeader.xaml">
       <SubType>Designer</SubType>
     </Page>

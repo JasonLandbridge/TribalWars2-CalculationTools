@@ -6,6 +6,7 @@ using System.Text;
 using TribalWars2_CalculationTools.Class;
 using TribalWars2_CalculationTools.Class.Buildings;
 using TribalWars2_CalculationTools.Class.Units;
+using TribalWars2_CalculationTools.Class.Weapons;
 using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Class
@@ -34,6 +35,15 @@ namespace TribalWars2_CalculationTools.Class
         public static Wall Wall { get; } = new Wall();
 
         #endregion
+
+
+        #region Weapons
+
+        public static SpearmanWeapon SpearmanWeapon { get; } = new SpearmanWeapon();
+        public static SwordsmanWeapon SwordsmanWeapon { get; } = new SwordsmanWeapon();
+
+        #endregion
+
         public static List<BaseUnit> UnitList => new List<BaseUnit>
         {
             Spearman,
@@ -103,6 +113,13 @@ namespace TribalWars2_CalculationTools.Class
                 Name = "Church Level 3",
                 Modifier = 1.1m
             }
+        };
+
+        public static List<BaseWeapon> WeaponOptions { get; } = new List<BaseWeapon>
+        {
+            new EmptyWeapon(),
+            SpearmanWeapon,
+            SwordsmanWeapon
         };
 
         public static int NumberOfUnits => UnitList.Count;
@@ -217,7 +234,7 @@ namespace TribalWars2_CalculationTools.Class
             return (int)Math.Round(x, MidpointRounding.AwayFromZero);
         }
 
-      
+
         #endregion
     }
 }
