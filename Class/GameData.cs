@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using TribalWars2_CalculationTools.Class;
 using TribalWars2_CalculationTools.Class.Buildings;
+using TribalWars2_CalculationTools.Class.Enum;
 using TribalWars2_CalculationTools.Class.Units;
 using TribalWars2_CalculationTools.Class.Weapons;
 using TribalWars2_CalculationTools.Models;
@@ -41,6 +42,39 @@ namespace TribalWars2_CalculationTools.Class
 
         public static SpearmanWeapon SpearmanWeapon { get; } = new SpearmanWeapon();
         public static SwordsmanWeapon SwordsmanWeapon { get; } = new SwordsmanWeapon();
+        public static AxeFighterWeapon AxeFighterWeapon { get; } = new AxeFighterWeapon();
+        public static ArcherWeapon ArcherWeapon { get; } = new ArcherWeapon();
+        public static LightCavalryWeapon LightCavalryWeapon { get; } = new LightCavalryWeapon();
+        public static MountedArcherWeapon MountedArcherWeapon { get; } = new MountedArcherWeapon();
+        public static HeavyCavalryWeapon HeavyCavalryWeapon { get; } = new HeavyCavalryWeapon();
+        public static RamWeapon RamWeapon { get; } = new RamWeapon();
+        public static CatapultWeapon CatapultWeapon { get; } = new CatapultWeapon();
+
+        public static decimal GetAtkModifierFromWeapon(UnitType belongsToUnitType, int weaponLevel)
+        {
+            foreach (BaseWeapon weapon in WeaponOptions)
+            {
+                if (weapon.BelongsToUnitType == belongsToUnitType)
+                {
+                    return weapon.GetAtkModifier(weaponLevel);
+                }
+            }
+
+            return 1m;
+        }
+
+        public static decimal GetDefModifierFromWeapon(UnitType belongsToUnitType, int weaponLevel)
+        {
+            foreach (BaseWeapon weapon in WeaponOptions)
+            {
+                if (weapon.BelongsToUnitType == belongsToUnitType)
+                {
+                    return weapon.GetDefModifier(weaponLevel);
+                }
+            }
+
+            return 1m;
+        }
 
         #endregion
 
@@ -59,6 +93,23 @@ namespace TribalWars2_CalculationTools.Class
             Trebuchet,
             Nobleman,
             Paladin,
+        };
+
+        public static List<UnitType> UnitTypeList = new List<UnitType>
+        {
+            UnitType.Spearman,
+            UnitType.Swordsman,
+            UnitType.AxeFighter,
+            UnitType.Archer,
+            UnitType.LightCavalry,
+            UnitType.MountedArcher,
+            UnitType.HeavyCavalry,
+            UnitType.Ram,
+            UnitType.Catapult,
+            UnitType.Berserker,
+            UnitType.Trebuchet,
+            UnitType.Nobleman,
+            UnitType.Paladin,
         };
 
         public static ObservableCollection<UnitRow> UnitImageList
@@ -119,21 +170,24 @@ namespace TribalWars2_CalculationTools.Class
         {
             new EmptyWeapon(),
             SpearmanWeapon,
-            SwordsmanWeapon
+            SwordsmanWeapon,
+            AxeFighterWeapon,
+            ArcherWeapon,
+            LightCavalryWeapon,
+            MountedArcherWeapon,
+            HeavyCavalryWeapon,
+            RamWeapon,
+            CatapultWeapon
         };
 
         public static int NumberOfUnits => UnitList.Count;
 
-        static GameData()
+        public static BaseUnit GetUnit(UnitType unitType)
         {
+            if (unitType == UnitType.None) return null;
 
+            return UnitList.First(unit => unit.UnitType == unitType);
         }
-
-        public static BaseUnit GetUnit(string code)
-        {
-            return UnitList.First(unit => unit.Code == code);
-        }
-
 
         #region Formulas
         /// <summary>
@@ -218,11 +272,15 @@ namespace TribalWars2_CalculationTools.Class
 
         }
 
-        public static int AddAtkModifier(int attackStrength, decimal atkModifier)
+        public static int AddAtkModifier(int atkStrength, decimal atkModifier)
         {
-            return (int)Math.Round(attackStrength * atkModifier, MidpointRounding.AwayFromZero);
-
+            return (int)Math.Round(atkStrength * atkModifier, MidpointRounding.AwayFromZero);
         }
+        public static int AddDefModifier(int defStrength, decimal defModifier)
+        {
+            return AddAtkModifier(defStrength, defModifier);
+        }
+
         public static int GetRamsKilled(int numberOfRams, int numberOfCatapults, int numberOfTrebuchet)
         {
             decimal totalSiege = numberOfRams + (decimal)numberOfCatapults;
@@ -234,6 +292,15 @@ namespace TribalWars2_CalculationTools.Class
             return (int)Math.Round(x, MidpointRounding.AwayFromZero);
         }
 
+        public static int GetAtkFightingPower(int numberOfUnits, UnitType unitType, WeaponSet weapon)
+        {
+            int FightingPower = GetUnit(unitType)?.FightingPower ?? 0;
+            // paladin Modifier is in percentage 0.15, 0.3 etc so add 1
+            decimal paladinModifier = (unitType == weapon.BelongsToUnitType ? weapon.AtkModifier : 0) + 1;
+
+            decimal fightingPower = FightingPower * paladinModifier;
+            return (int)Math.Round(numberOfUnits * fightingPower, MidpointRounding.AwayFromZero);
+        }
 
         #endregion
     }

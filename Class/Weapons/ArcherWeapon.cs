@@ -5,9 +5,9 @@ using TribalWars2_CalculationTools.Class.Enum;
 
 namespace TribalWars2_CalculationTools.Class.Weapons
 {
-    public class SpearmanWeapon : BaseWeapon
+    public class ArcherWeapon : BaseWeapon
     {
-        public override string Code { get; } = "SpearmanWeapon";
+        public override string Code { get; } = "ArcherWeapon";
 
         public override List<WeaponModifier> WeaponModifiers { get; } = new List<WeaponModifier>
         {
@@ -28,7 +28,7 @@ namespace TribalWars2_CalculationTools.Class.Weapons
             }
         };
 
-        public override UnitType BelongsToUnitType { get; } = UnitType.Spearman;
+        public override UnitType BelongsToUnitType { get; } = UnitType.Archer;
 
     }
 

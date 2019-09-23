@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using TribalWars2_CalculationTools.Annotations;
 using TribalWars2_CalculationTools.Class;
+using TribalWars2_CalculationTools.Class.Enum;
 using TribalWars2_CalculationTools.Class.Structs;
 using TribalWars2_CalculationTools.Class.Weapons;
 using TribalWars2_CalculationTools.Models;
@@ -199,6 +201,31 @@ namespace TribalWars2_CalculationTools.ViewModels
             });
 
 
+        }
+
+        public WeaponSet GetAtkWeapon()
+        {
+            if (InputAtkWeapon == null || Paladin.NumberOnAttack <= 0)
+            {
+                return new WeaponSet();
+            }
+
+            UnitType unitType = InputAtkWeapon.BelongsToUnitType;
+            decimal atkModifier = GameData.GetAtkModifierFromWeapon(unitType, InputAtkWeaponLevel);
+            decimal defModifier = GameData.GetDefModifierFromWeapon(unitType, InputAtkWeaponLevel);
+            return new WeaponSet(unitType, atkModifier, defModifier);
+        }
+        public WeaponSet GetDefWeapon()
+        {
+            if (InputDefWeapon == null || Paladin.NumberOnDefense <= 0)
+            {
+                return new WeaponSet();
+            }
+
+            UnitType unitType = InputDefWeapon.BelongsToUnitType;
+            decimal atkModifier = GameData.GetAtkModifierFromWeapon(unitType, InputDefWeaponLevel);
+            decimal defModifier = GameData.GetDefModifierFromWeapon(unitType, InputDefWeaponLevel);
+            return new WeaponSet(unitType, atkModifier, defModifier);
         }
 
         #endregion Constructors
@@ -526,9 +553,6 @@ namespace TribalWars2_CalculationTools.ViewModels
 
 
         #endregion
-
-
-
 
         public bool IsValid => (TotalUnits != 0);
         #endregion Properties

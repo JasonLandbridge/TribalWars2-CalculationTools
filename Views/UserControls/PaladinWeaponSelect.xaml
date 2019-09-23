@@ -14,7 +14,7 @@
         <StackPanel DataContext="{Binding ElementName=parent}" Orientation="Horizontal">
             <syncfusion:ComboBoxAdv
                 x:Name="InputWeaponType"
-                Width="110"
+                Width="90"
                 Height="28"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -27,7 +27,7 @@
 
             <syncfusion:ComboBoxAdv
                 x:Name="InputWeaponLevel"
-                Width="40"
+                Width="35"
                 Height="28"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

@@ -23,5 +23,5 @@ namespace TribalWars2_CalculationTools.Class.Units
 
         public override TimeSpan TravelTimePerTile { get; set; } = new TimeSpan(0, 14, 0);
 
- }
+    }
 }

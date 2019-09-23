@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TribalWars2_CalculationTools.Class.Enum;
+using TribalWars2_CalculationTools.Class.Weapons;
 
 namespace TribalWars2_CalculationTools.Class.Structs
 {
@@ -269,12 +271,12 @@ namespace TribalWars2_CalculationTools.Class.Structs
 
         #endregion
         #region AtkStrength
-        public int GetTotalInfantryAttack(bool defenseIsSuperior)
+        public int GetTotalInfantryAttack(WeaponSet weapon, bool defenseIsSuperior)
         {
             int totalAttack = 0;
-            totalAttack += Spearman * GameData.Spearman.FightingPower;
-            totalAttack += Swordsman * GameData.Swordsman.FightingPower;
-            totalAttack += AxeFighter * GameData.AxeFighter.FightingPower;
+            totalAttack += GameData.GetAtkFightingPower(Spearman, UnitType.Spearman, weapon);
+            totalAttack += GameData.GetAtkFightingPower(Swordsman, UnitType.Swordsman, weapon);
+            totalAttack += GameData.GetAtkFightingPower(AxeFighter, UnitType.AxeFighter, weapon);
 
             // Take into account that berserkers
             // are twice as strong when fighting a superior army
@@ -283,20 +285,19 @@ namespace TribalWars2_CalculationTools.Class.Structs
             return totalAttack;
         }
 
-        public int GetTotalCavalryAttack()
+        public int GetTotalCavalryAttack(WeaponSet weapon)
         {
             int totalAttack = 0;
-            totalAttack += LightCavalry * GameData.LightCavalry.FightingPower;
-            totalAttack += HeavyCavalry * GameData.HeavyCavalry.FightingPower;
-
+            totalAttack += GameData.GetAtkFightingPower(LightCavalry, UnitType.LightCavalry, weapon);
+            totalAttack += GameData.GetAtkFightingPower(HeavyCavalry, UnitType.HeavyCavalry, weapon);
             return totalAttack;
         }
 
-        public int GetTotalArcherAttack()
+        public int GetTotalArcherAttack(WeaponSet weapon)
         {
             int totalAttack = 0;
-            totalAttack += Archer * GameData.Archer.FightingPower;
-            totalAttack += MountedArcher * GameData.MountedArcher.FightingPower;
+            totalAttack += GameData.GetAtkFightingPower(Archer, UnitType.Archer, weapon);
+            totalAttack += GameData.GetAtkFightingPower(MountedArcher, UnitType.MountedArcher, weapon);
 
             return totalAttack;
         }
@@ -310,78 +311,52 @@ namespace TribalWars2_CalculationTools.Class.Structs
             totalAttack += Trebuchet * GameData.Trebuchet.FightingPower;
             totalAttack += Paladin * GameData.Paladin.FightingPower;
             return totalAttack;
-
-
         }
-
-
-
 
         #endregion
 
         #region TotalDefenseFrom
 
-        public int GetTotalDefFromArchers(decimal defModifier, int wallDefense)
+        public int GetTotalDefFromArchers(WeaponSet weapon)
         {
             int totalDefense = 0;
 
-            totalDefense += Spearman * GameData.GetUnit("Spearman").DefenseFromArchers;
-            totalDefense += Swordsman * GameData.GetUnit("Swordsman").DefenseFromArchers;
-            totalDefense += AxeFighter * GameData.GetUnit("AxeFighter").DefenseFromArchers;
-            totalDefense += Archer * GameData.GetUnit("Archer").DefenseFromArchers;
-            totalDefense += LightCavalry * GameData.GetUnit("LightCavalry").DefenseFromArchers;
-            totalDefense += MountedArcher * GameData.GetUnit("MountedArcher").DefenseFromArchers;
-            totalDefense += HeavyCavalry * GameData.GetUnit("HeavyCavalry").DefenseFromArchers;
-            totalDefense += Ram * GameData.GetUnit("Ram").DefenseFromArchers;
-            totalDefense += Catapult * GameData.GetUnit("Catapult").DefenseFromArchers;
-            totalDefense += Berserker * GameData.GetUnit("Berserker").DefenseFromArchers;
-            totalDefense += Trebuchet * GameData.GetUnit("Trebuchet").DefenseFromArchers;
-            totalDefense += Nobleman * GameData.GetUnit("Nobleman").DefenseFromArchers;
-            totalDefense += Paladin * GameData.GetUnit("Paladin").DefenseFromArchers;
+            for (int i = 0; i < UnitList.Count; i++)
+            {
+                // Apply the paladin weapon if set
+                decimal defenseStrength = GameData.UnitList[i].DefenseFromArchers * (GameData.UnitTypeList[i] == weapon.BelongsToUnitType ? weapon.DefModifier + 1 : 1);
+                totalDefense += (int)Math.Round(UnitList[i] * defenseStrength, MidpointRounding.AwayFromZero);
+            }
 
-            return (int)Math.Round(totalDefense * defModifier, MidpointRounding.AwayFromZero) + wallDefense;
+            return totalDefense;
         }
 
-        public int GetTotalDefFromCavalry(decimal defModifier, int wallDefense)
+        public int GetTotalDefFromCavalry(WeaponSet weapon)
         {
             int totalDefense = 0;
 
-            totalDefense += Spearman * GameData.GetUnit("Spearman").DefenseFromCavalry;
-            totalDefense += Swordsman * GameData.GetUnit("Swordsman").DefenseFromCavalry;
-            totalDefense += AxeFighter * GameData.GetUnit("AxeFighter").DefenseFromCavalry;
-            totalDefense += Archer * GameData.GetUnit("Archer").DefenseFromCavalry;
-            totalDefense += LightCavalry * GameData.GetUnit("LightCavalry").DefenseFromCavalry;
-            totalDefense += MountedArcher * GameData.GetUnit("MountedArcher").DefenseFromCavalry;
-            totalDefense += HeavyCavalry * GameData.GetUnit("HeavyCavalry").DefenseFromCavalry;
-            totalDefense += Ram * GameData.GetUnit("Ram").DefenseFromCavalry;
-            totalDefense += Catapult * GameData.GetUnit("Catapult").DefenseFromCavalry;
-            totalDefense += Berserker * GameData.GetUnit("Berserker").DefenseFromCavalry;
-            totalDefense += Trebuchet * GameData.GetUnit("Trebuchet").DefenseFromCavalry;
-            totalDefense += Nobleman * GameData.GetUnit("Nobleman").DefenseFromCavalry;
-            totalDefense += Paladin * GameData.GetUnit("Paladin").DefenseFromCavalry;
+            for (int i = 0; i < UnitList.Count; i++)
+            {
+                // Apply the paladin weapon if set
+                decimal defenseStrength = GameData.UnitList[i].DefenseFromCavalry * (GameData.UnitTypeList[i] == weapon.BelongsToUnitType ? weapon.DefModifier + 1 : 1);
+                totalDefense += (int)Math.Round(UnitList[i] * defenseStrength, MidpointRounding.AwayFromZero);
+            }
 
-            return (int)Math.Round(totalDefense * defModifier, MidpointRounding.AwayFromZero) + wallDefense;
+            return totalDefense;
         }
 
-        public int GetTotalDefFromInfantry(decimal defModifier, int wallDefense)
+        public int GetTotalDefFromInfantry(WeaponSet weapon)
         {
             int totalDefense = 0;
 
-            totalDefense += Spearman * GameData.GetUnit("Spearman").DefenseFromInfantry;
-            totalDefense += Swordsman * GameData.GetUnit("Swordsman").DefenseFromInfantry;
-            totalDefense += AxeFighter * GameData.GetUnit("AxeFighter").DefenseFromInfantry;
-            totalDefense += Archer * GameData.GetUnit("Archer").DefenseFromInfantry;
-            totalDefense += LightCavalry * GameData.GetUnit("LightCavalry").DefenseFromInfantry;
-            totalDefense += MountedArcher * GameData.GetUnit("MountedArcher").DefenseFromInfantry;
-            totalDefense += HeavyCavalry * GameData.GetUnit("HeavyCavalry").DefenseFromInfantry;
-            totalDefense += Ram * GameData.GetUnit("Ram").DefenseFromInfantry;
-            totalDefense += Catapult * GameData.GetUnit("Catapult").DefenseFromInfantry;
-            totalDefense += Berserker * GameData.GetUnit("Berserker").DefenseFromInfantry;
-            totalDefense += Trebuchet * GameData.GetUnit("Trebuchet").DefenseFromInfantry;
-            totalDefense += Nobleman * GameData.GetUnit("Nobleman").DefenseFromInfantry;
-            totalDefense += Paladin * GameData.GetUnit("Paladin").DefenseFromInfantry;
+            for (int i = 0; i < UnitList.Count; i++)
+            {
+                // Apply the paladin weapon if set
+                decimal defenseStrength = GameData.UnitList[i].DefenseFromInfantry * (GameData.UnitTypeList[i] == weapon.BelongsToUnitType ? weapon.DefModifier + 1 : 1);
+                totalDefense += (int)Math.Round(UnitList[i] * defenseStrength, MidpointRounding.AwayFromZero);
+            }
 
-            return (int)Math.Round(totalDefense * defModifier, MidpointRounding.AwayFromZero) + wallDefense;
+            return totalDefense;
         }
 
         #endregion

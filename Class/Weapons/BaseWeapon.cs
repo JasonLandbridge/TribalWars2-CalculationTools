@@ -10,9 +10,9 @@ namespace TribalWars2_CalculationTools.Class.Weapons
     {
         public abstract string Code { get; }
 
-        public int UnitId => (int) BelongsToUnitType;
+        public int UnitId => (int)BelongsToUnitType;
 
-        public string Name => Regex.Replace(this.Code, "([A-Z])", " $1").Trim();
+        public string Name => Regex.Replace(this.Code.Replace("Weapon", ""), "([A-Z])", " $1").Trim();
 
         public abstract List<WeaponModifier> WeaponModifiers { get; }
 

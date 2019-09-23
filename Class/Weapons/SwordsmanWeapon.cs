@@ -18,19 +18,17 @@ namespace TribalWars2_CalculationTools.Class.Weapons
             },
             new WeaponModifier
             {
-                //TODO Unconfirmed
                 AtkModifier = 0.10m,
-                DefModifer = 0.15m
+                DefModifer = 0.20m
             },
             new WeaponModifier
             {
-                //TODO Unconfirmed
                 AtkModifier = 0.20m,
                 DefModifer = 0.30m
             }
         };
 
-        public override UnitType BelongsToUnitType { get; } = UnitType.Spearman;
+        public override UnitType BelongsToUnitType { get; } = UnitType.Swordsman;
 
     }
 

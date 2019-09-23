@@ -51,53 +51,6 @@ namespace TribalWars2_CalculationTools.Views.UserControls
             }
         }
 
-
-        //public InputCalculatorData InputCalculatorData
-        //{
-        //    get => (InputCalculatorData)GetValue(InputCalculatorDataProperty);
-        //    set => SetValue(InputCalculatorDataProperty, value);
-        //}
-
-        //// Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty InputCalculatorDataProperty =
-        //    DependencyProperty.Register("InputCalculatorData",
-        //        typeof(InputCalculatorData),
-        //        typeof(PaladinWeaponSelect),
-        //        new PropertyMetadata(new InputCalculatorData(), SetValues));
-
-        //private static void SetValues(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    InputCalculatorData inputCalculator = e.NewValue as InputCalculatorData;
-
-        //    if (d is PaladinWeaponSelect weaponSelect && inputCalculator != null)
-        //    {
-
-        //        InputWeaponType.SelectedItem
-        //        weaponSelect.
-
-        //        weaponSelect..ItemsSource = inputCalculator.Units;
-
-        //        weaponSelect.InputGrandMasterHeader.Title = inputCalculator.InputGrandmasterBonusLabel;
-        //        weaponSelect.InputGrandMasterHeader.ImagePath = inputCalculator.InputGrandmasterBonusImagePath;
-
-        //        weaponSelect.InputChurchHeader.Title = inputCalculator.InputChurchLabel;
-        //        weaponSelect.InputChurchHeader.ImagePath = inputCalculator.InputChurchImagePath;
-
-        //        weaponSelect.InputMoraleHeader.Title = inputCalculator.InputMoraleLabel;
-        //        weaponSelect.InputMoraleHeader.ImagePath = inputCalculator.InputMoraleImagePath;
-
-        //        weaponSelect.InputLuckHeader.Title = inputCalculator.InputLuckLabel;
-        //        weaponSelect.InputLuckHeader.ImagePath = inputCalculator.InputLuckImagePath;
-
-        //        weaponSelect.InputWallHeader.Title = inputCalculator.InputWallLabel;
-        //        weaponSelect.InputWallHeader.ImagePath = inputCalculator.InputWallImagePath;
-
-        //        weaponSelect.InputNightBonusHeader.Title = inputCalculator.InputNightBonusLabel;
-        //        weaponSelect.InputNightBonusHeader.ImagePath = inputCalculator.InputNightBonusImagePath;
-
-        //    }
-        //}
-
         #region Constructors
 
         public PaladinWeaponSelect()
@@ -118,13 +71,11 @@ namespace TribalWars2_CalculationTools.Views.UserControls
 
         private void WeaponLevel_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Debug.WriteLine(e.ToString());
             ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void WeaponName_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Debug.WriteLine(e.ToString());
             ValueChanged?.Invoke(this, EventArgs.Empty);
 
         }

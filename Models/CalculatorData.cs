@@ -45,7 +45,7 @@ namespace TribalWars2_CalculationTools.Models
         public int WallLevelBeforeBattle(int ramNumber, int wallLevel, decimal faithBonus, bool paladinMorningStar)
         {
             //Taken from http://www.ds-pro.de/2/simulator.php
-            //Todo take into account the MorningStar weapon levels
+            //TODO take into account the MorningStar weapon levels
 
             decimal morningStarModifier = (paladinMorningStar ? 2 : 1);
 
@@ -57,14 +57,14 @@ namespace TribalWars2_CalculationTools.Models
             return newWall;
         }
 
-        public int PreRound(ref BattleResult result)
+        public int PreRound(ref BattleResult result, WeaponSet atkWeapon)
         {
             // Based on https://en.forum.tribalwars2.com/index.php?threads/unraveling-some-myths-regarding-the-battle-engine.3959/
 
             int wallLevel = result.WallLevelBefore;
             decimal atkModifier = result.AtkBattleModifier / 100m;
             int ironWall = 0; //TODO Need to make an input that takes the Tribe skill Iron wall into account
-            decimal paladinModifier = 1m; //TODO take the paladin weapon into account
+            decimal paladinModifier = (atkWeapon.BelongsToUnitType == UnitType.Ram ? atkWeapon.AtkModifier : 0) + 1;
 
             UnitSet atkUnits = result.AtkUnits;
             UnitSet defUnits = result.DefUnits;
@@ -130,13 +130,16 @@ namespace TribalWars2_CalculationTools.Models
             decimal luck = 1m + (input.InputLuck / 100m);
             decimal nightBonus = (input.InputNightBonus ? 2m : 1m);
             decimal officerBonus = (input.InputGrandmasterBonus ? 0.1m : 0m);
+            WeaponSet paladinAtkWeapon = input.GetAtkWeapon();
+            WeaponSet paladinDefWeapon = input.GetDefWeapon();
+
 
             decimal atkModifier = GameData.GetAtkBattleModifier(atkFaithBonus, morale, luck, officerBonus);
             result.AtkBattleModifier = (int)(atkModifier * 100m);
             decimal defModifier = GameData.GetDefBattleModifier(defFaithBonus, result.WallLevelBefore, nightBonus);
             result.DefBattleModifier = (int)(defModifier * 100m);
 
-            int resultingWallLevel = PreRound(ref result);
+            int resultingWallLevel = PreRound(ref result, paladinAtkWeapon);
             defModifier = GameData.GetDefBattleModifier(defFaithBonus, resultingWallLevel, nightBonus);
             result.DefBattleModifier = (int)(defModifier * 100m);
 
@@ -183,9 +186,9 @@ namespace TribalWars2_CalculationTools.Models
                 }
 
                 bool defSuperior = (totalAtkProvisions * 2 <= totalDefProvisions);
-                int atkInfantry = atkUnits.GetTotalInfantryAttack(defSuperior);
-                int atkCavalry = atkUnits.GetTotalCavalryAttack();
-                int atkArchers = atkUnits.GetTotalArcherAttack();
+                int atkInfantry = atkUnits.GetTotalInfantryAttack(paladinAtkWeapon, defSuperior);
+                int atkCavalry = atkUnits.GetTotalCavalryAttack(paladinAtkWeapon);
+                int atkArchers = atkUnits.GetTotalArcherAttack(paladinAtkWeapon);
                 int atkSpecial = atkUnits.GetTotalSpecialAtk();
                 int totalAtk = atkInfantry + atkCavalry + atkArchers + atkSpecial;
 
@@ -230,9 +233,17 @@ namespace TribalWars2_CalculationTools.Models
                 UnitSet cavalryGroupDefUnitSet = defUnits.GetUnitsByRatio(atkCavalryRatio);
                 UnitSet archerGroupDefUnitSet = defUnits.GetUnitsByRatio(atkArchersRatio);
 
-                int totalDefFromInfantry = infantryGroupDefUnitSet.GetTotalDefFromInfantry(defModifier, wallDefense);
-                int totalDefFromCavalry = cavalryGroupDefUnitSet.GetTotalDefFromCavalry(defModifier, wallDefense);
-                int totalDefFromArchers = archerGroupDefUnitSet.GetTotalDefFromArchers(defModifier, wallDefense);
+
+                int totalDefFromInfantry = infantryGroupDefUnitSet.GetTotalDefFromInfantry(paladinDefWeapon);
+                int totalDefFromCavalry = cavalryGroupDefUnitSet.GetTotalDefFromCavalry(paladinDefWeapon);
+                int totalDefFromArchers = archerGroupDefUnitSet.GetTotalDefFromArchers(paladinDefWeapon);
+
+                // Add defense modifier
+                totalDefFromInfantry = GameData.AddDefModifier(totalDefFromInfantry, defModifier) + wallDefense;
+                totalDefFromCavalry = GameData.AddDefModifier(totalDefFromCavalry, defModifier) + wallDefense;
+                totalDefFromArchers = GameData.AddDefModifier(totalDefFromArchers, defModifier) + wallDefense;
+
+
                 int totalDef = totalDefFromInfantry + totalDefFromCavalry + totalDefFromArchers;
 
                 // Used to keep track of how many units are lost this round

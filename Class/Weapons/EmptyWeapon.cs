@@ -7,7 +7,7 @@ namespace TribalWars2_CalculationTools.Class.Weapons
 {
     public class EmptyWeapon : BaseWeapon
     {
-        public override string Code { get; } = "EmptyWeapon";
+        public override string Code { get; } = " - ";
 
         public override List<WeaponModifier> WeaponModifiers { get; } = new List<WeaponModifier>
         {
