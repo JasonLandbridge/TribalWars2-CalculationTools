@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using TribalWars2_CalculationTools.Class;
+using ClassLibrary.Class;
 
 namespace TribalWars2_CalculationTools.Views.UserControls
 {

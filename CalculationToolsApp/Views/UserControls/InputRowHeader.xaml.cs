@@ -1,10 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using TribalWars2_CalculationTools.Annotations;
 
 namespace TribalWars2_CalculationTools.Views.UserControls
 {

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using TribalWars2_CalculationTools.Annotations;
-using TribalWars2_CalculationTools.Class;
+using ClassLibrary.Class;
 
 namespace TribalWars2_CalculationTools.ViewModels
 {

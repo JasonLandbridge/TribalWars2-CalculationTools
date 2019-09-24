@@ -135,7 +135,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Class\Utilities\" />
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>

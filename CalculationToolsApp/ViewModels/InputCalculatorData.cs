@@ -1,16 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Media;
-using TribalWars2_CalculationTools.Annotations;
-using TribalWars2_CalculationTools.Class;
-using TribalWars2_CalculationTools.Class.Enum;
-using TribalWars2_CalculationTools.Class.Structs;
-using TribalWars2_CalculationTools.Class.Weapons;
-using TribalWars2_CalculationTools.Models;
+using ClassLibrary.Class;
+using ClassLibrary.Class.Weapons;
+using ClassLibrary.Enums;
+using ClassLibrary.Structs;
+using ClassLibrary.Utilities;
 
 namespace TribalWars2_CalculationTools.ViewModels
 {
@@ -566,5 +563,50 @@ namespace TribalWars2_CalculationTools.ViewModels
         }
 
         #endregion Methods
+
+        public BattleResult ToBattleResult()
+        {
+            UnitSet AtkUnits = new UnitSet
+            {
+                Spearman = Spearman.NumberOnAttack,
+                Swordsman = Swordsman.NumberOnAttack,
+                AxeFighter = AxeFighter.NumberOnAttack,
+                Archer = Archer.NumberOnAttack,
+                LightCavalry = LightCavalry.NumberOnAttack,
+                MountedArcher = MountedArcher.NumberOnAttack,
+                HeavyCavalry = HeavyCavalry.NumberOnAttack,
+                Ram = Ram.NumberOnAttack,
+                Catapult = Catapult.NumberOnAttack,
+                Berserker = Berserker.NumberOnAttack,
+                Trebuchet = Trebuchet.NumberOnAttack,
+                Nobleman = Nobleman.NumberOnAttack,
+                Paladin = Paladin.NumberOnAttack,
+            };
+
+            UnitSet DefUnits = new UnitSet
+            {
+                Spearman = Spearman.NumberOnDefense,
+                Swordsman = Swordsman.NumberOnDefense,
+                AxeFighter = AxeFighter.NumberOnDefense,
+                Archer = Archer.NumberOnDefense,
+                LightCavalry = LightCavalry.NumberOnDefense,
+                MountedArcher = MountedArcher.NumberOnDefense,
+                HeavyCavalry = HeavyCavalry.NumberOnDefense,
+                Ram = Ram.NumberOnDefense,
+                Catapult = Catapult.NumberOnDefense,
+                Berserker = Berserker.NumberOnDefense,
+                Trebuchet = Trebuchet.NumberOnDefense,
+                Nobleman = Nobleman.NumberOnDefense,
+                Paladin = Paladin.NumberOnDefense,
+            };
+
+            return new BattleResult
+            {
+                WallLevelBefore = InputWall,
+                AtkUnits = AtkUnits,
+                DefUnits = DefUnits
+            };
+
+        }
     }
 }

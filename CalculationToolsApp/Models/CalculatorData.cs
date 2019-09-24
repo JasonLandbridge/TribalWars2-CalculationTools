@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Documents;
-using TribalWars2_CalculationTools.Annotations;
-using TribalWars2_CalculationTools.Class;
-using TribalWars2_CalculationTools.Class.Enum;
-using TribalWars2_CalculationTools.Class.Structs;
-using TribalWars2_CalculationTools.Class.Units;
+using ClassLibrary.Class;
+using ClassLibrary.Enums;
+using ClassLibrary.Structs;
 using TribalWars2_CalculationTools.ViewModels;
 
 namespace TribalWars2_CalculationTools.Models
@@ -146,7 +142,7 @@ namespace TribalWars2_CalculationTools.Models
 
             // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
             // Based on: Battle Simulator - http://www.ds-pro.de/2/simulator.php
-            BattleResult result = new BattleResult(input);
+            BattleResult result = input.ToBattleResult();
 
             decimal atkFaithBonus = input.InputAtkChurch.Modifier;
             decimal defFaithBonus = input.InputDefChurch.Modifier;

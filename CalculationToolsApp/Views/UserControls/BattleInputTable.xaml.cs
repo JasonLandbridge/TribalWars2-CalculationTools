@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using ClassLibrary.Class;
+using ClassLibrary.Utilities;
 using TribalWars2_CalculationTools.ViewModels;
-using Syncfusion.Windows.Tools.Controls;
-using TribalWars2_CalculationTools.Class;
-using TribalWars2_CalculationTools.Models;
 
 namespace TribalWars2_CalculationTools.Views.UserControls
 {

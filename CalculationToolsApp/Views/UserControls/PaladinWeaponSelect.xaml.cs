@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using TribalWars2_CalculationTools.Class;
-using TribalWars2_CalculationTools.Class.Weapons;
-using TribalWars2_CalculationTools.ViewModels;
+using ClassLibrary.Class;
+using ClassLibrary.Class.Weapons;
 
 namespace TribalWars2_CalculationTools.Views.UserControls
 {
