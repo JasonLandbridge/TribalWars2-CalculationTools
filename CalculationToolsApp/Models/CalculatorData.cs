@@ -44,7 +44,7 @@ namespace TribalWars2_CalculationTools.Models
 
             int wallLevel = result.WallLevelBefore;
             decimal atkModifier = result.AtkBattleModifier / 100m;
-            int ironWall = 0; //TODO Need to make an input that takes the Tribe skill Iron wall into account
+            int ironWall = 0; //TODO Need to make an battleCalculatorInput that takes the Tribe skill Iron wall into account
             decimal paladinModifier = (atkWeapon.BelongsToUnitType == UnitType.Ram ? atkWeapon.AtkModifier : 0) + 1;
 
             UnitSet atkUnits = result.AtkUnits;
@@ -115,7 +115,7 @@ namespace TribalWars2_CalculationTools.Models
             // Calculate the new wall level after damage applied
             int finalWallLevel;
             int afterBattleWall = result.WallLevelAfter;
-            int ironWall = 0; //TODO Need to make an input that takes the Tribe skill Iron wall into account
+            int ironWall = 0; //TODO Need to make an battleCalculatorInput that takes the Tribe skill Iron wall into account
             // If the wall is already below the Iron Wall threshold then don't change anything. 
             if (afterBattleWall <= ironWall)
             {
@@ -136,22 +136,22 @@ namespace TribalWars2_CalculationTools.Models
             result.WallLevelAfter = finalWallLevel;
 
         }
-        public void SimulateBattle(InputCalculatorData input)
+        public void SimulateBattle(BattleCalculatorInputViewModel battleCalculatorInput)
         {
 
 
             // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
             // Based on: Battle Simulator - http://www.ds-pro.de/2/simulator.php
-            BattleResult result = input.ToBattleResult();
+            BattleResult result = battleCalculatorInput.ToBattleResult();
 
-            decimal atkFaithBonus = input.InputAtkChurch.Modifier;
-            decimal defFaithBonus = input.InputDefChurch.Modifier;
-            decimal morale = input.InputMorale / 100m;
-            decimal luck = 1m + (input.InputLuck / 100m);
-            decimal nightBonus = (input.InputNightBonus ? 2m : 1m);
-            decimal officerBonus = (input.InputGrandmasterBonus ? 0.1m : 0m);
-            WeaponSet paladinAtkWeapon = input.GetAtkWeapon();
-            WeaponSet paladinDefWeapon = input.GetDefWeapon();
+            decimal atkFaithBonus = battleCalculatorInput.InputAtkChurch.Modifier;
+            decimal defFaithBonus = battleCalculatorInput.InputDefChurch.Modifier;
+            decimal morale = battleCalculatorInput.InputMorale / 100m;
+            decimal luck = 1m + (battleCalculatorInput.InputLuck / 100m);
+            decimal nightBonus = (battleCalculatorInput.InputNightBonus ? 2m : 1m);
+            decimal officerBonus = (battleCalculatorInput.InputGrandmasterBonus ? 0.1m : 0m);
+            WeaponSet paladinAtkWeapon = battleCalculatorInput.GetAtkWeapon();
+            WeaponSet paladinDefWeapon = battleCalculatorInput.GetDefWeapon();
 
 
             decimal atkModifier = GameData.GetAtkBattleModifier(atkFaithBonus, morale, luck, officerBonus);
@@ -165,7 +165,7 @@ namespace TribalWars2_CalculationTools.Models
 
 
             // Stop here if there are no units given
-            if (!input.IsValid)
+            if (!battleCalculatorInput.IsValid)
             {
                 LastBattleResult = result;
 

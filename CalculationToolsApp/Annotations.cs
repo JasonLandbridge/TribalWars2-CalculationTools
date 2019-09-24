@@ -239,7 +239,7 @@ namespace TribalWars2_CalculationTools
   }
 
   /// <summary>
-  /// Describes dependency between method input and output.
+  /// Describes dependency between method battleCalculatorInput and output.
   /// </summary>
   /// <syntax>
   /// <p>Function Definition Table syntax:</p>
@@ -250,7 +250,7 @@ namespace TribalWars2_CalculationTools
   /// <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
   /// <item>Value    ::= true | false | null | notnull | canbenull</item>
   /// </list>
-  /// If the method has a single input parameter, its name could be omitted.<br/>
+  /// If the method has a single battleCalculatorInput parameter, its name could be omitted.<br/>
   /// Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same) for the method output
   /// means that the method doesn't return normally (throws or terminates the process).<br/>
   /// Value <c>canbenull</c> is only applicable for output parameters.<br/>

@@ -12,7 +12,7 @@
     Height="1480"
     mc:Ignorable="d">
     <Window.Resources>
-        <vm:InputCalculatorData x:Key="vm" />
+        <vm:BattleCalculatorInputViewModel x:Key="vm" />
     </Window.Resources>
 
     <!--  Main Grid  -->
@@ -68,11 +68,9 @@
         <!--  Input table  -->
 
         <uc:BattleInputTable
-            x:Name="InputTable"
+            x:Name="BattleInputTable"
             Grid.Row="0"
             Grid.Column="1"
-            DataContext="{StaticResource vm}"
-            InputCalculatorData="{StaticResource vm}"
             Loaded="InputTable_Loaded"
             ValueChanged="UpdateBattleCalculator" />
 

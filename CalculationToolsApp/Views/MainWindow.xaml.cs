@@ -13,7 +13,7 @@ namespace TribalWars2_CalculationTools.Views
     {
         #region Fields
 
-        private InputCalculatorData _inputCalculatorData = new InputCalculatorData();
+        private BattleCalculatorInputViewModel _battleCalculatorInputViewModel = new BattleCalculatorInputViewModel();
         private CalculatorData _selectedCalculatorData;
 
         #endregion Fields
@@ -22,23 +22,19 @@ namespace TribalWars2_CalculationTools.Views
 
         public MainWindow()
         {
-            // TODO make a list
-
-
             CalculatorData.Add(new CalculatorData(BattleResultViewModel));
             SelectedCalculatorData = CalculatorData[0];
 
             InitializeComponent();
+
             this.DataContext = this;
+            BattleInputTable.DataContext = BattleCalculatorInputViewModel;
 
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
             }
             else
             {
-                InputTable.DataContext = this;
-                InputTable.InputCalculatorData = InputCalculatorData;
-
                 AttackBattleResultTable.DataContext = BattleResultViewModel;
                 DefenseBattleResultTable.DataContext = BattleResultViewModel;
             }
@@ -69,12 +65,12 @@ namespace TribalWars2_CalculationTools.Views
 
         public ObservableCollection<CalculatorData> CalculatorData { get; set; } = new ObservableCollection<CalculatorData>();
 
-        public InputCalculatorData InputCalculatorData
+        public BattleCalculatorInputViewModel BattleCalculatorInputViewModel
         {
-            get => _inputCalculatorData;
+            get => _battleCalculatorInputViewModel;
             set
             {
-                _inputCalculatorData = value;
+                _battleCalculatorInputViewModel = value;
                 OnPropertyChanged();
             }
         }
@@ -95,7 +91,7 @@ namespace TribalWars2_CalculationTools.Views
         public void UpdateBattleCalculator(object sender, EventArgs e)
         {
             Debug.WriteLine("Battle Calculator updated!");
-            SelectedCalculatorData.SimulateBattle(InputCalculatorData);
+            SelectedCalculatorData.SimulateBattle(BattleCalculatorInputViewModel);
         }
 
         [NotifyPropertyChangedInvocator]

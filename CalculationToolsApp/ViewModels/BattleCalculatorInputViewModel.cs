@@ -11,7 +11,7 @@ using ClassLibrary.Utilities;
 
 namespace TribalWars2_CalculationTools.ViewModels
 {
-    public class InputCalculatorData : INotifyPropertyChanged
+    public class BattleCalculatorInputViewModel : BaseViewModel
     {
         #region Fields
 
@@ -45,7 +45,7 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         #region Constructors
 
-        public InputCalculatorData()
+        public BattleCalculatorInputViewModel()
         {
 
             UnitSet AtkUnits = new UnitSet
@@ -226,12 +226,6 @@ namespace TribalWars2_CalculationTools.ViewModels
         }
 
         #endregion Constructors
-
-        #region Events
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion Events
 
         #region Properties
 
@@ -553,16 +547,6 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         public bool IsValid => (TotalUnits != 0);
         #endregion Properties
-
-        #region Methods
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion Methods
 
         public BattleResult ToBattleResult()
         {

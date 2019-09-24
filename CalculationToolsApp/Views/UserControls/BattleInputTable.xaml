@@ -8,16 +8,10 @@
     xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:sync1="http://schemas.syncfusion.com/wpf"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
-    x:Name="parent"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid
-        x:Name="InputTable"
-        Grid.Row="1"
-        Grid.Column="1"
-        Background="White"
-        DataContext="{Binding ElementName=parent}">
+    <Grid x:Name="InputTable" Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="150" />
@@ -93,7 +87,8 @@
                     x:Name="UnitsInputRows"
                     Grid.Row="0"
                     Grid.Column="1"
-                    Grid.ColumnSpan="2">
+                    Grid.ColumnSpan="2"
+                    ItemsSource="{Binding Units, Mode=TwoWay}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,0,0,5">
@@ -134,41 +129,41 @@
                 <!--  Paladin weapons  -->
                 <uc:InputRowHeader
                     x:Name="InputPaladinWeapons"
-                    Title="{Binding InputCalculatorData.InputPaladinWeaponLabel}"
+                    Title="{Binding InputPaladinWeaponLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputPaladinWeaponImagePath}" />
+                    ImagePath="{Binding InputPaladinWeaponImagePath}" />
 
                 <uc:PaladinWeaponSelect
                     Grid.Row="1"
                     Grid.Column="1"
                     Margin="15,0,0,0"
                     ValueChanged="UpdateValueChanged"
-                    WeaponLevel="{Binding InputCalculatorData.InputAtkWeaponLevel, Mode=TwoWay}"
-                    WeaponType="{Binding InputCalculatorData.InputAtkWeapon, Mode=TwoWay}" />
+                    WeaponLevel="{Binding InputAtkWeaponLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    WeaponType="{Binding InputAtkWeapon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <uc:PaladinWeaponSelect
                     Grid.Row="1"
                     Grid.Column="2"
                     Margin="15,0,0,0"
                     ValueChanged="UpdateValueChanged"
-                    WeaponLevel="{Binding InputCalculatorData.InputDefWeaponLevel, Mode=TwoWay}"
-                    WeaponType="{Binding InputCalculatorData.InputDefWeapon, Mode=TwoWay}" />
+                    WeaponLevel="{Binding InputDefWeaponLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    WeaponType="{Binding InputDefWeapon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!--  Grandmaster  -->
 
                 <uc:InputRowHeader
                     x:Name="InputGrandMasterHeader"
-                    Title="{Binding InputCalculatorData.InputGrandmasterBonusLabel}"
+                    Title="{Binding InputGrandmasterBonusLabel}"
                     Grid.Row="2"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputGrandmasterBonusImagePath}" />
+                    ImagePath="{Binding InputGrandmasterBonusImagePath}" />
                 <CheckBox
                     Grid.Row="2"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Click="InputChangedCheckBox"
-                    IsChecked="{Binding InputCalculatorData.InputGrandmasterBonus, Mode=TwoWay}" />
+                    IsChecked="{Binding InputGrandmasterBonus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             </Grid>
         </GroupBox>
@@ -193,10 +188,10 @@
                 <!--  Church input rows  -->
                 <uc:InputRowHeader
                     x:Name="InputChurchHeader"
-                    Title="{Binding InputCalculatorData.InputChurchLabel}"
+                    Title="{Binding InputChurchLabel}"
                     Grid.Row="0"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputChurchImagePath}" />
+                    ImagePath="{Binding InputChurchImagePath}" />
 
                 <sync1:ComboBoxAdv
                     x:Name="InputComboChurchAtk"
@@ -209,7 +204,7 @@
                     DisplayMemberPath="Name"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                     SelectedIndex="1"
-                    SelectedValue="{Binding InputCalculatorData.InputAtkChurch, Mode=TwoWay}"
+                    SelectedValue="{Binding InputAtkChurch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectionChanged="InputComboChurchAtk_OnSelectionChanged" />
 
                 <sync1:ComboBoxAdv
@@ -223,15 +218,15 @@
                     DisplayMemberPath="Name"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                     SelectedIndex="1"
-                    SelectedValue="{Binding InputCalculatorData.InputDefChurch, Mode=TwoWay}"
+                    SelectedValue="{Binding InputDefChurch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectionChanged="InputComboChurchDef_OnSelectionChanged" />
                 <!--  Wall input rows  -->
                 <uc:InputRowHeader
                     x:Name="InputWallHeader"
-                    Title="{Binding InputCalculatorData.InputWallLabel}"
+                    Title="{Binding InputWallLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputWallImagePath}" />
+                    ImagePath="{Binding InputWallImagePath}" />
 
                 <sync:UpDown
                     Grid.Row="1"
@@ -243,7 +238,7 @@
                     NumberDecimalDigits="0"
                     Step="1"
                     ValueChanged="InputChangedInteger"
-                    Value="{Binding InputCalculatorData.InputWall, Mode=TwoWay}" />
+                    Value="{Binding InputWall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </GroupBox>
         <!--  Meta input rows  -->
@@ -268,10 +263,10 @@
                 <!--  Morale input rows  -->
                 <uc:InputRowHeader
                     x:Name="InputMoraleHeader"
-                    Title="{Binding InputCalculatorData.InputMoraleLabel}"
+                    Title="{Binding InputMoraleLabel}"
                     Grid.Row="0"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputMoraleImagePath}" />
+                    ImagePath="{Binding InputMoraleImagePath}" />
 
                 <sync:PercentTextBox
                     Grid.Row="0"
@@ -283,8 +278,7 @@
                     MaxValue="100"
                     MinValue="1"
                     PercentDecimalDigits="0"
-                    PercentValue="{Binding InputCalculatorData.InputMorale, Mode=TwoWay}"
-                    PercentValueChanged="InputMoralChanged"
+                    PercentValue="{Binding InputMorale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     PercentageSymbol="%"
                     TextSelectionOnFocus="True" />
 
@@ -292,10 +286,10 @@
 
                 <uc:InputRowHeader
                     x:Name="InputLuckHeader"
-                    Title="{Binding InputCalculatorData.InputLuckLabel}"
+                    Title="{Binding InputLuckLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputLuckImagePath}" />
+                    ImagePath="{Binding InputLuckImagePath}" />
 
                 <sync:UpDown
                     Grid.Row="1"
@@ -307,22 +301,22 @@
                     NumberDecimalDigits="0"
                     Step="1"
                     ValueChanged="InputChangedInteger"
-                    Value="{Binding InputCalculatorData.InputLuck, Mode=TwoWay}" />
+                    Value="{Binding InputLuck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!--  Nightbonus input rows  -->
                 <uc:InputRowHeader
                     x:Name="InputNightBonusHeader"
-                    Title="{Binding InputCalculatorData.InputNightBonusLabel}"
+                    Title="{Binding InputNightBonusLabel}"
                     Grid.Row="2"
                     Grid.Column="0"
-                    ImagePath="{Binding InputCalculatorData.InputNightBonusImagePath}" />
+                    ImagePath="{Binding InputNightBonusImagePath}" />
                 <CheckBox
                     Grid.Row="2"
                     Grid.Column="2"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Click="InputChangedCheckBox"
-                    IsChecked="{Binding InputCalculatorData.InputNightBonus, Mode=TwoWay}" />
+                    IsChecked="{Binding InputNightBonus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </GroupBox>
 

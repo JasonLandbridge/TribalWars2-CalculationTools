@@ -21,8 +21,7 @@
                 DisplayMemberPath="Name"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                 SelectedIndex="0"
-                SelectedItem="{Binding WeaponType, Mode=TwoWay}"
-                SelectedValue=""
+                SelectedItem="{Binding WeaponType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectionChanged="WeaponName_OnSelectionChanged" />
 
             <syncfusion:ComboBoxAdv
@@ -33,7 +32,7 @@
                 VerticalAlignment="Center"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                 SelectedIndex="0"
-                SelectedValue="{Binding WeaponLevel, Mode=TwoWay}"
+                SelectedValue="{Binding WeaponLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectionChanged="WeaponLevel_OnSelectionChanged" />
         </StackPanel>
     </Grid>
