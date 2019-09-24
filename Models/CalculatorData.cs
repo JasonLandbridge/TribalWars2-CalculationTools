@@ -42,21 +42,6 @@ namespace TribalWars2_CalculationTools.Models
         }
 
 
-        public int WallLevelBeforeBattle(int ramNumber, int wallLevel, decimal faithBonus, bool paladinMorningStar)
-        {
-            //Taken from http://www.ds-pro.de/2/simulator.php
-            //TODO take into account the MorningStar weapon levels
-
-            decimal morningStarModifier = (paladinMorningStar ? 2 : 1);
-
-            decimal ramAtkStrength = (ramNumber * faithBonus * morningStarModifier);
-
-            decimal a = wallLevel - Math.Round(ramAtkStrength / (4 * (decimal)Math.Pow(1.09, wallLevel)));
-            decimal b = Math.Round(wallLevel / (2 * morningStarModifier));
-            int newWall = (int)Math.Round(Math.Max(a, b), MidpointRounding.ToZero);
-            return newWall;
-        }
-
         public int PreRound(ref BattleResult result, WeaponSet atkWeapon)
         {
             // Based on https://en.forum.tribalwars2.com/index.php?threads/unraveling-some-myths-regarding-the-battle-engine.3959/
@@ -87,7 +72,7 @@ namespace TribalWars2_CalculationTools.Models
             int wallHitPoints = (GameData.Wall.GetHitPoints(wallLevel) * 2);
 
             // This is the net wall damage done by the rams
-            decimal wallDamage = (atkUnits.Ram * ramRatio * atkModifier * paladinModifier) / wallHitPoints;
+            decimal wallDamage = (atkUnits.Ram * ramRatio * atkModifier * paladinModifier) / wallHitPoints > 0 ? wallHitPoints : 0.0001m;
 
 
             // Calculate the new wall level after damage applied
@@ -110,12 +95,51 @@ namespace TribalWars2_CalculationTools.Models
                 }
             }
 
-            result.WallLevelAfter = resultingWallLevel;
+            result.WallLevelAfter = Math.Clamp(resultingWallLevel, 0, 20);
             result.AtkUnitsLost = atkUnitsLost;
             return result.WallLevelAfter;
 
         }
 
+        public void PostBattle(ref BattleResult result, WeaponSet atkWeapon)
+        {
+            if (result.WallLevelAfter == 0)
+            {
+                return;
+            }
+            decimal atkModifier = result.AtkBattleModifier / 100m;
+
+            decimal paladinModifier = (atkWeapon.BelongsToUnitType == UnitType.Ram ? atkWeapon.AtkModifier : 0) + 1;
+
+            int wallHitPoints = GameData.Wall.GetHitPoints(result.WallLevelAfter) * 2;
+            decimal damage = (result.AtkUnitsLeft.Ram * atkModifier * paladinModifier) / wallHitPoints;
+            decimal wallDamage = damage / wallHitPoints;
+
+
+            // Calculate the new wall level after damage applied
+            int finalWallLevel;
+            int afterBattleWall = result.WallLevelAfter;
+            int ironWall = 0; //TODO Need to make an input that takes the Tribe skill Iron wall into account
+            // If the wall is already below the Iron Wall threshold then don't change anything. 
+            if (afterBattleWall <= ironWall)
+            {
+                finalWallLevel = afterBattleWall;
+            }
+            else
+            {
+                if (afterBattleWall - ironWall < -wallDamage)
+                {
+                    finalWallLevel = afterBattleWall < ironWall ? afterBattleWall : ironWall;
+                }
+                else
+                {
+                    decimal rawLevel = Math.Clamp(afterBattleWall - wallDamage, 0, 20);
+                    finalWallLevel = (int)Math.Round(rawLevel, MidpointRounding.AwayFromZero);
+                }
+            }
+            result.WallLevelAfter = finalWallLevel;
+
+        }
         public void SimulateBattle(InputCalculatorData input)
         {
 
@@ -364,35 +388,8 @@ namespace TribalWars2_CalculationTools.Models
                 finalResult.DefUnitsLost += battleResult.DefUnitsLost;
             }
 
-            decimal damage = (finalResult.AtkUnitsLeft.Ram * atkModifier); //TODO add paladin weapon
-            int wallHitPoints = (GameData.Wall.GetHitPoints(finalResult.WallLevelAfter) * 2);
-            decimal wallDamage = damage / wallHitPoints;
-
-            // Calculate the new wall level after damage applied
-            int finalWallLevel = 0;
-            int afterBattleWall = finalResult.WallLevelAfter;
-            int ironWall = 0;
-            // If the wall is already below the Iron Wall threshold then don't change anything. 
-            if (afterBattleWall <= ironWall)
-            {
-                finalWallLevel = afterBattleWall;
-            }
-            else
-            {
-                if (afterBattleWall - ironWall < -wallDamage)
-                {
-                    finalWallLevel = afterBattleWall < ironWall ? afterBattleWall : ironWall;
-                }
-                else
-                {
-                    decimal rawLevel = Math.Clamp(afterBattleWall - wallDamage, 0, 20);
-                    finalWallLevel = (int)Math.Round(rawLevel, MidpointRounding.AwayFromZero);
-                }
-            }
-            finalResult.WallLevelFinal = finalWallLevel;
-
-            defModifier = GameData.GetDefBattleModifier(defFaithBonus, finalResult.WallLevelBefore, nightBonus);
-            finalResult.DefBattleModifier = (int)(defModifier * 100m);
+            // Simulate the post battle calculations
+            PostBattle(ref finalResult, paladinAtkWeapon);
 
             LastBattleResult = finalResult;
             _battleResultViewModel.UpdateBattleResult(LastBattleResult);

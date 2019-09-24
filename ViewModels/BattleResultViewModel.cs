@@ -64,6 +64,8 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         public BattleResultViewModel()
         {
+            AttackBattleResultTable.ShowWallResult = false;
+            DefenseBattleResultTable.ShowWallResult = true;
             for (int i = 0; i < GameData.NumberOfUnits; i++)
             {
                 BattleResultValue defaultValue = new BattleResultValue(0);
@@ -86,7 +88,6 @@ namespace TribalWars2_CalculationTools.ViewModels
         }
 
 
-
         public void UpdateBattleResult(BattleResult battleResult)
         {
 
@@ -103,11 +104,9 @@ namespace TribalWars2_CalculationTools.ViewModels
             DefenseBattleResultTable.UnitAmount.Clear();
             DefenseBattleResultTable.UnitLost.Clear();
             DefenseBattleResultTable.UnitsLeft.Clear();
-            if (battleResult.ShowWallResult)
-            {
-                DefenseBattleResultTable.WallResult = battleResult.WallResult;
-            }
 
+            DefenseBattleResultTable.WallResult = battleResult.WallResult;
+            OnPropertyChanged(nameof(DefenseBattleResultTable));
 
             for (int i = 0; i < battleResult.ListOfAtkNumbers.Count; i++)
             {

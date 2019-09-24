@@ -85,7 +85,7 @@ namespace TribalWars2_CalculationTools.Views.UserControls
                 resultTable.UnitsLost.BattleResultValues = viewModel.UnitLost;
                 resultTable.UnitsLeft.BattleResultValues = viewModel.UnitsLeft;
 
-                resultTable.WallResult.WallResult.Visibility = (viewModel.ShowWallResult ? Visibility.Visible : Visibility.Hidden);
+                resultTable.WallResult.Visibility = (viewModel.ShowWallResult ? Visibility.Visible : Visibility.Hidden);
                 resultTable.WallResult.WallResult.Content = viewModel.WallResult;
             }
 

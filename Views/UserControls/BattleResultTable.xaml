@@ -64,7 +64,7 @@
             <uc:BattleResultRow x:Name="UnitsLeft" Header="Survivors" />
 
             <!--  Units Left row  -->
-            <uc:BattleResultRow x:Name="WallResult" Header="Survivors" />
+            <uc:BattleResultRow x:Name="WallResult" Header="Wall" />
 
         </StackPanel>
     </GroupBox>

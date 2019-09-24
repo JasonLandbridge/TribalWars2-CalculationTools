@@ -46,7 +46,7 @@ namespace TribalWars2_CalculationTools.Views
                 DefenseBattleResultTable.DataContext = BattleResultViewModel;
             }
 
-            //teBattleCalculator(null, null);
+            UpdateBattleCalculator(null, null);
         }
 
         #endregion Constructors

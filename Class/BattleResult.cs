@@ -94,7 +94,7 @@ namespace TribalWars2_CalculationTools.Class
 
 
         public bool ShowWallResult => WallLevelBefore != WallLevelAfter;
-        public string WallResult => $"Wall went from level {WallLevelBefore} to {WallLevelAfter}";
+        public string WallResult => ShowWallResult ? $"Wall went from level {WallLevelBefore} to {WallLevelAfter}." : "No damage was done to the wall.";
 
         #endregion Properties
 
@@ -116,13 +116,6 @@ namespace TribalWars2_CalculationTools.Class
         public BattleResult Copy()
         {
             return (BattleResult)this.MemberwiseClone();
-        }
-
-
-        public int ToLossUnit(int currentNumber, decimal ratio, decimal lostCoefficient)
-        {
-            decimal x = (currentNumber * ratio) * lostCoefficient;
-            return (int)Math.Round(x + 0.000001m, MidpointRounding.AwayFromZero);
         }
 
         #endregion Methods

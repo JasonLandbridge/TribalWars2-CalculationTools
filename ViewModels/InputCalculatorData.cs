@@ -60,7 +60,7 @@ namespace TribalWars2_CalculationTools.ViewModels
                 LightCavalry = 0,
                 MountedArcher = 0,
                 HeavyCavalry = 0,
-                Ram = 500,
+                Ram = 90000,
                 Catapult = 0,
                 Berserker = 0,
                 Trebuchet = 0,
@@ -443,10 +443,10 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         public int InputWall
         {
-            get => _inputWall;
+            get => Math.Clamp(_inputWall, 0, 20);
             set
             {
-                _inputWall = value;
+                _inputWall = Math.Clamp(value, 0, 20);
                 OnPropertyChanged();
             }
         }

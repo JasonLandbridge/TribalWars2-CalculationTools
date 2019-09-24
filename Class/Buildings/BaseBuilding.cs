@@ -15,6 +15,7 @@ namespace TribalWars2_CalculationTools.Class.Buildings
 
         public int GetHitPoints(int level)
         {
+            if (level == 0) return 0;
             return level - 1 < HitpointList.Count ? HitpointList[level - 1] : 0;
         }
 
