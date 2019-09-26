@@ -5,11 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    x:Name="parent"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid Background="White" DataContext="{Binding ElementName=parent}">
+    <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -58,6 +57,7 @@
             x:Name="WallResult"
             Grid.Row="0"
             Grid.Column="1"
+            Content="{Binding Content}"
             Margin="2.5,5" />
     </Grid>
 </UserControl>

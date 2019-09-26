@@ -8,47 +8,25 @@ using ClassLibrary.Class.Weapons;
 using ClassLibrary.Enums;
 using ClassLibrary.Structs;
 using ClassLibrary.Utilities;
+using ClassLibrary.ViewModels;
 
 namespace TribalWars2_CalculationTools.ViewModels
 {
-    public class BattleCalculatorInputViewModel : BaseViewModel
+    public class BattleInputTableViewModel : BaseViewModel
     {
         #region Fields
 
-        private InputUnitRow _archer;
-        private InputUnitRow _axeFighter;
-        private InputUnitRow _berserker;
-        private InputUnitRow _catapult;
-        private bool _grandmasterBonus = false;
-        private InputUnitRow _heavyCavalry;
-        private FaithLevel _inputAtkChurch = GameData.FaithOptions[1];
-        private int _inputAtkWeaponLevel = 1;
-        private FaithLevel _inputDefChurch = GameData.FaithOptions[1];
-        private int _inputDefWeaponLevel = 1;
-        private int _inputLuck = 0;
-        private int _inputMorale = 100;
-        private bool _inputNightBonus = false;
         private int _inputWall = 20;
-        private InputUnitRow _lightCavalry;
-        private InputUnitRow _mountedArcher;
-        private InputUnitRow _nobleman;
-        private InputUnitRow _paladin;
-        private InputUnitRow _ram;
-        private InputUnitRow _spearman;
-        private InputUnitRow _swordsman;
-        private InputUnitRow _trebuchet;
-        private ObservableCollection<InputUnitRow> _units = new ObservableCollection<InputUnitRow>();
-        private BaseWeapon _inputAtkWeapon;
-        private BaseWeapon _inputDefWeapon;
 
         #endregion Fields
 
         #region Constructors
 
-        public BattleCalculatorInputViewModel()
+        public BattleInputTableViewModel()
         {
+            DefaultValues();
 
-            UnitSet AtkUnits = new UnitSet
+            UnitSet atkUnits = new UnitSet
             {
                 Spearman = 0,
                 Swordsman = 0,
@@ -66,7 +44,7 @@ namespace TribalWars2_CalculationTools.ViewModels
 
             };
 
-            UnitSet DefUnits = new UnitSet
+            UnitSet defUnits = new UnitSet
             {
                 Spearman = 1000,
                 Swordsman = 1000,
@@ -81,40 +59,60 @@ namespace TribalWars2_CalculationTools.ViewModels
                 Trebuchet = 100,
                 Nobleman = 0,
                 Paladin = 0,
-
             };
 
+            LoadUnits(atkUnits, defUnits);
 
+
+        }
+
+        public void DefaultValues()
+        {
+            InputGrandmasterBonus = false;
+            InputAtkWeaponLevel = 1;
+            InputAtkWeapon = new EmptyWeapon();
+            InputDefWeaponLevel = 1;
+            InputDefWeapon = new EmptyWeapon();
+            InputAtkChurch = GameData.FaithOptions[1];
+            InputDefChurch = GameData.FaithOptions[1];
+            InputLuck = 0;
+            InputMorale = 100;
+            InputNightBonus = false;
+
+        }
+
+        public void LoadUnits(UnitSet atkUnits, UnitSet defUnits)
+        {
             Units.Add(Spearman = new InputUnitRow
             {
                 ImagePath = GameData.Spearman.ImagePath,
                 Name = GameData.Spearman.Name,
-                NumberOnAttack = AtkUnits.Spearman,
-                NumberOnDefense = DefUnits.Spearman
+                NumberOnAttack = atkUnits.Spearman,
+                NumberOnDefense = defUnits.Spearman
             });
 
             Units.Add(Swordsman = new InputUnitRow
             {
                 ImagePath = GameData.Swordsman.ImagePath,
                 Name = GameData.Swordsman.Name,
-                NumberOnAttack = AtkUnits.Swordsman,
-                NumberOnDefense = DefUnits.Swordsman
+                NumberOnAttack = atkUnits.Swordsman,
+                NumberOnDefense = defUnits.Swordsman
             });
 
             Units.Add(AxeFighter = new InputUnitRow
             {
                 ImagePath = GameData.AxeFighter.ImagePath,
                 Name = GameData.AxeFighter.Name,
-                NumberOnAttack = AtkUnits.AxeFighter,
-                NumberOnDefense = DefUnits.AxeFighter
+                NumberOnAttack = atkUnits.AxeFighter,
+                NumberOnDefense = defUnits.AxeFighter
             });
 
             Units.Add(Archer = new InputUnitRow
             {
                 ImagePath = GameData.Archer.ImagePath,
                 Name = GameData.Archer.Name,
-                NumberOnAttack = AtkUnits.Archer,
-                NumberOnDefense = DefUnits.Archer
+                NumberOnAttack = atkUnits.Archer,
+                NumberOnDefense = defUnits.Archer
 
             });
 
@@ -122,8 +120,8 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.LightCavalry.ImagePath,
                 Name = GameData.LightCavalry.Name,
-                NumberOnAttack = AtkUnits.LightCavalry,
-                NumberOnDefense = DefUnits.LightCavalry
+                NumberOnAttack = atkUnits.LightCavalry,
+                NumberOnDefense = defUnits.LightCavalry
 
             });
 
@@ -131,8 +129,8 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.MountedArcher.ImagePath,
                 Name = GameData.MountedArcher.Name,
-                NumberOnAttack = AtkUnits.MountedArcher,
-                NumberOnDefense = DefUnits.MountedArcher
+                NumberOnAttack = atkUnits.MountedArcher,
+                NumberOnDefense = defUnits.MountedArcher
 
             });
 
@@ -140,8 +138,8 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.HeavyCavalry.ImagePath,
                 Name = GameData.HeavyCavalry.Name,
-                NumberOnAttack = AtkUnits.HeavyCavalry,
-                NumberOnDefense = DefUnits.HeavyCavalry
+                NumberOnAttack = atkUnits.HeavyCavalry,
+                NumberOnDefense = defUnits.HeavyCavalry
 
             });
 
@@ -149,16 +147,16 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.Ram.ImagePath,
                 Name = GameData.Ram.Name,
-                NumberOnAttack = AtkUnits.Ram,
-                NumberOnDefense = DefUnits.Ram
+                NumberOnAttack = atkUnits.Ram,
+                NumberOnDefense = defUnits.Ram
             });
 
             Units.Add(Catapult = new InputUnitRow
             {
                 ImagePath = GameData.Catapult.ImagePath,
                 Name = GameData.Catapult.Name,
-                NumberOnAttack = AtkUnits.Catapult,
-                NumberOnDefense = DefUnits.Catapult
+                NumberOnAttack = atkUnits.Catapult,
+                NumberOnDefense = defUnits.Catapult
 
             });
 
@@ -166,8 +164,8 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.Berserker.ImagePath,
                 Name = GameData.Berserker.Name,
-                NumberOnAttack = AtkUnits.Berserker,
-                NumberOnDefense = DefUnits.Berserker
+                NumberOnAttack = atkUnits.Berserker,
+                NumberOnDefense = defUnits.Berserker
 
             });
 
@@ -175,16 +173,16 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.Trebuchet.ImagePath,
                 Name = GameData.Trebuchet.Name,
-                NumberOnAttack = AtkUnits.Trebuchet,
-                NumberOnDefense = DefUnits.Trebuchet
+                NumberOnAttack = atkUnits.Trebuchet,
+                NumberOnDefense = defUnits.Trebuchet
             });
 
             Units.Add(Nobleman = new InputUnitRow
             {
                 ImagePath = GameData.Nobleman.ImagePath,
                 Name = GameData.Nobleman.Name,
-                NumberOnAttack = AtkUnits.Nobleman,
-                NumberOnDefense = DefUnits.Nobleman
+                NumberOnAttack = atkUnits.Nobleman,
+                NumberOnDefense = defUnits.Nobleman
 
             });
 
@@ -192,12 +190,16 @@ namespace TribalWars2_CalculationTools.ViewModels
             {
                 ImagePath = GameData.Paladin.ImagePath,
                 Name = GameData.Paladin.Name,
-                NumberOnAttack = AtkUnits.Paladin,
-                NumberOnDefense = DefUnits.Paladin
+                NumberOnAttack = atkUnits.Paladin,
+                NumberOnDefense = defUnits.Paladin
 
             });
 
-
+            //Add property notification to nested properties
+            foreach (InputUnitRow inputUnitRow in Units)
+            {
+                inputUnitRow.PropertyChanged += (sender, args) => OnPropertyChanged();
+            }
         }
 
         public WeaponSet GetAtkWeapon()
@@ -231,133 +233,19 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         #region Units
 
-        public InputUnitRow Archer
-        {
-            get => _archer;
-            set
-            {
-                _archer = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow AxeFighter
-        {
-            get => _axeFighter;
-            set
-            {
-                _axeFighter = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow Berserker
-        {
-            get => _berserker;
-            set
-            {
-                _berserker = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow Catapult
-        {
-            get => _catapult;
-            set
-            {
-                _catapult = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow HeavyCavalry
-        {
-            get => _heavyCavalry;
-            set
-            {
-                _heavyCavalry = value;
-                this.OnPropertyChanged();
-            }
-        }
-        public InputUnitRow LightCavalry
-        {
-            get => _lightCavalry;
-            set
-            {
-                _lightCavalry = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow MountedArcher
-        {
-            get => _mountedArcher;
-            set
-            {
-                _mountedArcher = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow Nobleman
-        {
-            get => _nobleman;
-            set
-            {
-                _nobleman = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow Paladin
-        {
-            get => _paladin;
-            set
-            {
-                _paladin = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow Ram
-        {
-            get => _ram;
-            set
-            {
-                _ram = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow Spearman
-        {
-            get => _spearman;
-            set
-            {
-                _spearman = value;
-                this.OnPropertyChanged();
-            }
-        }
-        public InputUnitRow Swordsman
-        {
-            get => _swordsman;
-            set
-            {
-                _swordsman = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public InputUnitRow Trebuchet
-        {
-            get => _trebuchet;
-            set
-            {
-                _trebuchet = value;
-                this.OnPropertyChanged();
-            }
-        }
+        public InputUnitRow Archer { get; set; }
+        public InputUnitRow AxeFighter { get; set; }
+        public InputUnitRow Berserker { get; set; }
+        public InputUnitRow Catapult { get; set; }
+        public InputUnitRow HeavyCavalry { get; set; }
+        public InputUnitRow LightCavalry { get; set; }
+        public InputUnitRow MountedArcher { get; set; }
+        public InputUnitRow Nobleman { get; set; }
+        public InputUnitRow Paladin { get; set; }
+        public InputUnitRow Ram { get; set; }
+        public InputUnitRow Spearman { get; set; }
+        public InputUnitRow Swordsman { get; set; }
+        public InputUnitRow Trebuchet { get; set; }
 
         public int TotalAtkUnits
         {
@@ -377,28 +265,11 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         public int TotalUnits => TotalAtkUnits + TotalDefUnits;
 
-        public ObservableCollection<InputUnitRow> Units
-        {
-            get => _units;
-            set
-            {
-                _units = value;
-                this.OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<InputUnitRow> Units { get; set; } = new ObservableCollection<InputUnitRow>();
 
         #region Officers
 
-        public bool InputGrandmasterBonus
-        {
-            get => _grandmasterBonus;
-            set
-            {
-                _grandmasterBonus = value;
-                OnPropertyChanged();
-            }
-        }
-
+        public bool InputGrandmasterBonus { get; set; }
         public string InputGrandmasterBonusImagePath { get; } = "/Resources/Img/units/unit_grandmaster.png";
         public string InputGrandmasterBonusLabel { get; } = "Grand Master";
 
@@ -409,29 +280,12 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         #region Buildings
 
-        public FaithLevel InputAtkChurch
-        {
-            get => _inputAtkChurch;
-            set
-            {
-                _inputAtkChurch = value;
-                OnPropertyChanged();
-            }
-        }
+        public FaithLevel InputAtkChurch { get; set; }
         public string InputChurchImagePath { get; } = "/Resources/Img/buildings/buildings_church.png";
 
         public string InputChurchLabel { get; } = "Church";
 
-        public FaithLevel InputDefChurch
-        {
-            get => _inputDefChurch;
-            set
-            {
-                _inputDefChurch = value;
-                OnPropertyChanged();
-            }
-        }
-
+        public FaithLevel InputDefChurch { get; set; }
         public int InputWall
         {
             get => Math.Clamp(_inputWall, 0, 20);
@@ -452,44 +306,12 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         #region Weapons
 
-        public BaseWeapon InputAtkWeapon
-        {
-            get => _inputAtkWeapon;
-            set
-            {
-                _inputAtkWeapon = value;
-                OnPropertyChanged();
-            }
-        }
+        public BaseWeapon InputAtkWeapon { get; set; }
 
-        public int InputAtkWeaponLevel
-        {
-            get => _inputAtkWeaponLevel;
-            set
-            {
-                _inputAtkWeaponLevel = value;
-                OnPropertyChanged();
-            }
-        }
-        public BaseWeapon InputDefWeapon
-        {
-            get => _inputDefWeapon;
-            set
-            {
-                _inputDefWeapon = value;
-                OnPropertyChanged();
-            }
-        }
+        public int InputAtkWeaponLevel { get; set; }
+        public BaseWeapon InputDefWeapon { get; set; }
 
-        public int InputDefWeaponLevel
-        {
-            get => _inputDefWeaponLevel;
-            set
-            {
-                _inputDefWeaponLevel = value;
-                OnPropertyChanged();
-            }
-        }
+        public int InputDefWeaponLevel { get; set; }
 
         public string InputPaladinWeaponImagePath { get; } = "/Resources/Img/weapons/paladin_weapon.png";
 
@@ -500,43 +322,19 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         #region Meta
 
-        public int InputLuck
-        {
-            get => _inputLuck;
-            set
-            {
-                _inputLuck = value;
-                OnPropertyChanged();
-            }
-        }
+        public int InputLuck { get; set; }
 
         public string InputLuckImagePath { get; } = "/Resources/Img/info/info_luck.png";
 
         public string InputLuckLabel { get; } = "Luck";
 
-        public int InputMorale
-        {
-            get => _inputMorale;
-            set
-            {
-                _inputMorale = value;
-                OnPropertyChanged();
-            }
-        }
+        public int InputMorale { get; set; }
 
         public string InputMoraleImagePath { get; } = "/Resources/Img/info/info_morale.png";
 
         public string InputMoraleLabel { get; } = "Morale";
 
-        public bool InputNightBonus
-        {
-            get => _inputNightBonus;
-            set
-            {
-                _inputNightBonus = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool InputNightBonus { get; set; }
 
         public string InputNightBonusImagePath { get; } = "/Resources/Img/info/info_nightbonus.png";
 
@@ -545,7 +343,7 @@ namespace TribalWars2_CalculationTools.ViewModels
 
         #endregion
 
-        public bool IsValid => (TotalUnits != 0);
+        public bool IsValid => TotalUnits != 0;
         #endregion Properties
 
         public BattleResult ToBattleResult()

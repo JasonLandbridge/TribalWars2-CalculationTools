@@ -1,13 +1,11 @@
-﻿namespace ClassLibrary.Class
+﻿using ClassLibrary.ViewModels;
+
+namespace ClassLibrary.Class
 {
-    public class BattleResultValue
+    public class BattleResultValue : BaseViewModel
     {
-        public int Value { get; set; } = 0;
+        public int Value { get; set; }
 
-        public BattleResultValue()
-        {
-
-        }
         public BattleResultValue(int value)
         {
             Value = value;

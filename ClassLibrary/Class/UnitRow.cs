@@ -1,6 +1,8 @@
-﻿namespace ClassLibrary.Class
+﻿using ClassLibrary.ViewModels;
+
+namespace ClassLibrary.Class
 {
-    public class UnitRow
+    public class UnitRow : BaseViewModel
     {
         public string ImagePath { get; set; }
 

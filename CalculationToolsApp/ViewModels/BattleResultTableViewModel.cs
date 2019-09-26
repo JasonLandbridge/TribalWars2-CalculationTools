@@ -1,73 +1,24 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using ClassLibrary.Class;
+﻿using ClassLibrary.Class;
+using System.Collections.ObjectModel;
+using ClassLibrary.ViewModels;
 
 namespace TribalWars2_CalculationTools.ViewModels
 {
-    public class BattleResultTableViewModel : INotifyPropertyChanged
+    public class BattleResultTableViewModel : BaseViewModel
     {
-        private ObservableCollection<BattleResultValue> _unitLost = new ObservableCollection<BattleResultValue>();
-        private ObservableCollection<BattleResultValue> _unitAmount = new ObservableCollection<BattleResultValue>();
-        private ObservableCollection<BattleResultValue> _unitsLeft = new ObservableCollection<BattleResultValue>();
-        private string _wallResult = "";
-        private bool _showWallResult = false;
+        #region Properties
 
-        public ObservableCollection<BattleResultValue> UnitAmount
-        {
-            get => _unitAmount;
-            set
-            {
-                _unitAmount = value;
-                OnPropertyChanged();
-            }
-        }
+        public string Header { get; set; }
+        public bool ShowWallResult { get; set; }
+        public string BattleModifier { get; set; }
+        public BattleResultRowViewModel UnitAmount { get; set; } = new BattleResultRowViewModel();
 
-        public ObservableCollection<BattleResultValue> UnitLost
-        {
-            get => _unitLost;
-            set
-            {
-                _unitLost = value;
-                OnPropertyChanged();
-            }
-        }
+        public BattleResultRowViewModel UnitLost { get; set; } = new BattleResultRowViewModel();
 
-        public ObservableCollection<BattleResultValue> UnitsLeft
-        {
-            get => _unitsLeft;
-            set
-            {
-                _unitsLeft = value;
-                OnPropertyChanged();
-            }
-        }
+        public BattleResultRowViewModel UnitsLeft { get; set; } = new BattleResultRowViewModel();
 
-        public string WallResult
-        {
-            get => _wallResult;
-            set
-            {
-                _wallResult = value;
-                OnPropertyChanged();
-            }
-        }
-        public bool ShowWallResult
-        {
-            get => _showWallResult;
-            set
-            {
-                _showWallResult = value;
-                OnPropertyChanged();
-            }
-        }
+        public BattleResultRowViewModel WallResult { get; set; } = new BattleResultRowViewModel();
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        #endregion Properties
     }
 }

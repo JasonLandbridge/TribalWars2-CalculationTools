@@ -136,7 +136,7 @@ namespace TribalWars2_CalculationTools.Models
             result.WallLevelAfter = finalWallLevel;
 
         }
-        public void SimulateBattle(BattleCalculatorInputViewModel battleCalculatorInput)
+        public void SimulateBattle(BattleInputTableViewModel battleCalculatorInput)
         {
 
 

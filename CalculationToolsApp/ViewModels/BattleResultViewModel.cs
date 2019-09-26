@@ -1,117 +1,66 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ClassLibrary.Class;
+using ClassLibrary.ViewModels;
 
 namespace TribalWars2_CalculationTools.ViewModels
 {
-    public class BattleResultViewModel : INotifyPropertyChanged
+    public class BattleResultViewModel : BaseViewModel
     {
-        private int _atkBattleModifier = 0;
 
-        public int AtkBattleModifier
-        {
-            get => _atkBattleModifier;
-            set
-            {
-                _atkBattleModifier = value;
-                OnPropertyChanged();
-            }
-        }
+        public int AtkBattleModifier { get; set; }
+        public int DefBattleModifier { get; set; }
 
-        private int _defBattleModifier = 0;
-
-        public int DefBattleModifier
-        {
-            get => _defBattleModifier;
-            set
-            {
-                _defBattleModifier = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private BattleResultTableViewModel _attackBattleResultTable = new BattleResultTableViewModel();
-
-        public BattleResultTableViewModel AttackBattleResultTable
-        {
-            get => _attackBattleResultTable;
-            set
-            {
-                _attackBattleResultTable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private BattleResultTableViewModel _defenseBattleResultTable = new BattleResultTableViewModel();
-
-        public BattleResultTableViewModel DefenseBattleResultTable
-        {
-            get => _defenseBattleResultTable;
-            set
-            {
-                _defenseBattleResultTable = value;
-                OnPropertyChanged();
-            }
-        }
+        public BattleResultTableViewModel AttackBattleResultTable { get; set; } = new BattleResultTableViewModel();
+        public BattleResultTableViewModel DefenseBattleResultTable { get; set; } = new BattleResultTableViewModel();
 
         public BattleResultViewModel()
         {
+
+
+            AttackBattleResultTable.Header = "Attacking Units";
+            DefenseBattleResultTable.Header = "Defending Units";
+
+            AttackBattleResultTable.UnitAmount.Header = "Amount";
+            AttackBattleResultTable.UnitLost.Header = "Losses";
+            AttackBattleResultTable.UnitsLeft.Header = "Survivors";
             AttackBattleResultTable.ShowWallResult = false;
+
+            DefenseBattleResultTable.UnitAmount.Header = "Amount";
+            DefenseBattleResultTable.UnitLost.Header = "Losses";
+            DefenseBattleResultTable.UnitsLeft.Header = "Survivors";
+            DefenseBattleResultTable.WallResult.Header = "Wall";
             DefenseBattleResultTable.ShowWallResult = true;
+
             for (int i = 0; i < GameData.NumberOfUnits; i++)
             {
                 BattleResultValue defaultValue = new BattleResultValue(0);
 
-                AttackBattleResultTable.UnitAmount.Add(defaultValue);
-                AttackBattleResultTable.UnitLost.Add(defaultValue);
+                AttackBattleResultTable.UnitAmount.BattleResultValues.Add(defaultValue);
+                AttackBattleResultTable.UnitLost.BattleResultValues.Add(defaultValue);
 
-                DefenseBattleResultTable.UnitAmount.Add(defaultValue);
-                DefenseBattleResultTable.UnitLost.Add(defaultValue);
+                DefenseBattleResultTable.UnitAmount.BattleResultValues.Add(defaultValue);
+                DefenseBattleResultTable.UnitLost.BattleResultValues.Add(defaultValue);
             }
-
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
 
         public void UpdateBattleResult(BattleResult battleResult)
         {
 
-            // AttackBattleResultTable.UnitAmount.Add(new BattleResultValue(9));
+            AttackBattleResultTable.BattleModifier = battleResult.AtkBattleModifier.ToString();
+            DefenseBattleResultTable.BattleModifier = battleResult.DefBattleModifier.ToString();
 
-            AtkBattleModifier = battleResult.AtkBattleModifier;
-            DefBattleModifier = battleResult.DefBattleModifier;
+            DefenseBattleResultTable.WallResult.Content = battleResult.WallResult;
 
+            AttackBattleResultTable.UnitAmount.BattleResultValues = new ObservableCollection<BattleResultValue>(battleResult.ListOfAtkNumbers);
+            AttackBattleResultTable.UnitLost.BattleResultValues = new ObservableCollection<BattleResultValue>(battleResult.ListOfAtkLostNumbers);
+            AttackBattleResultTable.UnitsLeft.BattleResultValues = new ObservableCollection<BattleResultValue>(battleResult.ListOfAtkLeftNumbers);
 
-            AttackBattleResultTable.UnitAmount.Clear();
-            AttackBattleResultTable.UnitLost.Clear();
-            AttackBattleResultTable.UnitsLeft.Clear();
+            DefenseBattleResultTable.UnitAmount.BattleResultValues = new ObservableCollection<BattleResultValue>(battleResult.ListOfDefNumbers);
+            DefenseBattleResultTable.UnitLost.BattleResultValues = new ObservableCollection<BattleResultValue>(battleResult.ListOfDefLostNumbers);
+            DefenseBattleResultTable.UnitsLeft.BattleResultValues = new ObservableCollection<BattleResultValue>(battleResult.ListOfDefLeftNumbers);
 
-            DefenseBattleResultTable.UnitAmount.Clear();
-            DefenseBattleResultTable.UnitLost.Clear();
-            DefenseBattleResultTable.UnitsLeft.Clear();
-
-            DefenseBattleResultTable.WallResult = battleResult.WallResult;
-            OnPropertyChanged(nameof(DefenseBattleResultTable));
-
-            for (int i = 0; i < battleResult.ListOfAtkNumbers.Count; i++)
-            {
-                AttackBattleResultTable.UnitAmount.Add(battleResult.ListOfAtkNumbers[i]);
-                AttackBattleResultTable.UnitLost.Add(battleResult.ListOfAtkLostNumbers[i]);
-                AttackBattleResultTable.UnitsLeft.Add(battleResult.ListOfAtkLeftNumbers[i]);
-
-                DefenseBattleResultTable.UnitAmount.Add(battleResult.ListOfDefNumbers[i]);
-                DefenseBattleResultTable.UnitLost.Add(battleResult.ListOfDefLostNumbers[i]);
-                DefenseBattleResultTable.UnitsLeft.Add(battleResult.ListOfDefLeftNumbers[i]);
-
-
-            }
         }
     }
 }

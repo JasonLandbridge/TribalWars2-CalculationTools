@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
-namespace TribalWars2_CalculationTools.ViewModels
+namespace ClassLibrary.ViewModels
 {
     /// <summary>
     /// A base view model that fires Property Changed Events as needed
@@ -17,5 +14,6 @@ namespace TribalWars2_CalculationTools.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

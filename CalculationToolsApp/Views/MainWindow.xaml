@@ -12,7 +12,7 @@
     Height="1480"
     mc:Ignorable="d">
     <Window.Resources>
-        <vm:BattleCalculatorInputViewModel x:Key="vm" />
+        <vm:BattleInputTableViewModel x:Key="vm" />
     </Window.Resources>
 
     <!--  Main Grid  -->
@@ -36,7 +36,10 @@
             <sync:TreeViewAdv />
         </GroupBox>
         <!--  Result Grid  -->
-        <Grid Grid.Row="0" Grid.Column="2">
+        <Grid
+            Grid.Row="0"
+            Grid.Column="2"
+            DataContext="{Binding BattleResultViewModel}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
@@ -50,18 +53,14 @@
                 x:Name="AttackBattleResultTable"
                 Grid.Row="0"
                 Grid.Column="0"
-                BattleModifier="{Binding AtkBattleModifier}"
-                BattleResultTableViewModel="{Binding AttackBattleResultTable}"
-                Header="Attacking units" />
+                DataContext="{Binding AttackBattleResultTable}" />
 
             <!--  Defend Grid  -->
             <uc:BattleResultTable
                 x:Name="DefenseBattleResultTable"
                 Grid.Row="1"
                 Grid.Column="0"
-                BattleModifier="{Binding DefBattleModifier}"
-                BattleResultTableViewModel="{Binding DefenseBattleResultTable}"
-                Header="Defending units" />
+                DataContext="{Binding DefenseBattleResultTable}" />
 
         </Grid>
 
@@ -71,8 +70,7 @@
             x:Name="BattleInputTable"
             Grid.Row="0"
             Grid.Column="1"
-            Loaded="InputTable_Loaded"
-            ValueChanged="UpdateBattleCalculator" />
+            DataContext="{Binding BattleCalculatorInputViewModel}" />
 
     </Grid>
 
