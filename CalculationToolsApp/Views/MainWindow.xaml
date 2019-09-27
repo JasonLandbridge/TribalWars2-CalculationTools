@@ -6,73 +6,95 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sync="http://schemas.syncfusion.com/wpf"
     xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
-    xmlns:vm="clr-namespace:TribalWars2_CalculationTools.ViewModels"
     xmlns:userControls="clr-namespace:TribalWars2_CalculationTools.ViewModels.UserControls"
+    xmlns:vm="clr-namespace:TribalWars2_CalculationTools.ViewModels"
     Title="Tribal Wars 2 Calculation Tools"
     Width="1920"
-    Height="1480"
+    Height="1080"
     mc:Ignorable="d">
     <Window.Resources>
         <userControls:BattleInputTableViewModel x:Key="vm" />
     </Window.Resources>
 
-    <!--  Main Grid  -->
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
+    <DockPanel LastChildFill="False">
+        <!--  Menu  -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Height="25" Header="_File">
+                <MenuItem Header="_Open" />
+                <MenuItem Header="_Close" />
+                <MenuItem Header="_Save" />
+            </MenuItem>
+            <MenuItem Height="25" Header="_Load Preset" />
+            <MenuItem Height="25" Header="_Settings" />
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="lblCursorPosition" />
+            </StatusBarItem>
+        </StatusBar>
+        <!--  Main Grid  -->
+        <GroupBox DockPanel.Dock="Left" Header="Battle Calculations">
 
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <GroupBox
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            Grid.Column="0"
-            Header="Battle Calculations">
-            <sync:TreeViewAdv />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="75" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <sync:TreeViewAdv
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,5" />
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Content="Save" />
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Content="Load" />
+            </Grid>
         </GroupBox>
-        <!--  Result Grid  -->
-        <Grid
-            Grid.Row="0"
-            Grid.Column="2"
-            DataContext="{Binding BattleResultViewModel}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
 
-            <!--  Attack Grid  -->
-            <uc:BattleResultTable
-                x:Name="AttackBattleResultTable"
-                Grid.Row="0"
-                Grid.Column="0"
-                DataContext="{Binding AttackBattleResultTable}" />
 
-            <!--  Defend Grid  -->
-            <uc:BattleResultTable
-                x:Name="DefenseBattleResultTable"
-                Grid.Row="1"
-                Grid.Column="0"
-                DataContext="{Binding DefenseBattleResultTable}" />
 
-        </Grid>
 
-        <!--  Input table  -->
+        <!--  Tabs  -->
+        <TabControl DockPanel.Dock="Left">
+            <TabItem Header="Battle Simulator">
+                <StackPanel Orientation="Horizontal">
+                    <!--  Input table  -->
+                    <StackPanel DataContext="{Binding BattleCalculatorInputViewModel}" Orientation="Vertical">
+                        <uc:BattleInputTable x:Name="BattleInputTable" />
+                        <Button Margin="5,5" Content="Import units" />
+                    </StackPanel>
 
-        <uc:BattleInputTable
-            x:Name="BattleInputTable"
-            Grid.Row="0"
-            Grid.Column="1"
-            DataContext="{Binding BattleCalculatorInputViewModel}" />
+                    <!--  Result Grid  -->
+                    <StackPanel DataContext="{Binding BattleResultViewModel}" Orientation="Vertical">
+                        <!--  Attack Grid  -->
+                        <uc:BattleResultTable
+                            x:Name="AttackBattleResultTable"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            DataContext="{Binding AttackBattleResultTable}" />
 
-    </Grid>
+                        <!--  Defend Grid  -->
+                        <uc:BattleResultTable
+                            x:Name="DefenseBattleResultTable"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            DataContext="{Binding DefenseBattleResultTable}" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Unit Counter" />
+        </TabControl>
+
+
+    </DockPanel>
 
 </Window>
