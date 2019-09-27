@@ -1,8 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using ClassLibrary.Class;
 using ClassLibrary.Class.Weapons;
 using ClassLibrary.Enums;
@@ -10,7 +8,7 @@ using ClassLibrary.Structs;
 using ClassLibrary.Utilities;
 using ClassLibrary.ViewModels;
 
-namespace TribalWars2_CalculationTools.ViewModels
+namespace TribalWars2_CalculationTools.ViewModels.UserControls
 {
     public class BattleInputTableViewModel : BaseViewModel
     {

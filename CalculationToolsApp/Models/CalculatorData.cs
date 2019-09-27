@@ -7,6 +7,7 @@ using ClassLibrary.Class;
 using ClassLibrary.Enums;
 using ClassLibrary.Structs;
 using TribalWars2_CalculationTools.ViewModels;
+using TribalWars2_CalculationTools.ViewModels.UserControls;
 
 namespace TribalWars2_CalculationTools.Models
 {

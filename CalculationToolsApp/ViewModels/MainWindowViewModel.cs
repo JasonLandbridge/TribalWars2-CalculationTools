@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Text;
 using ClassLibrary.ViewModels;
 using TribalWars2_CalculationTools.Models;
+using TribalWars2_CalculationTools.ViewModels.UserControls;
 
 namespace TribalWars2_CalculationTools.ViewModels
 {

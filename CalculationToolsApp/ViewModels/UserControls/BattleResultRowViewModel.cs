@@ -2,7 +2,7 @@
 using ClassLibrary.Class;
 using ClassLibrary.ViewModels;
 
-namespace TribalWars2_CalculationTools.ViewModels
+namespace TribalWars2_CalculationTools.ViewModels.UserControls
 {
     public class BattleResultRowViewModel : BaseViewModel
     {
