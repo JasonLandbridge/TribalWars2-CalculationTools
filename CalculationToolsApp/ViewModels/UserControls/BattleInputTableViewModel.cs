@@ -1,19 +1,23 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Input;
 using ClassLibrary.Class;
 using ClassLibrary.Class.Weapons;
 using ClassLibrary.Enums;
 using ClassLibrary.Structs;
 using ClassLibrary.Utilities;
+using ClassLibrary.Utilities.WindowFactory;
 using ClassLibrary.ViewModels;
+using TribalWars2_CalculationTools.ViewModels.WindowFactory;
 
 namespace TribalWars2_CalculationTools.ViewModels.UserControls
 {
     public class BattleInputTableViewModel : BaseViewModel
     {
         #region Fields
-
+        private readonly IWindowFactory _mWindowFactory = new UnitImportWindowFactory();
         private int _inputWall = 20;
 
         #endregion Fields
@@ -22,6 +26,9 @@ namespace TribalWars2_CalculationTools.ViewModels.UserControls
 
         public BattleInputTableViewModel()
         {
+
+            OpenImportUnitsCommand = new RelayCommand(OpenUnitImportWindow);
+
             DefaultValues();
 
             UnitSet atkUnits = new UnitSet
@@ -60,7 +67,6 @@ namespace TribalWars2_CalculationTools.ViewModels.UserControls
             };
 
             LoadUnits(atkUnits, defUnits);
-
 
         }
 
@@ -225,6 +231,12 @@ namespace TribalWars2_CalculationTools.ViewModels.UserControls
             return new WeaponSet(unitType, atkModifier, defModifier);
         }
 
+        private void OpenUnitImportWindow()
+        {
+            _mWindowFactory.CreateNewWindow();
+
+        }
+
         #endregion Constructors
 
         #region Properties
@@ -316,8 +328,6 @@ namespace TribalWars2_CalculationTools.ViewModels.UserControls
         public string InputPaladinWeaponLabel { get; } = "Paladin Weapon";
         #endregion
 
-
-
         #region Meta
 
         public int InputLuck { get; set; }
@@ -338,6 +348,12 @@ namespace TribalWars2_CalculationTools.ViewModels.UserControls
 
         public string InputNightBonusLabel { get; } = "Night bonus";
 
+
+        #endregion
+
+        #region Commands
+
+        public ICommand OpenImportUnitsCommand { get; set; }
 
         #endregion
 

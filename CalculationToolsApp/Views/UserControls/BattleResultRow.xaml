@@ -57,7 +57,7 @@
             x:Name="WallResult"
             Grid.Row="0"
             Grid.Column="1"
-            Content="{Binding Content}"
-            Margin="2.5,5" />
+            Margin="2.5,5"
+            Content="{Binding Content}" />
     </Grid>
 </UserControl>

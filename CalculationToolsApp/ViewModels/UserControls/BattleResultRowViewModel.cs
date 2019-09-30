@@ -8,7 +8,8 @@ namespace TribalWars2_CalculationTools.ViewModels.UserControls
     {
         #region Properties
 
-        public ObservableCollection<BattleResultValue> BattleResultValues { get; set; } = new ObservableCollection<BattleResultValue>();
+        public ObservableCollection<BattleResultValue> BattleResultValues { get; set; } =
+            BattleResultValue.GetEmptyObservableCollection();
         public string Content { get; set; }
         public string Header { get; set; }
         public bool Show { get; set; }

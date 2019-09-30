@@ -10,7 +10,7 @@
     xmlns:vm="clr-namespace:TribalWars2_CalculationTools.ViewModels"
     Title="Tribal Wars 2 Calculation Tools"
     Width="1920"
-    Height="1080"
+    Height="1180"
     mc:Ignorable="d">
     <Window.Resources>
         <userControls:BattleInputTableViewModel x:Key="vm" />
@@ -60,9 +60,6 @@
             </Grid>
         </GroupBox>
 
-
-
-
         <!--  Tabs  -->
         <TabControl DockPanel.Dock="Left">
             <TabItem Header="Battle Simulator">
@@ -70,7 +67,10 @@
                     <!--  Input table  -->
                     <StackPanel DataContext="{Binding BattleCalculatorInputViewModel}" Orientation="Vertical">
                         <uc:BattleInputTable x:Name="BattleInputTable" />
-                        <Button Margin="5,5" Content="Import units" />
+                        <Button
+                            Margin="5,5"
+                            Command="{Binding OpenImportUnitsCommand}"
+                            Content="Import scout report" />
                     </StackPanel>
 
                     <!--  Result Grid  -->
@@ -93,7 +93,6 @@
             </TabItem>
             <TabItem Header="Unit Counter" />
         </TabControl>
-
 
     </DockPanel>
 
