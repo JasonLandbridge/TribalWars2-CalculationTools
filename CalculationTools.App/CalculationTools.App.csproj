@@ -6,7 +6,7 @@
     <RootNamespace>TribalWars2_CalculationTools</RootNamespace>
     <UseWPF>true</UseWPF>
     <StartupObject>TribalWars2_CalculationTools.App</StartupObject>
-    <AssemblyName>CalculationToolsApp</AssemblyName>
+    <AssemblyName>CalculationTools.App</AssemblyName>
     <Platforms>AnyCPU;x86</Platforms>
 	<PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -140,7 +140,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
+    <ProjectReference Include="..\CalculationTools.Core\CalculationTools.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculationToolsApp", "CalculationToolsApp\CalculationToolsApp.csproj", "{5749401D-66C5-445D-A817-CFED013C09E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculationTools.App", "CalculationTools.App\CalculationTools.App.csproj", "{5749401D-66C5-445D-A817-CFED013C09E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary", "ClassLibrary\ClassLibrary.csproj", "{9E838D81-F056-4D2E-B8B0-D94CC2759695}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculationTools.Core", "CalculationTools.Core\CalculationTools.Core.csproj", "{9E838D81-F056-4D2E-B8B0-D94CC2759695}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
