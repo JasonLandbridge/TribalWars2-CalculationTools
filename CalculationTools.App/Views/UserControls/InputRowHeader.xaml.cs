@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-namespace TribalWars2_CalculationTools.Views.UserControls
+namespace CalculationTools.App
 {
     /// <summary>
     /// Interaction logic for InputRowHeader.xaml

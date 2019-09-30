@@ -1,6 +1,6 @@
-﻿using ClassLibrary.ViewModels;
+﻿using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.ViewModels.UserControls
+namespace CalculationTools.App
 {
     public class BattleResultTableViewModel : BaseViewModel
     {

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
-using ClassLibrary.ViewModels;
-using TribalWars2_CalculationTools.Models;
-using TribalWars2_CalculationTools.ViewModels.UserControls;
+using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.ViewModels
+namespace CalculationTools.App
 {
     /// <summary>
     /// The viewmodel for view MainWindow

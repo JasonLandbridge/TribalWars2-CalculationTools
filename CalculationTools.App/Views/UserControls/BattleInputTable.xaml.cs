@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using ClassLibrary.Class;
-using ClassLibrary.Utilities;
-using TribalWars2_CalculationTools.ViewModels;
+using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.Views.UserControls
+namespace CalculationTools.App
 {
     /// <summary>
     /// Interaction logic for InputTable.xaml

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using ClassLibrary.Enums;
 
-namespace ClassLibrary.Class.Weapons
+namespace CalculationTools.Core
 {
     public abstract class BaseWeapon
     {

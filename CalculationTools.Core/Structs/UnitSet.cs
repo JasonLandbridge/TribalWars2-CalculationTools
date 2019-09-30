@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ClassLibrary.Class;
-using ClassLibrary.Enums;
 
-namespace ClassLibrary.Structs
+namespace CalculationTools.Core
 {
     public struct UnitSet
     {

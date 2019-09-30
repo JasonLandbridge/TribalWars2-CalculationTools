@@ -1,10 +1,10 @@
 ﻿<UserControl
-    x:Class="TribalWars2_CalculationTools.Views.UserControls.BattleResultTable"
+    x:Class="CalculationTools.App.BattleResultTable"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
+    xmlns:local="clr-namespace:CalculationTools.App"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -51,16 +51,16 @@
 
             </Grid>
             <!--  Unit Amount row  -->
-            <uc:BattleResultRow DataContext="{Binding UnitAmount}"/>
+            <local:BattleResultRow DataContext="{Binding UnitAmount}"/>
 
             <!--  Units Lost row  -->
-            <uc:BattleResultRow DataContext="{Binding UnitLost}"/>
+            <local:BattleResultRow DataContext="{Binding UnitLost}"/>
 
             <!--  Units Left row  -->
-            <uc:BattleResultRow DataContext="{Binding UnitsLeft}"/>
+            <local:BattleResultRow DataContext="{Binding UnitsLeft}"/>
 
             <!--  Units Left row  -->
-            <uc:BattleResultRow DataContext="{Binding WallResult}" />
+            <local:BattleResultRow DataContext="{Binding WallResult}" />
 
         </StackPanel>
     </GroupBox>

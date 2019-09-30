@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using ClassLibrary.Enums;
 
-namespace ClassLibrary.Class.Units
+namespace CalculationTools.Core
 {
     public abstract class BaseUnit
     {

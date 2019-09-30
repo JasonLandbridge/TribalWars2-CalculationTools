@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary.Utilities.WindowFactory
+﻿namespace CalculationTools.Core
 {
     public interface IWindowFactory
     {

@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary.Class.Weapons
+﻿namespace CalculationTools.Core
 {
     public class WeaponModifier
     {

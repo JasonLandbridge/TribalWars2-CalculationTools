@@ -32,7 +32,7 @@ using System;
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace TribalWars2_CalculationTools
+namespace CalculationTools.App
 {
   /// <summary>
   /// Indicates that the value of the marked element could be <c>null</c> sometimes,

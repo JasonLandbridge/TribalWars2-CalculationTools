@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using ClassLibrary.Structs;
-namespace ClassLibrary.Class
+
+namespace CalculationTools.Core
 {
     public class BattleResult
     {

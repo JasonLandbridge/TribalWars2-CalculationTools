@@ -3,16 +3,15 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>TribalWars2_CalculationTools</RootNamespace>
+    <RootNamespace>CalculationTools.App</RootNamespace>
     <UseWPF>true</UseWPF>
-    <StartupObject>TribalWars2_CalculationTools.App</StartupObject>
     <AssemblyName>CalculationTools.App</AssemblyName>
     <Platforms>AnyCPU;x86</Platforms>
-	<PublishSingleFile>true</PublishSingleFile>
+    <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-	<PublishReadyToRun>true</PublishReadyToRun>
+    <PublishReadyToRun>true</PublishReadyToRun>
     <Configurations>Debug;Release</Configurations>
-	<PublishTrimmed>true</PublishTrimmed>
+    <PublishTrimmed>true</PublishTrimmed>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 

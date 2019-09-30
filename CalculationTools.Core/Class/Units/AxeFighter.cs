@@ -1,7 +1,6 @@
 ﻿using System;
-using ClassLibrary.Enums;
 
-namespace ClassLibrary.Class.Units
+namespace CalculationTools.Core
 {
     public class AxeFighter : BaseUnit
     {

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace TribalWars2_CalculationTools
+namespace CalculationTools.App
 {
     /// <summary>
     /// Interaction logic for App.xaml

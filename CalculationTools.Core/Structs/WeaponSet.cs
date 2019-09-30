@@ -1,6 +1,4 @@
-﻿using ClassLibrary.Enums;
-
-namespace ClassLibrary.Structs
+﻿namespace CalculationTools.Core
 {
     public struct WeaponSet
     {

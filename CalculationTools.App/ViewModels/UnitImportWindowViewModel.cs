@@ -2,11 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using ClassLibrary.Class;
-using ClassLibrary.ViewModels;
-using TribalWars2_CalculationTools.ViewModels.UserControls;
+using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.ViewModels
+namespace CalculationTools.App
 {
     public class UnitImportWindowViewModel : BaseViewModel
     {

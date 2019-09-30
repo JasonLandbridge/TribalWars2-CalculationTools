@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using ClassLibrary.Class;
-using ClassLibrary.ViewModels;
+﻿using System.Collections.ObjectModel;
+using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.ViewModels.UserControls
+namespace CalculationTools.App
 {
     public class BattleUnitPreviewViewModel : BaseViewModel
     {

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ClassLibrary.Class.Units;
-using ClassLibrary.ViewModels;
 
-namespace ClassLibrary.Class
+namespace CalculationTools.Core
 {
     public class BattleResultValue : BaseViewModel
     {

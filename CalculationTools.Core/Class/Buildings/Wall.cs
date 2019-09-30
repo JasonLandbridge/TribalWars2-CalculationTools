@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ClassLibrary.Class.Buildings
+namespace CalculationTools.Core
 {
     public class Wall : BaseBuilding
     {

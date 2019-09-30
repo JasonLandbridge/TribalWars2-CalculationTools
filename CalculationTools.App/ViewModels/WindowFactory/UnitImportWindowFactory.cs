@@ -1,7 +1,6 @@
-﻿using ClassLibrary.Utilities.WindowFactory;
-using TribalWars2_CalculationTools.Views;
+﻿using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.ViewModels.WindowFactory
+namespace CalculationTools.App
 {
     public class UnitImportWindowFactory : IWindowFactory
     {

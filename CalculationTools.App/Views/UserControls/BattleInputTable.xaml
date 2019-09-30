@@ -1,14 +1,13 @@
 ﻿<UserControl
-    x:Class="TribalWars2_CalculationTools.Views.UserControls.BattleInputTable"
+    x:Class="CalculationTools.App.BattleInputTable"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:sync1="http://schemas.syncfusion.com/wpf"
-    xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
     xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+    xmlns:app="clr-namespace:CalculationTools.App"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -74,7 +73,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="40" />
                                 </Grid.RowDefinitions>
-                                <uc:InputRowHeader
+                                <app:InputRowHeader
                                     Title="{Binding Name}"
                                     Grid.Row="0"
                                     Grid.Column="0"
@@ -126,21 +125,21 @@
                 </ItemsControl>
 
                 <!--  Paladin weapons  -->
-                <uc:InputRowHeader
+                <app:InputRowHeader
                     x:Name="InputPaladinWeapons"
                     Title="{Binding InputPaladinWeaponLabel}"
                     Grid.Row="1"
                     Grid.Column="0"
                     ImagePath="{Binding InputPaladinWeaponImagePath}" />
 
-                <uc:PaladinWeaponSelect
+                <app:PaladinWeaponSelect
                     Grid.Row="1"
                     Grid.Column="1"
                     Margin="15,0,0,0"
                     ValueChanged="UpdateValueChanged"
                     WeaponLevel="{Binding InputAtkWeaponLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     WeaponType="{Binding InputAtkWeapon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <uc:PaladinWeaponSelect
+                <app:PaladinWeaponSelect
                     Grid.Row="1"
                     Grid.Column="2"
                     Margin="15,0,0,0"
@@ -150,7 +149,7 @@
 
                 <!--  Grandmaster  -->
 
-                <uc:InputRowHeader
+                <app:InputRowHeader
                     x:Name="InputGrandMasterHeader"
                     Title="{Binding InputGrandmasterBonusLabel}"
                     Grid.Row="2"
@@ -185,7 +184,7 @@
                 </Grid.RowDefinitions>
 
                 <!--  Church input rows  -->
-                <uc:InputRowHeader
+                <app:InputRowHeader
                     x:Name="InputChurchHeader"
                     Title="{Binding InputChurchLabel}"
                     Grid.Row="0"
@@ -220,7 +219,7 @@
                     SelectedValue="{Binding InputDefChurch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectionChanged="InputComboChurchDef_OnSelectionChanged" />
                 <!--  Wall input rows  -->
-                <uc:InputRowHeader
+                <app:InputRowHeader
                     x:Name="InputWallHeader"
                     Title="{Binding InputWallLabel}"
                     Grid.Row="1"
@@ -260,7 +259,7 @@
                 </Grid.RowDefinitions>
 
                 <!--  Morale input rows  -->
-                <uc:InputRowHeader
+                <app:InputRowHeader
                     x:Name="InputMoraleHeader"
                     Title="{Binding InputMoraleLabel}"
                     Grid.Row="0"
@@ -283,7 +282,7 @@
 
                 <!--  Luck input rows  -->
 
-                <uc:InputRowHeader
+                <app:InputRowHeader
                     x:Name="InputLuckHeader"
                     Title="{Binding InputLuckLabel}"
                     Grid.Row="1"
@@ -303,7 +302,7 @@
                     Value="{Binding InputLuck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!--  Nightbonus input rows  -->
-                <uc:InputRowHeader
+                <app:InputRowHeader
                     x:Name="InputNightBonusHeader"
                     Title="{Binding InputNightBonusLabel}"
                     Grid.Row="2"

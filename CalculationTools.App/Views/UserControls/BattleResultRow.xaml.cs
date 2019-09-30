@@ -1,9 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
-using ClassLibrary.Class;
+﻿using System.Windows.Controls;
 
-namespace TribalWars2_CalculationTools.Views.UserControls
+namespace CalculationTools.App
 {
     public partial class BattleResultRow : UserControl
     {

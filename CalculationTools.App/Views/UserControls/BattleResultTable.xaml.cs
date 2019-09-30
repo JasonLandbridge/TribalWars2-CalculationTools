@@ -1,9 +1,7 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using ClassLibrary.Class;
-using TribalWars2_CalculationTools.ViewModels;
+﻿using System.Windows.Controls;
+using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.Views.UserControls
+namespace CalculationTools.App
 {
 
     public partial class BattleResultTable : UserControl

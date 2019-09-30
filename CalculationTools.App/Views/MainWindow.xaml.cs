@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using TribalWars2_CalculationTools.Models;
-using TribalWars2_CalculationTools.ViewModels;
+﻿using System.Windows;
 
-namespace TribalWars2_CalculationTools.Views
+namespace CalculationTools.App
 {
     public partial class MainWindow : Window
     {

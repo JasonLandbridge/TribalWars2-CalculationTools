@@ -1,19 +1,17 @@
 ﻿<Window
-    x:Class="TribalWars2_CalculationTools.Views.MainWindow"
+    x:Class="CalculationTools.App.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CalculationTools.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sync="http://schemas.syncfusion.com/wpf"
-    xmlns:uc="clr-namespace:TribalWars2_CalculationTools.Views.UserControls"
-    xmlns:userControls="clr-namespace:TribalWars2_CalculationTools.ViewModels.UserControls"
-    xmlns:vm="clr-namespace:TribalWars2_CalculationTools.ViewModels"
     Title="Tribal Wars 2 Calculation Tools"
     Width="1920"
     Height="1180"
     mc:Ignorable="d">
     <Window.Resources>
-        <userControls:BattleInputTableViewModel x:Key="vm" />
+        <local:BattleInputTableViewModel x:Key="vm" />
     </Window.Resources>
 
     <DockPanel LastChildFill="False">
@@ -66,7 +64,7 @@
                 <StackPanel Orientation="Horizontal">
                     <!--  Input table  -->
                     <StackPanel DataContext="{Binding BattleCalculatorInputViewModel}" Orientation="Vertical">
-                        <uc:BattleInputTable x:Name="BattleInputTable" />
+                        <local:BattleInputTable x:Name="BattleInputTable" />
                         <Button
                             Margin="5,5"
                             Command="{Binding OpenImportUnitsCommand}"
@@ -76,18 +74,10 @@
                     <!--  Result Grid  -->
                     <StackPanel DataContext="{Binding BattleResultViewModel}" Orientation="Vertical">
                         <!--  Attack Grid  -->
-                        <uc:BattleResultTable
-                            x:Name="AttackBattleResultTable"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            DataContext="{Binding AttackBattleResultTable}" />
+                        <local:BattleResultTable x:Name="AttackBattleResultTable" DataContext="{Binding AttackBattleResultTable}" />
 
                         <!--  Defend Grid  -->
-                        <uc:BattleResultTable
-                            x:Name="DefenseBattleResultTable"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            DataContext="{Binding DefenseBattleResultTable}" />
+                        <local:BattleResultTable x:Name="DefenseBattleResultTable" DataContext="{Binding DefenseBattleResultTable}" />
                     </StackPanel>
                 </StackPanel>
             </TabItem>

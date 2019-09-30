@@ -1,18 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
-using ClassLibrary.Class;
-using ClassLibrary.Class.Weapons;
-using ClassLibrary.Enums;
-using ClassLibrary.Structs;
-using ClassLibrary.Utilities;
-using ClassLibrary.Utilities.WindowFactory;
-using ClassLibrary.ViewModels;
-using TribalWars2_CalculationTools.ViewModels.WindowFactory;
+using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.ViewModels.UserControls
+namespace CalculationTools.App
 {
     public class BattleInputTableViewModel : BaseViewModel
     {

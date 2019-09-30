@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using ClassLibrary.Enums;
 
-namespace ClassLibrary.Class.Weapons
+namespace CalculationTools.Core
 {
     public class HeavyCavalryWeapon : BaseWeapon
     {

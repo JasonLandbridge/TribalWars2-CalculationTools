@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace ClassLibrary.Class.Buildings
+namespace CalculationTools.Core
 {
     public abstract class BaseBuilding
     {

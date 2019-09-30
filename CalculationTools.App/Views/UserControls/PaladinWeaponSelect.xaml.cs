@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using ClassLibrary.Class;
-using ClassLibrary.Class.Weapons;
+using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.Views.UserControls
+namespace CalculationTools.App
 {
     /// <summary>
     /// Interaction logic for PaladinWeaponSelect.xaml

@@ -1,6 +1,4 @@
-﻿using ClassLibrary.Class;
-
-namespace ClassLibrary.ViewModels
+﻿namespace CalculationTools.Core
 {
     public class InputUnitRow : UnitRow
     {

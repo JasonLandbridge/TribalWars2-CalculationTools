@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using ClassLibrary.Class;
-using ClassLibrary.ViewModels;
+using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.ViewModels.UserControls
+namespace CalculationTools.App
 {
     public class BattleResultViewModel : BaseViewModel
     {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ClassLibrary.ViewModels
+namespace CalculationTools.Core
 {
     /// <summary>
     /// A base view model that fires Property Changed Events as needed

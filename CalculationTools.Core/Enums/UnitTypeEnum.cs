@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary.Enums
+﻿namespace CalculationTools.Core
 {
     public enum UnitType
     {

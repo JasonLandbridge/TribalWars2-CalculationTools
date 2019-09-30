@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using ClassLibrary.Class;
-using ClassLibrary.Enums;
-using ClassLibrary.Structs;
-using TribalWars2_CalculationTools.ViewModels;
-using TribalWars2_CalculationTools.ViewModels.UserControls;
+using CalculationTools.Core;
 
-namespace TribalWars2_CalculationTools.Models
+namespace CalculationTools.App
 {
     public class CalculatorData : INotifyPropertyChanged
     {

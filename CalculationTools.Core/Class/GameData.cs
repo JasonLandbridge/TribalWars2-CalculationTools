@@ -2,14 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using ClassLibrary.Class.Buildings;
-using ClassLibrary.Class.Units;
-using ClassLibrary.Class.Weapons;
-using ClassLibrary.Enums;
-using ClassLibrary.Structs;
-using ClassLibrary.Utilities;
 
-namespace ClassLibrary.Class
+namespace CalculationTools.Core
 {
     public static class GameData
     {
