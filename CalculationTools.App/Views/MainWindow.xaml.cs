@@ -2,16 +2,19 @@
 
 namespace CalculationTools.App
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
+
         #region Constructors
 
-        public MainWindowViewModel MainWindowViewModel { get; set; } = new MainWindowViewModel();
         public MainWindow()
         {
-            this.DataContext = MainWindowViewModel;
-
             InitializeComponent();
+            DataContext = new MainWindowViewModel();
+
         }
 
         #endregion Constructors

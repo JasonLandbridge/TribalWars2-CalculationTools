@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="CalculationTools.App.csproj.DotSettings" />
     <None Remove="Resources\Img\buildings\buildings_church.png" />
     <None Remove="Resources\Img\buildings\buildings_wall.png" />
     <None Remove="Resources\Img\info\info_luck.png" />
