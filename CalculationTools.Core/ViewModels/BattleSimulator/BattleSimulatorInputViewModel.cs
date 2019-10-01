@@ -1,65 +1,105 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using CalculationTools.Core;
 using CalculationTools.Core.Base;
 
-namespace CalculationTools.App
+namespace CalculationTools.Core.BattleSimulator
 {
-    public class BattleInputTableViewModel : BaseViewModel
+    public class BattleSimulatorInputViewModel : BaseViewModel
     {
-        #region Fields
-        private readonly IWindowFactory _mWindowFactory = new UnitImportWindowFactory();
-        private int _inputWall = 20;
-
-        #endregion Fields
-
         #region Constructors
 
-        public BattleInputTableViewModel()
+        public BattleSimulatorInputViewModel()
         {
-
-            OpenImportUnitsCommand = new RelayCommand(OpenUnitImportWindow);
-
+            SetupValues();
             DefaultValues();
+        }
 
-            UnitSet atkUnits = new UnitSet
+        private void SetupValues()
+        {
+            Units.Add(Spearman = new InputUnitRow
             {
-                Spearman = 0,
-                Swordsman = 0,
-                AxeFighter = 10000,
-                Archer = 0,
-                LightCavalry = 0,
-                MountedArcher = 0,
-                HeavyCavalry = 0,
-                Ram = 90000,
-                Catapult = 0,
-                Berserker = 0,
-                Trebuchet = 0,
-                Nobleman = 0,
-                Paladin = 0,
+                ImagePath = GameData.Spearman.ImagePath,
+                Name = GameData.Spearman.Name,
+            });
 
-            };
-
-            UnitSet defUnits = new UnitSet
+            Units.Add(Swordsman = new InputUnitRow
             {
-                Spearman = 1000,
-                Swordsman = 1000,
-                AxeFighter = 0,
-                Archer = 0,
-                LightCavalry = 0,
-                MountedArcher = 0,
-                HeavyCavalry = 0,
-                Ram = 0,
-                Catapult = 0,
-                Berserker = 0,
-                Trebuchet = 100,
-                Nobleman = 0,
-                Paladin = 0,
-            };
+                ImagePath = GameData.Swordsman.ImagePath,
+                Name = GameData.Swordsman.Name,
+            });
 
-            LoadUnits(atkUnits, defUnits);
+            Units.Add(AxeFighter = new InputUnitRow
+            {
+                ImagePath = GameData.AxeFighter.ImagePath,
+                Name = GameData.AxeFighter.Name,
+            });
+
+            Units.Add(Archer = new InputUnitRow
+            {
+                ImagePath = GameData.Archer.ImagePath,
+                Name = GameData.Archer.Name,
+            });
+
+            Units.Add(LightCavalry = new InputUnitRow
+            {
+                ImagePath = GameData.LightCavalry.ImagePath,
+                Name = GameData.LightCavalry.Name,
+            });
+
+            Units.Add(MountedArcher = new InputUnitRow
+            {
+                ImagePath = GameData.MountedArcher.ImagePath,
+                Name = GameData.MountedArcher.Name,
+            });
+
+            Units.Add(HeavyCavalry = new InputUnitRow
+            {
+                ImagePath = GameData.HeavyCavalry.ImagePath,
+                Name = GameData.HeavyCavalry.Name,
+            });
+
+            Units.Add(Ram = new InputUnitRow
+            {
+                ImagePath = GameData.Ram.ImagePath,
+                Name = GameData.Ram.Name,
+            });
+
+            Units.Add(Catapult = new InputUnitRow
+            {
+                ImagePath = GameData.Catapult.ImagePath,
+                Name = GameData.Catapult.Name,
+            });
+
+            Units.Add(Berserker = new InputUnitRow
+            {
+                ImagePath = GameData.Berserker.ImagePath,
+                Name = GameData.Berserker.Name,
+            });
+
+            Units.Add(Trebuchet = new InputUnitRow
+            {
+                ImagePath = GameData.Trebuchet.ImagePath,
+                Name = GameData.Trebuchet.Name,
+            });
+
+            Units.Add(Nobleman = new InputUnitRow
+            {
+                ImagePath = GameData.Nobleman.ImagePath,
+                Name = GameData.Nobleman.Name,
+            });
+
+            Units.Add(Paladin = new InputUnitRow
+            {
+                ImagePath = GameData.Paladin.ImagePath,
+                Name = GameData.Paladin.Name,
+            });
+
+            //Add property notification to nested properties
+            foreach (InputUnitRow inputUnitRow in Units)
+            {
+                inputUnitRow.PropertyChanged += (sender, args) => OnPropertyChanged();
+            }
 
         }
 
@@ -75,128 +115,53 @@ namespace CalculationTools.App
             InputLuck = 0;
             InputMorale = 100;
             InputNightBonus = false;
-
         }
 
+        /// <summary>
+        /// Set all the attacking and defending units in the input fields
+        /// </summary>
+        /// <param name="atkUnits">The Attacking UnitSet</param>
+        /// <param name="defUnits">The Defending UnitSet</param>
         public void LoadUnits(UnitSet atkUnits, UnitSet defUnits)
         {
-            Units.Add(Spearman = new InputUnitRow
-            {
-                ImagePath = GameData.Spearman.ImagePath,
-                Name = GameData.Spearman.Name,
-                NumberOnAttack = atkUnits.Spearman,
-                NumberOnDefense = defUnits.Spearman
-            });
+            Spearman.NumberOnAttack = atkUnits.Spearman;
+            Spearman.NumberOnDefense = defUnits.Spearman;
 
-            Units.Add(Swordsman = new InputUnitRow
-            {
-                ImagePath = GameData.Swordsman.ImagePath,
-                Name = GameData.Swordsman.Name,
-                NumberOnAttack = atkUnits.Swordsman,
-                NumberOnDefense = defUnits.Swordsman
-            });
+            Swordsman.NumberOnAttack = atkUnits.Swordsman;
+            Swordsman.NumberOnDefense = defUnits.Swordsman;
 
-            Units.Add(AxeFighter = new InputUnitRow
-            {
-                ImagePath = GameData.AxeFighter.ImagePath,
-                Name = GameData.AxeFighter.Name,
-                NumberOnAttack = atkUnits.AxeFighter,
-                NumberOnDefense = defUnits.AxeFighter
-            });
+            AxeFighter.NumberOnAttack = atkUnits.AxeFighter;
+            AxeFighter.NumberOnDefense = defUnits.AxeFighter;
 
-            Units.Add(Archer = new InputUnitRow
-            {
-                ImagePath = GameData.Archer.ImagePath,
-                Name = GameData.Archer.Name,
-                NumberOnAttack = atkUnits.Archer,
-                NumberOnDefense = defUnits.Archer
+            Archer.NumberOnAttack = atkUnits.Archer;
+            Archer.NumberOnDefense = defUnits.Archer;
 
-            });
+            LightCavalry.NumberOnAttack = atkUnits.LightCavalry;
+            LightCavalry.NumberOnDefense = defUnits.LightCavalry;
 
-            Units.Add(LightCavalry = new InputUnitRow
-            {
-                ImagePath = GameData.LightCavalry.ImagePath,
-                Name = GameData.LightCavalry.Name,
-                NumberOnAttack = atkUnits.LightCavalry,
-                NumberOnDefense = defUnits.LightCavalry
+            MountedArcher.NumberOnAttack = atkUnits.MountedArcher;
+            MountedArcher.NumberOnDefense = defUnits.MountedArcher;
 
-            });
+            HeavyCavalry.NumberOnAttack = atkUnits.HeavyCavalry;
+            HeavyCavalry.NumberOnDefense = defUnits.HeavyCavalry;
 
-            Units.Add(MountedArcher = new InputUnitRow
-            {
-                ImagePath = GameData.MountedArcher.ImagePath,
-                Name = GameData.MountedArcher.Name,
-                NumberOnAttack = atkUnits.MountedArcher,
-                NumberOnDefense = defUnits.MountedArcher
+            Ram.NumberOnAttack = atkUnits.Ram;
+            Ram.NumberOnDefense = defUnits.Ram;
 
-            });
+            Catapult.NumberOnAttack = atkUnits.Catapult;
+            Catapult.NumberOnDefense = defUnits.Catapult;
 
-            Units.Add(HeavyCavalry = new InputUnitRow
-            {
-                ImagePath = GameData.HeavyCavalry.ImagePath,
-                Name = GameData.HeavyCavalry.Name,
-                NumberOnAttack = atkUnits.HeavyCavalry,
-                NumberOnDefense = defUnits.HeavyCavalry
+            Berserker.NumberOnAttack = atkUnits.Berserker;
+            Berserker.NumberOnDefense = defUnits.Berserker;
 
-            });
+            Trebuchet.NumberOnAttack = atkUnits.Trebuchet;
+            Trebuchet.NumberOnDefense = defUnits.Trebuchet;
 
-            Units.Add(Ram = new InputUnitRow
-            {
-                ImagePath = GameData.Ram.ImagePath,
-                Name = GameData.Ram.Name,
-                NumberOnAttack = atkUnits.Ram,
-                NumberOnDefense = defUnits.Ram
-            });
+            Nobleman.NumberOnAttack = atkUnits.Nobleman;
+            Nobleman.NumberOnDefense = defUnits.Nobleman;
 
-            Units.Add(Catapult = new InputUnitRow
-            {
-                ImagePath = GameData.Catapult.ImagePath,
-                Name = GameData.Catapult.Name,
-                NumberOnAttack = atkUnits.Catapult,
-                NumberOnDefense = defUnits.Catapult
-
-            });
-
-            Units.Add(Berserker = new InputUnitRow
-            {
-                ImagePath = GameData.Berserker.ImagePath,
-                Name = GameData.Berserker.Name,
-                NumberOnAttack = atkUnits.Berserker,
-                NumberOnDefense = defUnits.Berserker
-
-            });
-
-            Units.Add(Trebuchet = new InputUnitRow
-            {
-                ImagePath = GameData.Trebuchet.ImagePath,
-                Name = GameData.Trebuchet.Name,
-                NumberOnAttack = atkUnits.Trebuchet,
-                NumberOnDefense = defUnits.Trebuchet
-            });
-
-            Units.Add(Nobleman = new InputUnitRow
-            {
-                ImagePath = GameData.Nobleman.ImagePath,
-                Name = GameData.Nobleman.Name,
-                NumberOnAttack = atkUnits.Nobleman,
-                NumberOnDefense = defUnits.Nobleman
-
-            });
-
-            Units.Add(Paladin = new InputUnitRow
-            {
-                ImagePath = GameData.Paladin.ImagePath,
-                Name = GameData.Paladin.Name,
-                NumberOnAttack = atkUnits.Paladin,
-                NumberOnDefense = defUnits.Paladin
-
-            });
-
-            //Add property notification to nested properties
-            foreach (InputUnitRow inputUnitRow in Units)
-            {
-                inputUnitRow.PropertyChanged += (sender, args) => OnPropertyChanged();
-            }
+            Paladin.NumberOnAttack = atkUnits.Paladin;
+            Paladin.NumberOnDefense = defUnits.Paladin;
         }
 
         public WeaponSet GetAtkWeapon()
@@ -222,12 +187,6 @@ namespace CalculationTools.App
             decimal atkModifier = GameData.GetAtkModifierFromWeapon(unitType, InputDefWeaponLevel);
             decimal defModifier = GameData.GetDefModifierFromWeapon(unitType, InputDefWeaponLevel);
             return new WeaponSet(unitType, atkModifier, defModifier);
-        }
-
-        private void OpenUnitImportWindow()
-        {
-            _mWindowFactory.CreateNewWindow();
-
         }
 
         #endregion Constructors
@@ -289,15 +248,7 @@ namespace CalculationTools.App
         public string InputChurchLabel { get; } = "Church";
 
         public FaithLevel InputDefChurch { get; set; }
-        public int InputWall
-        {
-            get => Math.Clamp(_inputWall, 0, 20);
-            set
-            {
-                _inputWall = Math.Clamp(value, 0, 20);
-                OnPropertyChanged();
-            }
-        }
+        public int InputWall { get; set; }
 
         public string InputWallImagePath { get; } = "/Resources/Img/buildings/buildings_wall.png";
 

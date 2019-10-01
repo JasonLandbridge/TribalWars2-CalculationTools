@@ -1,7 +1,6 @@
-﻿using CalculationTools.Core;
-using CalculationTools.Core.Base;
+﻿using CalculationTools.Core.Base;
 
-namespace CalculationTools.App
+namespace CalculationTools.Core.BattleSimulator
 {
     public class BattleResultTableViewModel : BaseViewModel
     {

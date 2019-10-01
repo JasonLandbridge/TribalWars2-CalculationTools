@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using CalculationTools.Core;
 
 namespace CalculationTools.App
 {
@@ -13,8 +14,7 @@ namespace CalculationTools.App
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
-
+            TabBattleSimulator.DataContext = IoC.GetBattleSimulatorViewModel();
         }
 
         #endregion Constructors

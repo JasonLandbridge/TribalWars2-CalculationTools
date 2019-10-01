@@ -2,10 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using CalculationTools.Core;
 using CalculationTools.Core.Base;
 
-namespace CalculationTools.App
+namespace CalculationTools.Core.BattleSimulator
 {
     public class UnitImportWindowViewModel : BaseViewModel
     {
@@ -62,15 +61,15 @@ namespace CalculationTools.App
             }
 
 
-            ObservableCollection<BattleResultValue> unitAmountRow = new ObservableCollection<BattleResultValue>();
-            ObservableCollection<BattleResultValue> unitLostRow = new ObservableCollection<BattleResultValue>();
-            ObservableCollection<BattleResultValue> unitLeftRow = new ObservableCollection<BattleResultValue>();
+            ObservableCollection<BattleResultValueViewModel> unitAmountRow = new ObservableCollection<BattleResultValueViewModel>();
+            ObservableCollection<BattleResultValueViewModel> unitLostRow = new ObservableCollection<BattleResultValueViewModel>();
+            ObservableCollection<BattleResultValueViewModel> unitLeftRow = new ObservableCollection<BattleResultValueViewModel>();
 
             for (int i = 0; i < rowData.Count; i += 3)
             {
-                unitAmountRow.Add(new BattleResultValue(rowData[i]));
-                unitLostRow.Add(new BattleResultValue(rowData[i + 1]));
-                unitLeftRow.Add(new BattleResultValue(rowData[i + 2]));
+                unitAmountRow.Add(new BattleResultValueViewModel(rowData[i]));
+                unitLostRow.Add(new BattleResultValueViewModel(rowData[i + 1]));
+                unitLeftRow.Add(new BattleResultValueViewModel(rowData[i + 2]));
             }
 
 

@@ -2,6 +2,7 @@
     x:Class="CalculationTools.App.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:battleSimulator="clr-namespace:CalculationTools.Core.BattleSimulator;assembly=CalculationTools.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CalculationTools.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,9 +11,6 @@
     Width="1920"
     Height="1180"
     mc:Ignorable="d">
-    <Window.Resources>
-        <local:BattleInputTableViewModel x:Key="vm" />
-    </Window.Resources>
 
     <DockPanel LastChildFill="False">
         <!--  Menu  -->
@@ -60,24 +58,23 @@
 
         <!--  Tabs  -->
         <TabControl DockPanel.Dock="Left">
-            <TabItem Header="Battle Simulator">
+            <TabItem x:Name="TabBattleSimulator" Header="Battle Simulator">
                 <StackPanel Orientation="Horizontal">
                     <!--  Input table  -->
-                    <StackPanel DataContext="{Binding BattleCalculatorInputViewModel}" Orientation="Vertical">
-                        <local:BattleInputTable x:Name="BattleInputTable" />
+                    <StackPanel Orientation="Vertical">
+                        <local:BattleInputTable DataContext="{Binding BattleSimulatorInputViewModel}"/>
                         <Button
                             Margin="5,5"
-                            Command="{Binding OpenImportUnitsCommand}"
                             Content="Import scout report" />
                     </StackPanel>
 
                     <!--  Result Grid  -->
-                    <StackPanel DataContext="{Binding BattleResultViewModel}" Orientation="Vertical">
+                    <StackPanel Orientation="Vertical">
                         <!--  Attack Grid  -->
-                        <local:BattleResultTable x:Name="AttackBattleResultTable" DataContext="{Binding AttackBattleResultTable}" />
+                        <local:BattleResultTable  DataContext="{Binding AttackBattleResultTable}" />
 
                         <!--  Defend Grid  -->
-                        <local:BattleResultTable x:Name="DefenseBattleResultTable" DataContext="{Binding DefenseBattleResultTable}" />
+                        <local:BattleResultTable DataContext="{Binding DefenseBattleResultTable}" />
                     </StackPanel>
                 </StackPanel>
             </TabItem>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CalculationTools.Core.BattleSimulator;
 
 namespace CalculationTools.Core
 {
@@ -170,12 +171,12 @@ namespace CalculationTools.Core
                 Paladin = GameData.GetUnitsKilled(Paladin, killRate),
             };
         }
-        public List<BattleResultValue> ToBattleResultList()
+        public List<BattleResultValueViewModel> ToBattleResultList()
         {
-            List<BattleResultValue> list = new List<BattleResultValue>();
+            List<BattleResultValueViewModel> list = new List<BattleResultValueViewModel>();
             foreach (int value in UnitList)
             {
-                list.Add(new BattleResultValue(value));
+                list.Add(new BattleResultValueViewModel(value));
             }
             return list;
         }

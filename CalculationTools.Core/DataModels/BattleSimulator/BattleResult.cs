@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CalculationTools.Core
+namespace CalculationTools.Core.BattleSimulator
 {
     public class BattleResult
     {
@@ -39,14 +39,14 @@ namespace CalculationTools.Core
 
         #region ResultList
 
-        public List<BattleResultValue> ListOfAtkNumbers => AtkUnits.ToBattleResultList();
-        public List<BattleResultValue> ListOfAtkLostNumbers => AtkUnitsLost.ToBattleResultList();
-        public List<BattleResultValue> ListOfAtkLeftNumbers => AtkUnitsLeft.ToBattleResultList();
+        public List<BattleResultValueViewModel> ListOfAtkNumbers => AtkUnits.ToBattleResultList();
+        public List<BattleResultValueViewModel> ListOfAtkLostNumbers => AtkUnitsLost.ToBattleResultList();
+        public List<BattleResultValueViewModel> ListOfAtkLeftNumbers => AtkUnitsLeft.ToBattleResultList();
 
 
-        public List<BattleResultValue> ListOfDefNumbers => DefUnits.ToBattleResultList();
-        public List<BattleResultValue> ListOfDefLostNumbers => DefUnitsLost.ToBattleResultList();
-        public List<BattleResultValue> ListOfDefLeftNumbers => DefUnitsLeft.ToBattleResultList();
+        public List<BattleResultValueViewModel> ListOfDefNumbers => DefUnits.ToBattleResultList();
+        public List<BattleResultValueViewModel> ListOfDefLostNumbers => DefUnitsLost.ToBattleResultList();
+        public List<BattleResultValueViewModel> ListOfDefLeftNumbers => DefUnitsLeft.ToBattleResultList();
 
         #endregion
 

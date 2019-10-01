@@ -1,45 +1,202 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using CalculationTools.Core;
+using CalculationTools.Core.BattleSimulator;
 
-namespace CalculationTools.App
+namespace CalculationTools.Core
 {
-    public class CalculatorData : INotifyPropertyChanged
+    public static class GameData
     {
+        #region Units
 
-        private BattleResult _lastBattleResult = new BattleResult();
+        public static Archer Archer { get; } = new Archer();
+        public static AxeFighter AxeFighter { get; } = new AxeFighter();
+        public static Berserker Berserker { get; } = new Berserker();
+        public static Catapult Catapult { get; } = new Catapult();
+        public static HeavyCavalry HeavyCavalry { get; } = new HeavyCavalry();
+        public static LightCavalry LightCavalry { get; } = new LightCavalry();
+        public static MountedArcher MountedArcher { get; } = new MountedArcher();
+        public static Nobleman Nobleman { get; } = new Nobleman();
+        public static Paladin Paladin { get; } = new Paladin();
+        public static Ram Ram { get; } = new Ram();
+        public static Spearman Spearman { get; } = new Spearman();
+        public static Swordsman Swordsman { get; } = new Swordsman();
+        public static Trebuchet Trebuchet { get; } = new Trebuchet();
+        #endregion
 
-        public BattleResult LastBattleResult
+        #region Buildings
+
+        public static Wall Wall { get; } = new Wall();
+
+        #endregion
+
+        #region Weapons
+
+        public static ArcherWeapon ArcherWeapon { get; } = new ArcherWeapon();
+        public static AxeFighterWeapon AxeFighterWeapon { get; } = new AxeFighterWeapon();
+        public static CatapultWeapon CatapultWeapon { get; } = new CatapultWeapon();
+        public static HeavyCavalryWeapon HeavyCavalryWeapon { get; } = new HeavyCavalryWeapon();
+        public static LightCavalryWeapon LightCavalryWeapon { get; } = new LightCavalryWeapon();
+        public static MountedArcherWeapon MountedArcherWeapon { get; } = new MountedArcherWeapon();
+        public static RamWeapon RamWeapon { get; } = new RamWeapon();
+        public static SpearmanWeapon SpearmanWeapon { get; } = new SpearmanWeapon();
+        public static SwordsmanWeapon SwordsmanWeapon { get; } = new SwordsmanWeapon();
+        public static decimal GetAtkModifierFromWeapon(UnitType belongsToUnitType, int weaponLevel)
         {
-            get => _lastBattleResult;
-            set
+            foreach (BaseWeapon weapon in WeaponOptions)
             {
-                _lastBattleResult = value;
-                OnPropertyChanged();
+                if (weapon.BelongsToUnitType == belongsToUnitType)
+                {
+                    return weapon.GetAtkModifier(weaponLevel);
+                }
+            }
 
+            return 1m;
+        }
+
+        public static decimal GetDefModifierFromWeapon(UnitType belongsToUnitType, int weaponLevel)
+        {
+            foreach (BaseWeapon weapon in WeaponOptions)
+            {
+                if (weapon.BelongsToUnitType == belongsToUnitType)
+                {
+                    return weapon.GetDefModifier(weaponLevel);
+                }
+            }
+
+            return 1m;
+        }
+
+        #endregion
+
+        #region Fields
+
+        public static List<UnitType> UnitTypeList = new List<UnitType>
+        {
+            UnitType.Spearman,
+            UnitType.Swordsman,
+            UnitType.AxeFighter,
+            UnitType.Archer,
+            UnitType.LightCavalry,
+            UnitType.MountedArcher,
+            UnitType.HeavyCavalry,
+            UnitType.Ram,
+            UnitType.Catapult,
+            UnitType.Berserker,
+            UnitType.Trebuchet,
+            UnitType.Nobleman,
+            UnitType.Paladin,
+        };
+
+        #endregion Fields
+
+        #region Properties
+
+        public static List<FaithLevel> FaithOptions { get; } = new List<FaithLevel>
+        {
+            new FaithLevel
+            {
+                Code ="Faith_0",
+                Name = "None",
+                Modifier = 0.5m
+            },
+            new FaithLevel
+            {
+                Code ="Faith_1",
+                Name = "Chapel",
+                Modifier = 1m
+            },
+            new FaithLevel
+            {
+                Code ="Faith_2",
+                Name = "Church Level 1",
+                Modifier = 1m
+            },
+            new FaithLevel
+            {
+                Code ="Faith_3",
+                Name = "Church Level 2",
+                Modifier = 1.05m,
+
+            },
+            new FaithLevel
+            {
+                Code ="Faith_4",
+                Name = "Church Level 3",
+                Modifier = 1.1m
+            }
+        };
+
+        public static int NumberOfUnits => UnitList.Count;
+
+        public static ObservableCollection<UnitRow> UnitImageList
+        {
+            get
+            {
+                ObservableCollection<UnitRow> unitImageList = new ObservableCollection<UnitRow>();
+
+                foreach (BaseUnit baseUnit in UnitList)
+                {
+                    unitImageList.Add(new UnitRow
+                    {
+                        ImagePath = baseUnit.ImagePath,
+                        Name = baseUnit.Name,
+                    });
+                }
+
+                return unitImageList;
             }
         }
 
-        private BattleResultViewModel _battleResultViewModel;
-
-        public CalculatorData()
+        public static List<BaseUnit> UnitList => new List<BaseUnit>
         {
-
-        }
-        public CalculatorData(BattleResultViewModel BattleResultViewModel)
+            Spearman,
+            Swordsman,
+            AxeFighter,
+            Archer,
+            LightCavalry,
+            MountedArcher,
+            HeavyCavalry,
+            Ram,
+            Catapult,
+            Berserker,
+            Trebuchet,
+            Nobleman,
+            Paladin,
+        };
+        public static List<BaseWeapon> WeaponOptions { get; } = new List<BaseWeapon>
         {
-            _battleResultViewModel = BattleResultViewModel;
+            new EmptyWeapon(),
+            SpearmanWeapon,
+            SwordsmanWeapon,
+            AxeFighterWeapon,
+            ArcherWeapon,
+            LightCavalryWeapon,
+            MountedArcherWeapon,
+            HeavyCavalryWeapon,
+            RamWeapon,
+            CatapultWeapon
+        };
+
+        #endregion Properties
+
+        #region Methods
+
+        public static BaseUnit GetUnit(UnitType unitType)
+        {
+            if (unitType == UnitType.None) return null;
+
+            return UnitList.First(unit => unit.UnitType == unitType);
         }
 
+        #region BattleSimulation
 
-        public int PreRound(ref BattleResult result, WeaponSet atkWeapon)
+        public static int PreRound(ref BattleResult result, WeaponSet atkWeapon)
         {
             // Based on https://en.forum.tribalwars2.com/index.php?threads/unraveling-some-myths-regarding-the-battle-engine.3959/
 
-            int wallLevel = result.WallLevelBefore;
+            int wallLevel = Math.Clamp(result.WallLevelBefore, 0, 20);
             decimal atkModifier = result.AtkBattleModifier / 100m;
             int ironWall = 0; //TODO Need to make an battleCalculatorInput that takes the Tribe skill Iron wall into account
             decimal paladinModifier = (atkWeapon.BelongsToUnitType == UnitType.Ram ? atkWeapon.AtkModifier : 0) + 1;
@@ -65,8 +222,13 @@ namespace CalculationTools.App
             int wallHitPoints = (GameData.Wall.GetHitPoints(wallLevel) * 2);
 
             // This is the net wall damage done by the rams
-            decimal wallDamage = (atkUnits.Ram * ramRatio * atkModifier * paladinModifier) / wallHitPoints > 0 ? wallHitPoints : 0.0001m;
+            decimal wallDamage = (atkUnits.Ram * ramRatio * atkModifier * paladinModifier);
 
+            // If wallHitPoints is not zero then divide by
+            if (wallHitPoints > 0)
+            {
+                wallDamage /= wallHitPoints;
+            }
 
             // Calculate the new wall level after damage applied
             int resultingWallLevel;
@@ -94,7 +256,7 @@ namespace CalculationTools.App
 
         }
 
-        public void PostBattle(ref BattleResult result, WeaponSet atkWeapon)
+        public static void PostBattle(ref BattleResult result, WeaponSet atkWeapon)
         {
             if (result.WallLevelAfter == 0)
             {
@@ -112,7 +274,7 @@ namespace CalculationTools.App
             // Calculate the new wall level after damage applied
             int finalWallLevel;
             int afterBattleWall = result.WallLevelAfter;
-            int ironWall = 0; //TODO Need to make an battleCalculatorInput that takes the Tribe skill Iron wall into account
+            int ironWall = 0; //TODO Need to make an battleSimulatorInput that takes the Tribe skill Iron wall into account
             // If the wall is already below the Iron Wall threshold then don't change anything. 
             if (afterBattleWall <= ironWall)
             {
@@ -133,22 +295,20 @@ namespace CalculationTools.App
             result.WallLevelAfter = finalWallLevel;
 
         }
-        public void SimulateBattle(BattleInputTableViewModel battleCalculatorInput)
+        public static BattleResult SimulateBattle(BattleSimulatorInputViewModel battleSimulatorInput)
         {
-
-
             // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
             // Based on: Battle Simulator - http://www.ds-pro.de/2/simulator.php
-            BattleResult result = battleCalculatorInput.ToBattleResult();
+            BattleResult result = battleSimulatorInput.ToBattleResult();
 
-            decimal atkFaithBonus = battleCalculatorInput.InputAtkChurch.Modifier;
-            decimal defFaithBonus = battleCalculatorInput.InputDefChurch.Modifier;
-            decimal morale = battleCalculatorInput.InputMorale / 100m;
-            decimal luck = 1m + (battleCalculatorInput.InputLuck / 100m);
-            decimal nightBonus = (battleCalculatorInput.InputNightBonus ? 2m : 1m);
-            decimal officerBonus = (battleCalculatorInput.InputGrandmasterBonus ? 0.1m : 0m);
-            WeaponSet paladinAtkWeapon = battleCalculatorInput.GetAtkWeapon();
-            WeaponSet paladinDefWeapon = battleCalculatorInput.GetDefWeapon();
+            decimal atkFaithBonus = battleSimulatorInput.InputAtkChurch.Modifier;
+            decimal defFaithBonus = battleSimulatorInput.InputDefChurch.Modifier;
+            decimal morale = battleSimulatorInput.InputMorale / 100m;
+            decimal luck = 1m + (battleSimulatorInput.InputLuck / 100m);
+            decimal nightBonus = (battleSimulatorInput.InputNightBonus ? 2m : 1m);
+            decimal officerBonus = (battleSimulatorInput.InputGrandmasterBonus ? 0.1m : 0m);
+            WeaponSet paladinAtkWeapon = battleSimulatorInput.GetAtkWeapon();
+            WeaponSet paladinDefWeapon = battleSimulatorInput.GetDefWeapon();
 
 
             decimal atkModifier = GameData.GetAtkBattleModifier(atkFaithBonus, morale, luck, officerBonus);
@@ -162,13 +322,9 @@ namespace CalculationTools.App
 
 
             // Stop here if there are no units given
-            if (!battleCalculatorInput.IsValid)
+            if (!battleSimulatorInput.IsValid)
             {
-                LastBattleResult = result;
-
-                _battleResultViewModel.UpdateBattleResult(LastBattleResult);
-
-                return;
+                return result;
             }
 
             List<BattleResult> BattleHistory = new List<BattleResult> { result.Copy() };
@@ -384,20 +540,128 @@ namespace CalculationTools.App
             // Simulate the post battle calculations
             PostBattle(ref finalResult, paladinAtkWeapon);
 
-            LastBattleResult = finalResult;
-            _battleResultViewModel.UpdateBattleResult(LastBattleResult);
-
+            return finalResult;
         }
 
 
 
+        #endregion
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion Methods
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        #region Formulas
+        public static int AddAtkModifier(int atkStrength, decimal atkModifier)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return (int)Math.Round(atkStrength * atkModifier, MidpointRounding.AwayFromZero);
         }
+
+        public static int AddDefModifier(int defStrength, decimal defModifier)
+        {
+            return AddAtkModifier(defStrength, defModifier);
+        }
+
+        public static decimal GetAtkBattleModifier(decimal faithBonus, decimal morale, decimal luck, decimal officerBonus)
+        {
+            // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
+            // Math round is important 0.545 -> 0.55
+            decimal y = Math.Round(faithBonus * morale * luck, 2, MidpointRounding.AwayFromZero);
+            return 1m * y + officerBonus;
+        }
+
+        public static int GetAtkFightingPower(int numberOfUnits, UnitType unitType, WeaponSet weapon)
+        {
+            int FightingPower = GetUnit(unitType)?.FightingPower ?? 0;
+            // paladin Modifier is in percentage 0.15, 0.3 etc so add 1
+            decimal paladinModifier = (unitType == weapon.BelongsToUnitType ? weapon.AtkModifier : 0) + 1;
+
+            decimal fightingPower = FightingPower * paladinModifier;
+            return (int)Math.Round(numberOfUnits * fightingPower, MidpointRounding.AwayFromZero);
+        }
+
+        public static decimal GetAtkKillRate(int atkStrength, int defStrength)
+        {
+            if (atkStrength <= 0 || defStrength <= 0)
+            {
+                return 0;
+            }
+
+            decimal atkDefRatio = Math.Round(atkStrength / (decimal)defStrength, 9, MidpointRounding.AwayFromZero);
+            decimal defKillRate = atkStrength <= defStrength ? 1 : (decimal)Math.Sqrt(1 / (double)atkDefRatio) / atkDefRatio;
+
+            return Math.Round(defKillRate, 6, MidpointRounding.AwayFromZero);
+        }
+
+        public static decimal GetDefBattleModifier(decimal faithBonus, int wallLevel, decimal nightBonus)
+        {
+            // 5% for every wall level
+            decimal wallBonus = 1m + wallLevel * 0.05m;
+            // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
+            // Math round is important 0.545 -> 0.55
+            decimal y = Math.Round(faithBonus * wallBonus * nightBonus, 2, MidpointRounding.AwayFromZero);
+            return 1m * y;
+        }
+
+        public static decimal GetDefKillRate(int atkStrength, int defStrength)
+        {
+            if (atkStrength <= 0 || defStrength <= 0)
+            {
+                return 0;
+            }
+
+            decimal atkDefRatio = Math.Round(defStrength / (decimal)atkStrength, 9, MidpointRounding.AwayFromZero);
+            decimal atkKillRate = defStrength <= atkStrength ? 1 : (decimal)Math.Sqrt(1 / (double)atkDefRatio) / atkDefRatio;
+
+            return Math.Round(atkKillRate, 6, MidpointRounding.AwayFromZero);
+        }
+
+        public static int GetRamsKilled(int numberOfRams, int numberOfCatapults, int numberOfTrebuchet)
+        {
+            decimal totalSiege = numberOfRams + (decimal)numberOfCatapults;
+            if (totalSiege == 0)
+            {
+                return 0;
+            }
+            decimal x = numberOfTrebuchet * (numberOfRams / totalSiege);
+            return (int)Math.Round(x, MidpointRounding.AwayFromZero);
+        }
+
+        public static decimal GetUnitProvisionRatio(int unitProvisions, int totalUnitProvisions)
+        {
+            if (totalUnitProvisions <= 0)
+            {
+                return 0;
+            }
+            decimal x = unitProvisions / (decimal)totalUnitProvisions;
+            return Math.Round(x, 6, MidpointRounding.AwayFromZero);
+        }
+
+        public static int GetUnitRatio(decimal ratio, int numberOfUnits)
+        {
+            decimal unitRatio = ratio * (decimal)numberOfUnits;
+            int unitCount = (int)Math.Round(unitRatio, MidpointRounding.AwayFromZero);
+            return unitCount;
+        }
+
+        /// <summary>
+        /// Applies the killRate to the number of units and returns the number of killed units.
+        /// </summary>
+        /// <param name="numberOfUnits"></param>
+        /// <param name="killRate"></param>
+        /// <returns></returns>
+        public static int GetUnitsKilled(int numberOfUnits, decimal killRate)
+        {
+            decimal x = numberOfUnits * killRate;
+            return (int)Math.Round(x + 0.000001m, MidpointRounding.AwayFromZero);
+        }
+        public static int GetWallDefense(int wallLevel)
+        {
+            if (wallLevel == 0)
+            {
+                return 0;
+            }
+            return (int)Math.Round(Math.Pow(1.2515, wallLevel - 1) * 20, MidpointRounding.AwayFromZero);
+
+        }
+        #endregion
     }
 }

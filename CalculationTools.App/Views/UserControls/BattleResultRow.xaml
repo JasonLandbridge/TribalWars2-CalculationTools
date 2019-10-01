@@ -21,6 +21,7 @@
             MinWidth="100"
             Margin="0,5"
             Content="{Binding Header}" />
+
         <!--  Unit Amount row  -->
         <ItemsControl
             Grid.Row="0"

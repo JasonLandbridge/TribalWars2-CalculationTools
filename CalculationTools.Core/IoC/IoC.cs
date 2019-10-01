@@ -46,8 +46,20 @@ namespace CalculationTools.Core
         {
             // Binds to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
+
+            Kernel.Bind<BattleSimulatorViewModel>().ToConstant(new BattleSimulatorViewModel());
         }
 
+
+        public static ApplicationViewModel GetApplicationViewModel()
+        {
+            return Get<ApplicationViewModel>();
+        }
+
+        public static BattleSimulatorViewModel GetBattleSimulatorViewModel()
+        {
+            return Get<BattleSimulatorViewModel>();
+        }
         #endregion Methods
     }
 }

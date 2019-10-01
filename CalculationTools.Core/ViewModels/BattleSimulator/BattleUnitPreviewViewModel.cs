@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using CalculationTools.Core;
 using CalculationTools.Core.Base;
 
-namespace CalculationTools.App
+namespace CalculationTools.Core.BattleSimulator
 {
     public class BattleUnitPreviewViewModel : BaseViewModel
     {

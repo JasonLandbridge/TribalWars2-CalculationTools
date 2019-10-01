@@ -21,6 +21,7 @@ namespace CalculationTools.App
         public BattleInputTable()
         {
             InitializeComponent();
+            //TODO fix to static resource
             UnitsInputImageRows.ItemsSource = GameData.UnitImageList;
             InputComboChurchAtk.ItemsSource = GameData.FaithOptions;
             InputComboChurchDef.ItemsSource = GameData.FaithOptions;
@@ -40,7 +41,6 @@ namespace CalculationTools.App
         {
             if (e != null && e.AddedItems.Count > 0)
             {
-                //BattleCalculatorInputViewModel.InputAtkChurch = e.AddedItems[0] as FaithLevel;
                 UpdateValueChanged(this, EventArgs.Empty);
             }
         }
@@ -49,7 +49,6 @@ namespace CalculationTools.App
         {
             if (e != null && e.AddedItems.Count > 0)
             {
-                //BattleCalculatorInputViewModel.InputDefChurch = e.AddedItems[0] as FaithLevel;
                 UpdateValueChanged(this, EventArgs.Empty);
             }
         }

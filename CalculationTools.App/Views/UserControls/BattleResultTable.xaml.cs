@@ -11,7 +11,7 @@ namespace CalculationTools.App
         public BattleResultTable()
         {
             InitializeComponent();
-            UnitImageRow.ItemsSource = GameData.UnitImageList;
+            UnitImageRow.ItemsSource = GameData.UnitImageList; //TODO fix this to a binding
         }
 
         #endregion Constructors
