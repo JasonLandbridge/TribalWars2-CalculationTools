@@ -31,7 +31,7 @@
             </StatusBarItem>
         </StatusBar>
         <!--  Main Grid  -->
-        <GroupBox DockPanel.Dock="Left" Header="Battle Calculations">
+        <GroupBox DockPanel.Dock="Left" Header="Battle Simulator">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -81,7 +81,10 @@
                     </StackPanel>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Unit Counter" />
+            <TabItem Header="Unit Calculator" />
+            <TabItem Header="Building Calculator" />
+            <TabItem Header="Loyalty Calculator" />
+
         </TabControl>
 
     </DockPanel>

@@ -1,4 +1,6 @@
-﻿namespace CalculationTools.Core
+﻿using CalculationTools.Core.Base;
+
+namespace CalculationTools.Core
 {
     public class UnitRow : BaseViewModel
     {

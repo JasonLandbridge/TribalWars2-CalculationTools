@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CalculationTools.Core;
+using CalculationTools.Core.Base;
 
 namespace CalculationTools.App
 {

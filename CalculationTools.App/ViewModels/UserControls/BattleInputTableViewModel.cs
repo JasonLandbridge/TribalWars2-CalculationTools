@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using CalculationTools.Core;
+using CalculationTools.Core.Base;
 
 namespace CalculationTools.App
 {

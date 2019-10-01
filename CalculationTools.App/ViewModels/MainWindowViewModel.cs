@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using CalculationTools.Core;
+using CalculationTools.Core.Base;
 
 namespace CalculationTools.App
 {
