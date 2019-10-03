@@ -4,7 +4,7 @@ namespace CalculationTools.Core
 {
     public class EmptyWeapon : BaseWeapon
     {
-        public override string Code { get; } = " - ";
+        public override string Code { get; } = "     -     ";
 
         public override List<WeaponModifier> WeaponModifiers { get; } = new List<WeaponModifier>
         {

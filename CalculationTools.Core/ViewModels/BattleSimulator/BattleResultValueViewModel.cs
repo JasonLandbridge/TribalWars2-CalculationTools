@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Windows.Media;
 using CalculationTools.Core.Base;
 
-namespace CalculationTools.Core.BattleSimulator
+namespace CalculationTools.Core
 {
     public class BattleResultValueViewModel : BaseViewModel
     {
@@ -59,6 +59,10 @@ namespace CalculationTools.Core.BattleSimulator
                 return Value.ToString();
             }
         }
+
+        public Color ValueColor { get; set; } = Colors.Black;
+
+        public SolidColorBrush ValueColorBrush => new SolidColorBrush(ValueColor);
 
         #endregion Properties
 

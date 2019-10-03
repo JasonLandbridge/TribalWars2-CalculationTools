@@ -11,12 +11,6 @@ namespace CalculationTools.App
     /// </summary>
     public partial class PaladinWeaponSelect : UserControl
     {
-        #region Fields
-
-        #endregion Fields
-
-
-
         public int WeaponLevel
         {
             get => (int)GetValue(WeaponLevelProperty);

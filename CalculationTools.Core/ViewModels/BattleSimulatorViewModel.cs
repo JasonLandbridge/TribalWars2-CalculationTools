@@ -3,6 +3,7 @@ using CalculationTools.Core.BattleSimulator;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows.Media;
 using System.Windows.Input;
 
 namespace CalculationTools.Core
@@ -108,6 +109,12 @@ namespace CalculationTools.Core
             battleResultList.ForEach(x => x.AbbreviateValue = abbreviateValue);
             return battleResultList;
         }
+        public List<BattleResultValueViewModel> SetNumberColor(List<BattleResultValueViewModel> battleResultList, Color valueColor)
+        {
+            battleResultList.ForEach(x => x.ValueColor = valueColor);
+            return battleResultList;
+        }
+
 
         public void SetupBattleResult()
         {
@@ -147,7 +154,7 @@ namespace CalculationTools.Core
 
             // Set values for the AttackResultTable
             AttackBattleResultTable.UnitAmount.BattleResultValues = battleResult.ListOfAtkNumbers;
-            AttackBattleResultTable.UnitLost.BattleResultValues = battleResult.ListOfAtkLostNumbers;
+            AttackBattleResultTable.UnitLost.BattleResultValues = SetNumberColor(battleResult.ListOfAtkLostNumbers, Colors.Red);
             AttackBattleResultTable.UnitsLostWood.BattleResultValues = SetNumberFormat(battleResult.ListOfAtkLostWood, true);
             AttackBattleResultTable.UnitsLostClay.BattleResultValues = SetNumberFormat(battleResult.ListOfAtkLostClay, true);
             AttackBattleResultTable.UnitsLostIron.BattleResultValues = SetNumberFormat(battleResult.ListOfAtkLostIron, true);
@@ -155,7 +162,7 @@ namespace CalculationTools.Core
 
             // Set values for the DefenseResultTable
             DefenseBattleResultTable.UnitAmount.BattleResultValues = battleResult.ListOfDefNumbers;
-            DefenseBattleResultTable.UnitLost.BattleResultValues = battleResult.ListOfDefLostNumbers;
+            DefenseBattleResultTable.UnitLost.BattleResultValues = SetNumberColor(battleResult.ListOfDefLostNumbers, Colors.Red);
             DefenseBattleResultTable.UnitsLostWood.BattleResultValues = SetNumberFormat(battleResult.ListOfDefLostWood, true);
             DefenseBattleResultTable.UnitsLostClay.BattleResultValues = SetNumberFormat(battleResult.ListOfDefLostClay, true);
             DefenseBattleResultTable.UnitsLostIron.BattleResultValues = SetNumberFormat(battleResult.ListOfDefLostIron, true);

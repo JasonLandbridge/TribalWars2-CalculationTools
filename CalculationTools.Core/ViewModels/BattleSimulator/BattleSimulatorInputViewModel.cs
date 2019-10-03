@@ -107,9 +107,9 @@ namespace CalculationTools.Core.BattleSimulator
         {
             InputGrandmasterBonus = false;
             InputAtkWeaponLevel = 1;
-            InputAtkWeapon = new EmptyWeapon();
+            InputAtkWeapon = GameData.WeaponOptions[0];
             InputDefWeaponLevel = 1;
-            InputDefWeapon = new EmptyWeapon();
+            InputDefWeapon = GameData.WeaponOptions[0];
             InputAtkChurch = GameData.FaithOptions[1];
             InputDefChurch = GameData.FaithOptions[1];
             InputLuck = 0;

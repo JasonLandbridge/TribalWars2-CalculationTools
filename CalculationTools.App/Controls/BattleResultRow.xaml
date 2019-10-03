@@ -39,7 +39,8 @@
                         MaxWidth="50"
                         Margin="2.5,5"
                         HorizontalContentAlignment="Center"
-                        Content="{Binding ValueFormatted}"/>
+                        Content="{Binding ValueFormatted}"
+                        Foreground="{Binding ValueColorBrush, FallbackValue=#FF000000}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

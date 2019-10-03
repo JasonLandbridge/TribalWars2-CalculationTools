@@ -27,10 +27,11 @@
                     x:Name="UnitModifier"
                     Grid.Row="0"
                     Grid.Column="0"
-                    Width="100"
+                    Width="50"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="{Binding BattleModifier}" />
+                    Content="{Binding BattleModifier}"
+                    ContentStringFormat=" {0}%"/>
                 <ItemsControl
                     x:Name="UnitImageRow"
                     Grid.Row="0"
