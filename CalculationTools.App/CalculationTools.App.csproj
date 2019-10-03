@@ -153,13 +153,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\UserControls\PaladinWeaponSelect.xaml.cs">
+    <Compile Update="Controls\PaladinWeaponSelect.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Views\UserControls\PaladinWeaponSelect.xaml">
+    <Page Update="Controls\PaladinWeaponSelect.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

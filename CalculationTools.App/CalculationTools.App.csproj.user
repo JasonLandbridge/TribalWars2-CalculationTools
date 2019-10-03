@@ -8,19 +8,19 @@
     <Compile Update="Views\UnitImportWidow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UserControls\BattleResultRow.xaml.cs">
+    <Compile Update="Controls\BattleResultRow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UserControls\BattleResultTable.xaml.cs">
+    <Compile Update="Controls\BattleResultTable.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UserControls\BattleUnitPreview.xaml.cs">
+    <Compile Update="Controls\BattleUnitPreview.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UserControls\InputRowHeader.xaml.cs">
+    <Compile Update="Controls\InputRowHeader.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\UserControls\BattleInputTable.xaml.cs">
+    <Compile Update="Controls\BattleInputTable.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -31,22 +31,22 @@
     <Page Update="Views\UnitImportWidow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UserControls\BattleResultRow.xaml">
+    <Page Update="Controls\BattleResultRow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UserControls\BattleResultTable.xaml">
+    <Page Update="Controls\BattleResultTable.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UserControls\BattleUnitPreview.xaml">
+    <Page Update="Controls\BattleUnitPreview.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UserControls\PaladinWeaponSelect.xaml">
+    <Page Update="Controls\PaladinWeaponSelect.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UserControls\InputRowHeader.xaml">
+    <Page Update="Controls\InputRowHeader.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\UserControls\BattleInputTable.xaml">
+    <Page Update="Controls\BattleInputTable.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
