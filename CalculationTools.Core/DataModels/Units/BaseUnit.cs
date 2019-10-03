@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using CalculationTools.Core.Enums;
 
 namespace CalculationTools.Core
 {
@@ -11,10 +12,29 @@ namespace CalculationTools.Core
 
         public abstract UnitType UnitType { get; set; }
 
-        /*Unit Cost*/
+        #region Unit Cost
+
+        /// <summary>
+        /// The cost of Wood for this unit.
+        /// </summary>
         public abstract int WoodCost { get; }
+
+        /// <summary>
+        /// The cost of Clay for this unit.
+        /// </summary>
         public abstract int ClayCost { get; }
+
+        /// <summary>
+        /// The cost of Iron for this unit.
+        /// </summary>
         public abstract int IronCost { get; }
+
+        /// <summary>
+        /// Returns a ResourceSet with the cost of this unit
+        /// </summary>
+        public ResourceSet ResourceCost => new ResourceSet(WoodCost, ClayCost, IronCost);
+        #endregion
+
         public abstract int ProvisionCost { get; }
 
         /*Fight values*/

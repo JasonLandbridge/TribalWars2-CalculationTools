@@ -61,9 +61,9 @@ namespace CalculationTools.Core.BattleSimulator
             }
 
 
-            ObservableCollection<BattleResultValueViewModel> unitAmountRow = new ObservableCollection<BattleResultValueViewModel>();
-            ObservableCollection<BattleResultValueViewModel> unitLostRow = new ObservableCollection<BattleResultValueViewModel>();
-            ObservableCollection<BattleResultValueViewModel> unitLeftRow = new ObservableCollection<BattleResultValueViewModel>();
+            List<BattleResultValueViewModel> unitAmountRow = new List<BattleResultValueViewModel>();
+            List<BattleResultValueViewModel> unitLostRow = new List<BattleResultValueViewModel>();
+            List<BattleResultValueViewModel> unitLeftRow = new List<BattleResultValueViewModel>();
 
             for (int i = 0; i < rowData.Count; i += 3)
             {

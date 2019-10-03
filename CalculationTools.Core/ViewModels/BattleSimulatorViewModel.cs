@@ -1,6 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using CalculationTools.Core.Base;
 using CalculationTools.Core.BattleSimulator;
 
@@ -105,15 +107,27 @@ namespace CalculationTools.Core
             AttackBattleResultTable.Header = "Attacking Units";
             DefenseBattleResultTable.Header = "Defending Units";
 
-            AttackBattleResultTable.UnitAmount.Header = "Amount";
-            AttackBattleResultTable.UnitLost.Header = "Losses";
-            AttackBattleResultTable.UnitsLeft.Header = "Survivors";
+
+            List<string> headers = new List<string>
+            {
+                "Amount",
+                "Losses",
+                "Wood Loss",
+                "Clay Loss",
+                "Iron Loss",
+                "Survivors",
+                "Wall"
+            };
+
+            for (int i = 0; i < AttackBattleResultTable.TableRows.Count; i++)
+            {
+                AttackBattleResultTable.TableRows[i].Header = headers[i];
+                DefenseBattleResultTable.TableRows[i].Header = headers[i];
+            }
+
             AttackBattleResultTable.ShowWallResult = false;
 
-            DefenseBattleResultTable.UnitAmount.Header = "Amount";
-            DefenseBattleResultTable.UnitLost.Header = "Losses";
-            DefenseBattleResultTable.UnitsLeft.Header = "Survivors";
-            DefenseBattleResultTable.WallResult.Header = "Wall";
+            //
             DefenseBattleResultTable.WallResult.BattleResultValues = null;
             DefenseBattleResultTable.ShowWallResult = true;
         }
@@ -126,14 +140,28 @@ namespace CalculationTools.Core
 
             DefenseBattleResultTable.WallResult.Content = battleResult.WallResult;
 
-            AttackBattleResultTable.UnitAmount.BattleResultValues = new ObservableCollection<BattleResultValueViewModel>(battleResult.ListOfAtkNumbers);
-            AttackBattleResultTable.UnitLost.BattleResultValues = new ObservableCollection<BattleResultValueViewModel>(battleResult.ListOfAtkLostNumbers);
-            AttackBattleResultTable.UnitsLeft.BattleResultValues = new ObservableCollection<BattleResultValueViewModel>(battleResult.ListOfAtkLeftNumbers);
+            // Set values for the AttackResultTable
+            AttackBattleResultTable.UnitAmount.BattleResultValues = battleResult.ListOfAtkNumbers;
+            AttackBattleResultTable.UnitLost.BattleResultValues = battleResult.ListOfAtkLostNumbers;
+            AttackBattleResultTable.UnitsLostWood.BattleResultValues = SetNumberFormat(battleResult.ListOfAtkLostWood, true);
+            AttackBattleResultTable.UnitsLostClay.BattleResultValues = SetNumberFormat(battleResult.ListOfAtkLostClay, true);
+            AttackBattleResultTable.UnitsLostIron.BattleResultValues = SetNumberFormat(battleResult.ListOfAtkLostIron, true);
+            AttackBattleResultTable.UnitsLeft.BattleResultValues = battleResult.ListOfAtkLeftNumbers;
 
-            DefenseBattleResultTable.UnitAmount.BattleResultValues = new ObservableCollection<BattleResultValueViewModel>(battleResult.ListOfDefNumbers);
-            DefenseBattleResultTable.UnitLost.BattleResultValues = new ObservableCollection<BattleResultValueViewModel>(battleResult.ListOfDefLostNumbers);
-            DefenseBattleResultTable.UnitsLeft.BattleResultValues = new ObservableCollection<BattleResultValueViewModel>(battleResult.ListOfDefLeftNumbers);
+            // Set values for the DefenseResultTable
+            DefenseBattleResultTable.UnitAmount.BattleResultValues = battleResult.ListOfDefNumbers;
+            DefenseBattleResultTable.UnitLost.BattleResultValues = battleResult.ListOfDefLostNumbers;
+            DefenseBattleResultTable.UnitsLostWood.BattleResultValues = SetNumberFormat(battleResult.ListOfDefLostWood, true);
+            DefenseBattleResultTable.UnitsLostClay.BattleResultValues = SetNumberFormat(battleResult.ListOfDefLostClay, true);
+            DefenseBattleResultTable.UnitsLostIron.BattleResultValues = SetNumberFormat(battleResult.ListOfDefLostIron, true);
+            DefenseBattleResultTable.UnitsLeft.BattleResultValues = battleResult.ListOfDefLeftNumbers;
 
+        }
+
+        public List<BattleResultValueViewModel> SetNumberFormat(List<BattleResultValueViewModel> battleResultList, bool abbreviateValue)
+        {
+            battleResultList.ForEach(x => x.AbbreviateValue = abbreviateValue);
+            return battleResultList;
         }
 
         #endregion Methods

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CalculationTools.Core.BattleSimulator;
+using CalculationTools.Core.Enums;
 
 namespace CalculationTools.Core
 {
@@ -165,6 +166,12 @@ namespace CalculationTools.Core
             Nobleman,
             Paladin,
         };
+
+        /// <summary>
+        /// Returns a list of Resource Costs for all units.
+        /// </summary>
+        public static List<ResourceSet> UnitCostList => UnitList.Select(unit => unit.ResourceCost).ToList();
+
         public static List<BaseWeapon> WeaponOptions { get; } = new List<BaseWeapon>
         {
             new EmptyWeapon(),

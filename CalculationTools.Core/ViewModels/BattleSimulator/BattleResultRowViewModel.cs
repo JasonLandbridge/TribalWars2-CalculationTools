@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CalculationTools.Core.Base;
 
 namespace CalculationTools.Core.BattleSimulator
@@ -7,9 +8,10 @@ namespace CalculationTools.Core.BattleSimulator
     {
         #region Properties
 
-        public ObservableCollection<BattleResultValueViewModel> BattleResultValues { get; set; } = BattleResultValueViewModel.GetEmptyObservableCollection();
+        public List<BattleResultValueViewModel> BattleResultValues { get; set; } = BattleResultValueViewModel.GetEmptyList();
         public string Content { get; set; }
         public string Header { get; set; }
+
         public bool Show { get; set; }
 
         #endregion Properties
