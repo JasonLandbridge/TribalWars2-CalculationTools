@@ -43,18 +43,17 @@ namespace CalculationTools.Core.BattleSimulator
                 {
                     switch (Value)
                     {
-                        //1.000.001 - 100.000.000.000
-                        case int n when (n >= 1000000000):
-                            return Value.ToString("###,##0,,M", CultureInfo.InstalledUICulture);
+                        //100.000.000 - 100.000.000.000
+                        case int n when (n >= 100000000):
+                            return Value.ToString("###,##0,,M", CultureInfo.InvariantCulture);
 
-                        //10.001 - 100.000
+                        //100.000 - 999.999
                         case int n when (n >= 100000):
-                            return Value.ToString("#,##0,K", CultureInfo.InstalledUICulture);
+                            return Value.ToString("#,##0,K", CultureInfo.InvariantCulture);
 
-                        //0 - 10.000
+                        //10.000 - 99.999
                         case int n when (n >= 10000):
-                            return Value.ToString("#,#", CultureInfo.InstalledUICulture);
-
+                            return Value.ToString("#,#", CultureInfo.InvariantCulture);
                     }
                 }
                 return Value.ToString();

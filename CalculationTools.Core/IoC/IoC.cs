@@ -33,21 +33,22 @@ namespace CalculationTools.Core
         /// NOTE: Must be called as soon as your application starts up to ensure all
         ///       services can be found
         /// </summary>
-        public static void Setup()
+        public static void Setup(IDialogService dialogService)
         {
             // Bind all view models
-            BindViewModel();
+            BindViewModel(dialogService);
         }
 
         /// <summary>
         /// Binds all singleton view models
         /// </summary>
-        private static void BindViewModel()
+        private static void BindViewModel(IDialogService dialogService)
         {
+
             // Binds to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
 
-            Kernel.Bind<BattleSimulatorViewModel>().ToConstant(new BattleSimulatorViewModel());
+            Kernel.Bind<BattleSimulatorViewModel>().ToConstant(new BattleSimulatorViewModel(dialogService));
         }
 
 

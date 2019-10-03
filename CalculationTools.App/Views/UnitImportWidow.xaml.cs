@@ -1,20 +1,17 @@
 ﻿using System.Windows;
+using CalculationTools.Core;
 
 namespace CalculationTools.App
 {
     /// <summary>
     /// Interaction logic for UnitImportWidow.xaml
     /// </summary>
-    public partial class UnitImportWidow : Window
+    public partial class UnitImportWidow : Window, IDialog
     {
         public UnitImportWidow()
         {
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
     }
 }

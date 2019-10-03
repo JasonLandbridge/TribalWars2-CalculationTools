@@ -64,7 +64,8 @@
                         <local:BattleInputTable DataContext="{Binding BattleSimulatorInputViewModel}"/>
                         <Button
                             Margin="5,5"
-                            Content="Import scout report" />
+                            Content="Import scout report"
+                            Command="{Binding ImportUnitCommand}"/>
                     </StackPanel>
 
                     <!--  Result Grid  -->

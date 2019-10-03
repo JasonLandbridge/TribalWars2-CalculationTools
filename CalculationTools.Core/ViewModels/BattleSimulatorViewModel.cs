@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using CalculationTools.Core.Base;
+using CalculationTools.Core.BattleSimulator;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using CalculationTools.Core.Base;
-using CalculationTools.Core.BattleSimulator;
+using System.Windows.Input;
 
 namespace CalculationTools.Core
 {
@@ -17,9 +16,14 @@ namespace CalculationTools.Core
         public int AtkBattleModifier { get; set; }
         public int DefBattleModifier { get; set; }
 
-        #endregion
+        #endregion BattleResult
 
         #region ViewModels
+
+        /// <summary>
+        /// The viewmodel that displays the battle results for the attacking side.
+        /// </summary>
+        public BattleResultTableViewModel AttackBattleResultTable { get; set; } = new BattleResultTableViewModel();
 
         /// <summary>
         /// The viewmodel for the input fields of the battle simulator.
@@ -27,24 +31,22 @@ namespace CalculationTools.Core
         public BattleSimulatorInputViewModel BattleSimulatorInputViewModel { get; set; } = new BattleSimulatorInputViewModel();
 
         /// <summary>
-        /// The viewmodel that displays the battle results for the attacking side.
-        /// </summary>
-        public BattleResultTableViewModel AttackBattleResultTable { get; set; } = new BattleResultTableViewModel();
-        /// <summary>
         /// The viewmodel that displays the battle results for the defending side.
         /// </summary>
         public BattleResultTableViewModel DefenseBattleResultTable { get; set; } = new BattleResultTableViewModel();
 
-
-        #endregion
+        #endregion ViewModels
 
         #endregion Properties
 
-
         #region Constructors
 
-        public BattleSimulatorViewModel()
+        public BattleSimulatorViewModel(IDialogService dialogService)
         {
+            this.dialogService = dialogService;
+
+            ImportUnitCommand = new RelayCommand(SetImportedUnits);
+
             SetupBattleResult();
             BattleSimulatorInputViewModel.PropertyChanged += RunBattleSimulator;
 
@@ -99,14 +101,18 @@ namespace CalculationTools.Core
 
         #endregion Constructors
 
-
         #region Methods
+
+        public List<BattleResultValueViewModel> SetNumberFormat(List<BattleResultValueViewModel> battleResultList, bool abbreviateValue)
+        {
+            battleResultList.ForEach(x => x.AbbreviateValue = abbreviateValue);
+            return battleResultList;
+        }
 
         public void SetupBattleResult()
         {
             AttackBattleResultTable.Header = "Attacking Units";
             DefenseBattleResultTable.Header = "Defending Units";
-
 
             List<string> headers = new List<string>
             {
@@ -134,7 +140,6 @@ namespace CalculationTools.Core
 
         public void UpdateBattleResult(BattleResult battleResult)
         {
-
             AttackBattleResultTable.BattleModifier = battleResult.AtkBattleModifier.ToString();
             DefenseBattleResultTable.BattleModifier = battleResult.DefBattleModifier.ToString();
 
@@ -155,15 +160,18 @@ namespace CalculationTools.Core
             DefenseBattleResultTable.UnitsLostClay.BattleResultValues = SetNumberFormat(battleResult.ListOfDefLostClay, true);
             DefenseBattleResultTable.UnitsLostIron.BattleResultValues = SetNumberFormat(battleResult.ListOfDefLostIron, true);
             DefenseBattleResultTable.UnitsLeft.BattleResultValues = battleResult.ListOfDefLeftNumbers;
-
-        }
-
-        public List<BattleResultValueViewModel> SetNumberFormat(List<BattleResultValueViewModel> battleResultList, bool abbreviateValue)
-        {
-            battleResultList.ForEach(x => x.AbbreviateValue = abbreviateValue);
-            return battleResultList;
         }
 
         #endregion Methods
+
+        private readonly IDialogService dialogService;
+        public ICommand ImportUnitCommand { get; set; }
+
+        public void SetImportedUnits()
+        {
+            var viewModel = new UnitImportWindowViewModel();
+
+            dialogService.ShowDialog(viewModel);
+        }
     }
 }

@@ -4,6 +4,9 @@ using CalculationTools.Core.BattleSimulator;
 
 namespace CalculationTools.Core
 {
+    /// <summary>
+    /// Holds the number of units for every possible unit type.
+    /// </summary>
     public struct UnitSet
     {
         #region Constructors

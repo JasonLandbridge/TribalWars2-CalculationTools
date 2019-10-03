@@ -124,43 +124,65 @@ namespace CalculationTools.Core.BattleSimulator
         /// <param name="defUnits">The Defending UnitSet</param>
         public void LoadUnits(UnitSet atkUnits, UnitSet defUnits)
         {
+            LoadAtkUnits(atkUnits);
+            LoadDefUnits(defUnits);
+        }
+
+        public void LoadAtkUnits(UnitSet atkUnits)
+        {
             Spearman.NumberOnAttack = atkUnits.Spearman;
-            Spearman.NumberOnDefense = defUnits.Spearman;
 
             Swordsman.NumberOnAttack = atkUnits.Swordsman;
-            Swordsman.NumberOnDefense = defUnits.Swordsman;
 
             AxeFighter.NumberOnAttack = atkUnits.AxeFighter;
-            AxeFighter.NumberOnDefense = defUnits.AxeFighter;
 
             Archer.NumberOnAttack = atkUnits.Archer;
-            Archer.NumberOnDefense = defUnits.Archer;
 
             LightCavalry.NumberOnAttack = atkUnits.LightCavalry;
-            LightCavalry.NumberOnDefense = defUnits.LightCavalry;
 
             MountedArcher.NumberOnAttack = atkUnits.MountedArcher;
-            MountedArcher.NumberOnDefense = defUnits.MountedArcher;
 
             HeavyCavalry.NumberOnAttack = atkUnits.HeavyCavalry;
-            HeavyCavalry.NumberOnDefense = defUnits.HeavyCavalry;
 
             Ram.NumberOnAttack = atkUnits.Ram;
-            Ram.NumberOnDefense = defUnits.Ram;
 
             Catapult.NumberOnAttack = atkUnits.Catapult;
-            Catapult.NumberOnDefense = defUnits.Catapult;
 
             Berserker.NumberOnAttack = atkUnits.Berserker;
-            Berserker.NumberOnDefense = defUnits.Berserker;
 
             Trebuchet.NumberOnAttack = atkUnits.Trebuchet;
-            Trebuchet.NumberOnDefense = defUnits.Trebuchet;
 
             Nobleman.NumberOnAttack = atkUnits.Nobleman;
-            Nobleman.NumberOnDefense = defUnits.Nobleman;
 
             Paladin.NumberOnAttack = atkUnits.Paladin;
+        }
+
+        public void LoadDefUnits(UnitSet defUnits)
+        {
+            Spearman.NumberOnDefense = defUnits.Spearman;
+
+            Swordsman.NumberOnDefense = defUnits.Swordsman;
+
+            AxeFighter.NumberOnDefense = defUnits.AxeFighter;
+
+            Archer.NumberOnDefense = defUnits.Archer;
+
+            LightCavalry.NumberOnDefense = defUnits.LightCavalry;
+
+            MountedArcher.NumberOnDefense = defUnits.MountedArcher;
+
+            HeavyCavalry.NumberOnDefense = defUnits.HeavyCavalry;
+
+            Ram.NumberOnDefense = defUnits.Ram;
+
+            Catapult.NumberOnDefense = defUnits.Catapult;
+
+            Berserker.NumberOnDefense = defUnits.Berserker;
+
+            Trebuchet.NumberOnDefense = defUnits.Trebuchet;
+
+            Nobleman.NumberOnDefense = defUnits.Nobleman;
+
             Paladin.NumberOnDefense = defUnits.Paladin;
         }
 

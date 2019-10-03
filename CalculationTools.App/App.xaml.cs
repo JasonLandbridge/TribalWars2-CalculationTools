@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using CalculationTools.Core;
+using CalculationTools.Core.BattleSimulator;
 
 namespace CalculationTools.App
 {
@@ -17,8 +18,12 @@ namespace CalculationTools.App
             // Let the base application do what it needs
             base.OnStartup(e);
 
+            IDialogService dialogService = new DialogService(MainWindow);
+            dialogService.Register<UnitImportWindowViewModel, UnitImportWidow>();
+
             // Setup the IoC
-            IoC.Setup();
+            IoC.Setup(dialogService);
+
 
             // Show the main window
             Current.MainWindow = new MainWindow();

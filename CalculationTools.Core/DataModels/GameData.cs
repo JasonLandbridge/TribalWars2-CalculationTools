@@ -225,7 +225,13 @@ namespace CalculationTools.Core
 
             // This is meant to calculate the "active" rams that will do damage in relation to the attacking force. 
             // More infantry = more damage with the rams
-            decimal ramRatio = Math.Clamp((decimal)totalProvisionsWithNoRams / (defUnits.GetTotalProvisions() + wallDefense), 0, 1);
+            int provisionDefense = (defUnits.GetTotalProvisions() + wallDefense);
+            decimal ramRatio = 0;
+            if (provisionDefense > 0)
+            {
+                ramRatio = Math.Clamp((decimal)totalProvisionsWithNoRams / provisionDefense, 0, 1);
+            }
+
             int wallHitPoints = (GameData.Wall.GetHitPoints(wallLevel) * 2);
 
             // This is the net wall damage done by the rams
@@ -323,16 +329,15 @@ namespace CalculationTools.Core
             decimal defModifier = GameData.GetDefBattleModifier(defFaithBonus, result.WallLevelBefore, nightBonus);
             result.DefBattleModifier = (int)(defModifier * 100m);
 
-            int resultingWallLevel = PreRound(ref result, paladinAtkWeapon);
-            defModifier = GameData.GetDefBattleModifier(defFaithBonus, resultingWallLevel, nightBonus);
-            result.DefBattleModifier = (int)(defModifier * 100m);
-
-
             // Stop here if there are no units given
             if (!battleSimulatorInput.IsValid)
             {
                 return result;
             }
+
+            int resultingWallLevel = PreRound(ref result, paladinAtkWeapon);
+            defModifier = GameData.GetDefBattleModifier(defFaithBonus, resultingWallLevel, nightBonus);
+            result.DefBattleModifier = (int)(defModifier * 100m);
 
             List<BattleResult> BattleHistory = new List<BattleResult> { result.Copy() };
             BattleResult currentRound = BattleHistory.Last();

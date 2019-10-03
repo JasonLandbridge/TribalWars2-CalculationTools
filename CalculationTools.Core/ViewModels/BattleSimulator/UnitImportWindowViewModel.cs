@@ -1,15 +1,68 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using CalculationTools.Core.Base;
 
 namespace CalculationTools.Core.BattleSimulator
 {
-    public class UnitImportWindowViewModel : BaseViewModel
+    public class UnitImportWindowViewModel : BaseViewModel, IDialogRequestClose
     {
-        private string _unitImportText;
+        #region Constructors
 
+        public UnitImportWindowViewModel()
+        {
+            ResetCommand = new RelayCommand(() => { UnitImportText = string.Empty; });
+            SaveCommand = new RelayCommand(SendToBattleInput);
+            CloseCommand = new RelayCommand(() => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
+        }
+
+        #endregion Constructors
+
+        #region Events
+
+        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+
+        #endregion Events
+
+        #region Properties
+
+        public UnitSet UnitResultSet { get; set; }
+
+        #region ViewModels
+        public BattleUnitPreviewViewModel BattleUnitPreviewViewModel { get; set; } = new BattleUnitPreviewViewModel();
+
+        #endregion
+
+
+        #region Commands
+
+        /// <summary>
+        /// Close the dialog window without changing anything
+        /// </summary>
+        public ICommand CloseCommand { get; }
+
+        /// <summary>
+        /// Reset the input fields
+        /// </summary>
+        public ICommand ResetCommand { get; }
+
+        /// <summary>
+        /// Confirm and send the UnitSet to the BattleSimulator
+        /// </summary>
+        public ICommand SaveCommand { get; }
+
+        #endregion
+
+        #region ErrorHandeling
+
+        public string ErrorMessage { get; set; }
+        public bool IsError { get; set; }
+        public Visibility IsErrorVisible => IsError ? Visibility.Visible : Visibility.Hidden;
+
+        #endregion
         public string UnitImportText
         {
             get => _unitImportText;
@@ -21,18 +74,9 @@ namespace CalculationTools.Core.BattleSimulator
             }
         }
 
-        public bool IsError { get; set; }
+        #endregion Properties
 
-        public Visibility IsErrorVisible => IsError ? Visibility.Visible : Visibility.Hidden;
-        public string ErrorMessage { get; set; }
-
-        public BattleUnitPreviewViewModel BattleUnitPreviewViewModel { get; set; } = new BattleUnitPreviewViewModel();
-
-        public UnitImportWindowViewModel()
-        {
-
-        }
-
+        #region Methods
 
         public void ParseInput()
         {
@@ -62,11 +106,13 @@ namespace CalculationTools.Core.BattleSimulator
 
 
             List<BattleResultValueViewModel> unitAmountRow = new List<BattleResultValueViewModel>();
+            List<int> unitValueList = new List<int>();
             List<BattleResultValueViewModel> unitLostRow = new List<BattleResultValueViewModel>();
             List<BattleResultValueViewModel> unitLeftRow = new List<BattleResultValueViewModel>();
 
             for (int i = 0; i < rowData.Count; i += 3)
             {
+                unitValueList.Add(rowData[i]);
                 unitAmountRow.Add(new BattleResultValueViewModel(rowData[i]));
                 unitLostRow.Add(new BattleResultValueViewModel(rowData[i + 1]));
                 unitLeftRow.Add(new BattleResultValueViewModel(rowData[i + 2]));
@@ -77,6 +123,22 @@ namespace CalculationTools.Core.BattleSimulator
             BattleUnitPreviewViewModel.UnitLost.BattleResultValues = unitLostRow;
             BattleUnitPreviewViewModel.UnitsLeft.BattleResultValues = unitLeftRow;
 
+            UnitResultSet = new UnitSet(unitValueList);
         }
+
+        public void SendToBattleInput()
+        {
+            ParseInput();
+            IoC.GetBattleSimulatorViewModel().BattleSimulatorInputViewModel.LoadDefUnits(UnitResultSet);
+            CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
+        }
+
+        #endregion Methods
+
+        #region Fields
+
+        private string _unitImportText;
+
+        #endregion Fields
     }
 }
