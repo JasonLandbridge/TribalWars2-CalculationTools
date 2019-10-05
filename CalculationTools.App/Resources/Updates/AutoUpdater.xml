@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <item>
   <version>0.0.2.0</version>
-  <url>http://rbsoft.org/downloads/AutoUpdaterTest.zip</url>
-  <changelog>https://github.com/ravibpatel/AutoUpdater.NET/releases</changelog>
+  <url>https://github.com/JasonLandbridge/TribalWars2-CalculationTools/releases/download/pre-release/TribalWars2_CalculationTools.exe</url>
+  <changelog>https://github.com/JasonLandbridge/TribalWars2-CalculationTools/releases</changelog>
   <mandatory>false</mandatory>
 </item>

@@ -1,20 +1,23 @@
 ﻿namespace CalculationTools.Core
 {
+    /// <summary>
+    /// Used to assign a enum type to each unit.
+    /// <para>Indexes correspond to the order of units in game.</para>
+    /// </summary>
     public enum UnitType
     {
-        None = 0,
-        Spearman = 1,
-        Swordsman = 2,
-        AxeFighter = 3,
-        Archer = 4,
-        LightCavalry = 5,
-        MountedArcher = 6,
-        HeavyCavalry = 7,
-        Ram = 8,
-        Catapult = 9,
-        Berserker = 10,
-        Trebuchet = 11,
-        Nobleman = 12,
-        Paladin = 13,
+        Spearman = 0,
+        Swordsman = 1,
+        AxeFighter = 2,
+        Archer = 3,
+        LightCavalry = 4,
+        MountedArcher = 5,
+        HeavyCavalry = 6,
+        Ram = 7,
+        Catapult = 8,
+        Berserker = 9,
+        Trebuchet = 10,
+        Nobleman = 11,
+        Paladin = 12,
     }
 }

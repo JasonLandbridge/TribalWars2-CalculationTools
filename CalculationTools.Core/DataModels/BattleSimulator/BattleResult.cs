@@ -11,7 +11,7 @@ namespace CalculationTools.Core.BattleSimulator
         public UnitSet AtkUnits { get; set; }
         public UnitSet AtkUnitsLost;
         public UnitSet AtkUnitsLeft => AtkUnits - AtkUnitsLost;
-
+        public WeaponSet AtkWeapon { get; set; }
         #endregion
 
         #region Defending
@@ -19,6 +19,7 @@ namespace CalculationTools.Core.BattleSimulator
         public UnitSet DefUnits { get; set; }
         public UnitSet DefUnitsLost;
         public UnitSet DefUnitsLeft => DefUnits - DefUnitsLost;
+        public WeaponSet DefWeapon { get; set; }
 
         #endregion
 
@@ -44,6 +45,63 @@ namespace CalculationTools.Core.BattleSimulator
         #region AtkResults
 
         public List<BattleResultValueViewModel> ListOfAtkNumbers => AtkUnits.ToBattleResultList();
+
+        public List<BattleResultValueViewModel> ListOfAtkFromInfantry
+        {
+            get
+            {
+                List<BattleResultValueViewModel> list = new List<BattleResultValueViewModel>();
+
+                for (int i = 0; i < GameData.UnitList.Count; i++)
+                {
+                    BattleResultValueViewModel battleResultValue = new BattleResultValueViewModel();
+                    if (GameData.UnitList[i].AttackType == AttackType.Infantry)
+                    {
+                        battleResultValue.Value = GameData.GetAtkFightingPower(AtkUnits.UnitList[i], (UnitType)i, AtkWeapon);
+                    }
+                    list.Add(battleResultValue);
+                }
+                return list;
+            }
+        }
+        public List<BattleResultValueViewModel> ListOfAtkFromCavalry
+        {
+            get
+            {
+                List<BattleResultValueViewModel> list = new List<BattleResultValueViewModel>();
+
+                for (int i = 0; i < GameData.UnitList.Count; i++)
+                {
+                    BattleResultValueViewModel battleResultValue = new BattleResultValueViewModel();
+                    if (GameData.UnitList[i].AttackType == AttackType.Cavalry)
+                    {
+                        battleResultValue.Value = GameData.GetAtkFightingPower(AtkUnits.UnitList[i], (UnitType)i, AtkWeapon);
+                    }
+                    list.Add(battleResultValue);
+                }
+                return list;
+            }
+        }
+
+        public List<BattleResultValueViewModel> ListOfAtkFromArchers
+        {
+            get
+            {
+                List<BattleResultValueViewModel> list = new List<BattleResultValueViewModel>();
+
+                for (int i = 0; i < GameData.UnitList.Count; i++)
+                {
+                    BattleResultValueViewModel battleResultValue = new BattleResultValueViewModel();
+                    if (GameData.UnitList[i].AttackType == AttackType.Archer)
+                    {
+                        battleResultValue.Value = GameData.GetAtkFightingPower(AtkUnits.UnitList[i], (UnitType)i, AtkWeapon);
+                    }
+                    list.Add(battleResultValue);
+                }
+                return list;
+            }
+        }
+
         public List<BattleResultValueViewModel> ListOfAtkLostNumbers => AtkUnitsLost.ToBattleResultList();
         public List<BattleResultValueViewModel> ListOfAtkLostWood
         {
@@ -76,6 +134,13 @@ namespace CalculationTools.Core.BattleSimulator
 
         #region DefResults
         public List<BattleResultValueViewModel> ListOfDefNumbers => DefUnits.ToBattleResultList();
+
+        public List<BattleResultValueViewModel> ListOfDefFromInfantry => DefUnits.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * GameData.UnitList[i].DefenseFromInfantry)).ToList();
+        public List<BattleResultValueViewModel> ListOfDefFromCavalry => DefUnits.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * GameData.UnitList[i].DefenseFromCavalry)).ToList();
+        public List<BattleResultValueViewModel> ListOfDefFromArchers => DefUnits.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * GameData.UnitList[i].DefenseFromArchers)).ToList();
+
+        #region Losses
+
         public List<BattleResultValueViewModel> ListOfDefLostNumbers => DefUnitsLost.ToBattleResultList();
         public List<BattleResultValueViewModel> ListOfDefLostWood
         {
@@ -101,6 +166,9 @@ namespace CalculationTools.Core.BattleSimulator
                 return DefUnitsLost.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * resourceCosts[i].Iron)).ToList();
             }
         }
+
+        #endregion
+
         public List<BattleResultValueViewModel> ListOfDefLeftNumbers => DefUnitsLeft.ToBattleResultList();
 
         #endregion

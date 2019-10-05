@@ -11,6 +11,7 @@ namespace CalculationTools.Core
         public string Name => Regex.Replace(this.Code, "([A-Z])", " $1").Trim();
 
         public abstract UnitType UnitType { get; set; }
+        public abstract AttackType AttackType { get; set; }
 
         #region Unit Cost
 

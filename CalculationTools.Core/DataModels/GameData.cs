@@ -192,8 +192,6 @@ namespace CalculationTools.Core
 
         public static BaseUnit GetUnit(UnitType unitType)
         {
-            if (unitType == UnitType.None) return null;
-
             return UnitList.First(unit => unit.UnitType == unitType);
         }
 
@@ -213,7 +211,7 @@ namespace CalculationTools.Core
             UnitSet atkUnitsLost = result.AtkUnitsLost;
 
             // Calculate how many rams were killed by the Trebuchet
-            int ramsKilled = GameData.GetRamsKilled(atkUnits.Ram, atkUnits.Catapult, defUnits.Trebuchet);
+            int ramsKilled = GetRamsKilled(atkUnits.Ram, atkUnits.Catapult, defUnits.Trebuchet);
             atkUnits.Ram -= ramsKilled;
             atkUnitsLost.Ram = ramsKilled;
 
@@ -221,7 +219,7 @@ namespace CalculationTools.Core
             int totalProvisionsWithNoRams = atkUnits.GetTotalProvisions() - atkUnits.GetTotalRamProvisions();
 
             // Get base wall defense
-            int wallDefense = GameData.GetWallDefense(wallLevel);
+            int wallDefense = GetWallDefense(wallLevel);
 
             // This is meant to calculate the "active" rams that will do damage in relation to the attacking force. 
             // More infantry = more damage with the rams
@@ -232,7 +230,7 @@ namespace CalculationTools.Core
                 ramRatio = Math.Clamp((decimal)totalProvisionsWithNoRams / provisionDefense, 0, 1);
             }
 
-            int wallHitPoints = (GameData.Wall.GetHitPoints(wallLevel) * 2);
+            int wallHitPoints = (Wall.GetHitPoints(wallLevel) * 2);
 
             // This is the net wall damage done by the rams
             decimal wallDamage = (atkUnits.Ram * ramRatio * atkModifier * paladinModifier);
@@ -279,7 +277,7 @@ namespace CalculationTools.Core
 
             decimal paladinModifier = (atkWeapon.BelongsToUnitType == UnitType.Ram ? atkWeapon.AtkModifier : 0) + 1;
 
-            int wallHitPoints = GameData.Wall.GetHitPoints(result.WallLevelAfter) * 2;
+            int wallHitPoints = Wall.GetHitPoints(result.WallLevelAfter) * 2;
             decimal damage = (result.AtkUnitsLeft.Ram * atkModifier * paladinModifier) / wallHitPoints;
             decimal wallDamage = damage / wallHitPoints;
 
@@ -324,9 +322,9 @@ namespace CalculationTools.Core
             WeaponSet paladinDefWeapon = battleSimulatorInput.GetDefWeapon();
 
 
-            decimal atkModifier = GameData.GetAtkBattleModifier(atkFaithBonus, morale, luck, officerBonus);
+            decimal atkModifier = GetAtkBattleModifier(atkFaithBonus, morale, luck, officerBonus);
             result.AtkBattleModifier = (int)(atkModifier * 100m);
-            decimal defModifier = GameData.GetDefBattleModifier(defFaithBonus, result.WallLevelBefore, nightBonus);
+            decimal defModifier = GetDefBattleModifier(defFaithBonus, result.WallLevelBefore, nightBonus);
             result.DefBattleModifier = (int)(defModifier * 100m);
 
             // Stop here if there are no units given
@@ -336,7 +334,7 @@ namespace CalculationTools.Core
             }
 
             int resultingWallLevel = PreRound(ref result, paladinAtkWeapon);
-            defModifier = GameData.GetDefBattleModifier(defFaithBonus, resultingWallLevel, nightBonus);
+            defModifier = GetDefBattleModifier(defFaithBonus, resultingWallLevel, nightBonus);
             result.DefBattleModifier = (int)(defModifier * 100m);
 
             List<BattleResult> BattleHistory = new List<BattleResult> { result.Copy() };
@@ -403,13 +401,13 @@ namespace CalculationTools.Core
                 }
 
                 // Add Atk modifier
-                atkInfantry = GameData.AddAtkModifier(atkInfantry, atkModifier);
-                atkCavalry = GameData.AddAtkModifier(atkCavalry, atkModifier);
-                atkArchers = GameData.AddAtkModifier(atkArchers, atkModifier);
+                atkInfantry = AddAtkModifier(atkInfantry, atkModifier);
+                atkCavalry = AddAtkModifier(atkCavalry, atkModifier);
+                atkArchers = AddAtkModifier(atkArchers, atkModifier);
 
-                decimal atkInfantryRatio = GameData.GetUnitProvisionRatio(atkInfantryProvisions, totalAtkProvisions);
-                decimal atkCavalryRatio = GameData.GetUnitProvisionRatio(atkCavalryProvisions, totalAtkProvisions);
-                decimal atkArchersRatio = GameData.GetUnitProvisionRatio(atkArchersProvisions, totalAtkProvisions);
+                decimal atkInfantryRatio = GetUnitProvisionRatio(atkInfantryProvisions, totalAtkProvisions);
+                decimal atkCavalryRatio = GetUnitProvisionRatio(atkCavalryProvisions, totalAtkProvisions);
+                decimal atkArchersRatio = GetUnitProvisionRatio(atkArchersProvisions, totalAtkProvisions);
                 decimal totalRatio = atkInfantryRatio + atkCavalryRatio + atkArchersRatio;
 
 
@@ -424,9 +422,9 @@ namespace CalculationTools.Core
                 int totalDefFromArchers = archerGroupDefUnitSet.GetTotalDefFromArchers(paladinDefWeapon);
 
                 // Add defense modifier
-                totalDefFromInfantry = GameData.AddDefModifier(totalDefFromInfantry, defModifier) + wallDefense;
-                totalDefFromCavalry = GameData.AddDefModifier(totalDefFromCavalry, defModifier) + wallDefense;
-                totalDefFromArchers = GameData.AddDefModifier(totalDefFromArchers, defModifier) + wallDefense;
+                totalDefFromInfantry = AddDefModifier(totalDefFromInfantry, defModifier) + wallDefense;
+                totalDefFromCavalry = AddDefModifier(totalDefFromCavalry, defModifier) + wallDefense;
+                totalDefFromArchers = AddDefModifier(totalDefFromArchers, defModifier) + wallDefense;
 
 
                 int totalDef = totalDefFromInfantry + totalDefFromCavalry + totalDefFromArchers;
@@ -463,14 +461,14 @@ namespace CalculationTools.Core
                 {
                     if ((bool)atkWonRound1)
                     {
-                        killRate = GameData.GetAtkKillRate(atkInfantry, totalDefFromInfantry);
+                        killRate = GetAtkKillRate(atkInfantry, totalDefFromInfantry);
                         atkUnitsLost += atkUnits.ApplyKillRateAtkInfantry(killRate);
                         infantryGroupDefUnitSetLost = infantryGroupDefUnitSet.ApplyKillRate(1);
                         if (strongestGroupIndex == 1) atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(killRate);
                     }
                     else
                     {
-                        killRate = GameData.GetDefKillRate(atkInfantry, totalDefFromInfantry);
+                        killRate = GetDefKillRate(atkInfantry, totalDefFromInfantry);
                         atkUnitsLost += atkUnits.ApplyKillRateAtkInfantry(1);
                         atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(1);
                         infantryGroupDefUnitSetLost = infantryGroupDefUnitSet.ApplyKillRate(killRate);
@@ -482,14 +480,14 @@ namespace CalculationTools.Core
                 {
                     if ((bool)atkWonRound2)
                     {
-                        killRate = GameData.GetAtkKillRate(atkCavalry, totalDefFromCavalry);
+                        killRate = GetAtkKillRate(atkCavalry, totalDefFromCavalry);
                         atkUnitsLost += atkUnits.ApplyKillRateAtkCavalry(killRate);
                         cavalryGroupDefUnitSetLost = cavalryGroupDefUnitSet.ApplyKillRate(1);
                         if (strongestGroupIndex == 2) atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(killRate);
                     }
                     else
                     {
-                        killRate = GameData.GetDefKillRate(atkCavalry, totalDefFromCavalry);
+                        killRate = GetDefKillRate(atkCavalry, totalDefFromCavalry);
                         atkUnitsLost += atkUnits.ApplyKillRateAtkCavalry(1);
                         atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(1);
                         cavalryGroupDefUnitSetLost = cavalryGroupDefUnitSet.ApplyKillRate(killRate);
@@ -501,7 +499,7 @@ namespace CalculationTools.Core
                 {
                     if ((bool)atkWonRound3)
                     {
-                        killRate = GameData.GetAtkKillRate(atkArchers, totalDefFromArchers);
+                        killRate = GetAtkKillRate(atkArchers, totalDefFromArchers);
                         atkUnitsLost += atkUnits.ApplyKillRateAtkArchers(killRate);
                         archerGroupDefUnitSetLost = archerGroupDefUnitSet.ApplyKillRate(1);
                         if (strongestGroupIndex == 3) atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(killRate);
@@ -509,7 +507,7 @@ namespace CalculationTools.Core
                     }
                     else
                     {
-                        killRate = GameData.GetDefKillRate(atkArchers, totalDefFromArchers);
+                        killRate = GetDefKillRate(atkArchers, totalDefFromArchers);
                         atkUnitsLost += atkUnits.ApplyKillRateAtkArchers(1);
                         atkUnitsLost += atkUnits.ApplyKillRateAtkSpecial(1);
                         archerGroupDefUnitSetLost = archerGroupDefUnitSet.ApplyKillRate(killRate);

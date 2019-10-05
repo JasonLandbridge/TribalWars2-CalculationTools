@@ -25,7 +25,7 @@ namespace CalculationTools.Core
             }
         };
 
-        public override UnitType BelongsToUnitType { get; } = UnitType.None;
+        public override UnitType? BelongsToUnitType { get; } = null;
 
     }
 

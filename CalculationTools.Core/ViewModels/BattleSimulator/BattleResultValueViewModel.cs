@@ -10,6 +10,11 @@ namespace CalculationTools.Core
     {
         #region Constructors
 
+        public BattleResultValueViewModel()
+        {
+
+        }
+
         public BattleResultValueViewModel(int value)
         {
             Value = value;
@@ -26,7 +31,7 @@ namespace CalculationTools.Core
         /// <para>Displays 1,235M</para>
         /// <para>Displays 1B</para>
         /// </summary>
-        public bool AbbreviateValue { get; set; }
+        public bool IsAbbreviated { get; set; }
 
         /// <summary>
         /// The base value 
@@ -35,11 +40,15 @@ namespace CalculationTools.Core
 
         public string ValueFormat { get; } = "s{0}";
 
+        public bool IsBold { get; set; }
+
+        public string IsBoldString => IsBold ? "Bold" : "Normal";
+
         public string ValueFormatted
         {
             get
             {
-                if (AbbreviateValue)
+                if (IsAbbreviated)
                 {
                     switch (Value)
                     {
@@ -48,11 +57,11 @@ namespace CalculationTools.Core
                             return Value.ToString("###,##0,,M", CultureInfo.InvariantCulture);
 
                         //100.000 - 999.999
-                        case int n when (n >= 100000):
+                        case int n when (n >= 10000):
                             return Value.ToString("#,##0,K", CultureInfo.InvariantCulture);
 
                         //10.000 - 99.999
-                        case int n when (n >= 10000):
+                        case int n when (n >= 1000):
                             return Value.ToString("#,#", CultureInfo.InvariantCulture);
                     }
                 }

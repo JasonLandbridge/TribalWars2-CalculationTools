@@ -6,6 +6,8 @@ namespace CalculationTools.Core
     {
         public override string Code { get; } = "Archer";
         public override UnitType UnitType { get; set; } = UnitType.Archer;
+        public override AttackType AttackType { get; set; } = AttackType.Archer;
+
         public override int WoodCost { get; } = 80;
         public override int ClayCost { get; } = 30;
         public override int IronCost { get; } = 60;

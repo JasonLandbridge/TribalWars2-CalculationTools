@@ -13,6 +13,8 @@
     <Configurations>Debug;Release</Configurations>
     <PublishTrimmed>true</PublishTrimmed>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <StartupObject>CalculationTools.App.App</StartupObject>
+    <AssemblyVersion>0.0.1.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -33,6 +35,7 @@
     <None Remove="Resources\Img\info\info_luck.png" />
     <None Remove="Resources\Img\info\info_morale.png" />
     <None Remove="Resources\Img\info\info_nightbonus.png" />
+    <None Remove="Resources\Img\info\info_weapon_mastery.png" />
     <None Remove="Resources\Img\units\unit_archer.png" />
     <None Remove="Resources\Img\units\unit_axe_fighter.png" />
     <None Remove="Resources\Img\units\unit_berserker.png" />
@@ -64,6 +67,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Img\info\info_weapon_mastery.png" />
     <Resource Include="Resources\Img\units\unit_archer.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -109,6 +113,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.5.7" />
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.5.71" />
     <PackageReference Include="Fody" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>

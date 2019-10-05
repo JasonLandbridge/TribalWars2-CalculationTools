@@ -25,7 +25,7 @@ namespace CalculationTools.Core
             }
         };
 
-        public override UnitType BelongsToUnitType { get; } = UnitType.Spearman;
+        public override UnitType? BelongsToUnitType { get; } = UnitType.Spearman;
 
     }
 

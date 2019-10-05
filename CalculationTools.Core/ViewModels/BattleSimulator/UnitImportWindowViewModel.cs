@@ -80,6 +80,11 @@ namespace CalculationTools.Core.BattleSimulator
 
         public void ParseInput()
         {
+            if (UnitImportText == null)
+            {
+                return;
+            }
+
             // Filter out the decimal character from the string
             string untImportText = UnitImportText.Replace(".", "").Replace(",", "");
 

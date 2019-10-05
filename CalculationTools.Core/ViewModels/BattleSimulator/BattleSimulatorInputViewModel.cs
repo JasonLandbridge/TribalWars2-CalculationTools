@@ -102,20 +102,66 @@ namespace CalculationTools.Core.BattleSimulator
             }
 
         }
-
         public void DefaultValues()
         {
-            InputGrandmasterBonus = false;
-            InputAtkWeaponLevel = 1;
-            InputAtkWeapon = GameData.WeaponOptions[0];
-            InputDefWeaponLevel = 1;
-            InputDefWeapon = GameData.WeaponOptions[0];
-            InputAtkChurch = GameData.FaithOptions[1];
-            InputDefChurch = GameData.FaithOptions[1];
-            InputLuck = 0;
-            InputMorale = 100;
-            InputNightBonus = false;
+
+            BattleConfig defaultConfig = new BattleConfig
+            {
+                AtkUnits = new UnitSet
+                {
+                    Archer = 0,
+                    AxeFighter = 0,
+                    Berserker = 0,
+                    Catapult = 0,
+                    HeavyCavalry = 0,
+                    LightCavalry = 0,
+                    MountedArcher = 0,
+                    Nobleman = 0,
+                    Paladin = 0,
+                    Ram = 0,
+                    Spearman = 0,
+                    Swordsman = 0,
+                    Trebuchet = 0,
+                },
+
+                DefUnits = new UnitSet
+                {
+                    Archer = 0,
+                    AxeFighter = 0,
+                    Berserker = 0,
+                    Catapult = 0,
+                    HeavyCavalry = 0,
+                    LightCavalry = 0,
+                    MountedArcher = 0,
+                    Nobleman = 0,
+                    Paladin = 0,
+                    Ram = 0,
+                    Spearman = 0,
+                    Swordsman = 0,
+                    Trebuchet = 0,
+                },
+
+                BattleMeta = new BattleMeta
+                {
+                    GrandmasterBonus = false,
+                    AtkWeaponLevel = 0,
+                    AtkWeapon = GameData.WeaponOptions[0],
+                    DefWeaponLevel = 0,
+                    DefWeapon = GameData.WeaponOptions[0],
+                    AtkChurch = GameData.FaithOptions[1],
+                    DefChurch = GameData.FaithOptions[1],
+                    Luck = 0,
+                    Morale = 100,
+                    NightBonus = false,
+                    WallLevel = 0,
+                    WeaponMastery = 0
+                }
+            };
+
+            LoadBattleConfig(defaultConfig);
         }
+
+        #region Loading
 
         /// <summary>
         /// Set all the attacking and defending units in the input fields
@@ -128,84 +174,86 @@ namespace CalculationTools.Core.BattleSimulator
             LoadDefUnits(defUnits);
         }
 
+        public void LoadBattleConfig(BattleConfig battleConfig)
+        {
+            LoadUnits(battleConfig.AtkUnits, battleConfig.DefUnits);
+            LoadBattleMeta(battleConfig.BattleMeta);
+        }
+
+        public void LoadBattleMeta(BattleMeta battleMeta)
+        {
+            InputGrandmasterBonus = battleMeta.GrandmasterBonus;
+            InputAtkWeaponLevel = battleMeta.AtkWeaponLevel;
+            InputAtkWeapon = battleMeta.AtkWeapon;
+            InputDefWeaponLevel = battleMeta.DefWeaponLevel;
+            InputDefWeapon = battleMeta.DefWeapon;
+            InputAtkChurch = battleMeta.AtkChurch;
+            InputDefChurch = battleMeta.DefChurch;
+            InputLuck = battleMeta.Luck;
+            InputMorale = battleMeta.Morale;
+            InputWeaponMastery = battleMeta.WeaponMastery;
+            InputNightBonus = battleMeta.NightBonus;
+            InputWall = battleMeta.WallLevel;
+        }
+
         public void LoadAtkUnits(UnitSet atkUnits)
         {
             Spearman.NumberOnAttack = atkUnits.Spearman;
-
             Swordsman.NumberOnAttack = atkUnits.Swordsman;
-
             AxeFighter.NumberOnAttack = atkUnits.AxeFighter;
-
             Archer.NumberOnAttack = atkUnits.Archer;
-
             LightCavalry.NumberOnAttack = atkUnits.LightCavalry;
-
             MountedArcher.NumberOnAttack = atkUnits.MountedArcher;
-
             HeavyCavalry.NumberOnAttack = atkUnits.HeavyCavalry;
-
             Ram.NumberOnAttack = atkUnits.Ram;
-
             Catapult.NumberOnAttack = atkUnits.Catapult;
-
             Berserker.NumberOnAttack = atkUnits.Berserker;
-
             Trebuchet.NumberOnAttack = atkUnits.Trebuchet;
-
             Nobleman.NumberOnAttack = atkUnits.Nobleman;
-
             Paladin.NumberOnAttack = atkUnits.Paladin;
         }
 
         public void LoadDefUnits(UnitSet defUnits)
         {
             Spearman.NumberOnDefense = defUnits.Spearman;
-
             Swordsman.NumberOnDefense = defUnits.Swordsman;
-
             AxeFighter.NumberOnDefense = defUnits.AxeFighter;
-
             Archer.NumberOnDefense = defUnits.Archer;
-
             LightCavalry.NumberOnDefense = defUnits.LightCavalry;
-
             MountedArcher.NumberOnDefense = defUnits.MountedArcher;
-
             HeavyCavalry.NumberOnDefense = defUnits.HeavyCavalry;
-
             Ram.NumberOnDefense = defUnits.Ram;
-
             Catapult.NumberOnDefense = defUnits.Catapult;
-
             Berserker.NumberOnDefense = defUnits.Berserker;
-
             Trebuchet.NumberOnDefense = defUnits.Trebuchet;
-
             Nobleman.NumberOnDefense = defUnits.Nobleman;
-
             Paladin.NumberOnDefense = defUnits.Paladin;
         }
 
+        #endregion
+
+
+
         public WeaponSet GetAtkWeapon()
         {
-            if (InputAtkWeapon == null || Paladin.NumberOnAttack <= 0)
+            if (InputAtkWeapon == null || Paladin.NumberOnAttack <= 0 || InputAtkWeapon.BelongsToUnitType == null)
             {
                 return new WeaponSet();
             }
 
-            UnitType unitType = InputAtkWeapon.BelongsToUnitType;
+            UnitType unitType = (UnitType)InputAtkWeapon.BelongsToUnitType;
             decimal atkModifier = GameData.GetAtkModifierFromWeapon(unitType, InputAtkWeaponLevel);
             decimal defModifier = GameData.GetDefModifierFromWeapon(unitType, InputAtkWeaponLevel);
             return new WeaponSet(unitType, atkModifier, defModifier);
         }
         public WeaponSet GetDefWeapon()
         {
-            if (InputDefWeapon == null || Paladin.NumberOnDefense <= 0)
+            if (InputDefWeapon == null || Paladin.NumberOnDefense <= 0 || InputDefWeapon.BelongsToUnitType == null)
             {
                 return new WeaponSet();
             }
 
-            UnitType unitType = InputDefWeapon.BelongsToUnitType;
+            UnitType unitType = (UnitType)InputDefWeapon.BelongsToUnitType;
             decimal atkModifier = GameData.GetAtkModifierFromWeapon(unitType, InputDefWeaponLevel);
             decimal defModifier = GameData.GetDefModifierFromWeapon(unitType, InputDefWeaponLevel);
             return new WeaponSet(unitType, atkModifier, defModifier);
@@ -296,6 +344,10 @@ namespace CalculationTools.Core.BattleSimulator
 
         #region Meta
 
+        public int InputWeaponMastery { get; set; }
+        public string InputWeaponMasteryImagePath { get; } = "/Resources/Img/info/info_weapon_mastery.png";
+        public string InputWeaponMasteryLabel { get; } = "Weapon Mastery";
+
         public int InputLuck { get; set; }
 
         public string InputLuckImagePath { get; } = "/Resources/Img/info/info_luck.png";
@@ -313,6 +365,8 @@ namespace CalculationTools.Core.BattleSimulator
         public string InputNightBonusImagePath { get; } = "/Resources/Img/info/info_nightbonus.png";
 
         public string InputNightBonusLabel { get; } = "Night bonus";
+
+
 
 
         #endregion
@@ -366,7 +420,9 @@ namespace CalculationTools.Core.BattleSimulator
             {
                 WallLevelBefore = InputWall,
                 AtkUnits = AtkUnits,
-                DefUnits = DefUnits
+                DefUnits = DefUnits,
+                AtkWeapon = GetAtkWeapon(),
+                DefWeapon = GetDefWeapon()
             };
 
         }

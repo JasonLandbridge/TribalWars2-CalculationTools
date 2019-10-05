@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using CalculationTools.Core;
 using CalculationTools.Core.BattleSimulator;
+using AutoUpdaterDotNET;
 
 namespace CalculationTools.App
 {
@@ -28,6 +30,20 @@ namespace CalculationTools.App
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
+
+
+
+            //Check for updates
+            //MessageBox.Show(typeof(App).Assembly.GetName().Version.ToString());
+
+            //AutoUpdate();
+        }
+
+        public void AutoUpdate()
+        {
+            AutoUpdater.DownloadPath = Environment.CurrentDirectory;
+            AutoUpdater.Start("https://raw.githubusercontent.com/JasonLandbridge/TribalWars2-CalculationTools/master/CalculationTools.App/Resources/Updates/AutoUpdater.xml");
+
         }
     }
 }
