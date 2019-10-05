@@ -5,32 +5,41 @@
     /// </summary>
     public struct BattleMeta
     {
-
         public bool GrandmasterBonus { get; set; }
 
         #region Weapons
+
         public int AtkWeaponLevel { get; set; }
         public BaseWeapon AtkWeapon { get; set; }
         public int DefWeaponLevel { get; set; }
         public BaseWeapon DefWeapon { get; set; }
 
-        #endregion
-
+        #endregion Weapons
 
         #region Buildings
+
         public FaithLevel AtkChurch { get; set; }
         public FaithLevel DefChurch { get; set; }
         public int WallLevel { get; set; }
 
-        #endregion
+        #endregion Buildings
 
         #region Meta
+
         public int Luck { get; set; }
         public int Morale { get; set; }
         public bool NightBonus { get; set; }
         public int WeaponMastery { get; set; }
 
-        #endregion
+        #endregion Meta
 
+        public decimal AtkFaithBonus => AtkChurch.Modifier;
+        public decimal DefFaithBonus => DefChurch.Modifier;
+
+        public decimal MoralePercentage => Morale / 100m;
+        public decimal LuckPercentage => 1m + (Luck / 100m);
+        public decimal NightBonusPercentage => NightBonus ? 2m : 1m;
+        public decimal GrandMasterBonusPercentage => GrandmasterBonus ? 0.1m : 0m;
+        public decimal WeaponMasteryPercentage => WeaponMastery * 0.02m;
     }
 }

@@ -12,10 +12,12 @@ namespace CalculationTools.Core
     public class BattleSimulatorViewModel : BaseViewModel
     {
         #region Fields
+
         private readonly IDialogService dialogService;
         private bool _isDefenseStrengthShown;
         private bool _isResourcesLostShown;
         private bool isAttackStrengthShown;
+
         #endregion Fields
 
         #region Constructors
@@ -27,7 +29,6 @@ namespace CalculationTools.Core
             ImportUnitCommand = new RelayCommand(SetImportedUnits);
 
             SetupBattleResult();
-            BattleSimulatorInputViewModel.PropertyChanged += RunBattleSimulator;
 
             BattleConfig battleConfig = new BattleConfig
             {
@@ -82,9 +83,13 @@ namespace CalculationTools.Core
             };
 
             BattleSimulatorInputViewModel.LoadBattleConfig(battleConfig);
-        }
-        #endregion Constructors
 
+            //Only bind to the property changed after all values have been loaded for the first time to prevent unnecessary recalculations
+            BattleSimulatorInputViewModel.PropertyChanged += (sender, args) => RunBattleSimulator();
+            RunBattleSimulator();
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -151,7 +156,7 @@ namespace CalculationTools.Core
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RunBattleSimulator(object sender, PropertyChangedEventArgs e)
+        private void RunBattleSimulator()
         {
             Debug.WriteLine("Battle Calculator updated!");
             BattleResult battleResult = GameData.SimulateBattle(BattleSimulatorInputViewModel);
@@ -159,7 +164,6 @@ namespace CalculationTools.Core
         }
 
         #endregion Methods
-
 
         #region Properties
 
@@ -186,6 +190,7 @@ namespace CalculationTools.Core
         /// The viewmodel that displays the battle results for the defending side.
         /// </summary>
         public BattleResultTableViewModel DefenseBattleResultTable { get; set; } = new BattleResultTableViewModel();
+
         #endregion ViewModels
 
         #region Filters
@@ -199,7 +204,6 @@ namespace CalculationTools.Core
                 AttackBattleResultTable.IsAttackStrengthShown = value;
                 OnPropertyChanged();
             }
-
         }
 
         public bool IsDefenseStrengthShown
@@ -225,17 +229,14 @@ namespace CalculationTools.Core
             }
         }
 
-        #endregion
+        #endregion Filters
 
         #region Commands
 
         public ICommand ImportUnitCommand { get; set; }
 
-        #endregion
+        #endregion Commands
 
         #endregion Properties
-
-
-
     }
 }
