@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CalculationTools.Core.BattleSimulator;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace CalculationTools.Core
 {
@@ -63,6 +65,7 @@ namespace CalculationTools.Core
         public int Spearman { get; set; }
         public int Swordsman { get; set; }
         public int Trebuchet { get; set; }
+
         public List<int> UnitList
         {
             get =>
@@ -106,6 +109,8 @@ namespace CalculationTools.Core
                 }
             }
         }
+
+        public bool HasUnits => UnitList.Sum(unit => unit) > 0;
 
         #endregion Properties
 
@@ -174,6 +179,7 @@ namespace CalculationTools.Core
                 Paladin = GameData.GetUnitsKilled(Paladin, killRate),
             };
         }
+
         public List<BattleResultValueViewModel> ToBattleResultList()
         {
             List<BattleResultValueViewModel> list = new List<BattleResultValueViewModel>();
@@ -186,7 +192,6 @@ namespace CalculationTools.Core
 
         #region ApplyKillRate
 
-
         /// <summary>
         /// Applies the kill rate to this UnitSet and returns another UnitSet with the number of lost units.
         /// </summary>
@@ -198,7 +203,7 @@ namespace CalculationTools.Core
             List<int> lostList = GetUnitsLost(killRate).UnitList;
 
             // Subtract the loses from the current number of units
-            for (int i = 0; i < this.UnitList.Count; i++)
+            for (int i = 0; i < UnitList.Count; i++)
             {
                 newList.Add(UnitList[i] - lostList[i]);
             }
@@ -206,6 +211,7 @@ namespace CalculationTools.Core
             UnitList = newList;
             return new UnitSet(lostList);
         }
+
         public UnitSet ApplyKillRateAtkInfantry(decimal killRate)
         {
             UnitSet newLostUnitSet = new UnitSet
@@ -221,6 +227,7 @@ namespace CalculationTools.Core
 
             return newLostUnitSet;
         }
+
         public UnitSet ApplyKillRateAtkArchers(decimal killRate)
         {
             UnitSet newLostUnitSet = new UnitSet
@@ -269,9 +276,10 @@ namespace CalculationTools.Core
             return newLostUnitSet;
         }
 
+        #endregion ApplyKillRate
 
-        #endregion
         #region AtkStrength
+
         public int GetTotalInfantryAttack(WeaponSet weapon, bool defenseIsSuperior)
         {
             int totalAttack = 0;
@@ -314,7 +322,7 @@ namespace CalculationTools.Core
             return totalAttack;
         }
 
-        #endregion
+        #endregion AtkStrength
 
         #region TotalDefenseFrom
 
@@ -360,7 +368,59 @@ namespace CalculationTools.Core
             return totalDefense;
         }
 
-        #endregion
+        #endregion TotalDefenseFrom
+
+        #region NumberOfUnits
+
+        public int GetTotalInfantryUnits()
+        {
+            int totalNumberOfUnits = 0;
+            // Count all units that are NOT Cavalry and NOT archers
+            totalNumberOfUnits += Spearman;
+            totalNumberOfUnits += Swordsman;
+            totalNumberOfUnits += AxeFighter;
+            totalNumberOfUnits += Berserker;
+
+            return totalNumberOfUnits;
+        }
+
+        public int GetTotalCavalryUnits()
+        {
+            int totalNumberOfUnits = 0;
+
+            totalNumberOfUnits += LightCavalry;
+            totalNumberOfUnits += HeavyCavalry;
+
+            return totalNumberOfUnits;
+        }
+
+        public int GetTotalArcherUnits()
+        {
+            int totalNumberOfUnits = 0;
+
+            totalNumberOfUnits += Archer;
+            totalNumberOfUnits += MountedArcher;
+
+            return totalNumberOfUnits;
+        }
+
+        public int GetTotalSpecialUnits()
+        {
+            int totalNumberOfUnits = 0;
+            totalNumberOfUnits += Ram;
+            totalNumberOfUnits += Catapult;
+            totalNumberOfUnits += Trebuchet;
+            totalNumberOfUnits += Nobleman;
+            totalNumberOfUnits += Paladin;
+            return totalNumberOfUnits;
+        }
+
+        public int GetTotalUnits()
+        {
+            return GetTotalInfantryUnits() + GetTotalCavalryUnits() + GetTotalArcherUnits() + GetTotalSpecialUnits();
+        }
+
+        #endregion NumberOfUnits
 
         #region Provisions
 
@@ -393,8 +453,6 @@ namespace CalculationTools.Core
             totalProvisions += AxeFighter * GameData.AxeFighter.ProvisionCost;
             totalProvisions += Berserker * GameData.Berserker.ProvisionCost;
 
-            totalProvisions += Nobleman * GameData.Nobleman.ProvisionCost;
-
             return totalProvisions;
         }
 
@@ -407,6 +465,7 @@ namespace CalculationTools.Core
         {
             return Ram * GameData.Ram.ProvisionCost;
         }
+
         public int GetTotalSpecialProvisions()
         {
             int totalProvisions = 0;
@@ -416,9 +475,9 @@ namespace CalculationTools.Core
             totalProvisions += Nobleman * GameData.Nobleman.ProvisionCost;
             totalProvisions += Paladin * GameData.Paladin.ProvisionCost;
             return totalProvisions;
-
         }
-        #endregion
+
+        #endregion Provisions
 
         public void Clear()
         {
@@ -431,6 +490,29 @@ namespace CalculationTools.Core
             }
 
             UnitList = zeroList;
+        }
+
+        public override string ToString()
+        {
+            // Turning this into an loop causes error in debugging
+            // Visual Studio Debug Error:
+            // To prevent an unsafe abort when evaluating the function *.toString all threads where allowed to run.
+            // This may have changed the state of the process and any breakpoints encountered have been skipped.
+            string s = string.Empty;
+            if (Spearman > 0) s += $"Spearman = { Spearman }, { Environment.NewLine}";
+            if (Swordsman > 0) s += $"Swordsman = { Swordsman}, {Environment.NewLine}";
+            if (AxeFighter > 0) s += $"AxeFighter = { AxeFighter }, {Environment.NewLine}";
+            if (Archer > 0) s += $"Archer = { Archer }, {Environment.NewLine}";
+            if (LightCavalry > 0) s += $"LightCavalry = { LightCavalry }, {Environment.NewLine}";
+            if (MountedArcher > 0) s += $"MountedArcher = { MountedArcher}, {Environment.NewLine}";
+            if (HeavyCavalry > 0) s += $"HeavyCavalry = { HeavyCavalry }, {Environment.NewLine}";
+            if (Ram > 0) s += $"Ram = { Ram}, {Environment.NewLine}";
+            if (Catapult > 0) s += $"Catapult = { Catapult }, {Environment.NewLine}";
+            if (Berserker > 0) s += $"Berserker = { Berserker}, {Environment.NewLine}";
+            if (Trebuchet > 0) s += $"Trebuchet = { Trebuchet}, {Environment.NewLine}";
+            if (Nobleman > 0) s += $"Nobleman = { Nobleman }, {Environment.NewLine}";
+            if (Paladin > 0) s += $"Paladin = { Paladin}, {Environment.NewLine}";
+            return s;
         }
 
         #endregion Methods

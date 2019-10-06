@@ -119,9 +119,6 @@
             <TabItem Header="Unit Calculator" />
             <TabItem Header="Building Calculator" />
             <TabItem Header="Loyalty Calculator" />
-
         </TabControl>
-
     </DockPanel>
-
 </Window>

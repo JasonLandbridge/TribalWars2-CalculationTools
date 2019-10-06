@@ -8,7 +8,6 @@ namespace CalculationTools.App
     /// </summary>
     public partial class MainWindow : Window
     {
-
         #region Constructors
 
         public MainWindow()
@@ -18,6 +17,5 @@ namespace CalculationTools.App
         }
 
         #endregion Constructors
-
     }
 }

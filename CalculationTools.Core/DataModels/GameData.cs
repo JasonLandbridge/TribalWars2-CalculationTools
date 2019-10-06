@@ -9,6 +9,11 @@ namespace CalculationTools.Core
 {
     public static class GameData
     {
+        /// <summary>
+        /// Assuming the game uses the same method of rounding everywhere
+        /// </summary>
+        private static readonly MidpointRounding GameRounding = MidpointRounding.ToPositiveInfinity;
+
         #region Properties
 
         #region Units
@@ -58,29 +63,33 @@ namespace CalculationTools.Core
         public static SpearmanWeapon SpearmanWeapon { get; } = new SpearmanWeapon();
         public static SwordsmanWeapon SwordsmanWeapon { get; } = new SwordsmanWeapon();
 
+        /// <summary>
+        /// Returns the Attack modifier from the paladin weapon based on the weapon level.
+        /// </summary>
+        /// <param name="belongsToUnitType">Which <see cref="BaseUnit"/> does this weapon influence.</param>
+        /// <param name="weaponLevel">The weapon level 1-3</param>
+        /// <returns></returns>
         public static decimal GetAtkModifierFromWeapon(UnitType belongsToUnitType, int weaponLevel)
         {
-            foreach (BaseWeapon weapon in WeaponOptions)
+            foreach (BaseWeapon weapon in WeaponOptions.Where(weapon => weapon.BelongsToUnitType == belongsToUnitType))
             {
-                if (weapon.BelongsToUnitType == belongsToUnitType)
-                {
-                    return weapon.GetAtkModifier(weaponLevel);
-                }
+                return weapon.GetAtkModifier(weaponLevel);
             }
-
             return 1m;
         }
 
+        /// <summary>
+        /// Returns the Defense modifier from the paladin weapon based on the weapon level.
+        /// </summary>
+        /// <param name="belongsToUnitType">Which <see cref="BaseUnit"/> does this weapon influence.</param>
+        /// <param name="weaponLevel">The weapon level 1-3</param>
+        /// <returns></returns>
         public static decimal GetDefModifierFromWeapon(UnitType belongsToUnitType, int weaponLevel)
         {
-            foreach (BaseWeapon weapon in WeaponOptions)
+            foreach (BaseWeapon weapon in WeaponOptions.Where(weapon => weapon.BelongsToUnitType == belongsToUnitType))
             {
-                if (weapon.BelongsToUnitType == belongsToUnitType)
-                {
-                    return weapon.GetDefModifier(weaponLevel);
-                }
+                return weapon.GetDefModifier(weaponLevel);
             }
-
             return 1m;
         }
 
@@ -196,13 +205,20 @@ namespace CalculationTools.Core
             return UnitList.First(unit => unit.UnitType == unitType);
         }
 
+        public static WeaponSet GetWeapon(UnitType unitType, int weaponLevel)
+        {
+            decimal atkModifier = GetAtkModifierFromWeapon(unitType, weaponLevel);
+            decimal defModifier = GetDefModifierFromWeapon(unitType, weaponLevel);
+            return new WeaponSet(unitType, atkModifier, defModifier);
+        }
+
         #region Formulas
 
         #region BattleModifiers
 
         public static int AddAtkModifier(int atkStrength, decimal atkModifier)
         {
-            return (int)Math.Round(atkStrength * atkModifier, MidpointRounding.AwayFromZero);
+            return (int)Math.Round(atkStrength * atkModifier, GameRounding);
         }
 
         public static int AddDefModifier(int defStrength, decimal defModifier)
@@ -220,19 +236,19 @@ namespace CalculationTools.Core
             result += battleMeta.GrandMasterBonusPercentage + battleMeta.WeaponMasteryPercentage;
 
             // Test case of rounding by battle report: 0.91066 -> 0.92'
-            result = 1m * Math.Round(result, 2, MidpointRounding.ToPositiveInfinity);
+            result = 1m * Math.Round(result, 2, GameRounding);
             return result;
         }
 
-        public static decimal GetDefBattleModifier(BattleMeta battleMeta, int wallLevel)
+        public static decimal GetDefBattleModifier(BattleMeta battleMeta)
         {
             // Based on the wiki https://en.wiki.tribalwars2.com/index.php?title=Battles
 
             // 5% for every wall level
-            decimal wallBonus = 1m + wallLevel * 0.05m;
+            decimal wallBonus = 1m + battleMeta.WallLevel * 0.05m;
 
             // Math round is important 0.545 -> 0.55
-            decimal result = Math.Round(battleMeta.DefFaithBonus * wallBonus * battleMeta.NightBonusPercentage, 2, MidpointRounding.ToPositiveInfinity);
+            decimal result = Math.Round(battleMeta.DefFaithBonus * wallBonus * battleMeta.NightBonusPercentage, 2, GameRounding);
             return 1m * result;
         }
 
@@ -245,59 +261,51 @@ namespace CalculationTools.Core
             decimal paladinModifier = (unitType == weapon.BelongsToUnitType ? weapon.AtkModifier : 0) + 1;
 
             decimal fightingPower = FightingPower * paladinModifier;
-            return (int)Math.Round(numberOfUnits * fightingPower, MidpointRounding.AwayFromZero);
+            return (int)Math.Round(numberOfUnits * fightingPower, GameRounding);
         }
 
         public static decimal GetAtkKillRate(int atkStrength, int defStrength)
         {
-            if (atkStrength <= 0 || defStrength <= 0)
-            {
-                return 0;
-            }
+            if (atkStrength <= 0 || defStrength <= 0) return 0;
 
-            decimal atkDefRatio = Math.Round(atkStrength / (decimal)defStrength, 9, MidpointRounding.AwayFromZero);
+            decimal atkDefRatio = atkStrength / (decimal)defStrength;
             decimal defKillRate = atkStrength <= defStrength ? 1 : (decimal)Math.Sqrt(1 / (double)atkDefRatio) / atkDefRatio;
 
-            return Math.Round(defKillRate, 6, MidpointRounding.AwayFromZero);
+            return defKillRate;
         }
 
         public static decimal GetDefKillRate(int atkStrength, int defStrength)
         {
-            if (atkStrength <= 0 || defStrength <= 0)
-            {
-                return 0;
-            }
+            if (atkStrength <= 0 || defStrength <= 0) return 0;
 
-            decimal atkDefRatio = Math.Round(defStrength / (decimal)atkStrength, 9, MidpointRounding.AwayFromZero);
+            decimal atkDefRatio = defStrength / (decimal)atkStrength;
             decimal atkKillRate = defStrength <= atkStrength ? 1 : (decimal)Math.Sqrt(1 / (double)atkDefRatio) / atkDefRatio;
 
-            return Math.Round(atkKillRate, 6, MidpointRounding.AwayFromZero);
+            return atkKillRate;
         }
 
         public static int GetRamsKilled(int numberOfRams, int numberOfCatapults, int numberOfTrebuchet)
         {
             decimal totalSiege = numberOfRams + (decimal)numberOfCatapults;
-            if (totalSiege == 0)
-            {
-                return 0;
-            }
+            if (totalSiege == 0) return 0;
+
             decimal x = numberOfTrebuchet * (numberOfRams / totalSiege);
-            return (int)Math.Round(x, MidpointRounding.AwayFromZero);
+            return (int)Math.Round(x, GameRounding);
         }
 
         public static decimal GetUnitProvisionRatio(int unitProvisions, int totalUnitProvisions)
         {
-            if (totalUnitProvisions <= 0)
-            {
-                return 0;
-            }
+            if (totalUnitProvisions <= 0) return 0;
+
             decimal x = unitProvisions / (decimal)totalUnitProvisions;
-            return Math.Round(x, 6, MidpointRounding.AwayFromZero);
+            return x;
         }
 
         public static int GetUnitRatio(decimal ratio, int numberOfUnits)
         {
-            decimal unitRatio = ratio * (decimal)numberOfUnits;
+            if (ratio == 1m) return numberOfUnits;
+
+            decimal unitRatio = ratio * numberOfUnits;
             int unitCount = (int)Math.Round(unitRatio, MidpointRounding.AwayFromZero);
             return unitCount;
         }
@@ -310,17 +318,18 @@ namespace CalculationTools.Core
         /// <returns></returns>
         public static int GetUnitsKilled(int numberOfUnits, decimal killRate)
         {
+            if (numberOfUnits == 0) return 0;
+            if (killRate == 1m) return numberOfUnits;
+
             decimal x = numberOfUnits * killRate;
             return (int)Math.Round(x + 0.000001m, MidpointRounding.AwayFromZero);
         }
 
         public static int GetWallDefense(int wallLevel)
         {
-            if (wallLevel == 0)
-            {
-                return 0;
-            }
-            return (int)Math.Round(Math.Pow(1.2515, wallLevel - 1) * 20, MidpointRounding.AwayFromZero);
+            if (wallLevel == 0) return 0;
+
+            return (int)Math.Round(Math.Pow(1.2515, wallLevel - 1) * 20, GameRounding);
         }
 
         #endregion Formulas
@@ -329,6 +338,13 @@ namespace CalculationTools.Core
 
         public static int PreRound(ref BattleResult result, WeaponSet atkWeapon)
         {
+            // Abort when there are no attacking rams or catapults, assumes nothing else damages the wall
+            if (result.AtkUnits.Ram == 0 && result.AtkUnits.Catapult == 0)
+            {
+                result.WallLevelAfter = result.WallLevelBefore;
+                return result.WallLevelBefore;
+            }
+
             // Based on https://en.forum.tribalwars2.com/index.php?threads/unraveling-some-myths-regarding-the-battle-engine.3959/
 
             int wallLevel = Math.Clamp(result.WallLevelBefore, 0, 20);
@@ -387,7 +403,7 @@ namespace CalculationTools.Core
                 else
                 {
                     decimal rawLevel = wallLevel - wallDamage;
-                    resultingWallLevel = (int)Math.Round(rawLevel, MidpointRounding.AwayFromZero);
+                    resultingWallLevel = (int)Math.Round(rawLevel, GameRounding);
                 }
             }
 
@@ -396,30 +412,32 @@ namespace CalculationTools.Core
             return result.WallLevelAfter;
         }
 
-        public static BattleResult SimulateBattle(BattleSimulatorInputViewModel battleSimulatorInput)
+        public static BattleResult SimulateBattle(BattleConfig battleConfig)
         {
             // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
             // Based on: Battle Simulator - http://www.ds-pro.de/2/simulator.php
-            BattleResult result = battleSimulatorInput.ToBattleResult();
+            BattleResult result = new BattleResult(battleConfig);
 
-            BattleMeta battleMeta = battleSimulatorInput.GetBattleMeta();
-            WeaponSet paladinAtkWeapon = battleSimulatorInput.GetAtkWeapon();
-            WeaponSet paladinDefWeapon = battleSimulatorInput.GetDefWeapon();
+            BattleMeta battleMeta = battleConfig.BattleMeta;
+            WeaponSet paladinAtkWeapon = battleConfig.GetAtkWeapon();
+            WeaponSet paladinDefWeapon = battleConfig.GetDefWeapon();
 
             decimal atkModifier = GetAtkBattleModifier(battleMeta);
             result.AtkBattleModifier = (int)(atkModifier * 100m);
-            decimal defModifier = GetDefBattleModifier(battleMeta, result.WallLevelBefore);
-            result.DefBattleModifier = (int)(defModifier * 100m);
+            decimal defModifier = GetDefBattleModifier(battleMeta);
+            result.DefModifierBeforeBattle = (int)(defModifier * 100m);
 
             // Stop here if there are no units given
-            if (!battleSimulatorInput.IsValid)
+            if (!battleConfig.HasUnits)
             {
                 return result;
             }
 
-            int resultingWallLevel = PreRound(ref result, paladinAtkWeapon);
-            defModifier = GetDefBattleModifier(battleMeta, resultingWallLevel);
-            result.DefBattleModifier = (int)(defModifier * 100m);
+            // Re-calculate the defense modifier when the wall has been damaged
+            int wallLevelAfterPreRound = PreRound(ref result, paladinAtkWeapon);
+            battleMeta.WallLevel = wallLevelAfterPreRound;
+            defModifier = GetDefBattleModifier(battleMeta);
+            result.DefModifierDuringBattle = (int)(defModifier * 100m);
 
             List<BattleResult> BattleHistory = new List<BattleResult> { result.Copy() };
             BattleResult currentRound = BattleHistory.Last();
@@ -452,6 +470,15 @@ namespace CalculationTools.Core
                     break;
                 }
 
+                // Get the number of units for each group, this is used to determine which group the special group joins
+                int atkInfantryUnits = atkUnits.GetTotalInfantryUnits();
+                int atkCavalryUnits = atkUnits.GetTotalCavalryUnits();
+                int atkArchersUnits = atkUnits.GetTotalArcherUnits();
+                int atkSpecialUnits = atkUnits.GetTotalSpecialUnits();
+
+                int totalAtkUnits = atkInfantryUnits + atkCavalryUnits + atkArchersUnits + atkSpecialUnits;
+
+                // Determine if the defense is superior, if so, then double the berserker attack strength.
                 bool defSuperior = (totalAtkProvisions * 2 <= totalDefProvisions);
                 int atkInfantry = atkUnits.GetTotalInfantryAttack(paladinAtkWeapon, defSuperior);
                 int atkCavalry = atkUnits.GetTotalCavalryAttack(paladinAtkWeapon);
@@ -461,15 +488,15 @@ namespace CalculationTools.Core
 
                 int strongestGroupIndex;
 
-                // Determine which group the special units join during battle, the strongest one gets them
-                if (atkInfantry > atkCavalry && atkInfantry > atkArchers)
+                // Determine which group the special units join during battle, the group with the highest number of units gets them.
+                if (atkInfantryUnits > atkCavalryUnits && atkInfantryUnits > atkArchersUnits)
                 {
                     //AtkInfantry is the strongest group
                     atkInfantry += atkSpecial;
                     atkInfantryProvisions += atkSpecialProvisions;
                     strongestGroupIndex = 1;
                 }
-                else if (atkCavalry > atkInfantry && atkCavalry > atkInfantry)
+                else if (atkCavalryUnits > atkInfantryUnits && atkCavalryUnits > atkArchersUnits)
                 {
                     //atkCavalry is the strongest group
                     atkCavalry += atkSpecial;
@@ -646,7 +673,7 @@ namespace CalculationTools.Core
             // Calculate the new wall level after damage applied
             int finalWallLevel;
             int afterBattleWall = result.WallLevelAfter;
-            int ironWall = 0; //TODO Need to make an battleSimulatorInput that takes the Tribe skill Iron wall into account
+            int ironWall = 0; //TODO Need to make an battleConfig that takes the Tribe skill Iron wall into account
             // If the wall is already below the Iron Wall threshold then don't change anything.
             if (afterBattleWall <= ironWall)
             {
@@ -661,10 +688,10 @@ namespace CalculationTools.Core
                 else
                 {
                     decimal rawLevel = Math.Clamp(afterBattleWall - wallDamage, 0, 20);
-                    finalWallLevel = (int)Math.Round(rawLevel, MidpointRounding.AwayFromZero);
+                    finalWallLevel = (int)Math.Round(rawLevel, GameRounding);
                 }
             }
-            result.WallLevelAfter = finalWallLevel;
+            result.WallLevelFinal = finalWallLevel;
         }
 
         #endregion BattleSimulation

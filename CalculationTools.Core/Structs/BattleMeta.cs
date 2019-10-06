@@ -9,9 +9,25 @@
 
         #region Weapons
 
+        /// <summary>
+        /// The weapon level used on the attacking side of the battle.
+        /// </summary>
         public int AtkWeaponLevel { get; set; }
+
+        /// <summary>
+        /// The weapon type used on the attacking side of the battle.
+        /// </summary>
         public BaseWeapon AtkWeapon { get; set; }
+
+        /// <summary>
+        /// The weapon level  used on the defending side of the battle.
+        /// </summary>
+
         public int DefWeaponLevel { get; set; }
+
+        /// <summary>
+        /// The weapon type  used on the defending side of the battle.
+        /// </summary>
         public BaseWeapon DefWeapon { get; set; }
 
         #endregion Weapons

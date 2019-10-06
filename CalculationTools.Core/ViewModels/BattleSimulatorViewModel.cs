@@ -78,7 +78,8 @@ namespace CalculationTools.Core
                     Luck = 13,
                     Morale = 62,
                     NightBonus = false,
-                    WeaponMastery = 2
+                    WeaponMastery = 2,
+                    WallLevel = 20
                 }
             };
 
@@ -113,7 +114,7 @@ namespace CalculationTools.Core
         public void UpdateBattleResult(BattleResult battleResult)
         {
             AttackBattleResultTable.BattleModifier = battleResult.AtkBattleModifier.ToString();
-            DefenseBattleResultTable.BattleModifier = battleResult.DefBattleModifier.ToString();
+            DefenseBattleResultTable.BattleModifier = battleResult.DefModifierBeforeBattle.ToString();
 
             DefenseBattleResultTable.WallResult.Content = battleResult.WallResult;
 
@@ -159,7 +160,7 @@ namespace CalculationTools.Core
         private void RunBattleSimulator()
         {
             Debug.WriteLine("Battle Calculator updated!");
-            BattleResult battleResult = GameData.SimulateBattle(BattleSimulatorInputViewModel);
+            BattleResult battleResult = GameData.SimulateBattle(BattleSimulatorInputViewModel.ToBattleConfig());
             UpdateBattleResult(battleResult);
         }
 

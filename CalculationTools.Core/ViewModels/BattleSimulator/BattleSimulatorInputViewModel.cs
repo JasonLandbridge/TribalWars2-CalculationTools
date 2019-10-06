@@ -15,11 +15,13 @@ namespace CalculationTools.Core
             SetupValues();
             DefaultValues();
         }
+
         #endregion Constructors
 
         #region Properties
 
         #region Units
+
         #region UnitInput
 
         public static InputUnitRow Archer { get; set; } = new InputUnitRow
@@ -27,6 +29,7 @@ namespace CalculationTools.Core
             ImagePath = GameData.Archer.ImagePath,
             Name = GameData.Archer.Name,
         };
+
         public static InputUnitRow AxeFighter { get; set; } = new InputUnitRow
         {
             ImagePath = GameData.AxeFighter.ImagePath,
@@ -80,6 +83,7 @@ namespace CalculationTools.Core
             ImagePath = GameData.Ram.ImagePath,
             Name = GameData.Ram.Name,
         };
+
         public static InputUnitRow Spearman { get; set; } = new InputUnitRow
         {
             ImagePath = GameData.Spearman.ImagePath,
@@ -98,8 +102,8 @@ namespace CalculationTools.Core
             Name = GameData.Trebuchet.Name,
         };
 
+        #endregion UnitInput
 
-        #endregion
         public int TotalAtkUnits
         {
             get
@@ -117,7 +121,6 @@ namespace CalculationTools.Core
         }
 
         public int TotalUnits => TotalAtkUnits + TotalDefUnits;
-
 
         public static ObservableCollection<InputUnitRow> Units { get; set; } = new ObservableCollection<InputUnitRow>
         {
@@ -142,10 +145,9 @@ namespace CalculationTools.Core
         public string InputGrandmasterBonusImagePath { get; } = "/Resources/Img/units/unit_grandmaster.png";
         public string InputGrandmasterBonusLabel { get; } = "Grand Master";
 
-        #endregion
+        #endregion Officers
 
-
-        #endregion
+        #endregion Units
 
         #region Buildings
 
@@ -161,9 +163,7 @@ namespace CalculationTools.Core
 
         public string InputWallLabel { get; } = "Wall";
 
-
-
-        #endregion
+        #endregion Buildings
 
         #region Weapons
 
@@ -177,7 +177,8 @@ namespace CalculationTools.Core
         public string InputPaladinWeaponImagePath { get; } = "/Resources/Img/weapons/paladin_weapon.png";
 
         public string InputPaladinWeaponLabel { get; } = "Paladin Weapon";
-        #endregion
+
+        #endregion Weapons
 
         #region Meta
 
@@ -193,15 +194,17 @@ namespace CalculationTools.Core
         public int InputWeaponMastery { get; set; }
         public string InputWeaponMasteryImagePath { get; } = "/Resources/Img/info/info_weapon_mastery.png";
         public string InputWeaponMasteryLabel { get; } = "Weapon Mastery";
-        #endregion
+
+        #endregion Meta
 
         #region Commands
 
         public ICommand OpenImportUnitsCommand { get; set; }
 
-        #endregion
+        #endregion Commands
 
         public bool IsValid => TotalUnits != 0;
+
         #endregion Properties
 
         #region Methods
@@ -274,13 +277,19 @@ namespace CalculationTools.Core
             LoadAtkUnits(atkUnits);
             LoadDefUnits(defUnits);
         }
-        #endregion
+
+        #endregion Loading
 
         #region Export
 
-        public BattleResult ToBattleResult()
+        public BattleConfig ToBattleConfig()
         {
-            UnitSet AtkUnits = new UnitSet
+            return new BattleConfig(GetAtkUnitSet(), GetDefUnitSet(), GetBattleMeta());
+        }
+
+        public UnitSet GetAtkUnitSet()
+        {
+            return new UnitSet
             {
                 Spearman = Spearman.NumberOnAttack,
                 Swordsman = Swordsman.NumberOnAttack,
@@ -296,8 +305,11 @@ namespace CalculationTools.Core
                 Nobleman = Nobleman.NumberOnAttack,
                 Paladin = Paladin.NumberOnAttack,
             };
+        }
 
-            UnitSet DefUnits = new UnitSet
+        public UnitSet GetDefUnitSet()
+        {
+            return new UnitSet
             {
                 Spearman = Spearman.NumberOnDefense,
                 Swordsman = Swordsman.NumberOnDefense,
@@ -313,42 +325,6 @@ namespace CalculationTools.Core
                 Nobleman = Nobleman.NumberOnDefense,
                 Paladin = Paladin.NumberOnDefense,
             };
-
-            return new BattleResult
-            {
-                WallLevelBefore = InputWall,
-                AtkUnits = AtkUnits,
-                DefUnits = DefUnits,
-                AtkWeapon = GetAtkWeapon(),
-                DefWeapon = GetDefWeapon()
-            };
-
-        }
-
-        public WeaponSet GetAtkWeapon()
-        {
-            if (InputAtkWeapon == null || Paladin.NumberOnAttack <= 0 || InputAtkWeapon.BelongsToUnitType == null)
-            {
-                return new WeaponSet();
-            }
-
-            UnitType unitType = (UnitType)InputAtkWeapon.BelongsToUnitType;
-            decimal atkModifier = GameData.GetAtkModifierFromWeapon(unitType, InputAtkWeaponLevel);
-            decimal defModifier = GameData.GetDefModifierFromWeapon(unitType, InputAtkWeaponLevel);
-            return new WeaponSet(unitType, atkModifier, defModifier);
-        }
-
-        public WeaponSet GetDefWeapon()
-        {
-            if (InputDefWeapon == null || Paladin.NumberOnDefense <= 0 || InputDefWeapon.BelongsToUnitType == null)
-            {
-                return new WeaponSet();
-            }
-
-            UnitType unitType = (UnitType)InputDefWeapon.BelongsToUnitType;
-            decimal atkModifier = GameData.GetAtkModifierFromWeapon(unitType, InputDefWeaponLevel);
-            decimal defModifier = GameData.GetDefModifierFromWeapon(unitType, InputDefWeaponLevel);
-            return new WeaponSet(unitType, atkModifier, defModifier);
         }
 
         public BattleMeta GetBattleMeta()
@@ -370,10 +346,10 @@ namespace CalculationTools.Core
             };
         }
 
-        #endregion
+        #endregion Export
+
         public void DefaultValues()
         {
-
             BattleConfig defaultConfig = new BattleConfig
             {
                 AtkUnits = new UnitSet
@@ -429,6 +405,7 @@ namespace CalculationTools.Core
 
             LoadBattleConfig(defaultConfig);
         }
+
         private void SetupValues()
         {
             //Add property notification to nested properties
@@ -436,7 +413,6 @@ namespace CalculationTools.Core
             {
                 inputUnitRow.PropertyChanged += (sender, args) => OnPropertyChanged();
             }
-
         }
 
         #endregion Methods
