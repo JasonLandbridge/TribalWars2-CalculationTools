@@ -14,7 +14,15 @@
     <PublishTrimmed>true</PublishTrimmed>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <StartupObject>CalculationTools.App.App</StartupObject>
-    <AssemblyVersion>0.0.1.0</AssemblyVersion>
+    <AssemblyVersion>0.0.2.0</AssemblyVersion>
+    <Authors>Jason Landbrug</Authors>
+    <Product>TribalWars2-CalculationTools</Product>
+    <FileVersion>0.0.2.0</FileVersion>
+    <PackageId>TribalWars2-CalculationTools</PackageId>
+    <PackageProjectUrl>https://github.com/JasonLandbridge/TribalWars2-CalculationTools/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/JasonLandbridge/TribalWars2-CalculationTools/</RepositoryUrl>
+    <PackageTags>BattleSimulator</PackageTags>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

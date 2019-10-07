@@ -36,7 +36,7 @@ namespace CalculationTools.App
             //Check for updates
             //MessageBox.Show(typeof(App).Assembly.GetName().Version.ToString());
 
-            //AutoUpdate();
+            AutoUpdate();
         }
 
         public void AutoUpdate()

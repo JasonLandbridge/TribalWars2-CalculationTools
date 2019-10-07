@@ -162,6 +162,49 @@ namespace CalculationTools.Core
             return !u1.Equals(u2);
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is UnitSet other && Equals(other);
+        }
+
+        public bool Equals(UnitSet other)
+        {
+            return
+                Spearman == other.Spearman &&
+                Swordsman == other.Swordsman &&
+                AxeFighter == other.AxeFighter &&
+                Archer == other.Archer &&
+                LightCavalry == other.LightCavalry &&
+                MountedArcher == other.MountedArcher &&
+                HeavyCavalry == other.HeavyCavalry &&
+                Ram == other.Ram &&
+                Catapult == other.Catapult &&
+                Berserker == other.Berserker &&
+                Trebuchet == other.Trebuchet &&
+                Nobleman == other.Nobleman &&
+                Paladin == other.Paladin;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = Archer;
+                hashCode = (hashCode * 397) ^ AxeFighter;
+                hashCode = (hashCode * 397) ^ Berserker;
+                hashCode = (hashCode * 397) ^ Catapult;
+                hashCode = (hashCode * 397) ^ HeavyCavalry;
+                hashCode = (hashCode * 397) ^ LightCavalry;
+                hashCode = (hashCode * 397) ^ MountedArcher;
+                hashCode = (hashCode * 397) ^ Nobleman;
+                hashCode = (hashCode * 397) ^ Paladin;
+                hashCode = (hashCode * 397) ^ Ram;
+                hashCode = (hashCode * 397) ^ Spearman;
+                hashCode = (hashCode * 397) ^ Swordsman;
+                hashCode = (hashCode * 397) ^ Trebuchet;
+                return hashCode;
+            }
+        }
 
         #endregion
 

@@ -1,4 +1,6 @@
 ﻿using Ninject;
+using nucs.JsonSettings;
+using nucs.JsonSettings.Autosave;
 
 namespace CalculationTools.Core
 {
@@ -14,6 +16,10 @@ namespace CalculationTools.Core
         /// </summary>
         public static IKernel Kernel { get; } = new StandardKernel();
 
+        /// <summary>
+        /// All settings are stored here and auto saved on change.
+        /// </summary>
+        public static Settings Settings { get; } = JsonSettings.Load<Settings>("Settings.json").EnableAutosave();
         #endregion Properties
 
         #region Methods
@@ -37,6 +43,7 @@ namespace CalculationTools.Core
         {
             // Bind all view models
             BindViewModel(dialogService);
+            BindModels();
         }
 
         /// <summary>
@@ -51,6 +58,11 @@ namespace CalculationTools.Core
             Kernel.Bind<BattleSimulatorViewModel>().ToConstant(new BattleSimulatorViewModel(dialogService));
         }
 
+        private static void BindModels()
+        {
+            Kernel.Bind<Settings>().ToConstant(Settings);
+        }
+
 
         public static ApplicationViewModel GetApplicationViewModel()
         {
@@ -61,6 +73,7 @@ namespace CalculationTools.Core
         {
             return Get<BattleSimulatorViewModel>();
         }
+
         #endregion Methods
     }
 }
