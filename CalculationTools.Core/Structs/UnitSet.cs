@@ -116,6 +116,8 @@ namespace CalculationTools.Core
 
         #region Methods
 
+        #region Operators
+
         public static UnitSet operator -(UnitSet u1, UnitSet u2) => new UnitSet
         {
             Spearman = u1.Spearman - u2.Spearman,
@@ -149,6 +151,19 @@ namespace CalculationTools.Core
             Nobleman = u1.Nobleman + u2.Nobleman,
             Paladin = u1.Paladin + u2.Paladin,
         };
+
+        public static bool operator ==(UnitSet u1, UnitSet u2)
+        {
+            return u1.Equals(u2);
+        }
+
+        public static bool operator !=(UnitSet u1, UnitSet u2)
+        {
+            return !u1.Equals(u2);
+        }
+
+
+        #endregion
 
         public UnitSet GetUnitsByRatio(decimal ratio = 1m)
         {

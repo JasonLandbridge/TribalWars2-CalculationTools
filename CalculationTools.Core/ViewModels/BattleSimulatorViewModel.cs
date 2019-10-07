@@ -41,7 +41,7 @@ namespace CalculationTools.Core
                     LightCavalry = 1645,
                     MountedArcher = 1021,
                     HeavyCavalry = 0,
-                    Ram = 0,
+                    Ram = 525,
                     Catapult = 0,
                     Berserker = 0,
                     Trebuchet = 0,

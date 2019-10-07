@@ -69,7 +69,7 @@ namespace CalculationTools.Core
         public int WallLevelAfter { get; set; }
         public int WallLevelBefore => BattleConfig.BattleMeta.WallLevel;
         public int WallLevelFinal { get; set; }
-        public string WallResult => ShowWallResult ? $"Wall went from level {WallLevelBefore} to {WallLevelAfter}." : "No damage was done to the wall.";
+        public string WallResult => ShowWallResult ? $"Wall went from level {WallLevelBefore}, to {WallLevelAfter} during the battle and finally {WallLevelFinal}." : "No damage was done to the wall.";
 
         #region ResultList
 

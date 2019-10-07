@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using CalculationTools.Core.BattleSimulator;
 using CalculationTools.Core.Enums;
@@ -306,7 +307,7 @@ namespace CalculationTools.Core
             if (ratio == 1m) return numberOfUnits;
 
             decimal unitRatio = ratio * numberOfUnits;
-            int unitCount = (int)Math.Round(unitRatio, MidpointRounding.AwayFromZero);
+            int unitCount = (int)Math.Round(unitRatio + 0.000001m, MidpointRounding.AwayFromZero);
             return unitCount;
         }
 
@@ -322,7 +323,7 @@ namespace CalculationTools.Core
             if (killRate == 1m) return numberOfUnits;
 
             decimal x = numberOfUnits * killRate;
-            return (int)Math.Round(x + 0.000001m, MidpointRounding.AwayFromZero);
+            return (int)Math.Round(x, MidpointRounding.AwayFromZero);
         }
 
         public static int GetWallDefense(int wallLevel)
@@ -526,6 +527,11 @@ namespace CalculationTools.Core
                 UnitSet cavalryGroupDefUnitSet = defUnits.GetUnitsByRatio(atkCavalryRatio);
                 UnitSet archerGroupDefUnitSet = defUnits.GetUnitsByRatio(atkArchersRatio);
 
+                //Check if the defUnits were divided correctly, if not, then use the difference value later to counteract the rounding error
+                UnitSet defUnitSetSum = infantryGroupDefUnitSet + cavalryGroupDefUnitSet + archerGroupDefUnitSet;
+                UnitSet difference = defUnits - defUnitSetSum;
+
+
                 int totalDefFromInfantry = infantryGroupDefUnitSet.GetTotalDefFromInfantry(paladinDefWeapon);
                 int totalDefFromCavalry = cavalryGroupDefUnitSet.GetTotalDefFromCavalry(paladinDefWeapon);
                 int totalDefFromArchers = archerGroupDefUnitSet.GetTotalDefFromArchers(paladinDefWeapon);
@@ -552,13 +558,13 @@ namespace CalculationTools.Core
 
                 if (atkCavalry > 0 && totalDefFromCavalry > 0)
                 {
-                    atkWonRound2 = (atkCavalry >= totalDefFromCavalry);
+                    atkWonRound2 = atkCavalry >= totalDefFromCavalry;
                     miniBattleResult.Add((bool)atkWonRound2);
                 }
 
                 if (atkArchers > 0 && totalDefFromArchers > 0)
                 {
-                    atkWonRound3 = (atkArchers >= totalDefFromArchers);
+                    atkWonRound3 = atkArchers >= totalDefFromArchers;
                     miniBattleResult.Add((bool)atkWonRound3);
                 }
 
@@ -622,7 +628,8 @@ namespace CalculationTools.Core
                 }
 
                 UnitSet survivingDefUnits = infantryGroupDefUnitSet + cavalryGroupDefUnitSet + archerGroupDefUnitSet;
-                UnitSet defUnitsLost = infantryGroupDefUnitSetLost + cavalryGroupDefUnitSetLost + archerGroupDefUnitSetLost;
+                // Compensate for the rounding error by adding the difference to the unitsLost
+                UnitSet defUnitsLost = infantryGroupDefUnitSetLost + cavalryGroupDefUnitSetLost + archerGroupDefUnitSetLost + difference;
 
                 currentRound.AtkUnits = atkUnits;
                 currentRound.AtkUnitsLost = atkUnitsLost;
