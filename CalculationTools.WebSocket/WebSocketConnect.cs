@@ -7,7 +7,9 @@ using System.Reflection.Metadata.Ecma335;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NLog;
 using Websocket.Client;
+
 
 namespace CalculationTools.WebSocket
 {
@@ -17,9 +19,7 @@ namespace CalculationTools.WebSocket
         public static string SessionID { get; set; }
 
         public static readonly Uri SocketURL = new Uri("wss://en.tribalwars2.com/socket.io/?platform=desktop&EIO=3&transport=websocket");
-
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
+        private static Logger Log = LogManager.GetCurrentClassLogger();
         public static string AccessToken { get; set; }
 
         public static WebsocketClient Client = new WebsocketClient(SocketURL);

@@ -1,11 +1,7 @@
 ﻿using AutoUpdaterDotNET;
 using CalculationTools.Core;
 using CalculationTools.Core.BattleSimulator;
-using log4net;
-using log4net.Config;
 using System;
-using System.IO;
-using System.Reflection;
 using System.Windows;
 
 namespace CalculationTools.App
@@ -16,7 +12,6 @@ namespace CalculationTools.App
     /// </summary>
     public partial class App : Application
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(App));
 
         /// <summary>
         /// Custom startup so we load our IoC immediately before anything else.
@@ -26,12 +21,6 @@ namespace CalculationTools.App
         {
             // Let the base application do what it needs
             base.OnStartup(e);
-
-            // Setup Log4Net
-            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
-
-            Log.Info("        =============  Started Logging  =============        ");
 
             IDialogService dialogService = new DialogService(MainWindow);
             dialogService.Register<UnitImportWindowViewModel, UnitImportWidow>();
@@ -58,5 +47,7 @@ namespace CalculationTools.App
             AutoUpdater.Start("https://raw.githubusercontent.com/JasonLandbridge/TribalWars2-CalculationTools/master/CalculationTools.App/Resources/Updates/AutoUpdater.xml");
 
         }
+
+
     }
 }

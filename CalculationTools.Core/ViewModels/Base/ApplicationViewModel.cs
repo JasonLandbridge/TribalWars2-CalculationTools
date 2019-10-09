@@ -1,4 +1,7 @@
-﻿using CalculationTools.Core.Base;
+﻿using System;
+using CalculationTools.Core.Base;
+using NLog;
+
 
 namespace CalculationTools.Core
 {
@@ -7,6 +10,15 @@ namespace CalculationTools.Core
     /// </summary>
     public class ApplicationViewModel : BaseViewModel
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
+        public ApplicationViewModel()
+        {
+            SetupLogging();
+        }
+        public void SetupLogging()
+        {
+            logger.Error("This is an error message");
+        }
     }
 }

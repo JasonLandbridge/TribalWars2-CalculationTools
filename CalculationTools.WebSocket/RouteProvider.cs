@@ -28,7 +28,6 @@ namespace CalculationTools.WebSocket
                 {
                     platform = "browser",
                     api_version = "10.*.*",
-                    // TODO make sure this is a random device each time
                     device = fakeUserAgent
                 },
                 id = 1
