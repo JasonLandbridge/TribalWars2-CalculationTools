@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Websocket.Client;
-using WebSocketSharp;
 
 namespace CalculationTools.WebSocket
 {
@@ -17,6 +17,10 @@ namespace CalculationTools.WebSocket
         public static string SessionID { get; set; }
 
         public static readonly Uri SocketURL = new Uri("wss://en.tribalwars2.com/socket.io/?platform=desktop&EIO=3&transport=websocket");
+
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        public static string AccessToken { get; set; }
 
         public static WebsocketClient Client = new WebsocketClient(SocketURL);
 
@@ -29,15 +33,15 @@ namespace CalculationTools.WebSocket
         //    {
         //        ws.OnOpen += (sender, e) =>
         //        {
-        //            Debug.WriteLine("Server is connected!");
+        //            Log.Info("Server is connected!");
         //        };
         //        ws.OnMessage += (sender, e) =>
         //        {
-        //            Debug.WriteLine("Message received: " + e.Data);
+        //            Log.Info("Message received: " + e.Data);
         //        };
         //        ws.OnError += (sender, e) =>
         //        {
-        //            Debug.WriteLine("Message Error: " + e.Message);
+        //            Log.Info("Message Error: " + e.Message);
         //        };
         //        ws.Connect();
 
@@ -45,7 +49,7 @@ namespace CalculationTools.WebSocket
 
         //        ws.SendAsync(message, b =>
         //         {
-        //             Debug.WriteLine("Sending second message:");
+        //             Log.Info("Sending second message:");
         //             message = $"42[\"msg\", {RouteProvider.Login("***REMOVED***", "***REMOVED***")},\"id\":2,\"headers\":{{\"traveltimes\":[[\"browser_send\",1570555427473]]}}}} ]";
         //             ws.Send(message);
         //         });
@@ -53,18 +57,18 @@ namespace CalculationTools.WebSocket
         //    }
 
         //}
-        public static async void StartConnection()
+        public static void StartConnection()
         {
 
             Client.ReconnectTimeoutMs = (int)TimeSpan.FromSeconds(30).TotalMilliseconds;
             Client.ReconnectionHappened.Subscribe(type =>
             {
-                Debug.WriteLine($"Reconnection happened, type: {type}");
+                Log.Info($"Reconnection happened, type: {type}");
 
                 switch (type)
                 {
                     case ReconnectionType.Initial:
-                        Debug.WriteLine("Server is connected!");
+                        Log.Info("Server is connected!");
                         break;
                     case ReconnectionType.Lost:
                         Client.Dispose();
@@ -73,39 +77,46 @@ namespace CalculationTools.WebSocket
             });
             Client.DisconnectionHappened.Subscribe(type =>
             {
-                Debug.WriteLine("Connection was disconnected by server");
+                Log.Info("Connection was disconnected by server");
             });
             Client.MessageReceived.Subscribe(msg =>
             {
-                Debug.WriteLine($"Message received: {msg}");
+                Log.Info($"Message received: {msg}");
                 ParseResponse(msg.Text);
             });
 
+
+            Log.Info("Start connection with TribalWars2");
             Client.Start().Wait();
 
             // Send keep alive ping
-            await Task.Run(StartSendingPing);
+            Task.Run(StartSendingPing);
 
             ExitEvent.WaitOne();
 
 
         }
 
-
+        public static void CloseConnection()
+        {
+            Client.Dispose();
+        }
 
         private static void ParseResponse(string response)
         {
             if (response == null)
             {
-                Debug.WriteLine("The response was null");
+                Log.Info("The response was null");
                 return;
             }
 
             if (response == "40")
             {
-                Debug.WriteLine("The connection was confirmed with code 40");
+                Log.Info("The connection was confirmed with code 40");
                 return;
             }
+
+            response = CleanResponse(response);
 
             SocketResponse socketResponse = ParseSocketResponse(response);
 
@@ -121,13 +132,37 @@ namespace CalculationTools.WebSocket
                     SendMessage(RouteProvider.AddMsg(RouteProvider.Login("***REMOVED***", "***REMOVED***")));
                     break;
 
+                case RouteProvider.LOGIN_SUCCESS:
+                    ParseLoginSuccess(response);
+                    break;
+
+
                 default:
                     break;
             }
         }
 
+        private static void ParseLoginSuccess(string response)
+        {
+            LoginDTO loginDto = new LoginDTO();
 
-        private static string FilterSocketId(string response)
+            try
+            {
+                loginDto = JsonConvert.DeserializeObject<LoginDTO>(response);
+            }
+            catch (Exception e)
+            {
+                Log.Info("Could not deserialize the following string:", e);
+            }
+
+            AccessToken = loginDto.Data.AccessToken;
+            PlayerData.Name = loginDto.Data.Name;
+            PlayerData.PlayerId = loginDto.Data.PlayerId;
+            PlayerData.IsLoggedIn = true;
+        }
+
+
+        private static string CleanResponse(string response)
         {
             List<string> filterIds = new List<string>
             {
@@ -148,16 +183,23 @@ namespace CalculationTools.WebSocket
                 response = response.StartsWith(filterId, StringComparison.Ordinal) ? response.Replace($"{filterId}[", "[", StringComparison.Ordinal) : response;
             }
 
+            //Clean off the outer msg tag
+            if (response.StartsWith("[\"msg\",") && response.EndsWith("]"))
+            {
+                response = response.Replace("[\"msg\",", "");
+                response = response.Remove(response.Length - 1, 1);
+            }
+
             return response;
         }
 
         private static void SendMessage(string message)
         {
-            if (!message.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(message))
             {
                 if (Client.IsRunning)
                 {
-                    Debug.WriteLine("Message send: " + message);
+                    Log.Info("Message send: " + message);
                     Task.Run(() => Client.Send(message));
                 }
             }
@@ -179,20 +221,12 @@ namespace CalculationTools.WebSocket
         public static SocketResponse ParseSocketResponse(string response)
         {
 
-            response = FilterSocketId(response);
             string headerType = string.Empty;
 
             if (response.StartsWith("0{"))
             {
                 response = response.Remove(0, 1);
                 headerType = "sid";
-            }
-
-            if (response.StartsWith("[\"msg\",") && response.EndsWith("]"))
-            {
-                response = response.Replace("[\"msg\",", "");
-                response = response.Remove(response.Length - 1, 1);
-                headerType = "msg";
             }
 
             SocketResponse socketResponse = new SocketResponse();
@@ -203,12 +237,12 @@ namespace CalculationTools.WebSocket
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Could not deserialize the following string:");
-                Debug.WriteLine(response);
+                Log.Info("Could not deserialize the following string:");
+                Log.Info(response);
             }
 
             // Set parsed values
-            if (!socketResponse.SessionID.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(socketResponse.SessionID))
             {
                 SessionID = socketResponse.SessionID;
             }

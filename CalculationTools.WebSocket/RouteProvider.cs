@@ -15,9 +15,12 @@ namespace CalculationTools.WebSocket
         public const string SYSTEM_IDENTIFY = "System/identify";
         public const string SYSTEM_IDENTIFIED = "System/identified";
         public const string LOGIN = "Authentication/login";
+        public const string LOGIN_SUCCESS = "Login/success";
 
         public static string SystemIdentify()
         {
+            string fakeUserAgent = new Bogus.DataSets.Internet("en").UserAgent();
+
             var jsonObject = new
             {
                 type = SYSTEM_IDENTIFY,
@@ -25,7 +28,8 @@ namespace CalculationTools.WebSocket
                 {
                     platform = "browser",
                     api_version = "10.*.*",
-                    device = "Mozilla/5.0%20(Windows%20NT%2010.0;%20Win64;%20x64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/77.0.3865.90%20Safari/537.36"
+                    // TODO make sure this is a random device each time
+                    device = fakeUserAgent
                 },
                 id = 1
             };

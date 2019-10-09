@@ -10,7 +10,7 @@ namespace CalculationTools.Tests
         [InlineData(5)]
         public static void TestConnection(int i)
         {
-            WebSocketConnect.TestConnection();
+            WebSocketConnect.StartConnection();
         }
 
         [Fact]
