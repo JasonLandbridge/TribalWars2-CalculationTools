@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CalculationTools.Core\CalculationTools.Core.csproj" />
+    <ProjectReference Include="..\CalculationTools.WebSocket\CalculationTools.WebSocket.csproj" />
   </ItemGroup>
 
   <ItemGroup>

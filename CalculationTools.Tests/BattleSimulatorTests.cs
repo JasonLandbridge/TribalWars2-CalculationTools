@@ -1,5 +1,5 @@
 ﻿using CalculationTools.Core;
-using CalculationTools.Core.BattleSimulator;
+using CalculationTools.WebSocket;
 using Xunit;
 
 namespace CalculationTools.Tests
