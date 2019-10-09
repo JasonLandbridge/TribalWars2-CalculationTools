@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <None Remove="CalculationTools.App.csproj.DotSettings" />
+    <None Remove="log4net.config" />
     <None Remove="Resources\Img\buildings\buildings_church.png" />
     <None Remove="Resources\Img\buildings\buildings_wall.png" />
     <None Remove="Resources\Img\info\info_luck.png" />
@@ -72,6 +73,12 @@
     <None Remove="Resources\Img\unit_swordsman.png" />
     <None Remove="Resources\Img\unit_trebuchet.png" />
     <None Remove="Resources\Img\weapons\paladin_weapon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -127,6 +134,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Ninject" Version="3.3.4" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.1.3" />
   </ItemGroup>

@@ -56,7 +56,10 @@
         </GroupBox>
 
         <!--  Tabs  -->
-        <TabControl DockPanel.Dock="Left">
+        <TabControl
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            DockPanel.Dock="Left">
             <TabItem x:Name="TabBattleSimulator" Header="Battle Simulator">
                 <StackPanel Orientation="Horizontal">
                     <!--  Input table  -->
@@ -115,6 +118,59 @@
                         <local:BattleResultTable DataContext="{Binding DefenseBattleResultTable}" />
                     </StackPanel>
                 </StackPanel>
+            </TabItem>
+            <TabItem Header="Farm Tracker">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Content="City Name" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Content=" Timber Camp" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        VerticalAlignment="Center"
+                        Content="Clay Pit" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        VerticalAlignment="Center"
+                        Content="Iron Mine" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="5"
+                        VerticalAlignment="Center"
+                        Content="Warehouse" />
+                    <DatePicker Grid.Row="0" Grid.Column="6" />
+                    <Button
+                        Grid.Row="0"
+                        Grid.Column="7"
+                        Height="20"
+                        VerticalAlignment="Center"
+                        Content="Reset" />
+                </Grid>
+
             </TabItem>
             <TabItem Header="Unit Calculator" />
             <TabItem Header="Building Calculator" />
