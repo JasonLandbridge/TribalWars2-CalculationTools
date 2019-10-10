@@ -1,6 +1,4 @@
-﻿using CalculationTools.Core.Base;
-using CalculationTools.Core.BattleSimulator;
-using System.Diagnostics;
+﻿using CalculationTools.Core.BattleSimulator;
 using System.Windows.Media;
 using System.Windows.Input;
 using CalculationTools.Core.Extensions;

@@ -1,6 +1,4 @@
-﻿using System.Security.Authentication.ExtendedProtection;
-using CalculationTools.Core.Base;
-using CalculationTools.Core.BattleSimulator;
+﻿using CalculationTools.Core.BattleSimulator;
 
 namespace CalculationTools.Core
 {

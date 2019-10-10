@@ -20,7 +20,14 @@
                 <MenuItem Header="_Save" />
             </MenuItem>
             <MenuItem Height="25" Header="_Load Preset" />
-            <MenuItem Height="25" Header="_Settings" />
+            <MenuItem
+                Height="25"
+                Command="{Binding OpenSettingsCommand}"
+                Header="_Settings" />
+            <MenuItem
+                Height="25"
+                Command="{Binding ConnectToTW2Command}"
+                Header="_Connect To TW2" />
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
@@ -60,7 +67,11 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             DockPanel.Dock="Left">
-            <TabItem x:Name="TabBattleSimulator" Header="Battle Simulator">
+            <TabItem
+                x:Name="TabBattleSimulator"
+                DataContext="{Binding BattleSimulatorViewModel}"
+                Header="Battle Simulator">
+
                 <StackPanel Orientation="Horizontal">
                     <!--  Input table  -->
                     <StackPanel Orientation="Vertical">

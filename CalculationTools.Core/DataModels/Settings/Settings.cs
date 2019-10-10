@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using nucs.JsonSettings;
+using System.Collections.Generic;
 
 namespace CalculationTools.Core
 {
@@ -73,10 +71,25 @@ namespace CalculationTools.Core
             }
         }
 
+
+        #endregion
+
+        #region Accounts
+        public virtual List<Account> Accounts { get; set; }
+
+
+
+        #endregion   
         #endregion
 
         #endregion
 
-        #endregion Properties
+        public void SetDefaultValues()
+        {
+            Accounts = new List<Account> { new Account { ServerCountryCode = "nl" } };
+
+
+            Save();
+        }
     }
 }

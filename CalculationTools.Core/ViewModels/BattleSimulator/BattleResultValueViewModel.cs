@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Media;
-using CalculationTools.Core.Base;
 
 namespace CalculationTools.Core
 {

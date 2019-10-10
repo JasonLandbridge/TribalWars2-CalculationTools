@@ -11,9 +11,10 @@ namespace CalculationTools.WebSocket
         #region Fields
 
         public const string LOGIN = "Authentication/login";
-        public const string LOGIN_SUCCESS = "Login/success";
+        public const string LOGIN_SUCCESS = "LoginAsync/success";
         public const string SYSTEM_IDENTIFIED = "System/identified";
         public const string SYSTEM_IDENTIFY = "System/identify";
+        public const string SYSTEM_ERROR = "System/error";
         public const string SYSTEM_WELCOME = "System/welcome";
         public const string SELECT_CHARACTER = "Authentication/selectCharacter";
         public const string CHARACTER_SELECTED = "Authentication/characterSelected";
@@ -28,17 +29,32 @@ namespace CalculationTools.WebSocket
 
         #region Methods
 
-        public static string Login(string name, string pass)
+        public static string Login(ConnectData connectData)
         {
+            object data;
+            if (!string.IsNullOrEmpty(connectData.AccessToken))
+            {
+                data = new
+                {
+                    name = connectData.Username,
+                    token = connectData.AccessToken
+                };
+            }
+            else
+            {
+                data = new
+                {
+                    name = connectData.Username,
+                    pass = connectData.Password
+                };
+            }
+
+
             var jsonObject = new
             {
                 id = 2,
                 type = LOGIN,
-                data = new
-                {
-                    name,
-                    pass
-                },
+                data,
                 headers = MsgHeader,
             };
             return AddMsg(JsonConvert.SerializeObject(jsonObject));

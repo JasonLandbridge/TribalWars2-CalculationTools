@@ -1,6 +1,8 @@
 ﻿using Ninject;
 using nucs.JsonSettings;
 using nucs.JsonSettings.Autosave;
+using System;
+using System.IO;
 
 namespace CalculationTools.Core
 {
@@ -16,10 +18,7 @@ namespace CalculationTools.Core
         /// </summary>
         public static IKernel Kernel { get; } = new StandardKernel();
 
-        /// <summary>
-        /// All settings are stored here and auto saved on change.
-        /// </summary>
-        public static Settings Settings { get; } = JsonSettings.Load<Settings>("Settings.json").EnableAutosave();
+        public static Settings Settings => Get<Settings>();
         #endregion Properties
 
         #region Methods
@@ -41,9 +40,31 @@ namespace CalculationTools.Core
         /// </summary>
         public static void Setup(IDialogService dialogService)
         {
+            SetupSettings();
+
             // Bind all view models
             BindViewModel(dialogService);
             BindModels();
+        }
+
+        public static void SetupSettings()
+        {
+            Settings settings;
+            string FileName = "Settings.json";
+            string path = $"{AppDomain.CurrentDomain.BaseDirectory}{FileName}";
+
+            if (File.Exists(path))
+            {
+                settings = JsonSettings.Load<Settings>(FileName).EnableAutosave();
+            }
+            else
+            {
+                settings = JsonSettings.Construct<Settings>(FileName).EnableAutosave();
+                settings.SetDefaultValues();
+            }
+
+            Kernel.Bind<Settings>().ToConstant(settings);
+
         }
 
         /// <summary>
@@ -55,18 +76,24 @@ namespace CalculationTools.Core
             // Binds to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
 
+            Kernel.Bind<MainWindowViewModel>().ToConstant(new MainWindowViewModel(dialogService));
+
             Kernel.Bind<BattleSimulatorViewModel>().ToConstant(new BattleSimulatorViewModel(dialogService));
         }
 
         private static void BindModels()
         {
-            Kernel.Bind<Settings>().ToConstant(Settings);
+
         }
 
 
         public static ApplicationViewModel GetApplicationViewModel()
         {
             return Get<ApplicationViewModel>();
+        }
+        public static MainWindowViewModel GetMainWindowViewModel()
+        {
+            return Get<MainWindowViewModel>();
         }
 
         public static BattleSimulatorViewModel GetBattleSimulatorViewModel()

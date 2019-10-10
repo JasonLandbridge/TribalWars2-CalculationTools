@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using CalculationTools.Core.DataModels.Meta;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -139,6 +140,106 @@ namespace CalculationTools.Core
         #endregion BattleMeta
 
         public static int NumberOfUnits => UnitList.Count;
+
+        public static List<Server> ServerList => new List<Server>
+        {
+            new Server
+            {
+                ServerName = "Netherlands",
+                ServerCountryCode = "nl"
+            },
+            new Server
+            {
+                ServerName = "Germany",
+                ServerCountryCode = "de"
+            },
+            new Server
+            {
+                ServerName = "International",
+                ServerCountryCode = "en"
+            },
+            new Server
+            {
+                ServerName = "Brazil",
+                ServerCountryCode = "br"
+            },
+            new Server
+            {
+                ServerName = "Poland",
+                ServerCountryCode = "pl"
+            },
+            new Server
+            {
+                ServerName = "France",
+                ServerCountryCode = "fr"
+            },
+            new Server
+            {
+                ServerName = "Russia",
+                ServerCountryCode = "ru"
+            },
+            new Server
+            {
+                ServerName = "Beta Server",
+                ServerCountryCode = "beta"
+            },
+            new Server
+            {
+                ServerName = "United States",
+                ServerCountryCode = "us"
+            },
+            new Server
+            {
+                ServerName = "Spain",
+                ServerCountryCode = "es"
+            },
+            new Server
+            {
+                ServerName = "Italy",
+                ServerCountryCode = "it"
+            },
+            new Server
+            {
+                ServerName = "Greece",
+                ServerCountryCode = "gr"
+            },
+            new Server
+            {
+                ServerName = "Turkey",
+                ServerCountryCode = "tr"
+            },
+            new Server
+            {
+                ServerName = "Czech Republic",
+                ServerCountryCode = "cz"
+            },
+            new Server
+            {
+                ServerName = "Portugal",
+                ServerCountryCode = "pt"
+            },
+            new Server
+            {
+                ServerName = "Norway",
+                ServerCountryCode = "no"
+            },
+            new Server
+            {
+                ServerName = "Slovakia",
+                ServerCountryCode = "sk"
+            },
+            new Server
+            {
+                ServerName = "Romania",
+                ServerCountryCode = "ro"
+            },
+            new Server
+            {
+                ServerName = "Hungary",
+                ServerCountryCode = "hu"
+            },
+        };
+
 
         /// <summary>
         /// Returns a list of Resource Costs for all units.

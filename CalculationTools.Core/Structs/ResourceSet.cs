@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CalculationTools.Core
+﻿namespace CalculationTools.Core
 {
     public struct ResourceSet
     {

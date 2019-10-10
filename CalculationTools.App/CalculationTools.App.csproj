@@ -41,6 +41,25 @@
     <None Remove="log4net.config" />
     <None Remove="Resources\Img\buildings\buildings_church.png" />
     <None Remove="Resources\Img\buildings\buildings_wall.png" />
+    <None Remove="Resources\Img\flags\flag_beta.png" />
+    <None Remove="Resources\Img\flags\flag_br.png" />
+    <None Remove="Resources\Img\flags\flag_cz.png" />
+    <None Remove="Resources\Img\flags\flag_de.png" />
+    <None Remove="Resources\Img\flags\flag_en.png" />
+    <None Remove="Resources\Img\flags\flag_es.png" />
+    <None Remove="Resources\Img\flags\flag_fr.png" />
+    <None Remove="Resources\Img\flags\flag_gr.png" />
+    <None Remove="Resources\Img\flags\flag_hu.png" />
+    <None Remove="Resources\Img\flags\flag_it.png" />
+    <None Remove="Resources\Img\flags\flag_nl.png" />
+    <None Remove="Resources\Img\flags\flag_no.png" />
+    <None Remove="Resources\Img\flags\flag_pl.png" />
+    <None Remove="Resources\Img\flags\flag_pt.png" />
+    <None Remove="Resources\Img\flags\flag_ro.png" />
+    <None Remove="Resources\Img\flags\flag_ru.png" />
+    <None Remove="Resources\Img\flags\flag_sk.png" />
+    <None Remove="Resources\Img\flags\flag_tr.png" />
+    <None Remove="Resources\Img\flags\flag_us.png" />
     <None Remove="Resources\Img\info\info_luck.png" />
     <None Remove="Resources\Img\info\info_morale.png" />
     <None Remove="Resources\Img\info\info_nightbonus.png" />
@@ -76,6 +95,31 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Img\flags\flag_beta.png" />
+    <Resource Include="Resources\Img\flags\flag_br.png" />
+    <Resource Include="Resources\Img\flags\flag_cz.png" />
+    <Resource Include="Resources\Img\flags\flag_de.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\flags\flag_en.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\flags\flag_es.png" />
+    <Resource Include="Resources\Img\flags\flag_fr.png" />
+    <Resource Include="Resources\Img\flags\flag_gr.png" />
+    <Resource Include="Resources\Img\flags\flag_hu.png" />
+    <Resource Include="Resources\Img\flags\flag_it.png" />
+    <Resource Include="Resources\Img\flags\flag_nl.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Img\flags\flag_no.png" />
+    <Resource Include="Resources\Img\flags\flag_pl.png" />
+    <Resource Include="Resources\Img\flags\flag_pt.png" />
+    <Resource Include="Resources\Img\flags\flag_ro.png" />
+    <Resource Include="Resources\Img\flags\flag_ru.png" />
+    <Resource Include="Resources\Img\flags\flag_sk.png" />
+    <Resource Include="Resources\Img\flags\flag_tr.png" />
+    <Resource Include="Resources\Img\flags\flag_us.png" />
     <Resource Include="Resources\Img\info\info_weapon_mastery.png" />
     <Resource Include="Resources\Img\units\unit_archer.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -170,10 +214,22 @@
     <Compile Update="Controls\PaladinWeaponSelect.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\SettingsWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ConnectionWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <Page Update="Controls\PaladinWeaponSelect.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ConnectionWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

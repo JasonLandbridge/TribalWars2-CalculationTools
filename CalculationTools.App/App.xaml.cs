@@ -22,8 +22,11 @@ namespace CalculationTools.App
             // Let the base application do what it needs
             base.OnStartup(e);
 
+            // Register all dialog windows
             IDialogService dialogService = new DialogService(MainWindow);
             dialogService.Register<UnitImportWindowViewModel, UnitImportWidow>();
+            dialogService.Register<ConnectionWindowViewModel, ConnectionWindow>();
+            dialogService.Register<SettingsWindowViewModel, SettingsWindow>();
 
             // Setup the IoC
             IoC.Setup(dialogService);

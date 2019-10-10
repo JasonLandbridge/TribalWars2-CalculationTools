@@ -1,6 +1,4 @@
-﻿using System;
-using CalculationTools.Core.Base;
-using NLog;
+﻿using NLog;
 
 
 namespace CalculationTools.Core

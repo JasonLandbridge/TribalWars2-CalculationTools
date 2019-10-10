@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using CalculationTools.Core.Base;
 
 namespace CalculationTools.Core.BattleSimulator
 {

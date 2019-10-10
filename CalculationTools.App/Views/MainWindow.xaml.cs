@@ -13,7 +13,7 @@ namespace CalculationTools.App
         public MainWindow()
         {
             InitializeComponent();
-            TabBattleSimulator.DataContext = IoC.GetBattleSimulatorViewModel();
+            DataContext = IoC.GetMainWindowViewModel();
         }
 
         #endregion Constructors
