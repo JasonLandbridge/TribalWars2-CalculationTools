@@ -157,7 +157,6 @@ namespace CalculationTools.Core
         /// <param name="e"></param>
         private void RunBattleSimulator()
         {
-            Debug.WriteLine("Battle Calculator updated!");
             BattleResult battleResult = GameData.SimulateBattle(BattleSimulatorInputViewModel.ToBattleConfig());
             UpdateBattleResult(battleResult);
         }

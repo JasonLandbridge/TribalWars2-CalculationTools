@@ -29,7 +29,7 @@ namespace CalculationTools.Core.BattleSimulator
 
         #region Properties
 
-        public UnitSet UnitResultSet { get; set; }
+        public UnitSet UnitResultSet { get; set; } = new UnitSet();
 
         #region ViewModels
         public BattleUnitPreviewViewModel BattleUnitPreviewViewModel { get; set; } = new BattleUnitPreviewViewModel();

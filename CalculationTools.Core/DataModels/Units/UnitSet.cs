@@ -1,33 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CalculationTools.Core.BattleSimulator;
-using Microsoft.VisualBasic.CompilerServices;
+using System.Text;
 
 namespace CalculationTools.Core
 {
     /// <summary>
     /// Holds the number of units for every possible unit type.
     /// </summary>
-    public struct UnitSet
+    public class UnitSet
     {
         #region Constructors
 
-        public UnitSet(int defaultValue = 0)
+        public UnitSet()
         {
-            Spearman = defaultValue;
-            Swordsman = defaultValue;
-            AxeFighter = defaultValue;
-            Archer = defaultValue;
-            LightCavalry = defaultValue;
-            MountedArcher = defaultValue;
-            HeavyCavalry = defaultValue;
-            Ram = defaultValue;
-            Catapult = defaultValue;
-            Berserker = defaultValue;
-            Trebuchet = defaultValue;
-            Nobleman = defaultValue;
-            Paladin = defaultValue;
+
         }
 
         public UnitSet(List<int> unitList)
@@ -556,21 +543,21 @@ namespace CalculationTools.Core
             // Visual Studio Debug Error:
             // To prevent an unsafe abort when evaluating the function *.toString all threads where allowed to run.
             // This may have changed the state of the process and any breakpoints encountered have been skipped.
-            string s = string.Empty;
-            if (Spearman > 0) s += $"Spearman = { Spearman }, { Environment.NewLine}";
-            if (Swordsman > 0) s += $"Swordsman = { Swordsman}, {Environment.NewLine}";
-            if (AxeFighter > 0) s += $"AxeFighter = { AxeFighter }, {Environment.NewLine}";
-            if (Archer > 0) s += $"Archer = { Archer }, {Environment.NewLine}";
-            if (LightCavalry > 0) s += $"LightCavalry = { LightCavalry }, {Environment.NewLine}";
-            if (MountedArcher > 0) s += $"MountedArcher = { MountedArcher}, {Environment.NewLine}";
-            if (HeavyCavalry > 0) s += $"HeavyCavalry = { HeavyCavalry }, {Environment.NewLine}";
-            if (Ram > 0) s += $"Ram = { Ram}, {Environment.NewLine}";
-            if (Catapult > 0) s += $"Catapult = { Catapult }, {Environment.NewLine}";
-            if (Berserker > 0) s += $"Berserker = { Berserker}, {Environment.NewLine}";
-            if (Trebuchet > 0) s += $"Trebuchet = { Trebuchet}, {Environment.NewLine}";
-            if (Nobleman > 0) s += $"Nobleman = { Nobleman }, {Environment.NewLine}";
-            if (Paladin > 0) s += $"Paladin = { Paladin}, {Environment.NewLine}";
-            return s;
+            StringBuilder s = new StringBuilder();
+            if (Spearman > 0) s.Append($"Spearman = { Spearman }, { Environment.NewLine}");
+            if (Swordsman > 0) s.Append($"Swordsman = { Swordsman}, {Environment.NewLine}");
+            if (AxeFighter > 0) s.Append($"AxeFighter = { AxeFighter }, {Environment.NewLine}");
+            if (Archer > 0) s.Append($"Archer = { Archer }, {Environment.NewLine}");
+            if (LightCavalry > 0) s.Append($"LightCavalry = { LightCavalry }, {Environment.NewLine}");
+            if (MountedArcher > 0) s.Append($"MountedArcher = { MountedArcher}, {Environment.NewLine}");
+            if (HeavyCavalry > 0) s.Append($"HeavyCavalry = { HeavyCavalry }, {Environment.NewLine}");
+            if (Ram > 0) s.Append($"Ram = { Ram}, {Environment.NewLine}");
+            if (Catapult > 0) s.Append($"Catapult = { Catapult }, {Environment.NewLine}");
+            if (Berserker > 0) s.Append($"Berserker = { Berserker}, {Environment.NewLine}");
+            if (Trebuchet > 0) s.Append($"Trebuchet = { Trebuchet}, {Environment.NewLine}");
+            if (Nobleman > 0) s.Append($"Nobleman = { Nobleman }, {Environment.NewLine}");
+            if (Paladin > 0) s.Append($"Paladin = { Paladin}, {Environment.NewLine}");
+            return s.ToString();
         }
 
         #endregion Methods

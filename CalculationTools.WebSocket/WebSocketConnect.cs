@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using NLog;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Net.WebSockets;
 using System.Reactive.Linq;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using NLog;
 using Websocket.Client;
 
 
@@ -15,48 +13,65 @@ namespace CalculationTools.WebSocket
 {
     public static class WebSocketConnect
     {
-        private static readonly ManualResetEvent ExitEvent = new ManualResetEvent(false);
-        public static string SessionID { get; set; }
+        #region Fields
 
         public static readonly Uri SocketURL = new Uri("wss://en.tribalwars2.com/socket.io/?platform=desktop&EIO=3&transport=websocket");
-        private static Logger Log = LogManager.GetCurrentClassLogger();
-        public static string AccessToken { get; set; }
-
         public static WebsocketClient Client = new WebsocketClient(SocketURL);
 
-        //public static async void StartConnection()
-        //{
-        //    ManualResetEvent exitEvent = new ManualResetEvent(false);
-        //    var url = "wss://en.tribalwars2.com/socket.io/";
+        private static readonly ManualResetEvent ExitEvent = new ManualResetEvent(false);
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+        #endregion Fields
 
-        //    using (var ws = new WebSocketSharp.WebSocket(url))
-        //    {
-        //        ws.OnOpen += (sender, e) =>
-        //        {
-        //            Log.Info("Server is connected!");
-        //        };
-        //        ws.OnMessage += (sender, e) =>
-        //        {
-        //            Log.Info("Message received: " + e.Data);
-        //        };
-        //        ws.OnError += (sender, e) =>
-        //        {
-        //            Log.Info("Message Error: " + e.Message);
-        //        };
-        //        ws.Connect();
+        #region Properties
 
-        //        string message = $"42[\"msg\", {RouteProvider.SystemIdentify()}]";
+        public static bool IsConnected => Client.IsRunning;
 
-        //        ws.SendAsync(message, b =>
-        //         {
-        //             Log.Info("Sending second message:");
-        //             message = $"42[\"msg\", {RouteProvider.Login("***REMOVED***", "***REMOVED***")},\"id\":2,\"headers\":{{\"traveltimes\":[[\"browser_send\",1570555427473]]}}}} ]";
-        //             ws.Send(message);
-        //         });
-        //        Console.ReadKey(true);
-        //    }
+        public static bool IsLoggedIn => PlayerData.IsLoggedIn;
+        public static string AccessToken { get; set; }
+        public static string SessionID { get; set; }
 
-        //}
+        #endregion Properties
+
+        #region Methods
+
+        public static void CloseConnection()
+        {
+            Client.Stop(WebSocketCloseStatus.NormalClosure, "").Wait();
+            Client.Dispose();
+            PlayerData.IsLoggedIn = false;
+        }
+
+        public static SocketResponse ParseSocketResponse(string response)
+        {
+
+            string headerType = string.Empty;
+
+            if (response.StartsWith("0{"))
+            {
+                response = response.Remove(0, 1);
+                headerType = "sid";
+            }
+
+            SocketResponse socketResponse = new SocketResponse();
+            try
+            {
+                socketResponse = JsonConvert.DeserializeObject<SocketResponse>(response);
+                socketResponse.HeaderType = headerType;
+            }
+            catch (Exception e)
+            {
+                Log.Info(e, "Could not deserialize the following string:");
+            }
+
+            // Set parsed values
+            if (!string.IsNullOrEmpty(socketResponse.SessionID))
+            {
+                SessionID = socketResponse.SessionID;
+            }
+
+            return socketResponse;
+        }
+
         public static void StartConnection()
         {
 
@@ -71,7 +86,7 @@ namespace CalculationTools.WebSocket
                         Log.Info("Server is connected!");
                         break;
                     case ReconnectionType.Lost:
-                        Client.Dispose();
+                        CloseConnection();
                         break;
                 }
             });
@@ -81,89 +96,25 @@ namespace CalculationTools.WebSocket
             });
             Client.MessageReceived.Subscribe(msg =>
             {
-                Log.Info($"Message received: {msg}");
+                Log.Info($"Message received: {msg.Text}");
                 ParseResponse(msg.Text);
             });
 
-
-            Log.Info("Start connection with TribalWars2");
+            Log.Debug("Start connection with TribalWars2");
             Client.Start().Wait();
 
             // Send keep alive ping
             Task.Run(StartSendingPing);
 
             ExitEvent.WaitOne();
-
-
         }
 
-        public static void CloseConnection()
-        {
-            Client.Dispose();
-        }
 
-        private static void ParseResponse(string response)
-        {
-            if (response == null)
-            {
-                Log.Info("The response was null");
-                return;
-            }
-
-            if (response == "40")
-            {
-                Log.Info("The connection was confirmed with code 40");
-                return;
-            }
-
-            response = CleanResponse(response);
-
-            SocketResponse socketResponse = ParseSocketResponse(response);
-
-            switch (socketResponse.SocketType)
-            {
-                case RouteProvider.SYSTEM_WELCOME:
-                    // On system welcome send system identify
-                    SendMessage(RouteProvider.AddMsg(RouteProvider.SystemIdentify()));
-                    break;
-
-                case RouteProvider.SYSTEM_IDENTIFIED:
-                    // Once system has been identified then send login credentials
-                    SendMessage(RouteProvider.AddMsg(RouteProvider.Login("***REMOVED***", "***REMOVED***")));
-                    break;
-
-                case RouteProvider.LOGIN_SUCCESS:
-                    ParseLoginSuccess(response);
-                    break;
-
-
-                default:
-                    break;
-            }
-        }
-
-        private static void ParseLoginSuccess(string response)
-        {
-            LoginDTO loginDto = new LoginDTO();
-
-            try
-            {
-                loginDto = JsonConvert.DeserializeObject<LoginDTO>(response);
-            }
-            catch (Exception e)
-            {
-                Log.Info("Could not deserialize the following string:", e);
-            }
-
-            AccessToken = loginDto.Data.AccessToken;
-            PlayerData.Name = loginDto.Data.Name;
-            PlayerData.PlayerId = loginDto.Data.PlayerId;
-            PlayerData.IsLoggedIn = true;
-        }
 
 
         private static string CleanResponse(string response)
         {
+            //TODO Delete all numbers from the beginning
             List<string> filterIds = new List<string>
             {
                 "0",
@@ -193,13 +144,77 @@ namespace CalculationTools.WebSocket
             return response;
         }
 
+        private static LoginDTO ParseLoginSuccess(string response)
+        {
+            LoginDTO loginDto = new LoginDTO();
+
+            try
+            {
+                loginDto = JsonConvert.DeserializeObject<LoginDTO>(response);
+            }
+            catch (Exception e)
+            {
+                Log.Info(e, "Could not deserialize the following string:");
+            }
+
+            AccessToken = loginDto.Data.AccessToken;
+            PlayerData.Name = loginDto.Data.Name;
+            PlayerData.PlayerId = loginDto.Data.PlayerId;
+            PlayerData.IsLoggedIn = true;
+
+            return loginDto;
+        }
+
+        private static void ParseResponse(string response)
+        {
+            if (string.IsNullOrEmpty(response))
+            {
+                Log.Info("The response was null/empty");
+                return;
+            }
+
+            // Ping response or open connection response
+            if (response == "3" || response == "40")
+            {
+                return;
+            }
+
+            response = CleanResponse(response);
+
+            SocketResponse socketResponse = ParseSocketResponse(response);
+
+            switch (socketResponse.SocketType)
+            {
+                case RouteProvider.SYSTEM_WELCOME:
+                    // On system welcome send system identify
+                    SendMessage(RouteProvider.SystemIdentify());
+                    break;
+
+                case RouteProvider.SYSTEM_IDENTIFIED:
+                    // Once system has been identified then send login credentials
+                    SendMessage(RouteProvider.Login("***REMOVED***", "***REMOVED***"));
+                    break;
+
+                case RouteProvider.LOGIN_SUCCESS:
+                    LoginDTO loginDto = ParseLoginSuccess(response);
+                    SendMessage(RouteProvider.SelectCharacter(loginDto));
+                    break;
+
+                case RouteProvider.CHARACTER_SELECTED:
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
         private static void SendMessage(string message)
         {
             if (!string.IsNullOrEmpty(message))
             {
                 if (Client.IsRunning)
                 {
-                    Log.Info("Message send: " + message);
+                    Log.Info($"Message Send:     {message}");
                     Task.Run(() => Client.Send(message));
                 }
             }
@@ -209,45 +224,14 @@ namespace CalculationTools.WebSocket
         {
             while (true)
             {
-                await Task.Delay(1000);
+                await Task.Delay(2000);
 
                 if (!Client.IsRunning)
                     continue;
-                SendMessage("ping");
+                SendMessage("2");
             }
         }
 
-
-        public static SocketResponse ParseSocketResponse(string response)
-        {
-
-            string headerType = string.Empty;
-
-            if (response.StartsWith("0{"))
-            {
-                response = response.Remove(0, 1);
-                headerType = "sid";
-            }
-
-            SocketResponse socketResponse = new SocketResponse();
-            try
-            {
-                socketResponse = JsonConvert.DeserializeObject<SocketResponse>(response);
-                socketResponse.HeaderType = headerType;
-            }
-            catch (Exception e)
-            {
-                Log.Info("Could not deserialize the following string:");
-                Log.Info(response);
-            }
-
-            // Set parsed values
-            if (!string.IsNullOrEmpty(socketResponse.SessionID))
-            {
-                SessionID = socketResponse.SessionID;
-            }
-
-            return socketResponse;
-        }
+        #endregion Methods
     }
 }

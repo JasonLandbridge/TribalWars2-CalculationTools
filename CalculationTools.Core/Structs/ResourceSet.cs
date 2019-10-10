@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CalculationTools.Core.Enums
+namespace CalculationTools.Core
 {
     public struct ResourceSet
     {

@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using CalculationTools.Core.Enums;
-
-namespace CalculationTools.Core
+﻿namespace CalculationTools.Core
 {
     /// <summary>
     /// This class is meant to compare the real result from in-game with the result from the battle simulator

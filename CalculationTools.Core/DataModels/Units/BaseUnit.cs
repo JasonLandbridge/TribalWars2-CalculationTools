@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using CalculationTools.Core.Enums;
 
 namespace CalculationTools.Core
 {

@@ -1,10 +1,8 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using CalculationTools.Core.BattleSimulator;
-using CalculationTools.Core.Enums;
 
 namespace CalculationTools.Core
 {
@@ -14,7 +12,7 @@ namespace CalculationTools.Core
         /// Assuming the game uses the same method of rounding everywhere
         /// </summary>
         private static readonly MidpointRounding GameRounding = MidpointRounding.ToPositiveInfinity;
-
+        private static Logger Log = LogManager.GetCurrentClassLogger();
         #region Properties
 
         #region Units
@@ -415,6 +413,10 @@ namespace CalculationTools.Core
 
         public static BattleResult SimulateBattle(BattleConfig battleConfig)
         {
+            Log.Debug("Starting Battle Simulation");
+            //Stopwatch stopwatch = new Stopwatch();
+            //stopwatch.Restart();
+
             // Based on: Tribal Wars 2 - Tutorial: Basic Battle System - https://www.youtube.com/watch?v=SG_qI1-go88
             // Based on: Battle Simulator - http://www.ds-pro.de/2/simulator.php
             BattleResult result = new BattleResult(battleConfig);
@@ -452,6 +454,12 @@ namespace CalculationTools.Core
 
             while (!battleDetermined)
             {
+                // Safety Break
+                if (BattleHistory.Count > 5)
+                {
+                    break;
+                }
+
                 currentRound = BattleHistory.Last();
 
                 UnitSet atkUnits = currentRound.AtkUnits;
@@ -660,6 +668,8 @@ namespace CalculationTools.Core
             // Simulate the post battle calculations
             PostBattle(ref finalResult, paladinAtkWeapon);
 
+            // stopwatch.Stop();
+            Log.Debug($"Ending Battle Simlation");
             return finalResult;
         }
 

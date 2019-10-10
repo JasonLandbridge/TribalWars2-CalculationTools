@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CalculationTools.Core.Enums;
 
 namespace CalculationTools.Core
 {
@@ -15,6 +14,8 @@ namespace CalculationTools.Core
         public BattleResult(BattleConfig battleConfig)
         {
             BattleConfig = battleConfig;
+            AtkUnits = battleConfig.AtkUnits;
+            DefUnits = battleConfig.DefUnits;
         }
 
         #endregion Constructors
@@ -26,13 +27,9 @@ namespace CalculationTools.Core
 
         #region Attacking
 
-        public UnitSet AtkUnitsLost;
+        public UnitSet AtkUnitsLost { get; set; } = new UnitSet();
 
-        public UnitSet AtkUnits
-        {
-            get => BattleConfig.AtkUnits;
-            set => BattleConfig.SetAtkUnits(value);
-        }
+        public UnitSet AtkUnits { get; set; } = new UnitSet();
 
         public UnitSet AtkUnitsLeft => AtkUnits - AtkUnitsLost;
         public WeaponSet AtkWeapon { get; set; }
@@ -41,13 +38,9 @@ namespace CalculationTools.Core
 
         #region Defending
 
-        public UnitSet DefUnitsLost;
+        public UnitSet DefUnitsLost { get; set; } = new UnitSet();
 
-        public UnitSet DefUnits
-        {
-            get => BattleConfig.DefUnits;
-            set => BattleConfig.SetDefUnits(value);
-        }
+        public UnitSet DefUnits { get; set; } = new UnitSet();
 
         public UnitSet DefUnitsLeft => DefUnits - DefUnitsLost;
         public WeaponSet DefWeapon { get; set; }

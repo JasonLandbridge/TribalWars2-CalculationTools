@@ -1,4 +1,6 @@
-﻿using CalculationTools.Core;
+﻿using System;
+using System.Threading.Tasks;
+using CalculationTools.Core;
 using CalculationTools.WebSocket;
 using Xunit;
 
@@ -10,7 +12,15 @@ namespace CalculationTools.Tests
         [InlineData(5)]
         public static void TestConnection(int i)
         {
+
+            Random rnd = new Random();
+
             WebSocketConnect.StartConnection();
+
+            Task.Delay(rnd.Next(6000, 12000)).Wait();
+
+            WebSocketConnect.CloseConnection();
+            Assert.True(!WebSocketConnect.IsConnected);
         }
 
         [Fact]

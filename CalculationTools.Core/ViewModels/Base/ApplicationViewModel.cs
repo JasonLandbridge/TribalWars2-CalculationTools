@@ -10,15 +10,11 @@ namespace CalculationTools.Core
     /// </summary>
     public class ApplicationViewModel : BaseViewModel
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger Log = LogManager.GetCurrentClassLogger();
 
         public ApplicationViewModel()
         {
-            SetupLogging();
         }
-        public void SetupLogging()
-        {
-            logger.Error("This is an error message");
-        }
+
     }
 }
