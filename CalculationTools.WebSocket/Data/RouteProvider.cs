@@ -11,11 +11,13 @@ namespace CalculationTools.WebSocket
         #region Fields
 
         public const string LOGIN = "Authentication/login";
-        public const string LOGIN_SUCCESS = "LoginAsync/success";
+        public const string LOGIN_SUCCESS = "Login/success";
         public const string SYSTEM_IDENTIFIED = "System/identified";
         public const string SYSTEM_IDENTIFY = "System/identify";
         public const string SYSTEM_ERROR = "System/error";
         public const string SYSTEM_WELCOME = "System/welcome";
+        public const string MESSAGE_ERROR = "Message/error";
+
         public const string SELECT_CHARACTER = "Authentication/selectCharacter";
         public const string CHARACTER_SELECTED = "Authentication/characterSelected";
 
@@ -77,7 +79,7 @@ namespace CalculationTools.WebSocket
             };
             return AddMsg(JsonConvert.SerializeObject(jsonObject));
         }
-        public static string SelectCharacter(LoginDTO loginDto)
+        public static string SelectCharacter(LoginDataDTO loginDto)
         {
             var jsonObject = new
             {
@@ -85,8 +87,8 @@ namespace CalculationTools.WebSocket
                 type = SELECT_CHARACTER,
                 data = new
                 {
-                    id = loginDto.Data.PlayerId,
-                    world_id = loginDto.Data.Characters[0].WorldId
+                    id = loginDto.PlayerId,
+                    world_id = loginDto.Characters[0].WorldId
                 },
                 headers = MsgHeader
 

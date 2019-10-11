@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Loader;
 using System.Threading;
@@ -27,13 +28,47 @@ namespace CalculationTools.WebSocket
 
         #endregion
 
-        public SocketClient()
+        #region Constructors
+
+        public SocketClient(ConnectData connectData)
         {
+
+            Client = new WebsocketClient(connectData.Uri)
+            {
+                ReconnectTimeoutMs = (int)TimeSpan.FromSeconds(30).TotalMilliseconds
+            };
+
+            Client.ReconnectionHappened.Subscribe(type =>
+            {
+                Log.Info($"Reconnection happened, type: {type}");
+
+                switch (type)
+                {
+                    case ReconnectionType.Initial:
+                        Log.Info("Server is connected!");
+                        break;
+                }
+            });
+            Client.DisconnectionHappened.Subscribe(type =>
+            {
+                Log.Info("Connection was disconnected by server");
+                ConnectionResult.TrySetResult(ConnectResult);
+            });
+            Client.MessageReceived.Subscribe(msg =>
+            {
+                Log.Info($"Message received: {msg.Text}");
+                ParseResponse(Client, msg.Text);
+            });
+
+            SetupBackgroundWorker();
 
         }
 
+        #endregion Constructors
+
         #region Properties
 
+        public BackgroundWorker BackgroundWorker { get; } = new BackgroundWorker();
         public WebsocketClient Client { get; set; }
 
         public ConnectData ConnectData { get; set; } = new ConnectData();
@@ -41,62 +76,56 @@ namespace CalculationTools.WebSocket
         public ConnectResult ConnectResult { get; set; } = new ConnectResult();
 
         public bool IsConnected => ConnectResult.IsConnected;
-
         public int PingCount { get; set; }
 
         #endregion Properties
 
         #region Methods
 
-        public async Task<ConnectResult> StartConnectionAsync(ConnectData connectData, bool keepAlive = false)
+        public void CloseConnection()
         {
-            ConnectData = connectData;
+            BackgroundWorker.CancelAsync();
+
+            ConnectionResult.TrySetCanceled(CancellationToken.None);
+        }
+
+        public void SetupBackgroundWorker()
+        {
+            BackgroundWorker.DoWork += async (sender, args) =>
+            {
+                while (true)
+                {
+                    await Task.Delay(2000);
+
+                    if (!Client.IsRunning)
+                        continue;
+                    SendMessageAsync(Client, "2");
+                }
+            };
+            BackgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Log.Info("Background worker has completed their pings!");
+            };
+            BackgroundWorker.ProgressChanged += (sender, args) => { PingCount++; };
+
+        }
+
+        public async Task<ConnectResult> StartConnectionAsync(ConnectData connectData, bool keepAlive = true)
+        {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
             AssemblyLoadContext.Default.Unloading += DefaultOnUnloading;
 
-            using (IWebsocketClient client = new WebsocketClient(connectData.Uri))
+            Log.Debug("Start connection with TribalWars2");
+
+            await Client.Start();
+
+            if (keepAlive)
             {
-                client.ReconnectTimeoutMs = (int)TimeSpan.FromSeconds(30).TotalMilliseconds;
-                client.ReconnectionHappened.Subscribe(type =>
-                {
-                    Log.Info($"Reconnection happened, type: {type}");
-
-                    switch (type)
-                    {
-                        case ReconnectionType.Initial:
-                            Log.Info("Server is connected!");
-                            break;
-                    }
-                });
-                client.DisconnectionHappened.Subscribe(type =>
-                {
-                    Log.Info("Connection was disconnected by server");
-                    ConnectionResult.TrySetResult(ConnectResult);
-                });
-                client.MessageReceived.Subscribe(msg =>
-                {
-                    Log.Info($"Message received: {msg.Text}");
-                    ParseResponse(client, msg.Text);
-                });
-
-                Log.Debug("Start connection with TribalWars2");
-
-                await client.Start();
-
-                if (keepAlive)
-                {
-                    // Send keep alive ping
-                    await Task.Run(() => SendPingAsync(client));
-                }
-
-                return await ConnectionResult.Task;
-
+                BackgroundWorker.RunWorkerAsync();
             }
-        }
 
-        public void CloseConnection()
-        {
-            ConnectionResult.TrySetCanceled(CancellationToken.None);
+            return await ConnectionResult.Task;
+
         }
         #region ParseResponse
 
@@ -137,7 +166,7 @@ namespace CalculationTools.WebSocket
                     break;
 
                 case RouteProvider.LOGIN_SUCCESS:
-                    LoginDTO loginDto = ParseLoginSuccess(response);
+                    var loginDto = ParseLoginSuccess(response);
                     SendMessageAsync(client, RouteProvider.SelectCharacter(loginDto));
                     break;
 
@@ -151,11 +180,44 @@ namespace CalculationTools.WebSocket
                     ConnectionResult.TrySetResult(ConnectResult);
                     break;
 
+                case RouteProvider.MESSAGE_ERROR:
+                    var errorMessage = ParseDataFromResponse<ErrorMessageDTO>(response);
+                    Log.Error($"Socket Error: {errorMessage.ErrorCode} - {errorMessage.Message}");
+                    CloseConnection();
+                    break;
+
                 default:
 
                     //ExitEvent.Set();
                     break;
             }
+        }
+
+        /// <summary>
+        /// This takes the data key from the Socket.io response and parses it to type <see cref="T"/>
+        /// </summary>
+        /// <typeparam name="T">The DTO class it will use to deserialize and to return</typeparam>
+        /// <param name="response">The string to parse</param>
+        /// <returns></returns>
+        public T ParseDataFromResponse<T>(string response)
+        {
+            JObject jsonObject = (JObject)JsonConvert.DeserializeObject(response);
+
+            if (jsonObject["data"].Any())
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<T>(jsonObject["data"].ToString());
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, $"Could not parse type {typeof(T)} with data object in string:{Environment.NewLine}{response}");
+                }
+            }
+
+            Log.Error($"Could not find data object in JsonString: {response}");
+
+            return default;
         }
 
         public SocketResponse ParseSocketResponse(string response)
@@ -188,59 +250,14 @@ namespace CalculationTools.WebSocket
 
             return socketResponse;
         }
-
-
-
-
-        private static string CleanResponse(string response)
+        private LoginDataDTO ParseLoginSuccess(string response)
         {
-            //TODO Delete all numbers from the beginning
-            List<string> filterIds = new List<string>
-            {
-                "0",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "40",
-                "42",
-            };
+            var loginData = ParseDataFromResponse<LoginDataDTO>(response);
 
-            // Remove the Socket.io identifier string from the start
-            foreach (string filterId in filterIds)
-            {
-                response = response.StartsWith(filterId, StringComparison.Ordinal) ? response.Replace($"{filterId}[", "[", StringComparison.Ordinal) : response;
-            }
-
-            //Clean off the outer msg tag
-            if (response.StartsWith("[\"msg\",") && response.EndsWith("]"))
-            {
-                response = response.Replace("[\"msg\",", "");
-                response = response.Remove(response.Length - 1, 1);
-            }
-
-            return response;
-        }
-
-        private LoginDTO ParseLoginSuccess(string response)
-        {
-            LoginDTO loginDto = new LoginDTO();
-
-            try
-            {
-                loginDto = JsonConvert.DeserializeObject<LoginDTO>(response);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Could not deserialize the following string:");
-            }
-
-            ConnectResult.AccessToken = loginDto.Data.AccessToken;
+            ConnectResult.AccessToken = loginData?.AccessToken;
             ConnectResult.IsConnected = true;
             ConnectionResult.TrySetResult(ConnectResult);
-            return loginDto;
+            return loginData;
         }
         private void ParseSystemError(string response)
         {
@@ -267,6 +284,22 @@ namespace CalculationTools.WebSocket
 
         }
 
+        private static string CleanResponse(string response)
+        {
+            // Remove the Socket.io identifier string from the start
+            var digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+            response = response.TrimStart(digits);
+
+            //Clean off the outer msg tag since 99% are messages anyway
+            if (response.StartsWith("[\"msg\",") && response.EndsWith("]"))
+            {
+                response = response.Replace("[\"msg\",", "");
+                response = response.Remove(response.Length - 1, 1);
+            }
+
+            return response;
+        }
+
 
         #endregion
 
@@ -282,28 +315,21 @@ namespace CalculationTools.WebSocket
             }
         }
 
-        private static async Task SendPingAsync(IWebsocketClient client)
-        {
-            while (true)
-            {
-                await Task.Delay(2000);
-
-                if (!client.IsRunning)
-                    continue;
-                SendMessageAsync(client, "2");
-            }
-        }
-
-        private static void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
+        private void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
         {
             Log.Info("Exiting process");
-            ExitEvent.Set();
+            CloseConnection();
         }
 
-        private static void DefaultOnUnloading(AssemblyLoadContext assemblyLoadContext)
+        private void DefaultOnUnloading(AssemblyLoadContext assemblyLoadContext)
         {
             Log.Info("Unloading process");
-            ExitEvent.Set();
+            CloseConnection();
+        }
+
+        private async Task SendPingAsync(IWebsocketClient client)
+        {
+
         }
         #endregion Methods
     }

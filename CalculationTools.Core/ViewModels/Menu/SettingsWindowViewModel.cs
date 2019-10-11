@@ -30,11 +30,10 @@ namespace CalculationTools.Core
                 ServerCountryCode = SelectedAccount.ServerCountryCode
             };
 
-            bool result = await WebSocketConnect.CheckLoginCredentialsAsync(connectData);
+            bool result = await WebSocketConnect.LoginAsync(connectData);
+
             if (result)
             {
-                result = await WebSocketConnect.LoginAsync(connectData);
-
                 CheckLoginMessage = "The credentials were successful!";
             }
             else

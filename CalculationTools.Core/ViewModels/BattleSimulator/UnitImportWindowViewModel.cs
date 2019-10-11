@@ -85,6 +85,11 @@ namespace CalculationTools.Core.BattleSimulator
 
             // Filter out the decimal character from the string
             string untImportText = UnitImportText.Replace(".", "").Replace(",", "");
+            if (untImportText.EndsWith("\n"))
+            {
+                untImportText = untImportText.Remove(untImportText.Length - 2, 2);
+            }
+
 
             // using the method 
             List<string> entries = untImportText.Split("\r\n").ToList();
@@ -125,6 +130,8 @@ namespace CalculationTools.Core.BattleSimulator
             BattleUnitPreviewViewModel.UnitAmount.BattleResultValues = unitAmountRow;
             BattleUnitPreviewViewModel.UnitLost.BattleResultValues = unitLostRow;
             BattleUnitPreviewViewModel.UnitsLeft.BattleResultValues = unitLeftRow;
+
+            IsError = false;
 
             UnitResultSet = new UnitSet(unitValueList);
         }

@@ -20,33 +20,28 @@ namespace CalculationTools.WebSocket
 
         public static ConnectResult ConnectResult { get; set; } = new ConnectResult();
 
+        private static SocketClient SocketClient { get; set; }
+
         #endregion Properties
 
         #region Methods
 
-        public static async Task<bool> CheckLoginCredentialsAsync(ConnectData connectData)
+        public static async Task<bool> LoginAsync(ConnectData connectData, bool useAccessToken = true)
         {
-            SocketClient socketClient = await CreateSocketConnectAsync(connectData);
+            if (useAccessToken)
+            {
+                connectData.AccessToken = ConnectResult.AccessToken;
+            }
 
-            return socketClient.IsConnected;
+            ConnectResult = await GetSocketClient(connectData).StartConnectionAsync(connectData);
+
+            return SocketClient.IsConnected;
         }
 
-        public static async Task<bool> LoginAsync(ConnectData connectData)
+        public static SocketClient GetSocketClient(ConnectData connectData)
         {
-            connectData.AccessToken = ConnectResult.AccessToken;
-            SocketClient socketClient = await CreateSocketConnectAsync(connectData);
-            return socketClient.IsConnected;
+            return SocketClient ??= new SocketClient(connectData);
         }
-
-        public static async Task<SocketClient> CreateSocketConnectAsync(ConnectData connectData)
-        {
-            SocketClient socketClient = new SocketClient();
-
-            ConnectResult = await Task.Run(() => socketClient.StartConnectionAsync(connectData));
-
-            return socketClient;
-        }
-
 
 
 
