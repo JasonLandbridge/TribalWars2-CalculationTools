@@ -327,10 +327,6 @@ namespace CalculationTools.WebSocket
             CloseConnection();
         }
 
-        private async Task SendPingAsync(IWebsocketClient client)
-        {
-
-        }
         #endregion Methods
     }
 

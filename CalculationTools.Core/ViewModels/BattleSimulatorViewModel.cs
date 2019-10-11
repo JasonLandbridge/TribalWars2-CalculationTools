@@ -1,7 +1,7 @@
 ﻿using CalculationTools.Core.BattleSimulator;
-using System.Windows.Media;
-using System.Windows.Input;
 using CalculationTools.Core.Extensions;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace CalculationTools.Core
 {
@@ -30,52 +30,52 @@ namespace CalculationTools.Core
             {
                 AtkUnits = new UnitSet
                 {
+                    Archer = 0,
+                    AxeFighter = 0,
+                    Berserker = 0,
+                    Catapult = 0,
+                    HeavyCavalry = 0,
+                    LightCavalry = 0,
+                    MountedArcher = 0,
+                    Nobleman = 0,
+                    Paladin = 0,
+                    Ram = 0,
                     Spearman = 0,
                     Swordsman = 0,
-                    AxeFighter = 13469,
-                    Archer = 0,
-                    LightCavalry = 1645,
-                    MountedArcher = 1021,
-                    HeavyCavalry = 0,
-                    Ram = 525,
-                    Catapult = 0,
-                    Berserker = 0,
                     Trebuchet = 0,
-                    Nobleman = 0,
-                    Paladin = 1,
                 },
 
                 DefUnits = new UnitSet
                 {
-                    Spearman = 2000,
-                    Swordsman = 2000,
-                    AxeFighter = 4300,
-                    Archer = 2000,
-                    LightCavalry = 45,
-                    MountedArcher = 1,
-                    HeavyCavalry = 0,
-                    Ram = 300,
-                    Catapult = 10,
+                    Archer = 0,
+                    AxeFighter = 0,
                     Berserker = 0,
-                    Trebuchet = 0,
+                    Catapult = 0,
+                    HeavyCavalry = 0,
+                    LightCavalry = 0,
+                    MountedArcher = 0,
                     Nobleman = 0,
-                    Paladin = 1,
+                    Paladin = 0,
+                    Ram = 0,
+                    Spearman = 0,
+                    Swordsman = 0,
+                    Trebuchet = 0,
                 },
 
                 BattleMeta = new BattleMeta
                 {
                     GrandmasterBonus = true,
-                    AtkWeaponLevel = 2,
-                    AtkWeapon = GameData.AxeFighterWeapon,
+                    AtkWeaponLevel = 0,
+                    AtkWeapon = GameData.WeaponOptions[0],
                     DefWeaponLevel = 0,
                     DefWeapon = GameData.WeaponOptions[0],
-                    AtkChurch = GameData.FaithOptions[4],
+                    AtkChurch = GameData.FaithOptions[1],
                     DefChurch = GameData.FaithOptions[1],
-                    Luck = 13,
-                    Morale = 62,
+                    Luck = 0,
+                    Morale = 100,
                     NightBonus = false,
-                    WeaponMastery = 2,
-                    WallLevel = 20
+                    WeaponMastery = 3,
+                    WallLevel = 0
                 }
             };
 
