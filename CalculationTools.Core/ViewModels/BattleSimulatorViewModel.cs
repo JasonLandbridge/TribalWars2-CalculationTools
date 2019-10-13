@@ -1,7 +1,7 @@
-﻿using CalculationTools.Core.BattleSimulator;
-using CalculationTools.Core.Extensions;
+﻿using CalculationTools.Core.Extensions;
 using System.Windows.Input;
 using System.Windows.Media;
+using CalculationTools.Common;
 
 namespace CalculationTools.Core
 {
@@ -10,6 +10,8 @@ namespace CalculationTools.Core
         #region Fields
 
         private readonly IDialogService dialogService;
+        private readonly ISettings _settings;
+
         private bool _isAttackStrengthShown;
         private bool _isDefenseStrengthShown;
         private bool _isResourcesLostShown;
@@ -18,9 +20,10 @@ namespace CalculationTools.Core
 
         #region Constructors
 
-        public BattleSimulatorViewModel(IDialogService dialogService)
+        public BattleSimulatorViewModel(IDialogService dialogService, IDataManager dataManager)
         {
             this.dialogService = dialogService;
+            _settings = dataManager.Settings;
 
             ImportUnitCommand = new RelayCommand(SetImportedUnits);
 
@@ -103,9 +106,9 @@ namespace CalculationTools.Core
             DefenseBattleResultTable.ShowWallResult = true;
 
             // Load settings
-            IsAttackStrengthShown = IoC.Settings.IsAttackStrengthShown;
-            IsDefenseStrengthShown = IoC.Settings.IsDefenseStrengthShown;
-            IsResourcesLostShown = IoC.Settings.IsResourcesLostShown;
+            IsAttackStrengthShown = _settings.IsAttackStrengthShown;
+            IsDefenseStrengthShown = _settings.IsDefenseStrengthShown;
+            IsResourcesLostShown = _settings.IsResourcesLostShown;
         }
 
         public void UpdateBattleResult(BattleResult battleResult)
@@ -198,7 +201,7 @@ namespace CalculationTools.Core
             {
                 _isAttackStrengthShown = value;
                 AttackBattleResultTable.IsAttackStrengthShown = value;
-                IoC.Settings.IsAttackStrengthShown = value;
+                _settings.IsAttackStrengthShown = value;
                 OnPropertyChanged();
             }
         }
@@ -210,7 +213,7 @@ namespace CalculationTools.Core
             {
                 _isDefenseStrengthShown = value;
                 DefenseBattleResultTable.IsDefenseStrengthShown = value;
-                IoC.Settings.IsDefenseStrengthShown = value;
+                _settings.IsDefenseStrengthShown = value;
                 OnPropertyChanged();
             }
         }
@@ -223,7 +226,7 @@ namespace CalculationTools.Core
                 _isResourcesLostShown = value;
                 AttackBattleResultTable.IsResourcesLostShown = value;
                 DefenseBattleResultTable.IsResourcesLostShown = value;
-                IoC.Settings.IsResourcesLostShown = value;
+                _settings.IsResourcesLostShown = value;
                 OnPropertyChanged();
             }
         }

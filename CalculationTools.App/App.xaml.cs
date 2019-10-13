@@ -1,8 +1,8 @@
 ﻿using AutoUpdaterDotNET;
 using CalculationTools.Core;
-using CalculationTools.Core.BattleSimulator;
 using System;
 using System.Windows;
+using SimpleInjector;
 
 namespace CalculationTools.App
 {
@@ -23,24 +23,21 @@ namespace CalculationTools.App
             base.OnStartup(e);
 
             // Register all dialog windows
-            IDialogService dialogService = new DialogService(MainWindow);
+            DialogService dialogService = new DialogService(MainWindow);
+
             dialogService.Register<UnitImportWindowViewModel, UnitImportWidow>();
             dialogService.Register<ConnectionWindowViewModel, ConnectionWindow>();
             dialogService.Register<SettingsWindowViewModel, SettingsWindow>();
 
-            // Setup the IoC
-            IoC.Setup(dialogService);
-
+            IoC.Container.Register<IDialogService>(() => dialogService, Lifestyle.Singleton);
+            ApplicationCore.OnStartUp(dialogService);
 
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
 
-
-
             //Check for updates
             //MessageBox.Show(typeof(App).Assembly.GetName().Version.ToString());
-
             AutoUpdate();
         }
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CalculationTools.Core.BattleSimulator
+namespace CalculationTools.Core
 {
     public class BattleResultRowViewModel : BaseViewModel
     {

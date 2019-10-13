@@ -1,8 +1,6 @@
-﻿using Ninject;
-using nucs.JsonSettings;
-using nucs.JsonSettings.Autosave;
-using System;
-using System.IO;
+﻿using CalculationTools.Common;
+using CalculationTools.Data;
+using SimpleInjector;
 
 namespace CalculationTools.Core
 {
@@ -14,24 +12,13 @@ namespace CalculationTools.Core
         #region Properties
 
         /// <summary>
-        /// The kernel for the IoC container
+        /// The IoC container
         /// </summary>
-        public static IKernel Kernel { get; } = new StandardKernel();
-
-        public static Settings Settings => Get<Settings>();
+        public static Container Container { get; } = new Container();
         #endregion Properties
 
         #region Methods
 
-        /// <summary>
-        /// Return a service from the IoC, of the specified type
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T Get<T>()
-        {
-            return Kernel.Get<T>();
-        }
 
         /// <summary>
         /// Sets up the IoC container, binds all the information required and is ready for use
@@ -40,65 +27,30 @@ namespace CalculationTools.Core
         /// </summary>
         public static void Setup(IDialogService dialogService)
         {
-            SetupSettings();
 
-            // Bind all view models
-            BindViewModel(dialogService);
-            BindModels();
-        }
+            Container.Register<IDataManager, DataManager>(Lifestyle.Singleton);
 
-        public static void SetupSettings()
-        {
-            Settings settings;
-            string FileName = "Settings.json";
-            string path = $"{AppDomain.CurrentDomain.BaseDirectory}{FileName}";
+            Container.Register<ApplicationViewModel>(Lifestyle.Singleton);
+            Container.Register<MainWindowViewModel>(Lifestyle.Singleton);
+            Container.Register<BattleSimulatorViewModel>(Lifestyle.Singleton);
 
-            if (File.Exists(path))
-            {
-                settings = JsonSettings.Load<Settings>(FileName).EnableAutosave();
-            }
-            else
-            {
-                settings = JsonSettings.Construct<Settings>(FileName).EnableAutosave();
-                settings.SetDefaultValues();
-            }
-
-            Kernel.Bind<Settings>().ToConstant(settings);
-
-        }
-
-        /// <summary>
-        /// Binds all singleton view models
-        /// </summary>
-        private static void BindViewModel(IDialogService dialogService)
-        {
-
-            // Binds to a single instance of Application view model
-            Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
-
-            Kernel.Bind<MainWindowViewModel>().ToConstant(new MainWindowViewModel(dialogService));
-
-            Kernel.Bind<BattleSimulatorViewModel>().ToConstant(new BattleSimulatorViewModel(dialogService));
-        }
-
-        private static void BindModels()
-        {
+            Container.Verify(VerificationOption.VerifyAndDiagnose);
 
         }
 
 
         public static ApplicationViewModel GetApplicationViewModel()
         {
-            return Get<ApplicationViewModel>();
+            return Container.GetInstance<ApplicationViewModel>();
         }
         public static MainWindowViewModel GetMainWindowViewModel()
         {
-            return Get<MainWindowViewModel>();
+            return Container.GetInstance<MainWindowViewModel>();
         }
 
         public static BattleSimulatorViewModel GetBattleSimulatorViewModel()
         {
-            return Get<BattleSimulatorViewModel>();
+            return Container.GetInstance<BattleSimulatorViewModel>();
         }
 
         #endregion Methods

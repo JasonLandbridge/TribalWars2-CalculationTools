@@ -39,14 +39,8 @@ namespace CalculationTools.Core
             {
                 viewModel.CloseRequested -= handler;
 
-                if (e.DialogResult.HasValue)
-                {
-                    dialog.DialogResult = e.DialogResult;
-                }
-                else
-                {
-                    dialog.Close();
-                }
+                dialog.Close();
+
             };
 
             viewModel.CloseRequested += handler;

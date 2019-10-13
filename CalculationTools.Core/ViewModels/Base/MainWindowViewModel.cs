@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using CalculationTools.Common;
+using System.Windows.Input;
 
 namespace CalculationTools.Core
 {
@@ -6,15 +7,19 @@ namespace CalculationTools.Core
     {
         #region Fields
 
-        private readonly IDialogService dialogService;
+        private readonly IDialogService _dialogService;
+        private readonly ISettings _settings;
+        private SettingsWindowViewModel _settingsWindowViewModel;
 
         #endregion Fields
 
         #region Constructors
 
-        public MainWindowViewModel(IDialogService dialogService)
+        public MainWindowViewModel(IDialogService dialogService, IDataManager dataManager)
         {
-            this.dialogService = dialogService;
+            _dialogService = dialogService;
+            _settings = dataManager.Settings;
+
             ConnectToTW2Command = new RelayCommand(ConnectToTW2);
             OpenSettingsCommand = new RelayCommand(OpenSettings);
         }
@@ -28,7 +33,11 @@ namespace CalculationTools.Core
         #region MenuViewModels
 
         public ConnectionWindowViewModel ConnectionWindowViewModel { get; set; } = new ConnectionWindowViewModel();
-        public SettingsWindowViewModel SettingsWindowViewModel { get; set; } = new SettingsWindowViewModel();
+
+        public SettingsWindowViewModel SettingsWindowViewModel
+        {
+            get { return _settingsWindowViewModel ??= new SettingsWindowViewModel(_settings); }
+        }
 
         #endregion
         #region Commands
@@ -43,13 +52,13 @@ namespace CalculationTools.Core
 
         public void OpenSettings()
         {
-            dialogService.ShowDialog(SettingsWindowViewModel);
+            _dialogService.ShowDialog(SettingsWindowViewModel);
         }
         public void ConnectToTW2()
         {
 
-            dialogService.ShowDialog(ConnectionWindowViewModel);
-            //  WebSocketConnect.StartConnectionAsync();
+            _dialogService.ShowDialog(ConnectionWindowViewModel);
+            //  SocketManager.StartConnectionAsync();
         }
 
         #endregion

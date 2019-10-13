@@ -1,14 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using CalculationTools.Common;
+using Newtonsoft.Json;
 using nucs.JsonSettings;
 using System.Collections.Generic;
 
-namespace CalculationTools.Core
+namespace CalculationTools.Data
 {
     /// <summary>
     /// The settings class holding all settings stored in a JSON file
     /// <para>See: https://github.com/Nucs/JsonSettings/ </para>
     /// </summary>
-    public class Settings : JsonSettings
+    public class Settings : JsonSettings, ISettings
     {
         #region Constructors
 
@@ -16,9 +17,6 @@ namespace CalculationTools.Core
         {
 
         }
-
-        public Settings(string fileName) : base(fileName) { }
-
         #endregion Constructors
 
         #region Properties
@@ -84,10 +82,10 @@ namespace CalculationTools.Core
 
         #endregion
 
+
         public void SetDefaultValues()
         {
             Accounts = new List<Account> { new Account { ServerCountryCode = "nl" } };
-
 
             Save();
         }

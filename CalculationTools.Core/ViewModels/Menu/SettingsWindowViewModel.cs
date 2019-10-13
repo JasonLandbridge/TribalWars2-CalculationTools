@@ -1,4 +1,5 @@
-﻿using CalculationTools.Core.DataModels.Meta;
+﻿using CalculationTools.Common;
+using CalculationTools.Common.DataModels.World;
 using CalculationTools.WebSocket;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,15 @@ namespace CalculationTools.Core
 {
     public class SettingsWindowViewModel : BaseViewModel, IDialogRequestClose
     {
+        private readonly ISettings _settings;
+
         #region Constructors
 
-        public SettingsWindowViewModel()
+        public SettingsWindowViewModel(ISettings settings)
         {
-            CloseCommand = new RelayCommand(() => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
+            _settings = settings;
+
+            CloseCommand = new RelayCommand(() => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs()));
             CheckAccountCommand = new RelayCommand(CheckAccountCredentials);
             SelectedAccount = Accounts[0];
         }
@@ -30,7 +35,7 @@ namespace CalculationTools.Core
                 ServerCountryCode = SelectedAccount.ServerCountryCode
             };
 
-            bool result = await WebSocketConnect.LoginAsync(connectData);
+            bool result = await SocketManager.LoginAsync(connectData);
 
             if (result)
             {
@@ -59,7 +64,11 @@ namespace CalculationTools.Core
 
         #region Account
 
-        public List<Account> Accounts { get; set; } = IoC.Settings.Accounts;
+        public List<Account> Accounts
+        {
+            get => _settings.Accounts;
+            set => _settings.Accounts = value;
+        }
 
         public Account SelectedAccount { get; set; }
 
@@ -78,7 +87,6 @@ namespace CalculationTools.Core
             {
                 SelectedAccount.Username = value;
                 Accounts[0] = SelectedAccount;
-                IoC.Settings.Save();
             }
         }
         public string Password
@@ -88,7 +96,6 @@ namespace CalculationTools.Core
             {
                 SelectedAccount.Password = value;
                 Accounts[0] = SelectedAccount;
-                IoC.Settings.Save();
             }
         }
         public string ServerCountryCode
@@ -98,7 +105,6 @@ namespace CalculationTools.Core
             {
                 SelectedAccount.ServerCountryCode = value;
                 Accounts[0] = SelectedAccount;
-                IoC.Settings.Save();
             }
         }
 

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CalculationTools.WebSocket
 {
-    public static class WebSocketConnect
+    public static class SocketManager
     {
         #region Fields
 

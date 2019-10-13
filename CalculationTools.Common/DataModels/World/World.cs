@@ -1,4 +1,4 @@
-﻿namespace CalculationTools.Core.DataModels.World
+﻿namespace CalculationTools.Common.DataModels.World
 {
     public class World
     {

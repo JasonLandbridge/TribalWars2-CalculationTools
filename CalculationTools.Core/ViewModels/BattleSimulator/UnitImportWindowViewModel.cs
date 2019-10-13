@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
-namespace CalculationTools.Core.BattleSimulator
+namespace CalculationTools.Core
 {
     public class UnitImportWindowViewModel : BaseViewModel, IDialogRequestClose
     {

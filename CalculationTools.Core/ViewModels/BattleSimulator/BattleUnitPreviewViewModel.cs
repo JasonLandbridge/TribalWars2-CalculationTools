@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace CalculationTools.Core.BattleSimulator
+namespace CalculationTools.Core
 {
     public class BattleUnitPreviewViewModel : BaseViewModel
     {

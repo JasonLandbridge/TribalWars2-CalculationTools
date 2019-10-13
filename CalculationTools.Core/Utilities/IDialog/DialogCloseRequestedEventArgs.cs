@@ -4,7 +4,7 @@ namespace CalculationTools.Core
 {
     public class DialogCloseRequestedEventArgs : EventArgs
     {
-        public DialogCloseRequestedEventArgs(bool? dialogResult)
+        public DialogCloseRequestedEventArgs(bool? dialogResult = null)
         {
             DialogResult = dialogResult;
         }
