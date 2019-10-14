@@ -1,4 +1,5 @@
 ﻿using CalculationTools.Common;
+using CalculationTools.Common.Connection;
 using CalculationTools.Common.Data;
 using NLog;
 using System.Threading.Tasks;
@@ -33,24 +34,45 @@ namespace CalculationTools.WebSocket
 
         #region Methods
 
-        public async Task<bool> LoginAsync(ConnectData connectData, bool useAccessToken = true)
+        public SocketClient GetSocketClient()
+        {
+            return SocketClient ??= new SocketClient(_playerData);
+        }
+
+        public async Task<ConnectResult> TestConnection(ConnectData connectData)
+        {
+            ConnectResult = await GetSocketClient().TestConnectionAsync(connectData);
+            return ConnectResult;
+
+        }
+
+        public async Task<ConnectResult> StartConnection(ConnectData connectData, bool useAccessToken = true)
         {
             if (useAccessToken)
             {
                 connectData.AccessToken = ConnectResult.AccessToken;
             }
 
-            ConnectResult = await GetSocketClient(connectData).StartConnectionAsync();
+            await GetSocketClient().SetupConnectionAsync(connectData);
+            ConnectResult = await GetSocketClient().StartConnectionAsync(useAccessToken);
+            return ConnectResult;
 
-            return SocketClient.IsConnected;
         }
 
-        public SocketClient GetSocketClient(ConnectData connectData)
+        public async Task<bool> StopConnection(bool deleteConnection = false)
         {
-            return SocketClient ??= new SocketClient(connectData, _playerData);
+            if (GetSocketClient() != null && GetSocketClient().IsConnected)
+            {
+                await GetSocketClient().CloseConnection();
+            }
+            if (deleteConnection)
+            {
+                SocketClient = null;
+                ConnectResult = null;
+            }
+
+            return true;
         }
-
-
 
         #endregion Methods
     }

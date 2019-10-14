@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using CalculationTools.Common.Connection;
 
 namespace CalculationTools.WebSocket
 {

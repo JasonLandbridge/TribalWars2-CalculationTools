@@ -8,6 +8,7 @@ namespace CalculationTools.Data
 {
     public class PlayerData : BasePropertyChanged, IPlayerData
     {
+        private readonly ISocketManager _socketManager;
         public DateTime LastUpdated { get; set; }
         public DateTime LastUpdatedLoginData { get; set; }
         public bool IsLoggedIn { get; set; }
@@ -47,6 +48,14 @@ namespace CalculationTools.Data
 
         }
 
+        public PlayerData(ISocketManager socketManager)
+        {
+            _socketManager = socketManager;
+
+
+
+
+        }
 
     }
 }

@@ -22,7 +22,7 @@ namespace CalculationTools.Common.Data
 
         #region Accounts
 
-        List<Account> GetAccounts();
+        List<Account> GetAccounts(bool onlyConfirmed = false);
         void SetAccount(Account account);
         Account AddAccount(Account account);
 

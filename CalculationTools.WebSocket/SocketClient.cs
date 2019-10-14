@@ -1,4 +1,5 @@
 ﻿using CalculationTools.Common;
+using CalculationTools.Common.Connection;
 using CalculationTools.Common.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -6,8 +7,8 @@ using NLog;
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Runtime.Loader;
-using System.Threading;
 using System.Threading.Tasks;
 using Websocket.Client;
 
@@ -17,8 +18,6 @@ namespace CalculationTools.WebSocket
     {
 
         #region Fields
-
-        private static readonly ManualResetEvent ExitEvent = new ManualResetEvent(false);
 
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -30,9 +29,37 @@ namespace CalculationTools.WebSocket
 
         #region Constructors
 
-        public SocketClient(ConnectData connectData, IPlayerData playerData)
+        public SocketClient(IPlayerData playerData)
         {
             _playerData = playerData;
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public BackgroundWorker BackgroundWorker { get; } = new BackgroundWorker();
+        public WebsocketClient Client { get; set; }
+        public ConnectData ConnectData { get; set; }
+        public ConnectResult ConnectResult { get; set; } = new ConnectResult();
+        public bool IsConnected => ConnectResult.IsConnected;
+
+        public bool ClientHasBeenSetup { get; set; }
+        public int PingCount { get; set; }
+
+        #endregion Properties
+
+        #region Methods
+
+        #region Connection
+
+        public async Task<bool> SetupConnectionAsync(ConnectData connectData)
+        {
+            if (Client.IsRunning)
+            {
+                await CloseConnection();
+            }
+
             ConnectData = connectData;
 
             Client = new WebsocketClient(ConnectData.Uri)
@@ -51,10 +78,10 @@ namespace CalculationTools.WebSocket
                         break;
                 }
             });
-            Client.DisconnectionHappened.Subscribe(type =>
+            Client.DisconnectionHappened.Subscribe(async type =>
             {
                 Log.Info("Connection was disconnected by server");
-                ConnectionResult.TrySetResult(ConnectResult);
+                await CloseConnection();
             });
             Client.MessageReceived.Subscribe(msg =>
             {
@@ -63,29 +90,8 @@ namespace CalculationTools.WebSocket
             });
 
             SetupBackgroundWorker();
-
-        }
-
-        #endregion Constructors
-
-        #region Properties
-
-        public BackgroundWorker BackgroundWorker { get; } = new BackgroundWorker();
-        public WebsocketClient Client { get; set; }
-        public ConnectData ConnectData { get; set; } = new ConnectData();
-        public ConnectResult ConnectResult { get; set; } = new ConnectResult();
-        public bool IsConnected => ConnectResult.IsConnected;
-        public int PingCount { get; set; }
-
-        #endregion Properties
-
-        #region Methods
-
-        public void CloseConnection()
-        {
-            BackgroundWorker.CancelAsync();
-
-            ConnectionResult.TrySetCanceled(CancellationToken.None);
+            ClientHasBeenSetup = true;
+            return true;
         }
 
         public void SetupBackgroundWorker()
@@ -95,7 +101,7 @@ namespace CalculationTools.WebSocket
             {
                 while (true)
                 {
-                    await Task.Delay(2000);
+                    await Task.Delay(1000);
 
                     if (!Client.IsRunning)
                         continue;
@@ -112,6 +118,26 @@ namespace CalculationTools.WebSocket
 
         public async Task<ConnectResult> StartConnectionAsync(bool keepAlive = true)
         {
+            if (!ClientHasBeenSetup)
+            {
+                string message = "Connection setup has not been performed before starting the connection";
+                Log.Error(message);
+                return new ConnectResult
+                {
+                    IsConnected = false,
+                    Message = message
+                };
+            }
+
+            if (Client.IsRunning)
+            {
+                return new ConnectResult
+                {
+                    IsConnected = true,
+                    Message = "Connection is already running"
+                };
+            }
+
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
             AssemblyLoadContext.Default.Unloading += DefaultOnUnloading;
 
@@ -119,15 +145,50 @@ namespace CalculationTools.WebSocket
 
             await Client.Start();
 
-            if (keepAlive)
+            if (keepAlive && !BackgroundWorker.IsBusy)
             {
                 BackgroundWorker.RunWorkerAsync();
             }
 
+
             return await ConnectionResult.Task;
 
         }
+        public async Task<bool> CloseConnection()
+        {
+            BackgroundWorker.CancelAsync();
+            var result = await Client.Stop(WebSocketCloseStatus.NormalClosure, "Closed by command");
+            PingCount = 0;
+            ConnectionResult.TrySetCanceled();
+            return result;
+        }
 
+        private static async void SendMessageAsync(IWebsocketClient client, string message)
+        {
+            if (!string.IsNullOrEmpty(message))
+            {
+                if (client.IsRunning)
+                {
+                    Log.Info($"Message Send:     {message}");
+                    await Task.Run(() => client.Send(message));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Will login with the <see cref="ConnectData"/> and disconnect again when a result has been returned.
+        /// </summary>
+        /// <param name="connectData">Connection credentials</param>
+        /// <returns></returns>
+        public async Task<ConnectResult> TestConnectionAsync(ConnectData connectData)
+        {
+            await SetupConnectionAsync(connectData);
+            ConnectResult result = await StartConnectionAsync(false);
+            await CloseConnection();
+            return result;
+        }
+
+        #endregion
         #region ParseMethods
         private void ParseResponse(IWebsocketClient client, string response)
         {
@@ -183,7 +244,7 @@ namespace CalculationTools.WebSocket
                 case RouteProvider.MESSAGE_ERROR:
                     var errorMessage = ParseDataFromResponse<ErrorMessageDTO>(response);
                     Log.Error($"Socket Error: {errorMessage.ErrorCode} - {errorMessage.Message}");
-                    CloseConnection();
+                    //await CloseConnection();
                     break;
 
                 default:
@@ -261,7 +322,6 @@ namespace CalculationTools.WebSocket
 
             // Send parsed data to the PlayerData to be stored
             _playerData.SetLoginData(loginData);
-
             return loginData;
         }
 
@@ -290,11 +350,6 @@ namespace CalculationTools.WebSocket
 
         }
 
-
-
-
-        #endregion
-
         private static string CleanResponse(string response)
         {
             // Remove the Socket.io identifier string from the start
@@ -310,29 +365,17 @@ namespace CalculationTools.WebSocket
 
             return response;
         }
-
-        private static async void SendMessageAsync(IWebsocketClient client, string message)
-        {
-            if (!string.IsNullOrEmpty(message))
-            {
-                if (client.IsRunning)
-                {
-                    Log.Info($"Message Send:     {message}");
-                    await Task.Run(() => client.Send(message));
-                }
-            }
-        }
-
-        private void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
+        #endregion
+        private async void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
         {
             Log.Info("Exiting process");
-            CloseConnection();
+            await CloseConnection();
         }
 
-        private void DefaultOnUnloading(AssemblyLoadContext assemblyLoadContext)
+        private async void DefaultOnUnloading(AssemblyLoadContext assemblyLoadContext)
         {
             Log.Info("Unloading process");
-            CloseConnection();
+            await CloseConnection();
         }
         #endregion Methods
 

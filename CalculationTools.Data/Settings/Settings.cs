@@ -82,18 +82,27 @@ namespace CalculationTools.Data
 
         public virtual Dictionary<int, Account> Accounts { get; set; }
 
-        public List<Account> GetAccounts()
+        public List<Account> GetAccounts(bool onlyConfirmed = false)
         {
-            List<Account> accounts = new List<Account>();
+            List<Account> listResult = new List<Account>();
 
             foreach (KeyValuePair<int, Account> accountPair in Accounts)
             {
                 Account account = accountPair.Value;
                 account.AccountID = accountPair.Key;
-                accounts.Add(account);
+
+                if (onlyConfirmed)
+                {
+                    if (account.IsConfirmed)
+                    {
+                        listResult.Add(account);
+                    }
+                    continue;
+                }
+                listResult.Add(account);
             }
 
-            return accounts;
+            return listResult;
         }
 
         public void SetAccount(Account account)

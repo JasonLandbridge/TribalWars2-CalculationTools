@@ -35,6 +35,19 @@
 
         #region Properties
 
+        public string FullWorldName
+        {
+            get
+            {
+                string name = $"({WorldId}) - {WorldName}";
+                if (Full)
+                {
+                    name += " (FULL)";
+                }
+                return name;
+            }
+        }
+
         #region IWorld Properties
 
         public string Id { get => _characterWorldID; set => _characterWorldID = value; }

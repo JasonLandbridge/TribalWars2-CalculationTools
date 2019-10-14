@@ -15,18 +15,39 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Content="Choose account to connect with:" />
-            <syncfusion:ComboBoxAdv Grid.Column="1" ItemsSource="{Binding Accounts}">
+            <Label Margin="5" Content="Choose an account to connect with:" />
+            <syncfusion:ComboBoxAdv
+                Grid.Column="1"
+                Width="300"
+                Margin="5"
+                HorizontalAlignment="Left"
+                IsEnabled="{Binding IsAccountSelectionEnabled}"
+                ItemsSource="{Binding Accounts}"
+                SelectedItem="{Binding SelectedAccount}">
                 <ComboBoxItem Content="" />
             </syncfusion:ComboBoxAdv>
+            <Button
+                Grid.Column="2"
+                Width="100"
+                Margin="5"
+                Content="Disconnect"
+                Command="{Binding DisconnectCommand}" />
+            <Button
+                Grid.Column="3"
+                Width="100"
+                Margin="5"
+                Content="Connect"
+                Command="{Binding ConnectCommand}"/>
         </Grid>
 
-        <Label Content="Paste the units from a scout report into the text box below" />
+        <Label Content="The connection log will be displayed here: " />
         <TextBox
             Height="200"
             AcceptsReturn="True"
@@ -51,7 +72,7 @@
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
                 Command="{Binding ResetCommand}"
-                Content="Reset"
+                Content="Clear"
                 IsCancel="True"
                 TabIndex="1700" />
 

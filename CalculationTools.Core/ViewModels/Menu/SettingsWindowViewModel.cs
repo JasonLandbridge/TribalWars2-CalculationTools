@@ -1,4 +1,5 @@
 ﻿using CalculationTools.Common;
+using CalculationTools.Common.Connection;
 using CalculationTools.Common.Data;
 using CalculationTools.Common.DataModels.World;
 using System;
@@ -72,6 +73,11 @@ namespace CalculationTools.Core
             set => SelectedAccount.Username = value;
         }
 
+        public string DefaultWorld
+        {
+            get => SelectedAccount?.DefaultWorld;
+            set => SelectedAccount.DefaultWorld = value;
+        }
         public List<CharacterWorld> WorldList { get; set; }
         #endregion
 
@@ -140,10 +146,9 @@ namespace CalculationTools.Core
                 ServerCountryCode = SelectedAccount.ServerCountryCode
             };
 
-            bool result = await _socketManager.LoginAsync(connectData);
+            var result = await _socketManager.TestConnection(connectData);
 
-
-            if (result)
+            if (result.IsConnected)
             {
                 CheckLoginMessage = "The credentials were successful!";
             }

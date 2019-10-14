@@ -2,7 +2,7 @@
 
 using System;
 
-namespace CalculationTools.Common
+namespace CalculationTools.Common.Connection
 {
     public class ConnectData
     {

@@ -1,16 +1,16 @@
-﻿using System.Windows;
-using CalculationTools.Core;
+﻿using CalculationTools.Core;
 
 namespace CalculationTools.App
 {
     /// <summary>
     /// Interaction logic for UnitImportWidow.xaml
     /// </summary>
-    public partial class ConnectionWindow : Window, IDialog
+    public partial class ConnectionWindow : IDialog
     {
-        public ConnectionWindow()
+        public ConnectionWindow(ConnectionWindowViewModel connectionWindowViewModel)
         {
             InitializeComponent();
+            DataContext = connectionWindowViewModel;
         }
 
     }
