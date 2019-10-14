@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace CalculationTools.Core
 {
-    public class ConnectionWindowViewModel : BaseViewModel, IDialogRequestClose
+    public class ConnectionWindowViewModel : BaseViewModel, IDialogViewModel
     {
         #region Constructors
 
@@ -17,6 +17,10 @@ namespace CalculationTools.Core
         #region Events
 
         public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+        public void OnDialogOpen()
+        {
+
+        }
 
         #endregion Events
 

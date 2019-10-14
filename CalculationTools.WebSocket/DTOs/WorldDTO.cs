@@ -1,10 +1,11 @@
 ﻿
 
+using CalculationTools.Common;
 using Newtonsoft.Json;
 
 namespace CalculationTools.WebSocket
 {
-    public class WorldDTO
+    public class WorldDTO : IWorld
     {
         [JsonProperty("id")]
         public string Id { get; set; }

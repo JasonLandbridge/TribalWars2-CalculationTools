@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CalculationTools.Common;
 using Newtonsoft.Json;
 
 namespace CalculationTools.WebSocket
 {
-    public class CharacterDTO
+    public class CharacterDTO : ICharacter
     {
         [JsonProperty("character_id")]
         public int CharacterId { get; set; }
@@ -33,6 +31,8 @@ namespace CalculationTools.WebSocket
 
         [JsonProperty("key_required")]
         public bool KeyRequired { get; set; }
+
+
     }
 
 }

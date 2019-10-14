@@ -1,124 +1,89 @@
 ﻿using CalculationTools.Common;
+using CalculationTools.Common.Data;
 using CalculationTools.Common.DataModels.World;
-using CalculationTools.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
 namespace CalculationTools.Core
 {
-    public class SettingsWindowViewModel : BaseViewModel, IDialogRequestClose
+    public class SettingsWindowViewModel : BaseViewModel, IDialogViewModel
     {
+        #region Fields
+
+
+        private readonly IPlayerData _playerData;
         private readonly ISettings _settings;
+        private readonly ISocketManager _socketManager;
+        private string _unitImportText;
+
+        #endregion Fields
 
         #region Constructors
 
-        public SettingsWindowViewModel(ISettings settings)
+        public SettingsWindowViewModel(IDataManager dataManager,
+            IPlayerData playerData, ISocketManager socketManager)
         {
-            _settings = settings;
+            _settings = dataManager.Settings;
+            _playerData = playerData;
+            _socketManager = socketManager;
 
             CloseCommand = new RelayCommand(() => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs()));
             CheckAccountCommand = new RelayCommand(CheckAccountCredentials);
-            SelectedAccount = Accounts[0];
-        }
 
-        private async void CheckAccountCredentials()
-        {
-            CheckLoginButtonText = "Checking credentials";
-            CheckLoginButtonEnabled = false;
-
-            ConnectData connectData = new ConnectData
+            _playerData.LoginDataIsUpdated += (sender, args) =>
             {
-                Username = SelectedAccount.Username,
-                Password = SelectedAccount.Password,
-                ServerCountryCode = SelectedAccount.ServerCountryCode
+                WorldList = _playerData.CharacterWorlds;
             };
 
-            bool result = await SocketManager.LoginAsync(connectData);
-
-            if (result)
-            {
-                CheckLoginMessage = "The credentials were successful!";
-            }
-            else
-            {
-                CheckLoginMessage = "The credentials failed! Please try again.";
-            }
-
-            CheckLoginButtonText = "Check account";
-            CheckLoginButtonEnabled = true;
-
         }
-
         #endregion Constructors
-
-        #region Events
-
-        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
-
-        #endregion Events
-
         #region Properties
 
 
         #region Account
 
-        public List<Account> Accounts
+        public List<Account> Accounts { get; set; }
+
+        public bool CheckLoginButtonEnabled { get; set; } = true;
+        public string CheckLoginButtonText { get; set; } = "Check account";
+        public string CheckLoginMessage { get; set; }
+        public string Password
         {
-            get => _settings.Accounts;
-            set => _settings.Accounts = value;
+            get => SelectedAccount?.Password;
+            set => SelectedAccount.Password = value;
         }
 
         public Account SelectedAccount { get; set; }
 
+        public string ServerCountryCode
+        {
+            get => SelectedAccount?.ServerCountryCode;
+            set => SelectedAccount.ServerCountryCode = value;
+        }
+
         public List<Server> ServerList => GameData.ServerList;
-
-        public string CheckLoginButtonText { get; set; } = "Check account";
-
-        public bool CheckLoginButtonEnabled { get; set; } = true;
-
-        public string CheckLoginMessage { get; set; }
 
         public string Username
         {
-            get => SelectedAccount.Username;
-            set
-            {
-                SelectedAccount.Username = value;
-                Accounts[0] = SelectedAccount;
-            }
-        }
-        public string Password
-        {
-            get => SelectedAccount.Password;
-            set
-            {
-                SelectedAccount.Password = value;
-                Accounts[0] = SelectedAccount;
-            }
-        }
-        public string ServerCountryCode
-        {
-            get => SelectedAccount.ServerCountryCode;
-            set
-            {
-                SelectedAccount.ServerCountryCode = value;
-                Accounts[0] = SelectedAccount;
-            }
+            get => SelectedAccount?.Username;
+            set => SelectedAccount.Username = value;
         }
 
+        public List<CharacterWorld> WorldList { get; set; }
         #endregion
 
 
         #region Commands
 
+        public ICommand CheckAccountCommand { get; set; }
+
         /// <summary>
         /// Close the dialog window without changing anything
         /// </summary>
         public ICommand CloseCommand { get; set; }
-        public ICommand CheckAccountCommand { get; set; }
-
         #endregion
 
         #region ErrorHandeling
@@ -140,10 +105,57 @@ namespace CalculationTools.Core
 
         #endregion Properties
 
-        #region Fields
+        #region Events
 
-        private string _unitImportText;
+        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
 
-        #endregion Fields
+        #endregion Events
+
+        #region Methods
+
+        public void OnDialogOpen()
+        {
+            Accounts = _settings.GetAccounts();
+
+            if (Accounts.Count > 0)
+            {
+                SelectedAccount = Accounts.Last();
+
+                SelectedAccount.PropertyChanged += (sender, args) =>
+                {
+                    _settings.SetAccount(SelectedAccount);
+                };
+            }
+        }
+
+        private async void CheckAccountCredentials()
+        {
+            CheckLoginButtonText = "Checking credentials";
+            CheckLoginButtonEnabled = false;
+
+            ConnectData connectData = new ConnectData
+            {
+                Username = SelectedAccount.Username,
+                Password = SelectedAccount.Password,
+                ServerCountryCode = SelectedAccount.ServerCountryCode
+            };
+
+            bool result = await _socketManager.LoginAsync(connectData);
+
+
+            if (result)
+            {
+                CheckLoginMessage = "The credentials were successful!";
+            }
+            else
+            {
+                CheckLoginMessage = "The credentials failed! Please try again.";
+            }
+
+            CheckLoginButtonText = "Check account";
+            CheckLoginButtonEnabled = true;
+        }
+
+        #endregion Methods
     }
 }

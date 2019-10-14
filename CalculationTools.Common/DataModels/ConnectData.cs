@@ -2,7 +2,7 @@
 
 using System;
 
-namespace CalculationTools.WebSocket
+namespace CalculationTools.Common
 {
     public class ConnectData
     {

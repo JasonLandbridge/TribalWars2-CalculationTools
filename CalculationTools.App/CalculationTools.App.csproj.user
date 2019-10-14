@@ -5,6 +5,9 @@
     <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Views\BattleSimulatorView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -23,11 +26,14 @@
     <Compile Update="Controls\InputRowHeader.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\BattleInputTable.xaml.cs">
+    <Compile Update="Controls\BattleInput.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Views\BattleSimulatorView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\SettingsWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -55,7 +61,7 @@
     <Page Update="Controls\InputRowHeader.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\BattleInputTable.xaml">
+    <Page Update="Controls\BattleInput.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

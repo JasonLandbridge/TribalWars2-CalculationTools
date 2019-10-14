@@ -1,5 +1,4 @@
-﻿using CalculationTools.Common;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace CalculationTools.Core
 {
@@ -8,17 +7,22 @@ namespace CalculationTools.Core
         #region Fields
 
         private readonly IDialogService _dialogService;
-        private readonly ISettings _settings;
-        private SettingsWindowViewModel _settingsWindowViewModel;
+
+        private readonly SettingsWindowViewModel _settingsWindowViewModel;
+        private readonly BattleSimulatorViewModel _battleSimulatorViewModel;
 
         #endregion Fields
 
         #region Constructors
 
-        public MainWindowViewModel(IDialogService dialogService, IDataManager dataManager)
+        public MainWindowViewModel(
+            SettingsWindowViewModel settingsWindowViewModel,
+            BattleSimulatorViewModel battleSimulatorViewModel,
+            IDialogService dialogService)
         {
             _dialogService = dialogService;
-            _settings = dataManager.Settings;
+            _settingsWindowViewModel = settingsWindowViewModel;
+            _battleSimulatorViewModel = battleSimulatorViewModel;
 
             ConnectToTW2Command = new RelayCommand(ConnectToTW2);
             OpenSettingsCommand = new RelayCommand(OpenSettings);
@@ -28,16 +32,9 @@ namespace CalculationTools.Core
 
         #region Properties
 
-        public BattleSimulatorViewModel BattleSimulatorViewModel => IoC.GetBattleSimulatorViewModel();
-
         #region MenuViewModels
 
         public ConnectionWindowViewModel ConnectionWindowViewModel { get; set; } = new ConnectionWindowViewModel();
-
-        public SettingsWindowViewModel SettingsWindowViewModel
-        {
-            get { return _settingsWindowViewModel ??= new SettingsWindowViewModel(_settings); }
-        }
 
         #endregion
         #region Commands
@@ -52,7 +49,8 @@ namespace CalculationTools.Core
 
         public void OpenSettings()
         {
-            _dialogService.ShowDialog(SettingsWindowViewModel);
+            _settingsWindowViewModel.OnDialogOpen();
+            _dialogService.ShowDialog(_settingsWindowViewModel);
         }
         public void ConnectToTW2()
         {

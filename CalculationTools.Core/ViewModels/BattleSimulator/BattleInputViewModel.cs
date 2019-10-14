@@ -4,11 +4,11 @@ using System.Windows.Input;
 
 namespace CalculationTools.Core
 {
-    public class BattleSimulatorInputViewModel : BaseViewModel
+    public class BattleInputViewModel : BaseViewModel
     {
         #region Constructors
 
-        public BattleSimulatorInputViewModel()
+        public BattleInputViewModel()
         {
             SetupValues();
             DefaultValues();

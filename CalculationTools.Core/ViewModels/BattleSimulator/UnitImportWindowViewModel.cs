@@ -6,12 +6,15 @@ using System.Windows.Input;
 
 namespace CalculationTools.Core
 {
-    public class UnitImportWindowViewModel : BaseViewModel, IDialogRequestClose
+    public class UnitImportWindowViewModel : BaseViewModel, IDialogViewModel
     {
+        private readonly BattleInputViewModel _battleInputViewModel;
+
         #region Constructors
 
-        public UnitImportWindowViewModel()
+        public UnitImportWindowViewModel(BattleInputViewModel battleInputViewModel)
         {
+            _battleInputViewModel = battleInputViewModel;
             ResetCommand = new RelayCommand(() => { UnitImportText = string.Empty; });
             SaveCommand = new RelayCommand(SendToBattleInput);
             CloseCommand = new RelayCommand(() => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
@@ -22,6 +25,10 @@ namespace CalculationTools.Core
         #region Events
 
         public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+        public void OnDialogOpen()
+        {
+
+        }
 
         #endregion Events
 
@@ -139,7 +146,7 @@ namespace CalculationTools.Core
         public void SendToBattleInput()
         {
             ParseInput();
-            IoC.GetBattleSimulatorViewModel().BattleSimulatorInputViewModel.LoadDefUnits(UnitResultSet);
+            _battleInputViewModel.LoadDefUnits(UnitResultSet);
             CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
         }
 

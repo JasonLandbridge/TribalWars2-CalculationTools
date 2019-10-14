@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CalculationTools.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -50,7 +51,6 @@ namespace CalculationTools.WebSocket
                     pass = connectData.Password
                 };
             }
-
 
             var jsonObject = new
             {

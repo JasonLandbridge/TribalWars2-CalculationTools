@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using CalculationTools.Common;
+using CalculationTools.Common.Data;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Loader;
@@ -14,26 +15,27 @@ namespace CalculationTools.WebSocket
 {
     public class SocketClient
     {
+
         #region Fields
 
-
         private static readonly ManualResetEvent ExitEvent = new ManualResetEvent(false);
+
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-        #endregion Fields
-
-        #region Events
+        private readonly IPlayerData _playerData;
 
         private readonly TaskCompletionSource<ConnectResult> ConnectionResult = new TaskCompletionSource<ConnectResult>();
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
-        public SocketClient(ConnectData connectData)
+        public SocketClient(ConnectData connectData, IPlayerData playerData)
         {
+            _playerData = playerData;
+            ConnectData = connectData;
 
-            Client = new WebsocketClient(connectData.Uri)
+            Client = new WebsocketClient(ConnectData.Uri)
             {
                 ReconnectTimeoutMs = (int)TimeSpan.FromSeconds(30).TotalMilliseconds
             };
@@ -70,11 +72,8 @@ namespace CalculationTools.WebSocket
 
         public BackgroundWorker BackgroundWorker { get; } = new BackgroundWorker();
         public WebsocketClient Client { get; set; }
-
         public ConnectData ConnectData { get; set; } = new ConnectData();
-
         public ConnectResult ConnectResult { get; set; } = new ConnectResult();
-
         public bool IsConnected => ConnectResult.IsConnected;
         public int PingCount { get; set; }
 
@@ -91,6 +90,7 @@ namespace CalculationTools.WebSocket
 
         public void SetupBackgroundWorker()
         {
+            BackgroundWorker.WorkerSupportsCancellation = true;
             BackgroundWorker.DoWork += async (sender, args) =>
             {
                 while (true)
@@ -110,7 +110,7 @@ namespace CalculationTools.WebSocket
 
         }
 
-        public async Task<ConnectResult> StartConnectionAsync(ConnectData connectData, bool keepAlive = true)
+        public async Task<ConnectResult> StartConnectionAsync(bool keepAlive = true)
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
             AssemblyLoadContext.Default.Unloading += DefaultOnUnloading;
@@ -127,8 +127,8 @@ namespace CalculationTools.WebSocket
             return await ConnectionResult.Task;
 
         }
-        #region ParseResponse
 
+        #region ParseMethods
         private void ParseResponse(IWebsocketClient client, string response)
         {
             if (string.IsNullOrEmpty(response))
@@ -193,34 +193,7 @@ namespace CalculationTools.WebSocket
             }
         }
 
-        /// <summary>
-        /// This takes the data key from the Socket.io response and parses it to type <see cref="T"/>
-        /// </summary>
-        /// <typeparam name="T">The DTO class it will use to deserialize and to return</typeparam>
-        /// <param name="response">The string to parse</param>
-        /// <returns></returns>
-        public T ParseDataFromResponse<T>(string response)
-        {
-            JObject jsonObject = (JObject)JsonConvert.DeserializeObject(response);
-
-            if (jsonObject["data"].Any())
-            {
-                try
-                {
-                    return JsonConvert.DeserializeObject<T>(jsonObject["data"].ToString());
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e, $"Could not parse type {typeof(T)} with data object in string:{Environment.NewLine}{response}");
-                }
-            }
-
-            Log.Error($"Could not find data object in JsonString: {response}");
-
-            return default;
-        }
-
-        public SocketResponse ParseSocketResponse(string response)
+        private SocketResponse ParseSocketResponse(string response)
         {
 
             string headerType = string.Empty;
@@ -250,15 +223,48 @@ namespace CalculationTools.WebSocket
 
             return socketResponse;
         }
+
+        /// <summary>
+        /// This takes the data key from the Socket.io response and parses it to type <see cref="T"/>
+        /// </summary>
+        /// <typeparam name="T">The DTO class it will use to deserialize and to return</typeparam>
+        /// <param name="response">The string to parse</param>
+        /// <returns></returns>
+        private T ParseDataFromResponse<T>(string response)
+        {
+            JObject jsonObject = (JObject)JsonConvert.DeserializeObject(response);
+
+            if (jsonObject["data"].Any())
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<T>(jsonObject["data"].ToString());
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, $"Could not parse type {typeof(T)} with data object in string:{Environment.NewLine}{response}");
+                }
+            }
+
+            Log.Error($"Could not find data object in JsonString: {response}");
+
+            return default;
+        }
+
         private LoginDataDTO ParseLoginSuccess(string response)
         {
             var loginData = ParseDataFromResponse<LoginDataDTO>(response);
 
-            ConnectResult.AccessToken = loginData?.AccessToken;
             ConnectResult.IsConnected = true;
             ConnectionResult.TrySetResult(ConnectResult);
+            ConnectResult.AccessToken = loginData?.AccessToken;
+
+            // Send parsed data to the PlayerData to be stored
+            _playerData.SetLoginData(loginData);
+
             return loginData;
         }
+
         private void ParseSystemError(string response)
         {
             SystemErrorDTO systemError = new SystemErrorDTO();
@@ -284,6 +290,11 @@ namespace CalculationTools.WebSocket
 
         }
 
+
+
+
+        #endregion
+
         private static string CleanResponse(string response)
         {
             // Remove the Socket.io identifier string from the start
@@ -299,9 +310,6 @@ namespace CalculationTools.WebSocket
 
             return response;
         }
-
-
-        #endregion
 
         private static async void SendMessageAsync(IWebsocketClient client, string message)
         {
@@ -326,8 +334,8 @@ namespace CalculationTools.WebSocket
             Log.Info("Unloading process");
             CloseConnection();
         }
-
         #endregion Methods
+
     }
 
 

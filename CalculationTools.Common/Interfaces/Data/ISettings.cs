@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace CalculationTools.Common
+namespace CalculationTools.Common.Data
 {
     public interface ISettings
     {
         #region Properties
 
-        List<Account> Accounts { get; set; }
         bool IsAttackStrengthShown { get; set; }
         bool IsDefenseStrengthShown { get; set; }
         bool IsResourcesLostShown { get; set; }
+        string FileName { get; set; }
 
         #endregion Properties
 
@@ -17,5 +17,16 @@ namespace CalculationTools.Common
         void Save();
 
         #endregion Methods
+
+        void SetDefaultValues();
+
+        #region Accounts
+
+        List<Account> GetAccounts();
+        void SetAccount(Account account);
+        Account AddAccount(Account account);
+
+        #endregion
+
     }
 }

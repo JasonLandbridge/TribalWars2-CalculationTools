@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CalculationTools.Common;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CalculationTools.WebSocket
 {
-    public class LoginDataDTO
+    public class LoginDataDTO : ILoginData
     {
 
         [JsonProperty("player_id")]
@@ -17,11 +17,17 @@ namespace CalculationTools.WebSocket
         [JsonProperty("token")]
         public string AccessToken { get; set; }
 
+        [JsonIgnore]
+        public IList<ICharacter> Characters => CharactersDTO.ToList<ICharacter>();
+
         [JsonProperty("characters")]
-        public IList<CharacterDTO> Characters { get; set; }
+        public List<CharacterDTO> CharactersDTO { get; set; }
+
+        [JsonIgnore]
+        public IList<IWorld> Worlds => WorldsDTO.ToList<IWorld>();
 
         [JsonProperty("worlds")]
-        public IList<WorldDTO> Worlds { get; set; }
+        public List<WorldDTO> WorldsDTO { get; set; }
 
         [JsonProperty("invitations")]
         public IList<object> Invitations { get; set; }

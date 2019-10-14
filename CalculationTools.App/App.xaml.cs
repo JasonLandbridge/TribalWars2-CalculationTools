@@ -1,14 +1,15 @@
 ﻿using AutoUpdaterDotNET;
 using CalculationTools.Core;
-using System;
-using System.Windows;
 using SimpleInjector;
+using System;
+using System.Diagnostics;
+using System.Windows;
 
 namespace CalculationTools.App
 {
 
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for ApplicationStart.xaml
     /// </summary>
     public partial class App : Application
     {
@@ -22,6 +23,28 @@ namespace CalculationTools.App
             // Let the base application do what it needs
             base.OnStartup(e);
 
+            RegisterDependencies();
+
+            try
+            {
+                // Show the main window
+                Current.MainWindow = IoC.Container.GetInstance<MainWindow>();
+                Current.MainWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                //Log the exception and exit
+                Debug.WriteLine(ex.Message);
+            }
+
+            //Check for updates
+            //MessageBox.Show(typeof(ApplicationStart).Assembly.GetName().Version.ToString());
+            AutoUpdate();
+        }
+
+
+        private void RegisterDependencies()
+        {
             // Register all dialog windows
             DialogService dialogService = new DialogService(MainWindow);
 
@@ -29,22 +52,40 @@ namespace CalculationTools.App
             dialogService.Register<ConnectionWindowViewModel, ConnectionWindow>();
             dialogService.Register<SettingsWindowViewModel, SettingsWindow>();
 
+            // Register dependencies
             IoC.Container.Register<IDialogService>(() => dialogService, Lifestyle.Singleton);
-            ApplicationCore.OnStartUp(dialogService);
 
-            // Show the main window
-            Current.MainWindow = new MainWindow();
-            Current.MainWindow.Show();
+            IoC.Container.Register<ApplicationViewModel>(Lifestyle.Singleton);
 
-            //Check for updates
-            //MessageBox.Show(typeof(App).Assembly.GetName().Version.ToString());
-            AutoUpdate();
+            IoC.Container.Register<MainWindow>();
+            IoC.Container.Register<MainWindowViewModel>();
+
+            IoC.Container.Register<SettingsWindow>();
+            IoC.Container.Register<SettingsWindowViewModel>();
+
+            IoC.Container.Register<UnitImportWidow>();
+            IoC.Container.Register<UnitImportWindowViewModel>();
+
+            IoC.Container.Register<ConnectionWindow>();
+            IoC.Container.Register<ConnectionWindowViewModel>();
+
+            //TODO extract the BattleSimulatorTab to its own control
+
+            IoC.Container.Register<BattleSimulatorViewModel>();
+            IoC.Container.Register<BattleSimulatorView>();
+
+            IoC.Container.Register<BattleInput>();
+            IoC.Container.Register<BattleInputViewModel>();
+
+            ApplicationCore.OnStartUp();
+
+            IoC.Container.Verify(VerificationOption.VerifyAndDiagnose);
         }
 
         public void AutoUpdate()
         {
             AutoUpdater.DownloadPath = Environment.CurrentDirectory;
-            AutoUpdater.Start("https://raw.githubusercontent.com/JasonLandbridge/TribalWars2-CalculationTools/master/CalculationTools.App/Resources/Updates/AutoUpdater.xml");
+            AutoUpdater.Start("https://raw.githubusercontent.com/JasonLandbridge/TribalWars2-CalculationTools/master/CalculationTools.ApplicationStart/Resources/Updates/AutoUpdater.xml");
 
         }
 

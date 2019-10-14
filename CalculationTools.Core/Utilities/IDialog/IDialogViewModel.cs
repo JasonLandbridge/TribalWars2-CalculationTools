@@ -2,8 +2,9 @@
 
 namespace CalculationTools.Core
 {
-    public interface IDialogRequestClose
+    public interface IDialogViewModel
     {
         event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+        void OnDialogOpen();
     }
 }

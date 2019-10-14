@@ -1,16 +1,16 @@
-﻿using System.Windows;
-using CalculationTools.Core;
+﻿using CalculationTools.Core;
 
 namespace CalculationTools.App
 {
     /// <summary>
     /// Interaction logic for UnitImportWidow.xaml
     /// </summary>
-    public partial class SettingsWindow : Window, IDialog
+    public partial class SettingsWindow : IDialog
     {
-        public SettingsWindow()
+        public SettingsWindow(SettingsWindowViewModel settingsWindowViewModel)
         {
             InitializeComponent();
+            DataContext = settingsWindowViewModel;
         }
 
     }

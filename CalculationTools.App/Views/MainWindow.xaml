@@ -67,68 +67,8 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             DockPanel.Dock="Left">
-            <TabItem
-                x:Name="TabBattleSimulator"
-                DataContext="{Binding BattleSimulatorViewModel}"
-                Header="Battle Simulator">
-
-                <StackPanel Orientation="Horizontal">
-                    <!--  Input table  -->
-                    <StackPanel Orientation="Vertical">
-                        <local:BattleInputTable DataContext="{Binding BattleSimulatorInputViewModel}" />
-                        <Button
-                            Margin="5,5"
-                            Command="{Binding ImportUnitCommand}"
-                            Content="Import scout report" />
-                    </StackPanel>
-
-                    <!--  Result Grid  -->
-                    <StackPanel Orientation="Vertical">
-                        <Expander Header="Show filters">
-                            <GroupBox Header="Filters">
-
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <CheckBox
-                                        Margin="5"
-                                        VerticalAlignment="Center"
-                                        Content="Show Attack Strength"
-                                        IsChecked="{Binding IsAttackStrengthShown}" />
-
-                                    <CheckBox
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Margin="5"
-                                        VerticalAlignment="Center"
-                                        Content="Show Defense Strength"
-                                        IsChecked="{Binding IsDefenseStrengthShown}" />
-
-                                    <CheckBox
-                                        Grid.Row="0"
-                                        Grid.Column="2"
-                                        Margin="5"
-                                        VerticalAlignment="Center"
-                                        Content="Show Resources Lost"
-                                        IsChecked="{Binding IsResourcesLostShown}" />
-                                </Grid>
-                            </GroupBox>
-                        </Expander>
-                        <!--  Attack Grid  -->
-                        <local:BattleResultTable DataContext="{Binding AttackBattleResultTable}" />
-
-                        <!--  Defend Grid  -->
-                        <local:BattleResultTable DataContext="{Binding DefenseBattleResultTable}" />
-                    </StackPanel>
-                </StackPanel>
+            <TabItem x:Name="TabBattleSimulator" Header="Battle Simulator">
+                <ContentControl x:Name="BattleSimulator" />
             </TabItem>
             <TabItem Header="Farm Tracker">
                 <Grid>

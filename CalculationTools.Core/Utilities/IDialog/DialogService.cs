@@ -16,7 +16,7 @@ namespace CalculationTools.Core
 
         public IDictionary<Type, Type> Mappings { get; }
 
-        public void Register<TViewModel, TView>() where TViewModel : IDialogRequestClose
+        public void Register<TViewModel, TView>() where TViewModel : IDialogViewModel
                                                   where TView : IDialog
         {
             if (Mappings.ContainsKey(typeof(TViewModel)))
@@ -27,11 +27,16 @@ namespace CalculationTools.Core
             Mappings.Add(typeof(TViewModel), typeof(TView));
         }
 
-        public bool? ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogRequestClose
+        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+
+        public event EventHandler OnDialogOpen;
+
+        public bool? ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogViewModel
         {
             Type viewType = Mappings[typeof(TViewModel)];
 
-            IDialog dialog = (IDialog)Activator.CreateInstance(viewType);
+            // Instead of re-creating a new view everytime take the one from the IoC container.
+            IDialog dialog = (IDialog)IoC.Container.GetInstance(viewType);
 
             EventHandler<DialogCloseRequestedEventArgs> handler = null;
 
@@ -39,7 +44,14 @@ namespace CalculationTools.Core
             {
                 viewModel.CloseRequested -= handler;
 
-                dialog.Close();
+                if (e.DialogResult.HasValue)
+                {
+                    dialog.DialogResult = e.DialogResult;
+                }
+                else
+                {
+                    dialog.Close();
+                }
 
             };
 
@@ -50,5 +62,7 @@ namespace CalculationTools.Core
 
             return dialog.ShowDialog();
         }
+
+
     }
 }

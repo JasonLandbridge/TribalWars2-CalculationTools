@@ -1,7 +1,9 @@
 ﻿using CalculationTools.Common;
+using CalculationTools.Common.Data;
 using Newtonsoft.Json;
 using nucs.JsonSettings;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CalculationTools.Data
 {
@@ -17,6 +19,8 @@ namespace CalculationTools.Data
         {
 
         }
+
+
         #endregion Constructors
 
         #region Properties
@@ -73,9 +77,58 @@ namespace CalculationTools.Data
         #endregion
 
         #region Accounts
-        public virtual List<Account> Accounts { get; set; }
 
+        //public virtual List<Account> Accounts { get; set; }
 
+        public virtual Dictionary<int, Account> Accounts { get; set; }
+
+        public List<Account> GetAccounts()
+        {
+            List<Account> accounts = new List<Account>();
+
+            foreach (KeyValuePair<int, Account> accountPair in Accounts)
+            {
+                Account account = accountPair.Value;
+                account.AccountID = accountPair.Key;
+                accounts.Add(account);
+            }
+
+            return accounts;
+        }
+
+        public void SetAccount(Account account)
+        {
+            if (Accounts.ContainsKey(account.AccountID))
+            {
+                Accounts[account.AccountID] = account;
+            }
+            else
+            {
+                AddAccount(account);
+            }
+
+            Save();
+        }
+
+        public Account AddAccount(Account account = null)
+        {
+            if (account == null)
+            {
+                account = new Account { ServerCountryCode = "nl" };
+            }
+
+            if (Accounts.Count > 0)
+            {
+                Accounts.Add(Accounts.Keys.Max() + 1, account);
+            }
+            else
+            {
+                Accounts.Add(0, account);
+            }
+
+            Save();
+            return account;
+        }
 
         #endregion   
         #endregion
@@ -85,9 +138,8 @@ namespace CalculationTools.Data
 
         public void SetDefaultValues()
         {
-            Accounts = new List<Account> { new Account { ServerCountryCode = "nl" } };
+            AddAccount();
 
-            Save();
         }
     }
 }

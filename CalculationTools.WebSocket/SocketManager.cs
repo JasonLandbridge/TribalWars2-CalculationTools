@@ -1,11 +1,15 @@
-﻿using NLog;
+﻿using CalculationTools.Common;
+using CalculationTools.Common.Data;
+using NLog;
 using System.Threading.Tasks;
 
 
 namespace CalculationTools.WebSocket
 {
-    public static class SocketManager
+    public class SocketManager : ISocketManager
     {
+        private readonly IPlayerData _playerData;
+
         #region Fields
 
 
@@ -13,34 +17,37 @@ namespace CalculationTools.WebSocket
 
         #endregion Fields
 
-
+        public SocketManager(IPlayerData playerData)
+        {
+            _playerData = playerData;
+        }
 
         #region Properties
 
 
-        public static ConnectResult ConnectResult { get; set; } = new ConnectResult();
+        public ConnectResult ConnectResult { get; set; } = new ConnectResult();
 
-        private static SocketClient SocketClient { get; set; }
+        private SocketClient SocketClient { get; set; }
 
         #endregion Properties
 
         #region Methods
 
-        public static async Task<bool> LoginAsync(ConnectData connectData, bool useAccessToken = true)
+        public async Task<bool> LoginAsync(ConnectData connectData, bool useAccessToken = true)
         {
             if (useAccessToken)
             {
                 connectData.AccessToken = ConnectResult.AccessToken;
             }
 
-            ConnectResult = await GetSocketClient(connectData).StartConnectionAsync(connectData);
+            ConnectResult = await GetSocketClient(connectData).StartConnectionAsync();
 
             return SocketClient.IsConnected;
         }
 
-        public static SocketClient GetSocketClient(ConnectData connectData)
+        public SocketClient GetSocketClient(ConnectData connectData)
         {
-            return SocketClient ??= new SocketClient(connectData);
+            return SocketClient ??= new SocketClient(connectData, _playerData);
         }
 
 

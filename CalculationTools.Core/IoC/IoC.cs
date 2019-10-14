@@ -1,5 +1,7 @@
 ﻿using CalculationTools.Common;
+using CalculationTools.Common.Data;
 using CalculationTools.Data;
+using CalculationTools.WebSocket;
 using SimpleInjector;
 
 namespace CalculationTools.Core
@@ -25,33 +27,31 @@ namespace CalculationTools.Core
         /// NOTE: Must be called as soon as your application starts up to ensure all
         ///       services can be found
         /// </summary>
-        public static void Setup(IDialogService dialogService)
+        public static void Setup()
         {
 
+            //IMySettings settings = new ConfigurationBuilder<IMySettings>().UseAppConfig().Build();
+
+            //Container.Register<IMySettings>(() => settings);
+
+            Container.Register<IPlayerData, PlayerData>(Lifestyle.Singleton);
             Container.Register<IDataManager, DataManager>(Lifestyle.Singleton);
+            Container.Register<ISocketManager, SocketManager>(Lifestyle.Singleton);
 
-            Container.Register<ApplicationViewModel>(Lifestyle.Singleton);
-            Container.Register<MainWindowViewModel>(Lifestyle.Singleton);
-            Container.Register<BattleSimulatorViewModel>(Lifestyle.Singleton);
-
-            Container.Verify(VerificationOption.VerifyAndDiagnose);
-
-        }
-
-
-        public static ApplicationViewModel GetApplicationViewModel()
-        {
-            return Container.GetInstance<ApplicationViewModel>();
-        }
-        public static MainWindowViewModel GetMainWindowViewModel()
-        {
-            return Container.GetInstance<MainWindowViewModel>();
         }
 
         public static BattleSimulatorViewModel GetBattleSimulatorViewModel()
         {
             return Container.GetInstance<BattleSimulatorViewModel>();
         }
+
+        public static IDataManager GetDataManager()
+        {
+            return Container.GetInstance<IDataManager>();
+        }
+
+
+        public static SettingsWindowViewModel SettingsWindowViewModel => Container.GetInstance<SettingsWindowViewModel>();
 
         #endregion Methods
     }

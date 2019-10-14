@@ -1,13 +1,16 @@
-﻿namespace CalculationTools.Common.DataModels.World
+﻿namespace CalculationTools.Common
 {
-    public class World
+    public class World : IWorld
     {
-        public string Name => WorldName;
+        public string Id { get; set; }
 
-        public string WorldName { get; set; }
+        public string Name { get; set; }
 
-        public string WorldId { get; set; }
+        public bool Full { get; set; }
 
+        public int Recommended { get; set; }
+
+        public bool KeyRequired { get; set; }
 
     }
 }

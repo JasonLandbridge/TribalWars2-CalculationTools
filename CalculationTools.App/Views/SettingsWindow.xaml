@@ -98,15 +98,11 @@
                             Height="25"
                             Margin="5"
                             HorizontalAlignment="Left"
-                            ItemsSource="{Binding ServerList}">
+                            ItemsSource="{Binding WorldList}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image
-                                            MaxWidth="64"
-                                            MaxHeight="64"
-                                            Source="{Binding}" />
-                                        <TextBlock Text="{Binding}" />
+                                        <TextBlock Text="{Binding Name}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>

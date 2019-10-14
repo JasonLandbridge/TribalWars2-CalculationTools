@@ -1,7 +1,7 @@
-﻿using CalculationTools.Core.Extensions;
+﻿using CalculationTools.Common.Data;
+using CalculationTools.Core.Extensions;
 using System.Windows.Input;
 using System.Windows.Media;
-using CalculationTools.Common;
 
 namespace CalculationTools.Core
 {
@@ -9,7 +9,10 @@ namespace CalculationTools.Core
     {
         #region Fields
 
-        private readonly IDialogService dialogService;
+        private readonly BattleInputViewModel _battleInputViewModel;
+        private readonly UnitImportWindowViewModel _unitImportWindowViewModel;
+        private readonly IDialogService _dialogService;
+        private readonly IDataManager _dataManager;
         private readonly ISettings _settings;
 
         private bool _isAttackStrengthShown;
@@ -20,9 +23,16 @@ namespace CalculationTools.Core
 
         #region Constructors
 
-        public BattleSimulatorViewModel(IDialogService dialogService, IDataManager dataManager)
+        public BattleSimulatorViewModel(
+            BattleInputViewModel battleInputViewModel,
+            UnitImportWindowViewModel unitImportWindowViewModel,
+            IDialogService dialogService,
+            IDataManager dataManager)
         {
-            this.dialogService = dialogService;
+            _battleInputViewModel = battleInputViewModel;
+            _unitImportWindowViewModel = unitImportWindowViewModel;
+            _dialogService = dialogService;
+            _dataManager = dataManager;
             _settings = dataManager.Settings;
 
             ImportUnitCommand = new RelayCommand(SetImportedUnits);
@@ -82,10 +92,10 @@ namespace CalculationTools.Core
                 }
             };
 
-            BattleSimulatorInputViewModel.LoadBattleConfig(battleConfig);
+            _battleInputViewModel.LoadBattleConfig(battleConfig);
 
             //Only bind to the property changed after all values have been loaded for the first time to prevent unnecessary recalculations
-            BattleSimulatorInputViewModel.PropertyChanged += (sender, args) => RunBattleSimulator();
+            _battleInputViewModel.PropertyChanged += (sender, args) => RunBattleSimulator();
             RunBattleSimulator();
         }
 
@@ -93,7 +103,7 @@ namespace CalculationTools.Core
 
         #region Methods
 
-        public void SetupBattleResult()
+        private void SetupBattleResult()
         {
             AttackBattleResultTable.Header = "Attacking Units";
             DefenseBattleResultTable.Header = "Defending Units";
@@ -111,7 +121,7 @@ namespace CalculationTools.Core
             IsResourcesLostShown = _settings.IsResourcesLostShown;
         }
 
-        public void UpdateBattleResult(BattleResult battleResult)
+        private void UpdateBattleResult(BattleResult battleResult)
         {
             AttackBattleResultTable.BattleModifier = battleResult.AtkBattleModifier.ToString();
             DefenseBattleResultTable.BattleModifier = battleResult.DefModifierBeforeBattle.ToString();
@@ -144,11 +154,9 @@ namespace CalculationTools.Core
             DefenseBattleResultTable.UnitsLeft.BattleResultValues = battleResult.ListOfDefLeftNumbers.AddTotal();
         }
 
-        public void SetImportedUnits()
+        private void SetImportedUnits()
         {
-            var viewModel = new UnitImportWindowViewModel();
-
-            dialogService.ShowDialog(viewModel);
+            _dialogService.ShowDialog(_unitImportWindowViewModel);
         }
 
         /// <summary>
@@ -158,7 +166,7 @@ namespace CalculationTools.Core
         /// <param name="e"></param>
         private void RunBattleSimulator()
         {
-            BattleResult battleResult = GameData.SimulateBattle(BattleSimulatorInputViewModel.ToBattleConfig());
+            BattleResult battleResult = GameData.SimulateBattle(_battleInputViewModel.ToBattleConfig());
             UpdateBattleResult(battleResult);
         }
 
@@ -179,11 +187,6 @@ namespace CalculationTools.Core
         /// The viewmodel that displays the battle results for the attacking side.
         /// </summary>
         public BattleResultTableViewModel AttackBattleResultTable { get; set; } = new BattleResultTableViewModel();
-
-        /// <summary>
-        /// The viewmodel for the input fields of the battle simulator.
-        /// </summary>
-        public BattleSimulatorInputViewModel BattleSimulatorInputViewModel { get; set; } = new BattleSimulatorInputViewModel();
 
         /// <summary>
         /// The viewmodel that displays the battle results for the defending side.

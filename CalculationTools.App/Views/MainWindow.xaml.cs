@@ -1,19 +1,19 @@
-﻿using System.Windows;
-using CalculationTools.Core;
+﻿using CalculationTools.Core;
 
 namespace CalculationTools.App
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         #region Constructors
 
-        public MainWindow()
+        public MainWindow(MainWindowViewModel mainWindowViewModel, BattleSimulatorView battleSimulatorView)
         {
             InitializeComponent();
-            DataContext = IoC.GetMainWindowViewModel();
+            DataContext = mainWindowViewModel;
+            BattleSimulator.Content = battleSimulatorView;
         }
 
         #endregion Constructors
