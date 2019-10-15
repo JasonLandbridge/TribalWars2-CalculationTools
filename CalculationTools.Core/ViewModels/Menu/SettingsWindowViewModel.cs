@@ -1,5 +1,4 @@
 ﻿using CalculationTools.Common;
-using CalculationTools.Common.Connection;
 using CalculationTools.Common.Data;
 using CalculationTools.Common.DataModels.World;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using CalculationTools.Common.Connection;
 
 namespace CalculationTools.Core
 {
@@ -18,7 +18,6 @@ namespace CalculationTools.Core
         private readonly IPlayerData _playerData;
         private readonly ISettings _settings;
         private readonly ISocketManager _socketManager;
-        private string _unitImportText;
 
         #endregion Fields
 
@@ -37,16 +36,26 @@ namespace CalculationTools.Core
             _playerData.LoginDataIsUpdated += (sender, args) =>
             {
                 WorldList = _playerData.CharacterWorlds;
+                if (WorldList != null && WorldList.Count > 0)
+                {
+                    DefaultWorld = WorldList[0].WorldId;
+                }
             };
 
         }
         #endregion Constructors
+        #region Events
+
+        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+
+        #endregion Events
+
         #region Properties
 
 
         #region Account
 
-        public List<Account> Accounts { get; set; }
+        public List<Account> Accounts { get; set; } = new List<Account>();
 
         public bool CheckLoginButtonEnabled { get; set; } = true;
         public string CheckLoginButtonText { get; set; } = "Check account";
@@ -57,7 +66,7 @@ namespace CalculationTools.Core
             set => SelectedAccount.Password = value;
         }
 
-        public Account SelectedAccount { get; set; }
+        public Account SelectedAccount { get; set; } = new Account();
 
         public string ServerCountryCode
         {
@@ -78,11 +87,22 @@ namespace CalculationTools.Core
             get => SelectedAccount?.DefaultWorld;
             set => SelectedAccount.DefaultWorld = value;
         }
-        public List<CharacterWorld> WorldList { get; set; }
+
+        public List<CharacterWorld> WorldList
+        {
+            get => SelectedAccount?.WorldList;
+            set
+            {
+
+                SelectedAccount.WorldList = value;
+
+            }
+        }
+
         #endregion
 
 
-        #region Commands
+        #region CommandsWorldList
 
         public ICommand CheckAccountCommand { get; set; }
 
@@ -99,24 +119,8 @@ namespace CalculationTools.Core
         public Visibility IsErrorVisible => IsError ? Visibility.Visible : Visibility.Hidden;
 
         #endregion
-        public string UnitImportText
-        {
-            get => _unitImportText;
-            set
-            {
-                _unitImportText = value;
-                OnPropertyChanged();
-            }
-        }
 
         #endregion Properties
-
-        #region Events
-
-        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
-
-        #endregion Events
-
         #region Methods
 
         public void OnDialogOpen()
@@ -141,20 +145,28 @@ namespace CalculationTools.Core
 
             ConnectData connectData = new ConnectData
             {
-                Username = SelectedAccount.Username,
-                Password = SelectedAccount.Password,
-                ServerCountryCode = SelectedAccount.ServerCountryCode
+                Username = Username,
+                Password = Password,
+                ServerCountryCode = ServerCountryCode
             };
-
-            var result = await _socketManager.TestConnection(connectData);
-
-            if (result.IsConnected)
+            ConnectResult result = new ConnectResult();
+            try
             {
-                CheckLoginMessage = "The credentials were successful!";
+                result = await _socketManager.TestConnection(connectData);
+                CheckLoginMessage = result.IsConnected ?
+                    "The credentials were successful!" :
+                    "The credentials failed! Please try again.";
+                SelectedAccount.IsConfirmed = result.IsConnected;
+
             }
-            else
+            catch (Exception e)
             {
-                CheckLoginMessage = "The credentials failed! Please try again.";
+                string error = "Oops, the developer fucked something up :(";
+                error += Environment.NewLine;
+                error += $"show him this: {e}";
+
+                CheckLoginMessage = error;
+                Console.WriteLine(e);
             }
 
             CheckLoginButtonText = "Check account";

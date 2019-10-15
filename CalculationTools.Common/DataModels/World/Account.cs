@@ -1,4 +1,4 @@
-﻿using CalculationTools.Common.Connection;
+﻿using System.Collections.Generic;
 
 namespace CalculationTools.Common
 {
@@ -12,11 +12,14 @@ namespace CalculationTools.Common
         public string ServerCountryCode { get; set; } = string.Empty;
         public string DefaultWorld { get; set; } = string.Empty;
 
+        public List<CharacterWorld> WorldList { get; set; } = new List<CharacterWorld>();
+
         /// <summary>
         /// Is this account to be confirmed working.
         /// </summary>
         public bool IsConfirmed { get; set; }
 
+        public string DisplayName => $"{ServerCountryCode} - {Username}";
 
         public ConnectData ToConnectData()
         {

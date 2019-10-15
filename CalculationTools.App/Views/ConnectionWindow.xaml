@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:CalculationTools.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    Title="Unit Import "
+    Title="Connect to TW2"
     Width="800"
     Height="500"
     mc:Ignorable="d">
@@ -29,30 +29,43 @@
                 Margin="5"
                 HorizontalAlignment="Left"
                 IsEnabled="{Binding IsAccountSelectionEnabled}"
-                ItemsSource="{Binding Accounts}"
+                ItemsSource="{Binding Accounts, Mode=OneWay}"
                 SelectedItem="{Binding SelectedAccount}">
-                <ComboBoxItem Content="" />
+                <syncfusion:ComboBoxAdv.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding DisplayName}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </syncfusion:ComboBoxAdv.ItemTemplate>
             </syncfusion:ComboBoxAdv>
             <Button
                 Grid.Column="2"
                 Width="100"
                 Margin="5"
-                Content="Disconnect"
-                Command="{Binding DisconnectCommand}" />
+                Command="{Binding DisconnectCommand}"
+                Content="Disconnect" />
             <Button
                 Grid.Column="3"
                 Width="100"
                 Margin="5"
-                Content="Connect"
-                Command="{Binding ConnectCommand}"/>
+                Command="{Binding ConnectCommand}"
+                Content="Connect" />
         </Grid>
+        <Label Content="{Binding SelectedAccount}" />
 
         <Label Content="The connection log will be displayed here: " />
         <TextBox
             Height="200"
             AcceptsReturn="True"
-            Text="{Binding UnitImportText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            TextWrapping="Wrap" />
+            Text="{Binding ConnectionLog, Mode=OneWay}"
+            TextWrapping="NoWrap"
+            FontFamily="Courier New"
+            FontSize="14"
+            IsReadOnly="True"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto"
+            />
         <Label Content="{Binding ErrorMessage}" Visibility="{Binding IsErrorVisible}" />
 
         <Grid>

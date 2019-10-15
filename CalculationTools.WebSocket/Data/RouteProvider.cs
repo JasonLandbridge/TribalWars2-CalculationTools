@@ -19,6 +19,7 @@ namespace CalculationTools.WebSocket
         public const string SYSTEM_ERROR = "System/error";
         public const string SYSTEM_WELCOME = "System/welcome";
         public const string MESSAGE_ERROR = "Message/error";
+        public const string EXCEPTION_ERROR = "Exception/ErrorException";
 
         public const string SELECT_CHARACTER = "Authentication/selectCharacter";
         public const string CHARACTER_SELECTED = "Authentication/characterSelected";

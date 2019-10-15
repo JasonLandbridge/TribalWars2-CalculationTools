@@ -8,7 +8,6 @@ namespace CalculationTools.Data
 {
     public class PlayerData : BasePropertyChanged, IPlayerData
     {
-        private readonly ISocketManager _socketManager;
         public DateTime LastUpdated { get; set; }
         public DateTime LastUpdatedLoginData { get; set; }
         public bool IsLoggedIn { get; set; }
@@ -22,8 +21,8 @@ namespace CalculationTools.Data
         {
             get
             {
-                List<CharacterWorld> worldList = Worlds.Select(world => new CharacterWorld(world)).ToList();
-                worldList.AddRange(Characters.Select(character => new CharacterWorld(character)));
+                List<CharacterWorld> worldList =
+                    Characters.Select(character => new CharacterWorld(character)).ToList();
                 return worldList;
             }
         }
@@ -48,9 +47,8 @@ namespace CalculationTools.Data
 
         }
 
-        public PlayerData(ISocketManager socketManager)
+        public PlayerData()
         {
-            _socketManager = socketManager;
 
 
 

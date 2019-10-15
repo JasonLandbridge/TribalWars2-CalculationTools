@@ -9,12 +9,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Runtime.Loader;
+using System.Text;
 using System.Threading.Tasks;
 using Websocket.Client;
 
 namespace CalculationTools.WebSocket
 {
-    public class SocketClient
+    public class SocketClient : BasePropertyChanged
     {
 
         #region Fields
@@ -32,9 +33,12 @@ namespace CalculationTools.WebSocket
         public SocketClient(IPlayerData playerData)
         {
             _playerData = playerData;
+
         }
 
         #endregion Constructors
+
+        public event EventHandler ConnectionLogUpdated;
 
         #region Properties
 
@@ -43,6 +47,7 @@ namespace CalculationTools.WebSocket
         public ConnectData ConnectData { get; set; }
         public ConnectResult ConnectResult { get; set; } = new ConnectResult();
         public bool IsConnected => ConnectResult.IsConnected;
+        public StringBuilder ConnectionLog { get; set; } = new StringBuilder();
 
         public bool ClientHasBeenSetup { get; set; }
         public int PingCount { get; set; }
@@ -53,28 +58,27 @@ namespace CalculationTools.WebSocket
 
         #region Connection
 
-        public async Task<bool> SetupConnectionAsync(ConnectData connectData)
+        public bool SetupConnection(ConnectData connectData, bool shouldReconnect = true)
         {
-            if (Client.IsRunning)
-            {
-                await CloseConnection();
-            }
-
             ConnectData = connectData;
 
             Client = new WebsocketClient(ConnectData.Uri)
             {
                 ReconnectTimeoutMs = (int)TimeSpan.FromSeconds(30).TotalMilliseconds
             };
+            Client.IsReconnectionEnabled = shouldReconnect;
 
             Client.ReconnectionHappened.Subscribe(type =>
             {
+
                 Log.Info($"Reconnection happened, type: {type}");
 
                 switch (type)
                 {
                     case ReconnectionType.Initial:
+
                         Log.Info("Server is connected!");
+                        AddToConnectionLog("Server is connected!");
                         break;
                 }
             });
@@ -85,8 +89,10 @@ namespace CalculationTools.WebSocket
             });
             Client.MessageReceived.Subscribe(msg =>
             {
-                Log.Info($"Message received: {msg.Text}");
-                ParseResponse(Client, msg.Text);
+                string log = $"Message received: {msg.Text}";
+                Log.Info(log);
+                AddToConnectionLog(log);
+                ParseResponseAsync(Client, msg.Text);
             });
 
             SetupBackgroundWorker();
@@ -105,7 +111,7 @@ namespace CalculationTools.WebSocket
 
                     if (!Client.IsRunning)
                         continue;
-                    SendMessageAsync(Client, "2");
+                    SendMessageAsync("2");
                 }
             };
             BackgroundWorker.RunWorkerCompleted += (sender, args) =>
@@ -138,8 +144,8 @@ namespace CalculationTools.WebSocket
                 };
             }
 
-            AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
-            AssemblyLoadContext.Default.Unloading += DefaultOnUnloading;
+            //AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
+            //AssemblyLoadContext.Default.Unloading += DefaultOnUnloading;
 
             Log.Debug("Start connection with TribalWars2");
 
@@ -156,21 +162,31 @@ namespace CalculationTools.WebSocket
         }
         public async Task<bool> CloseConnection()
         {
-            BackgroundWorker.CancelAsync();
-            var result = await Client.Stop(WebSocketCloseStatus.NormalClosure, "Closed by command");
+            Log.Info("Closing connection!");
+            AddToConnectionLog("Closing connection");
+            if (Client != null)
+            {
+                var result = await Client?.Stop(WebSocketCloseStatus.NormalClosure, "Closed by command");
+            }
+            if (BackgroundWorker.WorkerSupportsCancellation)
+            {
+                BackgroundWorker.CancelAsync();
+            }
             PingCount = 0;
-            ConnectionResult.TrySetCanceled();
-            return result;
+            ClientHasBeenSetup = false;
+            return true;
         }
 
-        private static async void SendMessageAsync(IWebsocketClient client, string message)
+        private async void SendMessageAsync(string message)
         {
             if (!string.IsNullOrEmpty(message))
             {
-                if (client.IsRunning)
+                if (Client != null && Client.IsRunning)
                 {
-                    Log.Info($"Message Send:     {message}");
-                    await Task.Run(() => client.Send(message));
+                    string log = $"Message Send:     {message}";
+                    AddToConnectionLog(log);
+                    Log.Info(log);
+                    await Task.Run(() => Client.Send(message));
                 }
             }
         }
@@ -182,19 +198,28 @@ namespace CalculationTools.WebSocket
         /// <returns></returns>
         public async Task<ConnectResult> TestConnectionAsync(ConnectData connectData)
         {
-            await SetupConnectionAsync(connectData);
-            ConnectResult result = await StartConnectionAsync(false);
+            // Ensure connection has been closed
             await CloseConnection();
+            SetupConnection(connectData, false);
+            ConnectResult result = await StartConnectionAsync(false);
+            Log.Debug($"Returning result from TestConnection: {result}");
+            await CloseConnection();
+
             return result;
         }
 
         #endregion
         #region ParseMethods
-        private void ParseResponse(IWebsocketClient client, string response)
+        private async void ParseResponseAsync(IWebsocketClient client, string response)
         {
             if (string.IsNullOrEmpty(response))
             {
                 Log.Info("The response was null/empty");
+                //ConnectionResult.TrySetResult(new ConnectResult
+                //{
+                //    IsConnected = false,
+                //    Message = "Received a null/empty answer"
+                //});
                 return;
             }
 
@@ -218,17 +243,17 @@ namespace CalculationTools.WebSocket
             {
                 case RouteProvider.SYSTEM_WELCOME:
                     // On system welcome send system identify
-                    SendMessageAsync(client, RouteProvider.SystemIdentify());
+                    SendMessageAsync(RouteProvider.SystemIdentify());
                     break;
 
                 case RouteProvider.SYSTEM_IDENTIFIED:
                     // Once system has been identified then send login credentials
-                    SendMessageAsync(client, RouteProvider.Login(ConnectData));
+                    SendMessageAsync(RouteProvider.Login(ConnectData));
                     break;
 
                 case RouteProvider.LOGIN_SUCCESS:
                     var loginDto = ParseLoginSuccess(response);
-                    SendMessageAsync(client, RouteProvider.SelectCharacter(loginDto));
+                    SendMessageAsync(RouteProvider.SelectCharacter(loginDto));
                     break;
 
                 case RouteProvider.CHARACTER_SELECTED:
@@ -237,14 +262,19 @@ namespace CalculationTools.WebSocket
 
                 case RouteProvider.SYSTEM_ERROR:
                     ParseSystemError(response);
-                    ConnectResult.IsConnected = false;
-                    ConnectionResult.TrySetResult(ConnectResult);
                     break;
 
                 case RouteProvider.MESSAGE_ERROR:
                     var errorMessage = ParseDataFromResponse<ErrorMessageDTO>(response);
                     Log.Error($"Socket Error: {errorMessage.ErrorCode} - {errorMessage.Message}");
-                    //await CloseConnection();
+                    await CloseConnection();
+                    break;
+
+                case RouteProvider.EXCEPTION_ERROR:
+                    var errorMessage2 = ParseDataFromResponse<SystemErrorDTO>(response);
+                    Log.Error($"Server exception error: {errorMessage2.Message}");
+                    AddToConnectionLog("THE SERVER IS MOST LIKELY DOWN!");
+                    await CloseConnection();
                     break;
 
                 default:
@@ -317,8 +347,8 @@ namespace CalculationTools.WebSocket
             var loginData = ParseDataFromResponse<LoginDataDTO>(response);
 
             ConnectResult.IsConnected = true;
-            ConnectionResult.TrySetResult(ConnectResult);
             ConnectResult.AccessToken = loginData?.AccessToken;
+            ConnectionResult.TrySetResult(ConnectResult);
 
             // Send parsed data to the PlayerData to be stored
             _playerData.SetLoginData(loginData);
@@ -344,6 +374,7 @@ namespace CalculationTools.WebSocket
                 if (systemError.Cause == RouteProvider.LOGIN)
                 {
                     ConnectResult.IsConnected = false;
+                    ConnectResult.Message = systemError.Message;
                     ConnectionResult.TrySetResult(ConnectResult);
                 }
             }
@@ -376,6 +407,12 @@ namespace CalculationTools.WebSocket
         {
             Log.Info("Unloading process");
             await CloseConnection();
+        }
+
+        private void AddToConnectionLog(string message)
+        {
+            ConnectionLog.Append(message + Environment.NewLine);
+            ConnectionLogUpdated.Invoke(this, EventArgs.Empty);
         }
         #endregion Methods
 

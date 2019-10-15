@@ -27,8 +27,6 @@ namespace CalculationTools.Core
             Mappings.Add(typeof(TViewModel), typeof(TView));
         }
 
-        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
-
         public event EventHandler OnDialogOpen;
 
         public bool? ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogViewModel

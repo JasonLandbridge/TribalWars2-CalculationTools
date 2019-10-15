@@ -9,6 +9,7 @@ namespace CalculationTools.Core
         private readonly IDialogService _dialogService;
 
         private readonly SettingsWindowViewModel _settingsWindowViewModel;
+        private readonly ConnectionWindowViewModel _connectionWindowViewModel;
         private readonly BattleSimulatorViewModel _battleSimulatorViewModel;
 
         #endregion Fields
@@ -17,11 +18,13 @@ namespace CalculationTools.Core
 
         public MainWindowViewModel(
             SettingsWindowViewModel settingsWindowViewModel,
+            ConnectionWindowViewModel connectionWindowViewModel,
             BattleSimulatorViewModel battleSimulatorViewModel,
             IDialogService dialogService)
         {
             _dialogService = dialogService;
             _settingsWindowViewModel = settingsWindowViewModel;
+            _connectionWindowViewModel = connectionWindowViewModel;
             _battleSimulatorViewModel = battleSimulatorViewModel;
 
             ConnectToTW2Command = new RelayCommand(ConnectToTW2);
@@ -32,11 +35,6 @@ namespace CalculationTools.Core
 
         #region Properties
 
-        #region MenuViewModels
-
-        public ConnectionWindowViewModel ConnectionWindowViewModel { get; set; } = new ConnectionWindowViewModel();
-
-        #endregion
         #region Commands
 
         public ICommand OpenSettingsCommand { get; set; }
@@ -54,9 +52,8 @@ namespace CalculationTools.Core
         }
         public void ConnectToTW2()
         {
-
-            _dialogService.ShowDialog(ConnectionWindowViewModel);
-            //  SocketManager.StartConnectionAsync();
+            _connectionWindowViewModel.OnDialogOpen();
+            _dialogService.ShowDialog(_connectionWindowViewModel);
         }
 
         #endregion

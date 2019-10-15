@@ -25,6 +25,7 @@ namespace CalculationTools.Core
             _settings = dataManager.Settings;
 
             ConnectCommand = new RelayCommand(StartConnection);
+            DisconnectCommand = new RelayCommand(StopConnection);
         }
 
         private async void StartConnection()
@@ -32,13 +33,25 @@ namespace CalculationTools.Core
             if (SelectedAccount != null)
             {
                 IsConnecting = true;
+                _socketManager.ConnectionLogUpdated += UpdateConnectionLog;
                 await _socketManager.StartConnection(SelectedAccount.ToConnectData());
             }
         }
 
+        private void UpdateConnectionLog(object sender, EventArgs e)
+        {
+            ConnectionLog = _socketManager.ConnectionLog?.ToString();
+        }
+
         private async void StopConnection()
         {
-            await _socketManager.StopConnection();
+            if (SelectedAccount != null)
+            {
+                IsConnecting = false;
+
+                await _socketManager.StopConnection();
+                _socketManager.ConnectionLogUpdated -= UpdateConnectionLog;
+            }
         }
 
         #endregion Constructors
@@ -59,6 +72,7 @@ namespace CalculationTools.Core
                     _settings.SetAccount(SelectedAccount);
                 };
             }
+
         }
 
         #endregion Events
@@ -70,9 +84,11 @@ namespace CalculationTools.Core
             set => IsAccountSelectionEnabled = !value;
         }
 
-        public bool IsAccountSelectionEnabled { get; set; }
-        public List<Account> Accounts { get; set; }
-        public Account SelectedAccount { get; set; }
+        public bool IsAccountSelectionEnabled { get; set; } = true;
+        public List<Account> Accounts { get; set; } = new List<Account>();
+        public Account SelectedAccount { get; set; } = new Account();
+
+        public string ConnectionLog { get; set; }
 
         #region Commands
 
@@ -109,10 +125,5 @@ namespace CalculationTools.Core
 
         #endregion Methods
 
-        #region Fields
-
-        private string _unitImportText;
-
-        #endregion Fields
     }
 }

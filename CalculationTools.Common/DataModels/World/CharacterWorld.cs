@@ -14,6 +14,11 @@
         #endregion
 
 
+        public CharacterWorld()
+        {
+
+        }
+
         public CharacterWorld(IWorld world)
         {
             Id = world.Id;

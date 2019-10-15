@@ -1,20 +1,18 @@
-﻿
+﻿using System;
 
-using System;
-
-namespace CalculationTools.Common.Connection
+namespace CalculationTools.Common
 {
     public class ConnectData
     {
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
-        public string ServerCountryCode { get; set; }
+        public string ServerCountryCode { get; set; } = string.Empty;
 
         public Uri Uri => new Uri($"wss://{ServerCountryCode}.tribalwars2.com/socket.io/?platform=desktop&EIO=3&transport=websocket");
 
-        public string AccessToken { get; set; }
+        public string AccessToken { get; set; } = string.Empty;
 
     }
 }

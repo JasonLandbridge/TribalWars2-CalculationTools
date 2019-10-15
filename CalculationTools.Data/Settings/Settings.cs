@@ -78,9 +78,7 @@ namespace CalculationTools.Data
 
         #region Accounts
 
-        //public virtual List<Account> Accounts { get; set; }
-
-        public virtual Dictionary<int, Account> Accounts { get; set; }
+        public virtual Dictionary<int, Account> Accounts { get; set; } = new Dictionary<int, Account>();
 
         public List<Account> GetAccounts(bool onlyConfirmed = false)
         {

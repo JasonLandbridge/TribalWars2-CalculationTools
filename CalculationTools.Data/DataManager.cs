@@ -2,6 +2,7 @@
 using nucs.JsonSettings;
 using nucs.JsonSettings.Autosave;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace CalculationTools.Data
@@ -21,12 +22,19 @@ namespace CalculationTools.Data
             string path = $"{AppDomain.CurrentDomain.BaseDirectory}{_settings.FileName}";
             if (!File.Exists(path))
             {
-                _settings = JsonSettings.Construct<Settings>().EnableAutosave();
+                _settings = JsonSettings.Construct<Settings>();
                 _settings.SetDefaultValues();
                 _settings.Save();
             }
 
-            _settings = JsonSettings.Load<Settings>(_settings.FileName).EnableAutosave();
+            try
+            {
+                _settings = JsonSettings.Load<Settings>(_settings.FileName);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
 
         }
 

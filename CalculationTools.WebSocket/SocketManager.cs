@@ -2,12 +2,14 @@
 using CalculationTools.Common.Connection;
 using CalculationTools.Common.Data;
 using NLog;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 
 
 namespace CalculationTools.WebSocket
 {
-    public class SocketManager : ISocketManager
+    public class SocketManager : BasePropertyChanged, ISocketManager
     {
         private readonly IPlayerData _playerData;
 
@@ -28,7 +30,11 @@ namespace CalculationTools.WebSocket
 
         public ConnectResult ConnectResult { get; set; } = new ConnectResult();
 
+        public StringBuilder ConnectionLog { get; set; } = new StringBuilder();
+
         private SocketClient SocketClient { get; set; }
+
+        public event EventHandler ConnectionLogUpdated;
 
         #endregion Properties
 
@@ -36,13 +42,26 @@ namespace CalculationTools.WebSocket
 
         public SocketClient GetSocketClient()
         {
-            return SocketClient ??= new SocketClient(_playerData);
+
+            if (SocketClient == null)
+            {
+                SocketClient = new SocketClient(_playerData);
+                SocketClient.ConnectionLogUpdated +=
+                    (sender, args) =>
+                    {
+                        ConnectionLog = SocketClient.ConnectionLog;
+                        ConnectionLogUpdated.Invoke(this, EventArgs.Empty);
+                    };
+            }
+
+            return SocketClient;
         }
 
         public async Task<ConnectResult> TestConnection(ConnectData connectData)
         {
-            ConnectResult = await GetSocketClient().TestConnectionAsync(connectData);
-            return ConnectResult;
+            ConnectResult connectResult = await GetSocketClient().TestConnectionAsync(connectData);
+            await StopConnection(true);
+            return connectResult;
 
         }
 
@@ -53,7 +72,7 @@ namespace CalculationTools.WebSocket
                 connectData.AccessToken = ConnectResult.AccessToken;
             }
 
-            await GetSocketClient().SetupConnectionAsync(connectData);
+            GetSocketClient().SetupConnection(connectData);
             ConnectResult = await GetSocketClient().StartConnectionAsync(useAccessToken);
             return ConnectResult;
 
