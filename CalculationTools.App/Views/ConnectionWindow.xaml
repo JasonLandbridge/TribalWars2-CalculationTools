@@ -52,27 +52,23 @@
                 Command="{Binding ConnectCommand}"
                 Content="Connect" />
         </Grid>
-        <Label Content="{Binding SelectedAccount}" />
-
         <Label Content="The connection log will be displayed here: " />
         <TextBox
             Height="200"
             AcceptsReturn="True"
-            Text="{Binding ConnectionLog, Mode=OneWay}"
-            TextWrapping="NoWrap"
             FontFamily="Courier New"
             FontSize="14"
-            IsReadOnly="True"
             HorizontalScrollBarVisibility="Auto"
-            VerticalScrollBarVisibility="Auto"
-            />
+            IsReadOnly="True"
+            Text="{Binding ConnectionLog, Mode=OneWay}"
+            TextWrapping="NoWrap"
+            VerticalScrollBarVisibility="Auto" />
         <Label Content="{Binding ErrorMessage}" Visibility="{Binding IsErrorVisible}" />
 
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -84,7 +80,7 @@
                 HorizontalAlignment="Left"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
-                Command="{Binding ResetCommand}"
+                Command="{Binding ClearCommand}"
                 Content="Clear"
                 IsCancel="True"
                 TabIndex="1700" />
@@ -98,20 +94,7 @@
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
                 Command="{Binding CloseCommand}"
-                Content="Cancel"
-                IsCancel="True"
-                TabIndex="1700" />
-
-            <Button
-                Grid.Column="3"
-                Width="100"
-                Height="25"
-                Margin="10,10,10,10"
-                HorizontalAlignment="Right"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                Command="{Binding SaveCommand}"
-                Content="Looks good!"
+                Content="Close"
                 IsDefault="True"
                 TabIndex="1600" />
         </Grid>

@@ -93,6 +93,12 @@ namespace CalculationTools.WebSocket
             return true;
         }
 
+        public void ClearConnectionLog()
+        {
+            GetSocketClient().ConnectionLog.Clear();
+        }
+
+
         #endregion Methods
     }
 }

@@ -26,6 +26,15 @@ namespace CalculationTools.Core
 
             ConnectCommand = new RelayCommand(StartConnection);
             DisconnectCommand = new RelayCommand(StopConnection);
+
+            ClearCommand = new RelayCommand(ClearConnectionLog);
+            CloseCommand = new RelayCommand(() => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs()));
+        }
+
+        private void ClearConnectionLog()
+        {
+            _socketManager.ClearConnectionLog();
+            ConnectionLog = string.Empty;
         }
 
         private async void StartConnection()
@@ -91,23 +100,18 @@ namespace CalculationTools.Core
         public string ConnectionLog { get; set; }
 
         #region Commands
+        public ICommand ConnectCommand { get; }
+        public ICommand DisconnectCommand { get; }
+
+        /// <summary>
+        /// Clear the connection log
+        /// </summary>
+        public ICommand ClearCommand { get; }
 
         /// <summary>
         /// Close the dialog window without changing anything
         /// </summary>
         public ICommand CloseCommand { get; }
-        public ICommand ConnectCommand { get; }
-        public ICommand DisconnectCommand { get; }
-
-        /// <summary>
-        /// Reset the input fields
-        /// </summary>
-        public ICommand ResetCommand { get; }
-
-        /// <summary>
-        /// Confirm and send the UnitSet to the BattleSimulator
-        /// </summary>
-        public ICommand SaveCommand { get; }
 
         #endregion
 

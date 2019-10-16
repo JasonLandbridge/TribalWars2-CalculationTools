@@ -14,5 +14,6 @@ namespace CalculationTools.Common
         StringBuilder ConnectionLog { get; }
 
         event EventHandler ConnectionLogUpdated;
+        void ClearConnectionLog();
     }
 }
