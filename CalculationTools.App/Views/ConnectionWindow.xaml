@@ -8,7 +8,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     Title="Connect to TW2"
     Width="800"
-    Height="500"
+    Height="470"
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical">
@@ -52,12 +52,13 @@
                 Command="{Binding ConnectCommand}"
                 Content="Connect" />
         </Grid>
-        <Label Content="The connection log will be displayed here: " />
+        <Label Margin="5" Content="The connection log will be displayed here: " />
         <TextBox
-            Height="200"
+            Height="300"
             AcceptsReturn="True"
             FontFamily="Courier New"
             FontSize="14"
+            Margin="5"
             HorizontalScrollBarVisibility="Auto"
             IsReadOnly="True"
             Text="{Binding ConnectionLog, Mode=OneWay}"
@@ -76,7 +77,7 @@
                 Grid.Column="0"
                 Width="100"
                 Height="25"
-                Margin="10,10,10,10"
+                Margin="5"
                 HorizontalAlignment="Left"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
@@ -89,7 +90,7 @@
                 Grid.Column="2"
                 Width="100"
                 Height="25"
-                Margin="10,10,10,10"
+                Margin="5"
                 HorizontalAlignment="Right"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
