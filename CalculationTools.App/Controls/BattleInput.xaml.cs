@@ -43,11 +43,6 @@ namespace CalculationTools.App
             UpdateValueChanged(this, EventArgs.Empty);
         }
 
-        private void InputChangedInteger(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            UpdateValueChanged(this, EventArgs.Empty);
-        }
-
         private void InputComboChurchAtk_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e != null && e.AddedItems.Count > 0)

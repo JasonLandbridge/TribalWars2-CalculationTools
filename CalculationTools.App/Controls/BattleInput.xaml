@@ -207,7 +207,6 @@
 						MinValue="0"
 						NumberDecimalDigits="0"
 						Step="1"
-						ValueChanged="InputChangedInteger"
 						Value="{Binding InputWall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 				</Grid>
 			</GroupBox>
@@ -269,7 +268,6 @@
 						MinValue="-15"
 						NumberDecimalDigits="0"
 						Step="1"
-						ValueChanged="InputChangedInteger"
 						Value="{Binding InputLuck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 					<!--  Weapon Mastery input rows  -->
@@ -291,7 +289,6 @@
 						MinValue="0"
 						NumberDecimalDigits="0"
 						Step="1"
-						ValueChanged="InputChangedInteger"
 						Value="{Binding InputWeaponMastery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 					<!--  Nightbonus input rows  -->
@@ -307,7 +304,6 @@
 						Grid.Column="2"
 						HorizontalAlignment="Center"
 						VerticalAlignment="Center"
-						Click="InputChangedCheckBox"
 						IsChecked="{Binding InputNightBonus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 				</Grid>
 			</GroupBox>

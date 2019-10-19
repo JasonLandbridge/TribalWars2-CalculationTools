@@ -95,8 +95,12 @@ namespace CalculationTools.Core
             _battleInputViewModel.LoadBattleConfig(battleConfig);
 
             //Only bind to the property changed after all values have been loaded for the first time to prevent unnecessary recalculations
-            _battleInputViewModel.PropertyChanged += (sender, args) => RunBattleSimulator();
+            _battleInputViewModel.PropertyChanged += (sender, args) =>
+            {
+                RunBattleSimulator();
+            };
             RunBattleSimulator();
+
         }
 
         #endregion Constructors

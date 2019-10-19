@@ -57,25 +57,23 @@ namespace CalculationTools.App
 
             IoC.Container.Register<ApplicationViewModel>(Lifestyle.Singleton);
 
-            IoC.Container.Register<MainWindow>();
-            IoC.Container.Register<MainWindowViewModel>();
+            IoC.Container.Register<MainWindow>(Lifestyle.Singleton);
+            IoC.Container.Register<MainWindowViewModel>(Lifestyle.Singleton);
 
             IoC.Container.Register<SettingsWindow>();
-            IoC.Container.Register<SettingsWindowViewModel>();
+            IoC.Container.Register<SettingsWindowViewModel>(Lifestyle.Singleton);
 
             IoC.Container.Register<UnitImportWidow>();
-            IoC.Container.Register<UnitImportWindowViewModel>();
+            IoC.Container.Register<UnitImportWindowViewModel>(Lifestyle.Singleton);
 
             IoC.Container.Register<ConnectionWindow>();
-            IoC.Container.Register<ConnectionWindowViewModel>();
+            IoC.Container.Register<ConnectionWindowViewModel>(Lifestyle.Singleton);
 
-            //TODO extract the BattleSimulatorTab to its own control
+            IoC.Container.Register<BattleSimulatorView>(Lifestyle.Singleton);
+            IoC.Container.Register<BattleSimulatorViewModel>(Lifestyle.Singleton);
 
-            IoC.Container.Register<BattleSimulatorViewModel>();
-            IoC.Container.Register<BattleSimulatorView>();
-
-            IoC.Container.Register<BattleInput>();
-            IoC.Container.Register<BattleInputViewModel>();
+            IoC.Container.Register<BattleInput>(Lifestyle.Singleton);
+            IoC.Container.Register<BattleInputViewModel>(Lifestyle.Singleton);
 
             ApplicationCore.OnStartUp();
 

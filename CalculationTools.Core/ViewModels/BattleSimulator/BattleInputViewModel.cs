@@ -1,6 +1,9 @@
+using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using PropertyChanged;
 
 namespace CalculationTools.Core
 {
@@ -151,10 +154,10 @@ namespace CalculationTools.Core
 
         public FaithLevel InputAtkChurch { get; set; }
         public string InputChurchImagePath { get; } = "/Resources/Img/buildings/buildings_church.png";
-
         public string InputChurchLabel { get; } = "Church";
 
         public FaithLevel InputDefChurch { get; set; }
+
         public int InputWall { get; set; }
 
         public string InputWallImagePath { get; } = "/Resources/Img/buildings/buildings_wall.png";
@@ -411,8 +414,10 @@ namespace CalculationTools.Core
             {
                 inputUnitRow.PropertyChanged += (sender, args) => OnPropertyChanged();
             }
+
         }
 
         #endregion Methods
+
     }
 }

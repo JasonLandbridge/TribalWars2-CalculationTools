@@ -1,4 +1,5 @@
-﻿using CalculationTools.Core;
+﻿using System;
+using CalculationTools.Core;
 
 namespace CalculationTools.App
 {
@@ -17,5 +18,10 @@ namespace CalculationTools.App
         }
 
         #endregion Constructors
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            App.Current.Shutdown();
+        }
     }
 }
