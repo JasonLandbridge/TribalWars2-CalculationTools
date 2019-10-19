@@ -11,10 +11,10 @@
     <Grid>
         <StackPanel DataContext="{Binding ElementName=parent}" Orientation="Horizontal">
 
-            <Image x:Name="HeaderImage" Width="40" />
+            <Image x:Name="HeaderImage" Width="30" />
             <Label
                 Width="90"
-                Margin="3,10"
+                Margin="3,5"
                 Padding="0"
                 Content="{Binding Path=Title}" />
         </StackPanel>
