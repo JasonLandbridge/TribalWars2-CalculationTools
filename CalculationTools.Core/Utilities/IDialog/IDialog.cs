@@ -13,5 +13,6 @@ namespace CalculationTools.Core
         Window Owner { get; set; }
         void Close();
         bool? ShowDialog();
+
     }
 }

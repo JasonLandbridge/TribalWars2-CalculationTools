@@ -282,6 +282,8 @@ namespace CalculationTools.Core
             Paladin,
         };
 
+        public static int UnitCount => UnitList.Count;
+
         public static List<BaseWeapon> WeaponOptions { get; } = new List<BaseWeapon>
         {
             new EmptyWeapon(),

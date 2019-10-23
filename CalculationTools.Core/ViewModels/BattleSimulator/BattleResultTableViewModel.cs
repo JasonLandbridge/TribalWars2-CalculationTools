@@ -59,6 +59,7 @@
         public BattleResultRowViewModel UnitsLostClay { get; set; } = new BattleResultRowViewModel();
         public BattleResultRowViewModel UnitsLostIron { get; set; } = new BattleResultRowViewModel();
         public BattleResultRowViewModel UnitsLostWood { get; set; } = new BattleResultRowViewModel();
+        public BattleResultRowViewModel UnitsLostResourceTotal { get; set; } = new BattleResultRowViewModel();
         #endregion
         #region Filters
 
@@ -90,6 +91,7 @@
             UnitsLostWood.Header = "Wood Loss";
             UnitsLostClay.Header = "Clay Loss";
             UnitsLostIron.Header = "Iron Loss";
+            UnitsLostResourceTotal.Header = "Total";
 
             UnitsLeft.Header = "Survivors";
             WallResult.Header = "Wall";

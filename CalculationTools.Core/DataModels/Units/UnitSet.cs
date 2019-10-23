@@ -74,26 +74,20 @@ namespace CalculationTools.Core
                 };
             set
             {
-                if (value.Count == 13)
-                {
-                    Spearman = value[0];
-                    Swordsman = value[1];
-                    AxeFighter = value[2];
-                    Archer = value[3];
-                    LightCavalry = value[4];
-                    MountedArcher = value[5];
-                    HeavyCavalry = value[6];
-                    Ram = value[7];
-                    Catapult = value[8];
-                    Berserker = value[9];
-                    Trebuchet = value[10];
-                    Nobleman = value[11];
-                    Paladin = value[12];
-                }
-                else
-                {
-                    throw new IndexOutOfRangeException("UnitList needs to exactly contain 13 entries!");
-                }
+
+                Spearman = 0 < value.Count ? value[0] : 0;
+                Swordsman = 1 < value.Count ? value[1] : 0;
+                AxeFighter = 2 < value.Count ? value[2] : 0;
+                Archer = 3 < value.Count ? value[3] : 0;
+                LightCavalry = 4 < value.Count ? value[4] : 0;
+                MountedArcher = 5 < value.Count ? value[5] : 0;
+                HeavyCavalry = 6 < value.Count ? value[6] : 0;
+                Ram = 7 < value.Count ? value[7] : 0;
+                Catapult = 8 < value.Count ? value[8] : 0;
+                Berserker = 9 < value.Count ? value[9] : 0;
+                Trebuchet = 10 < value.Count ? value[10] : 0;
+                Nobleman = 11 < value.Count ? value[11] : 0;
+                Paladin = 12 < value.Count ? value[12] : 0;
             }
         }
 
@@ -225,14 +219,14 @@ namespace CalculationTools.Core
             };
         }
 
-        public List<BattleResultValueViewModel> ToBattleResultList()
+        public BattleResultRow ToBattleResultRow()
         {
-            List<BattleResultValueViewModel> list = new List<BattleResultValueViewModel>();
+            BattleResultRow battleResultRow = new BattleResultRow();
             foreach (int value in UnitList)
             {
-                list.Add(new BattleResultValueViewModel(value));
+                battleResultRow.Add(value);
             }
-            return list;
+            return battleResultRow;
         }
 
         #region ApplyKillRate

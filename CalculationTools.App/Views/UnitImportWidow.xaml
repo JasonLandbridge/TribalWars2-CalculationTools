@@ -6,20 +6,41 @@
 	xmlns:local="clr-namespace:CalculationTools.App"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	Title="Unit Import "
-	Width="800"
-	Height="500"
+	Width="870"
+	Height="550"
 	WindowStartupLocation="CenterOwner"
 	mc:Ignorable="d">
+	<ScrollViewer VerticalScrollBarVisibility="Auto">
+		<StackPanel Orientation="Vertical">
+		<Expander Header="Help me!" Margin="5">
+			<GroupBox>
+				<StackPanel Orientation="Vertical">
+					<Label Content="This unit import can be used for both your attacking units, as well as the defending units."/>
+					<Label Content="1A). To import attacking units, select the units from the units panel in-game from left to right as shown in this image:"/>
+					<Image
+						Width="500"
+						Margin="2.5,0"
+						Source="{Binding HelpOneImagePath}" />
+					<Label Content="1B). To import defending units, open a unit scout report and select all units from left to right towards the bottom as shown in this image:"/>
+					<Image
+						Width="500"
+						Margin="2.5,0"
+						Source="{Binding HelpTwoImagePath}" />
+					<Label Content="2). Then press 'Ctrl + C' or left click with the mouse and choose copy" />
+					<Label Content="3). Then click on the text box below and press 'Ctrl + V' or left click with the mouse and choose paste." />
+					<Label Content="4). Click the 'Looks good!' button once you're happy with the result"></Label>
 
-	<StackPanel Orientation="Vertical">
-		<Label Content="Paste the units from a scout report into the text box below" />
+				</StackPanel>
+			</GroupBox>
+		</Expander>
 		<TextBox
 			Height="200"
+			Margin="5"
 			AcceptsReturn="True"
 			Text="{Binding UnitImportText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			TextWrapping="Wrap" />
 		<Label Content="{Binding ErrorMessage}" Visibility="{Binding IsErrorVisible}" />
-		<GroupBox Header="Preview">
+		<GroupBox Header="Preview" Margin="5">
 			<local:BattleUnitPreview DataContext="{Binding BattleUnitPreviewViewModel}" />
 		</GroupBox>
 
@@ -71,4 +92,5 @@
 				TabIndex="1600" />
 		</Grid>
 	</StackPanel>
+		</ScrollViewer>
 </Window>

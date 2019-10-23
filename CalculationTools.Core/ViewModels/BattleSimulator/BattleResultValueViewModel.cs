@@ -30,7 +30,7 @@ namespace CalculationTools.Core
         /// <para>Displays 1,235M</para>
         /// <para>Displays 1B</para>
         /// </summary>
-        public bool IsAbbreviated { get; set; }
+        public bool IsAbbreviated { get; set; } = true;
 
         /// <summary>
         /// The base value 

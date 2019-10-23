@@ -68,7 +68,7 @@ namespace CalculationTools.Core
 
         #region AtkResults
 
-        public List<BattleResultValueViewModel> ListOfAtkFromArchers
+        public BattleResultRow ListOfAtkFromArchers
         {
             get
             {
@@ -83,11 +83,11 @@ namespace CalculationTools.Core
                     }
                     list.Add(battleResultValue);
                 }
-                return list;
+                return new BattleResultRow(list);
             }
         }
 
-        public List<BattleResultValueViewModel> ListOfAtkFromCavalry
+        public BattleResultRow ListOfAtkFromCavalry
         {
             get
             {
@@ -102,103 +102,152 @@ namespace CalculationTools.Core
                     }
                     list.Add(battleResultValue);
                 }
-                return list;
+                return new BattleResultRow(list);
             }
         }
 
-        public List<BattleResultValueViewModel> ListOfAtkFromInfantry
+        public BattleResultRow ListOfAtkFromInfantry
         {
             get
             {
-                List<BattleResultValueViewModel> list = new List<BattleResultValueViewModel>();
+                BattleResultRow battleResultRow = new BattleResultRow();
 
                 for (int i = 0; i < GameData.UnitList.Count; i++)
                 {
-                    BattleResultValueViewModel battleResultValue = new BattleResultValueViewModel();
+                    int attackPower = 0;
                     if (GameData.UnitList[i].AttackType == AttackType.Infantry)
                     {
-                        battleResultValue.Value = GameData.GetAtkFightingPower(AtkUnits.UnitList[i], (UnitType)i, AtkWeapon);
+                        attackPower = GameData.GetAtkFightingPower(AtkUnits.UnitList[i], (UnitType)i, AtkWeapon);
                     }
-                    list.Add(battleResultValue);
+                    battleResultRow.Add(attackPower);
                 }
-                return list;
+                return battleResultRow;
             }
         }
+        public BattleResultRow ListOfAtkNumbers => AtkUnits.ToBattleResultRow();
 
-        public List<BattleResultValueViewModel> ListOfAtkLeftNumbers => AtkUnitsLeft.ToBattleResultList();
+        #region Losses
 
-        public List<BattleResultValueViewModel> ListOfAtkLostClay
+        public BattleResultRow ListOfAtkLostNumbers => AtkUnitsLost.ToBattleResultRow();
+
+        #region ResourcesLost
+        public BattleResultRow AtkWoodLost
         {
             get
             {
-                List<ResourceSet> resourceCosts = GameData.UnitCostList;
-                return AtkUnitsLost.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * resourceCosts[i].Clay)).ToList();
+                BattleResultRow resultRow = new BattleResultRow();
+
+                for (int i = 0; i < AtkUnitsLost.UnitList.Count; i++)
+                {
+                    resultRow.Add(AtkUnitsLost.UnitList[i] * GameData.UnitCostList[i].Wood);
+                }
+
+                return resultRow;
+
             }
         }
 
-        public List<BattleResultValueViewModel> ListOfAtkLostIron
+        public BattleResultRow AtkClayLost
         {
             get
             {
-                List<ResourceSet> resourceCosts = GameData.UnitCostList;
-                return AtkUnitsLost.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * resourceCosts[i].Iron)).ToList();
+                BattleResultRow resultRow = new BattleResultRow();
+
+                for (int i = 0; i < AtkUnitsLost.UnitList.Count; i++)
+                {
+                    resultRow.Add(AtkUnitsLost.UnitList[i] * GameData.UnitCostList[i].Clay);
+                }
+
+                return resultRow;
             }
         }
 
-        public List<BattleResultValueViewModel> ListOfAtkLostNumbers => AtkUnitsLost.ToBattleResultList();
-
-        public List<BattleResultValueViewModel> ListOfAtkLostWood
+        public BattleResultRow AtkIronLost
         {
             get
             {
-                List<ResourceSet> resourceCosts = GameData.UnitCostList;
-                return AtkUnitsLost.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * resourceCosts[i].Wood)).ToList();
+                BattleResultRow resultRow = new BattleResultRow();
+
+                for (int i = 0; i < AtkUnitsLost.UnitList.Count; i++)
+                {
+                    resultRow.Add(AtkUnitsLost.UnitList[i] * GameData.UnitCostList[i].Iron);
+                }
+
+                return resultRow;
             }
         }
 
-        public List<BattleResultValueViewModel> ListOfAtkNumbers => AtkUnits.ToBattleResultList();
+        public BattleResultRow AtkTotalResourcesLost => AtkWoodLost + AtkClayLost + AtkIronLost;
 
+
+
+
+        #endregion
+
+        #endregion
+
+        public BattleResultRow ListOfAtkLeftNumbers => AtkUnitsLeft.ToBattleResultRow();
         #endregion AtkResults
 
         #region DefResults
 
-        public List<BattleResultValueViewModel> ListOfDefFromArchers => DefUnits.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * GameData.UnitList[i].DefenseFromArchers)).ToList();
-        public List<BattleResultValueViewModel> ListOfDefFromCavalry => DefUnits.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * GameData.UnitList[i].DefenseFromCavalry)).ToList();
-        public List<BattleResultValueViewModel> ListOfDefFromInfantry => DefUnits.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * GameData.UnitList[i].DefenseFromInfantry)).ToList();
-        public List<BattleResultValueViewModel> ListOfDefLeftNumbers => DefUnitsLeft.ToBattleResultList();
-        public List<BattleResultValueViewModel> ListOfDefNumbers => DefUnits.ToBattleResultList();
+        public BattleResultRow ListOfDefFromArchers => new BattleResultRow(DefUnits.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * GameData.UnitList[i].DefenseFromArchers)).ToList());
+        public BattleResultRow ListOfDefFromCavalry => new BattleResultRow(DefUnits.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * GameData.UnitList[i].DefenseFromCavalry)).ToList());
+        public BattleResultRow ListOfDefFromInfantry => new BattleResultRow(DefUnits.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * GameData.UnitList[i].DefenseFromInfantry)).ToList());
+        public BattleResultRow ListOfDefLeftNumbers => DefUnitsLeft.ToBattleResultRow();
+        public BattleResultRow ListOfDefNumbers => DefUnits.ToBattleResultRow();
 
         #region Losses
+        public BattleResultRow ListOfDefLostNumbers => DefUnitsLost.ToBattleResultRow();
 
-        public List<BattleResultValueViewModel> ListOfDefLostClay
+        #region ResourcesLost
+        public BattleResultRow DefWoodLost
         {
             get
             {
-                List<ResourceSet> resourceCosts = GameData.UnitCostList;
-                return DefUnitsLost.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * resourceCosts[i].Clay)).ToList();
+                BattleResultRow resultRow = new BattleResultRow();
+
+                for (int i = 0; i < DefUnitsLost.UnitList.Count; i++)
+                {
+                    resultRow.Add(DefUnitsLost.UnitList[i] * GameData.UnitCostList[i].Wood);
+                }
+
+                return resultRow;
             }
         }
 
-        public List<BattleResultValueViewModel> ListOfDefLostIron
+        public BattleResultRow DefClayLost
         {
             get
             {
-                List<ResourceSet> resourceCosts = GameData.UnitCostList;
-                return DefUnitsLost.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * resourceCosts[i].Iron)).ToList();
+                BattleResultRow resultRow = new BattleResultRow();
+
+                for (int i = 0; i < DefUnitsLost.UnitList.Count; i++)
+                {
+                    resultRow.Add(DefUnitsLost.UnitList[i] * GameData.UnitCostList[i].Clay);
+                }
+
+                return resultRow;
             }
         }
 
-        public List<BattleResultValueViewModel> ListOfDefLostNumbers => DefUnitsLost.ToBattleResultList();
-
-        public List<BattleResultValueViewModel> ListOfDefLostWood
+        public BattleResultRow DefIronLost
         {
             get
             {
-                List<ResourceSet> resourceCosts = GameData.UnitCostList;
-                return DefUnitsLost.UnitList.Select((unitAmount, i) => new BattleResultValueViewModel(unitAmount * resourceCosts[i].Wood)).ToList();
+                BattleResultRow resultRow = new BattleResultRow();
+
+                for (int i = 0; i < DefUnitsLost.UnitList.Count; i++)
+                {
+                    resultRow.Add(DefUnitsLost.UnitList[i] * GameData.UnitCostList[i].Iron);
+                }
+
+                return resultRow;
             }
         }
 
+        public BattleResultRow DefTotalResourcesLost => DefWoodLost + DefClayLost + DefIronLost;
+        #endregion
         #endregion Losses
 
         #endregion DefResults

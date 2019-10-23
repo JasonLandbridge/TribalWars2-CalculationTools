@@ -132,30 +132,34 @@ namespace CalculationTools.Core
             DefenseBattleResultTable.WallResult.Content = battleResult.WallResult;
 
             // Set values for the AttackResultTable
-            AttackBattleResultTable.UnitAmount.BattleResultValues = battleResult.ListOfAtkNumbers.AddTotal();
+            AttackBattleResultTable.UnitAmount.BattleResultValues = battleResult.ListOfAtkNumbers.ValuesWithTotal;
 
-            AttackBattleResultTable.AttackFromInfantry.BattleResultValues = battleResult.ListOfAtkFromInfantry.AddTotal().SetAbbreviation(true);
-            AttackBattleResultTable.AttackFromCavalry.BattleResultValues = battleResult.ListOfAtkFromCavalry.AddTotal().SetAbbreviation(true);
-            AttackBattleResultTable.AttackFromArchers.BattleResultValues = battleResult.ListOfAtkFromArchers.AddTotal().SetAbbreviation(true);
+            AttackBattleResultTable.AttackFromInfantry.BattleResultValues = battleResult.ListOfAtkFromInfantry.ValuesWithTotal;
+            AttackBattleResultTable.AttackFromCavalry.BattleResultValues = battleResult.ListOfAtkFromCavalry.ValuesWithTotal;
+            AttackBattleResultTable.AttackFromArchers.BattleResultValues = battleResult.ListOfAtkFromArchers.ValuesWithTotal;
 
-            AttackBattleResultTable.UnitLost.BattleResultValues = battleResult.ListOfAtkLostNumbers.AddTotal().SetColor(Colors.Red);
-            AttackBattleResultTable.UnitsLostWood.BattleResultValues = battleResult.ListOfAtkLostWood.AddTotal().SetAbbreviation(true);
-            AttackBattleResultTable.UnitsLostClay.BattleResultValues = battleResult.ListOfAtkLostClay.AddTotal().SetAbbreviation(true);
-            AttackBattleResultTable.UnitsLostIron.BattleResultValues = battleResult.ListOfAtkLostIron.AddTotal().SetAbbreviation(true);
-            AttackBattleResultTable.UnitsLeft.BattleResultValues = battleResult.ListOfAtkLeftNumbers.AddTotal();
+            AttackBattleResultTable.UnitLost.BattleResultValues = battleResult.ListOfAtkLostNumbers.ValuesWithTotal.SetColor(Colors.Red);
+            AttackBattleResultTable.UnitsLostWood.BattleResultValues = battleResult.AtkWoodLost.ValuesWithTotal;
+            AttackBattleResultTable.UnitsLostClay.BattleResultValues = battleResult.AtkClayLost.ValuesWithTotal;
+            AttackBattleResultTable.UnitsLostIron.BattleResultValues = battleResult.AtkIronLost.ValuesWithTotal;
+            AttackBattleResultTable.UnitsLostResourceTotal.BattleResultValues = battleResult.AtkTotalResourcesLost.ValuesWithTotal;
+
+            AttackBattleResultTable.UnitsLeft.BattleResultValues = battleResult.ListOfAtkLeftNumbers.ValuesWithTotal;
 
             // Set values for the DefenseResultTable
-            DefenseBattleResultTable.UnitAmount.BattleResultValues = battleResult.ListOfDefNumbers.AddTotal();
+            DefenseBattleResultTable.UnitAmount.BattleResultValues = battleResult.ListOfDefNumbers.ValuesWithTotal;
 
-            DefenseBattleResultTable.DefenseFromInfantry.BattleResultValues = battleResult.ListOfDefFromInfantry.AddTotal().SetAbbreviation(true);
-            DefenseBattleResultTable.DefenseFromCavalry.BattleResultValues = battleResult.ListOfDefFromCavalry.AddTotal().SetAbbreviation(true);
-            DefenseBattleResultTable.DefenseFromArchers.BattleResultValues = battleResult.ListOfDefFromArchers.AddTotal().SetAbbreviation(true);
+            DefenseBattleResultTable.DefenseFromInfantry.BattleResultValues = battleResult.ListOfDefFromInfantry.ValuesWithTotal;
+            DefenseBattleResultTable.DefenseFromCavalry.BattleResultValues = battleResult.ListOfDefFromCavalry.ValuesWithTotal;
+            DefenseBattleResultTable.DefenseFromArchers.BattleResultValues = battleResult.ListOfDefFromArchers.ValuesWithTotal;
 
-            DefenseBattleResultTable.UnitLost.BattleResultValues = battleResult.ListOfDefLostNumbers.AddTotal().SetColor(Colors.Red);
-            DefenseBattleResultTable.UnitsLostWood.BattleResultValues = battleResult.ListOfDefLostWood.AddTotal().SetAbbreviation(true);
-            DefenseBattleResultTable.UnitsLostClay.BattleResultValues = battleResult.ListOfDefLostClay.AddTotal().SetAbbreviation(true);
-            DefenseBattleResultTable.UnitsLostIron.BattleResultValues = battleResult.ListOfDefLostIron.AddTotal().SetAbbreviation(true);
-            DefenseBattleResultTable.UnitsLeft.BattleResultValues = battleResult.ListOfDefLeftNumbers.AddTotal();
+            DefenseBattleResultTable.UnitLost.BattleResultValues = battleResult.ListOfDefLostNumbers.ValuesWithTotal.SetColor(Colors.Red);
+            DefenseBattleResultTable.UnitsLostWood.BattleResultValues = battleResult.DefWoodLost.ValuesWithTotal;
+            DefenseBattleResultTable.UnitsLostClay.BattleResultValues = battleResult.DefClayLost.ValuesWithTotal;
+            DefenseBattleResultTable.UnitsLostIron.BattleResultValues = battleResult.DefIronLost.ValuesWithTotal;
+            DefenseBattleResultTable.UnitsLostResourceTotal.BattleResultValues = battleResult.DefTotalResourcesLost.ValuesWithTotal;
+
+            DefenseBattleResultTable.UnitsLeft.BattleResultValues = battleResult.ListOfDefLeftNumbers.ValuesWithTotal;
         }
 
         private void SetImportedUnits()

@@ -47,12 +47,10 @@ namespace CalculationTools.Core
 
         public void OpenSettings()
         {
-            _settingsWindowViewModel.OnDialogOpen();
             _dialogService.ShowDialog(_settingsWindowViewModel);
         }
         public void ConnectToTW2()
         {
-            _connectionWindowViewModel.OnDialogOpen();
             _dialogService.ShowDialog(_connectionWindowViewModel);
         }
 

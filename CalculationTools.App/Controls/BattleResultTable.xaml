@@ -93,6 +93,9 @@
                         <local:BattleResultRow DataContext="{Binding UnitsLostClay}" />
                         <!--  Units Lost Iron row  -->
                         <local:BattleResultRow DataContext="{Binding UnitsLostIron}" />
+                        <!--  Units Lost Total Resources row  -->
+                        <local:BattleResultRow DataContext="{Binding UnitsLostResourceTotal}" />
+
                     </StackPanel>
                 </GroupBox>
 

@@ -5,9 +5,12 @@
     xmlns:app="clr-namespace:CalculationTools.App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="500"
+    d:DesignWidth="900"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
     <StackPanel Orientation="Vertical">
         <!--  Unit Image row  -->
         <Grid>
@@ -16,7 +19,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
+                <RowDefinition Height="60" />
             </Grid.RowDefinitions>
             <Label
                 x:Name="UnitModifier"
@@ -25,7 +28,7 @@
                 Width="100"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Content="" />
+                Content="{Binding Header}" />
             <ItemsControl
                 x:Name="UnitImageRow"
                 Grid.Row="0"
@@ -39,22 +42,30 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Image
-                            Width="40"
-                            Height="40"
-                            Margin="5,5"
+                            Width="50"
+                            Height="50"
+                            Margin="2.5,0"
                             Source="{Binding ImagePath}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
         </Grid>
+
         <!--  Unit Amount row  -->
-        <app:BattleResultRow DataContext="{Binding UnitAmount}" />
+        <StackPanel Visibility="{Binding UnitAmountVisibility, Converter={StaticResource BoolToVis}}">
+            <app:BattleResultRow DataContext="{Binding UnitAmount}"  />
+        </StackPanel>
 
         <!--  Units Lost row  -->
-        <app:BattleResultRow DataContext="{Binding UnitLost}" />
+        <StackPanel Visibility="{Binding UnitLostVisibility, Converter={StaticResource BoolToVis}}">
+            <app:BattleResultRow DataContext="{Binding UnitLost}" />
+        </StackPanel>
 
         <!--  Units Left row  -->
-        <app:BattleResultRow DataContext="{Binding UnitsLeft}" />
+        <StackPanel Visibility="{Binding UnitsLeftVisibility, Converter={StaticResource BoolToVis}}">
+            <app:BattleResultRow DataContext="{Binding UnitsLeft}" />
+        </StackPanel>
+
     </StackPanel>
 </UserControl>

@@ -1,103 +1,103 @@
 <UserControl
-	x:Class="CalculationTools.App.BattleSimulatorView"
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:app="clr-namespace:CalculationTools.App"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	d:DesignHeight="450"
-	d:DesignWidth="800"
-	mc:Ignorable="d">
-	<StackPanel Orientation="Horizontal">
-		<!--  Input table  -->
-		<Grid Background="White">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="130" />
-				<ColumnDefinition Width="150" />
-				<ColumnDefinition Width="150" />
+    x:Class="CalculationTools.App.BattleSimulatorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:app="clr-namespace:CalculationTools.App"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <StackPanel Orientation="Horizontal">
+        <!--  Input table  -->
+        <Grid Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="130" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
 
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
-			<Label
-				Grid.Row="0"
-				Grid.Column="1"
-				MinWidth="100"
-				Margin="0,5,0,0"
-				HorizontalAlignment="Center"
-				VerticalAlignment="Center"
-				Content="Attack" />
-			<Label
-				Grid.Row="0"
-				Grid.Column="2"
-				MinWidth="100"
-				Margin="0,5,0,0"
-				HorizontalAlignment="Stretch"
-				VerticalAlignment="Center"
-				Content="Defense" />
-			<ContentControl
-				x:Name="BattleInput"
-				Grid.Row="1"
-				Grid.Column="0"
-				Grid.ColumnSpan="3" />
-			<Button
-				Grid.Row="2"
-				Grid.Column="0"
-				Grid.ColumnSpan="3"
-				Margin="5,5"
-				Command="{Binding ImportUnitCommand}"
-				Content="Import scout report" />
-		</Grid>
-		<StackPanel Orientation="Vertical" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                MinWidth="100"
+                Margin="0,5,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="Attack" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="2"
+                MinWidth="100"
+                Margin="0,5,0,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Content="Defense" />
+            <ContentControl
+                x:Name="BattleInput"
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3" />
+            <Button
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Margin="5,5"
+                Command="{Binding ImportUnitCommand}"
+                Content="Import units" />
+        </Grid>
+        <StackPanel Orientation="Vertical" />
 
-		<!--  Result Grid  -->
-		<StackPanel Orientation="Vertical">
-			<Expander Header="Show filters">
-				<GroupBox Header="Filters">
+        <!--  Result Grid  -->
+        <StackPanel Orientation="Vertical">
+            <Expander Header="Show filters">
+                <GroupBox Header="Filters">
 
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="*" />
-						</Grid.ColumnDefinitions>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="30" />
-							<RowDefinition Height="Auto" />
-						</Grid.RowDefinitions>
-						<CheckBox
-							Margin="5"
-							VerticalAlignment="Center"
-							Content="Show Attack Strength"
-							IsChecked="{Binding IsAttackStrengthShown}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <CheckBox
+                            Margin="5"
+                            VerticalAlignment="Center"
+                            Content="Show Attack Strength"
+                            IsChecked="{Binding IsAttackStrengthShown}" />
 
-						<CheckBox
-							Grid.Row="0"
-							Grid.Column="1"
-							Margin="5"
-							VerticalAlignment="Center"
-							Content="Show Defense Strength"
-							IsChecked="{Binding IsDefenseStrengthShown}" />
+                        <CheckBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="5"
+                            VerticalAlignment="Center"
+                            Content="Show Defense Strength"
+                            IsChecked="{Binding IsDefenseStrengthShown}" />
 
-						<CheckBox
-							Grid.Row="0"
-							Grid.Column="2"
-							Margin="5"
-							VerticalAlignment="Center"
-							Content="Show Resources Lost"
-							IsChecked="{Binding IsResourcesLostShown}" />
-					</Grid>
-				</GroupBox>
-			</Expander>
-			<!--  Attack Grid  -->
-			<app:BattleResultTable DataContext="{Binding AttackBattleResultTable}" />
+                        <CheckBox
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="5"
+                            VerticalAlignment="Center"
+                            Content="Show Resources Lost"
+                            IsChecked="{Binding IsResourcesLostShown}" />
+                    </Grid>
+                </GroupBox>
+            </Expander>
+            <!--  Attack Grid  -->
+            <app:BattleResultTable DataContext="{Binding AttackBattleResultTable}" />
 
-			<!--  Defend Grid  -->
-			<app:BattleResultTable DataContext="{Binding DefenseBattleResultTable}" />
-		</StackPanel>
-	</StackPanel>
+            <!--  Defend Grid  -->
+            <app:BattleResultTable DataContext="{Binding DefenseBattleResultTable}" />
+        </StackPanel>
+    </StackPanel>
 </UserControl>

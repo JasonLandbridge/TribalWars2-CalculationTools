@@ -57,6 +57,8 @@
     <None Remove="Resources\Img\flags\flag_sk.png" />
     <None Remove="Resources\Img\flags\flag_tr.png" />
     <None Remove="Resources\Img\flags\flag_us.png" />
+    <None Remove="Resources\Img\help\scout_report_units_selected.png" />
+    <None Remove="Resources\Img\help\village_units_selected.png" />
     <None Remove="Resources\Img\info\info_luck.png" />
     <None Remove="Resources\Img\info\info_morale.png" />
     <None Remove="Resources\Img\info\info_nightbonus.png" />
@@ -116,6 +118,8 @@
     <Resource Include="Resources\Img\flags\flag_sk.png" />
     <Resource Include="Resources\Img\flags\flag_tr.png" />
     <Resource Include="Resources\Img\flags\flag_us.png" />
+    <Resource Include="Resources\Img\help\scout_report_units_selected.png" />
+    <Resource Include="Resources\Img\help\village_units_selected.png" />
     <Resource Include="Resources\Img\info\info_weapon_mastery.png" />
     <Resource Include="Resources\Img\units\unit_archer.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

@@ -33,7 +33,7 @@ namespace CalculationTools.Core
         {
             Type viewType = Mappings[typeof(TViewModel)];
 
-            // Instead of re-creating a new view everytime take the one from the IoC container.
+            // Instead of re-creating a new view every time, take the one from the IoC container.
             IDialog dialog = (IDialog)IoC.Container.GetInstance(viewType);
 
             EventHandler<DialogCloseRequestedEventArgs> handler = null;
@@ -57,6 +57,9 @@ namespace CalculationTools.Core
 
             dialog.DataContext = viewModel;
             dialog.Owner = owner;
+
+            // Run the OnDialogOpen method on the viewmodel
+            viewModel.OnDialogOpen();
 
             return dialog.ShowDialog();
         }

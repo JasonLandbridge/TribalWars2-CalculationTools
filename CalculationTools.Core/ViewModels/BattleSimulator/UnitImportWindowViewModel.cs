@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Castle.Core.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -15,9 +16,15 @@ namespace CalculationTools.Core
         public UnitImportWindowViewModel(BattleInputViewModel battleInputViewModel)
         {
             _battleInputViewModel = battleInputViewModel;
-            ResetCommand = new RelayCommand(() => { UnitImportText = string.Empty; });
+            ResetCommand = new RelayCommand(ResetWindow);
             SaveCommand = new RelayCommand(SendToBattleInput);
             CloseCommand = new RelayCommand(() => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
+        }
+
+        private void ResetWindow()
+        {
+            _unitImportText = string.Empty;
+            BattleUnitPreviewViewModel.Reset();
         }
 
         #endregion Constructors
@@ -27,7 +34,7 @@ namespace CalculationTools.Core
         public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
         public void OnDialogOpen()
         {
-
+            ResetCommand.Execute(null);
         }
 
         #endregion Events
@@ -35,6 +42,12 @@ namespace CalculationTools.Core
         #region Properties
 
         public UnitSet UnitResultSet { get; set; } = new UnitSet();
+
+        public bool IsAttackingImport { get; set; }
+
+        public string HelpOneImagePath => $"/Resources/Img/help/village_units_selected.png";
+        public string HelpTwoImagePath => $"/Resources/Img/help/scout_report_units_selected.png";
+
 
         #region ViewModels
         public BattleUnitPreviewViewModel BattleUnitPreviewViewModel { get; set; } = new BattleUnitPreviewViewModel();
@@ -85,8 +98,10 @@ namespace CalculationTools.Core
 
         public void ParseInput()
         {
-            if (UnitImportText == null)
+            if (UnitImportText.IsNullOrEmpty())
             {
+                IsError = false;
+                ResetWindow();
                 return;
             }
 
@@ -98,13 +113,33 @@ namespace CalculationTools.Core
             }
 
 
-            // using the method 
+
             List<string> entries = untImportText.Split("\r\n").ToList();
-            if (entries.Count != 39)
+
+
+            if (entries.Count == 0 || entries.Count > 39)
             {
                 IsError = true;
                 ErrorMessage = "The text input is invalid, make sure you selected all units in the scout report!";
                 return;
+            }
+
+            // If the entries are less than 13 than it is most likely an attacking units import
+            if (entries.Count >= 1 && entries.Count <= 13)
+            {
+                IsAttackingImport = true;
+                BattleUnitPreviewViewModel.Header = "Attacking Units";
+                BattleUnitPreviewViewModel.UnitLostVisibility = false;
+                BattleUnitPreviewViewModel.UnitsLeftVisibility = false;
+            }
+
+            if (entries.Count >= 14 && entries.Count <= 39)
+            {
+                IsAttackingImport = false;
+                BattleUnitPreviewViewModel.Header = "Defending Units";
+                BattleUnitPreviewViewModel.UnitLostVisibility = true;
+                BattleUnitPreviewViewModel.UnitsLeftVisibility = true;
+
             }
 
             // Convert string to int list
@@ -119,24 +154,64 @@ namespace CalculationTools.Core
                 rowData.Add(0);
             }
 
-
             List<BattleResultValueViewModel> unitAmountRow = new List<BattleResultValueViewModel>();
             List<int> unitValueList = new List<int>();
             List<BattleResultValueViewModel> unitLostRow = new List<BattleResultValueViewModel>();
             List<BattleResultValueViewModel> unitLeftRow = new List<BattleResultValueViewModel>();
 
-            for (int i = 0; i < rowData.Count; i += 3)
+            if (IsAttackingImport)
             {
-                unitValueList.Add(rowData[i]);
-                unitAmountRow.Add(new BattleResultValueViewModel(rowData[i]));
-                unitLostRow.Add(new BattleResultValueViewModel(rowData[i + 1]));
-                unitLeftRow.Add(new BattleResultValueViewModel(rowData[i + 2]));
+                for (int i = 0; i < GameData.UnitCount; i++)
+                {
+                    int value = 0;
+                    if (i < rowData.Count)
+                    {
+                        value = rowData[i];
+                    }
+
+                    unitValueList.Add(value);
+                    unitAmountRow.Add(new BattleResultValueViewModel(value));
+
+                }
+
+                BattleUnitPreviewViewModel.UnitAmount.BattleResultValues = unitAmountRow;
+
             }
+            else
+            {
+                // Values are ordered top to bottom, and left to right when copied in
+                for (int i = 0; i < rowData.Count; i += 3)
+                {
+                    int value = 0;
+                    if (i < rowData.Count)
+                    {
+                        value = rowData[i];
+                    }
+
+                    unitValueList.Add(value);
+                    unitAmountRow.Add(new BattleResultValueViewModel(value));
+
+                    value = 0;
+                    if (i + 1 < rowData.Count)
+                    {
+                        value = rowData[i + 1];
+                    }
+                    unitLostRow.Add(new BattleResultValueViewModel(value));
 
 
-            BattleUnitPreviewViewModel.UnitAmount.BattleResultValues = unitAmountRow;
-            BattleUnitPreviewViewModel.UnitLost.BattleResultValues = unitLostRow;
-            BattleUnitPreviewViewModel.UnitsLeft.BattleResultValues = unitLeftRow;
+                    value = 0;
+                    if (i + 2 < rowData.Count)
+                    {
+                        value = rowData[i + 2];
+                    }
+                    unitLeftRow.Add(new BattleResultValueViewModel(value));
+                }
+
+                BattleUnitPreviewViewModel.UnitAmount.BattleResultValues = unitAmountRow;
+                BattleUnitPreviewViewModel.UnitLost.BattleResultValues = unitLostRow;
+                BattleUnitPreviewViewModel.UnitsLeft.BattleResultValues = unitLeftRow;
+
+            }
 
             IsError = false;
 
@@ -146,7 +221,14 @@ namespace CalculationTools.Core
         public void SendToBattleInput()
         {
             ParseInput();
-            _battleInputViewModel.LoadDefUnits(UnitResultSet);
+            if (IsAttackingImport)
+            {
+                _battleInputViewModel.LoadAtkUnits(UnitResultSet);
+            }
+            else
+            {
+                _battleInputViewModel.LoadDefUnits(UnitResultSet);
+            }
             CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
         }
 

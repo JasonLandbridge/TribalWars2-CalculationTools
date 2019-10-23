@@ -41,7 +41,7 @@ namespace CalculationTools.Core.Extensions
         /// <param name="source"></param>
         /// <param name="abbreviateValue"></param>
         /// <returns></returns>
-        public static List<BattleResultValueViewModel> SetAbbreviation(this List<BattleResultValueViewModel> source, bool abbreviateValue)
+        public static List<BattleResultValueViewModel> SetAbbreviation(this List<BattleResultValueViewModel> source, bool abbreviateValue = true)
         {
             source.ForEach(x => x.IsAbbreviated = abbreviateValue);
             return source;

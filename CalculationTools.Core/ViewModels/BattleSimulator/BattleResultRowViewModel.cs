@@ -13,5 +13,15 @@ namespace CalculationTools.Core
         public bool Show { get; set; }
 
         #endregion Properties
+
+        public BattleResultRowViewModel()
+        {
+
+        }
+
+        public BattleResultRowViewModel(BattleResultRow battleResultRow)
+        {
+            BattleResultValues = battleResultRow.Values;
+        }
     }
 }
