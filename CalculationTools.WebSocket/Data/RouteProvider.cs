@@ -2,12 +2,12 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using CalculationTools.Common.Connection;
 
 namespace CalculationTools.WebSocket
 {
     public static class RouteProvider
     {
+        private static int _id;
 
 
         #region Fields
@@ -21,14 +21,48 @@ namespace CalculationTools.WebSocket
         public const string MESSAGE_ERROR = "Message/error";
         public const string EXCEPTION_ERROR = "Exception/ErrorException";
 
+
+        #region Send Types
         public const string SELECT_CHARACTER = "Authentication/selectCharacter";
+
+        public const string GET_GAME_DATA = "GameDataBatch/getGameData";
+        public const string GET_GROUPS = "Group/getGroups";
+        public const string GET_VILLAGES = "Icon/getVillages";
+        public const string PREMIUM_LIST_ITEMS = "Premium/listItems";
+        public const string GLOBALINFORMATION_GETINFO = "GlobalInformation/getInfo";
+
+
+        #endregion
+
+        #region Receive Types
         public const string CHARACTER_SELECTED = "Authentication/characterSelected";
+
+        public const string GROUPS = "Group/groups";
+        public const string GAME_DATA = "GameDataBatch/gameData";
+        public const string ICON_VILLAGES = "Icon/villages";
+        public const string PREMIUM_ITEMS = "Premium/items";
+        public const string GLOBALINFORMATION_INFO = "GlobalInformation/info";
+
+
+        #endregion
 
         #endregion Fields
 
         #region Properties
 
         public static long UnixTime => new DateTimeOffset(DateTime.Now).ToUnixTimeMilliseconds();
+
+        /// <summary>
+        /// Returns an unique Id incrementing on every message send
+        /// </summary>
+        public static int Id
+        {
+            get
+            {
+                _id++;
+                return _id;
+            }
+        }
 
         #endregion Properties
 
@@ -56,7 +90,7 @@ namespace CalculationTools.WebSocket
 
             var jsonObject = new
             {
-                id = 2,
+                id = Id,
                 type = LOGIN,
                 data,
                 headers = MsgHeader,
@@ -70,7 +104,7 @@ namespace CalculationTools.WebSocket
 
             var jsonObject = new
             {
-                id = 1,
+                id = Id,
                 type = SYSTEM_IDENTIFY,
                 data = new
                 {
@@ -85,7 +119,7 @@ namespace CalculationTools.WebSocket
         {
             var jsonObject = new
             {
-                id = 7,
+                id = Id,
                 type = SELECT_CHARACTER,
                 data = new
                 {
@@ -97,6 +131,26 @@ namespace CalculationTools.WebSocket
             };
             return AddMsg(JsonConvert.SerializeObject(jsonObject));
         }
+
+        /// <summary>
+        /// Sends a default message to the server with only a message type
+        /// </summary>
+        /// <param name="sendType">The message type</param>
+        /// <returns>A json formatted message</returns>
+        public static string GetDefaultSendMessage(string sendType)
+        {
+
+            var jsonObject = new
+            {
+                id = Id,
+                type = sendType,
+                headers = MsgHeader
+            };
+            return AddMsg(JsonConvert.SerializeObject(jsonObject));
+        }
+
+
+
         #endregion Methods
 
         #region MessageHelpers
@@ -122,6 +176,27 @@ namespace CalculationTools.WebSocket
         #endregion
 
 
+        public static string GetVillages()
+        {
+            var jsonObject = new
+            {
+                id = Id,
+                type = GET_VILLAGES,
+                headers = MsgHeader
+            };
+            return AddMsg(JsonConvert.SerializeObject(jsonObject));
+        }
+
+        public static string GetPremiumListItems()
+        {
+            var jsonObject = new
+            {
+                id = Id,
+                type = PREMIUM_LIST_ITEMS,
+                headers = MsgHeader
+            };
+            return AddMsg(JsonConvert.SerializeObject(jsonObject));
+        }
     }
 
 }

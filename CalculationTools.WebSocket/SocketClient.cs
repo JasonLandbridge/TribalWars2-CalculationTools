@@ -26,6 +26,9 @@ namespace CalculationTools.WebSocket
 
         private readonly TaskCompletionSource<ConnectResult> ConnectionResult = new TaskCompletionSource<ConnectResult>();
 
+        private static readonly Object lockObj = new Object();
+        private bool _keepAlive;
+
         #endregion Fields
 
         #region Constructors
@@ -124,6 +127,7 @@ namespace CalculationTools.WebSocket
 
         public async Task<ConnectResult> StartConnectionAsync(bool keepAlive = true)
         {
+            _keepAlive = keepAlive;
             if (!ClientHasBeenSetup)
             {
                 string message = "Connection setup has not been performed before starting the connection";
@@ -151,10 +155,7 @@ namespace CalculationTools.WebSocket
 
             await Client.Start();
 
-            if (keepAlive && !BackgroundWorker.IsBusy)
-            {
-                BackgroundWorker.RunWorkerAsync();
-            }
+
 
 
             return await ConnectionResult.Task;
@@ -175,6 +176,15 @@ namespace CalculationTools.WebSocket
             PingCount = 0;
             ClientHasBeenSetup = false;
             return true;
+        }
+
+        /// <summary>
+        /// A helper function which uses the default format for sending messages to the server
+        /// </summary>
+        /// <param name="sendType">The message type</param>
+        private void SendDefaultMessage(string sendType)
+        {
+            SendMessageAsync(RouteProvider.GetDefaultSendMessage(sendType));
         }
 
         private async void SendMessageAsync(string message)
@@ -257,6 +267,37 @@ namespace CalculationTools.WebSocket
                     break;
 
                 case RouteProvider.CHARACTER_SELECTED:
+                    //TODO do something with data returned
+                    SendDefaultMessage(RouteProvider.GET_GAME_DATA);
+                    SendDefaultMessage(RouteProvider.GET_GROUPS);
+                    break;
+
+                case RouteProvider.GROUPS:
+
+                    var groupsData = ParseDataFromResponse<GroupsDTO>(response);
+                    _playerData.SetGroups(groupsData.ToIGroupList());
+
+                    SendMessageAsync(RouteProvider.GetVillages());
+                    SendMessageAsync(RouteProvider.GetPremiumListItems());
+                    break;
+
+                case RouteProvider.GAME_DATA:
+                    //TODO This return object is huge and contains all game metrics
+                    break;
+
+                case RouteProvider.ICON_VILLAGES:
+                    //TODO This returns an object containing icon codes
+
+                    break;
+
+                case RouteProvider.PREMIUM_ITEMS:
+                    //TODO This returns an object containing the usable premium items
+                    SendDefaultMessage(RouteProvider.GLOBALINFORMATION_GETINFO);
+                    break;
+
+                case RouteProvider.GLOBALINFORMATION_INFO:
+                    //TODO This returns an object containing the incoming support and attacks
+                    var globalInfo = ParseDataFromResponse<GlobalInformationDTO>(response);
 
                     break;
 
@@ -278,7 +319,11 @@ namespace CalculationTools.WebSocket
                     break;
 
                 default:
-
+                    // Only start if no messages are left to send
+                    if (_keepAlive && !BackgroundWorker.IsBusy)
+                    {
+                        BackgroundWorker.RunWorkerAsync();
+                    }
                     //ExitEvent.Set();
                     break;
             }
@@ -397,23 +442,22 @@ namespace CalculationTools.WebSocket
             return response;
         }
         #endregion
-        private async void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
-        {
-            Log.Info("Exiting process");
-            await CloseConnection();
-        }
-
-        private async void DefaultOnUnloading(AssemblyLoadContext assemblyLoadContext)
-        {
-            Log.Info("Unloading process");
-            await CloseConnection();
-        }
 
         private void AddToConnectionLog(string message)
         {
-            ConnectionLog.Append(message + Environment.NewLine);
-            ConnectionLogUpdated.Invoke(this, EventArgs.Empty);
+            lock (lockObj)
+            {
+                if (message.Length > 2000)
+                {
+                    message = message.Substring(0, 2000);
+                }
+                ConnectionLog.Append(message + Environment.NewLine);
+                ConnectionLogUpdated.Invoke(this, EventArgs.Empty);
+
+            }
         }
+
+
         #endregion Methods
 
     }

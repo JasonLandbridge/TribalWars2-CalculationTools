@@ -8,14 +8,22 @@ namespace CalculationTools.Data
 {
     public class PlayerData : BasePropertyChanged, IPlayerData
     {
-        public DateTime LastUpdated { get; set; }
-        public DateTime LastUpdatedLoginData { get; set; }
-        public bool IsLoggedIn { get; set; }
-        public int PlayerId { get; set; }
-        public string Name { get; set; }
+        #region Constructors
 
-        private List<ICharacter> Characters { get; set; }
-        private List<IWorld> Worlds { get; set; }
+        public PlayerData()
+        {
+
+        }
+
+        #endregion Constructors
+
+        #region Events
+
+        public event EventHandler LoginDataIsUpdated;
+
+        #endregion Events
+
+        #region Properties
 
         public List<CharacterWorld> CharacterWorlds
         {
@@ -27,7 +35,33 @@ namespace CalculationTools.Data
             }
         }
 
-        public event EventHandler LoginDataIsUpdated;
+        public bool IsLoggedIn { get; set; }
+        public DateTime LastUpdated { get; set; }
+        public DateTime LastUpdatedLoginData { get; set; }
+        public string Name { get; set; }
+        public int PlayerId { get; set; }
+        public List<VillageGroup> VillageGroups { get; set; } = new List<VillageGroup>();
+
+        private List<ICharacter> Characters { get; set; }
+        private List<IWorld> Worlds { get; set; }
+
+        #endregion Properties
+
+        #region Methods
+
+        public void SetGroups(IList<IGroup> groupList)
+        {
+            if (groupList == null) return;
+
+            VillageGroups = new List<VillageGroup>();
+
+            foreach (IGroup group in groupList)
+            {
+                VillageGroups.Add(group as VillageGroup);
+            }
+
+
+        }
 
         public void SetLoginData(ILoginData loginData)
         {
@@ -47,13 +81,6 @@ namespace CalculationTools.Data
 
         }
 
-        public PlayerData()
-        {
-
-
-
-
-        }
-
+        #endregion Methods
     }
 }

@@ -49,7 +49,14 @@ namespace CalculationTools.Core
 
         private void UpdateConnectionLog(object sender, EventArgs e)
         {
-            ConnectionLog = _socketManager.ConnectionLog?.ToString();
+            try
+            {
+                ConnectionLog = _socketManager.ConnectionLog?.ToString();
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                Console.WriteLine(exception);
+            }
         }
 
         private async void StopConnection()
