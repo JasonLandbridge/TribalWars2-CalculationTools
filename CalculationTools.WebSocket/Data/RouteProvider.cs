@@ -35,8 +35,9 @@ namespace CalculationTools.WebSocket
         #endregion
 
         #region Receive Types
-        public const string CHARACTER_SELECTED = "Authentication/characterSelected";
+        public const string SID = "sid";
 
+        public const string CHARACTER_SELECTED = "Authentication/characterSelected";
         public const string GROUPS = "Group/groups";
         public const string GAME_DATA = "GameDataBatch/gameData";
         public const string ICON_VILLAGES = "Icon/villages";

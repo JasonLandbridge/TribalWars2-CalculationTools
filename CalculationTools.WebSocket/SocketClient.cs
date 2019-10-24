@@ -8,7 +8,6 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.WebSockets;
-using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
 using Websocket.Client;
@@ -28,6 +27,8 @@ namespace CalculationTools.WebSocket
 
         private static readonly Object lockObj = new Object();
         private bool _keepAlive;
+
+        private int _pingInterval = 1000;
 
         #endregion Fields
 
@@ -64,10 +65,9 @@ namespace CalculationTools.WebSocket
         public bool SetupConnection(ConnectData connectData, bool shouldReconnect = true)
         {
             ConnectData = connectData;
-
             Client = new WebsocketClient(ConnectData.Uri)
             {
-                ReconnectTimeoutMs = (int)TimeSpan.FromSeconds(30).TotalMilliseconds
+                ReconnectTimeoutMs = (int)TimeSpan.FromSeconds(60).TotalMilliseconds
             };
             Client.IsReconnectionEnabled = shouldReconnect;
 
@@ -110,7 +110,7 @@ namespace CalculationTools.WebSocket
             {
                 while (true)
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(_pingInterval);
 
                     if (!Client.IsRunning)
                         continue;
@@ -251,6 +251,11 @@ namespace CalculationTools.WebSocket
 
             switch (socketResponse.SocketType)
             {
+                case RouteProvider.SID:
+                    // First introduction message
+
+                    break;
+
                 case RouteProvider.SYSTEM_WELCOME:
                     // On system welcome send system identify
                     SendMessageAsync(RouteProvider.SystemIdentify());
@@ -298,7 +303,7 @@ namespace CalculationTools.WebSocket
                 case RouteProvider.GLOBALINFORMATION_INFO:
                     //TODO This returns an object containing the incoming support and attacks
                     var globalInfo = ParseDataFromResponse<GlobalInformationDTO>(response);
-
+                    StartBackgroundWorker();
                     break;
 
                 case RouteProvider.SYSTEM_ERROR:
@@ -319,32 +324,33 @@ namespace CalculationTools.WebSocket
                     break;
 
                 default:
-                    // Only start if no messages are left to send
-                    if (_keepAlive && !BackgroundWorker.IsBusy)
-                    {
-                        BackgroundWorker.RunWorkerAsync();
-                    }
+                    StartBackgroundWorker();
                     //ExitEvent.Set();
                     break;
+            }
+        }
+
+        private void StartBackgroundWorker()
+        {
+            // Only start if no messages are left to send
+            if (_keepAlive && !BackgroundWorker.IsBusy)
+            {
+                BackgroundWorker.RunWorkerAsync();
             }
         }
 
         private SocketResponse ParseSocketResponse(string response)
         {
 
-            string headerType = string.Empty;
-
-            if (response.StartsWith("0{"))
-            {
-                response = response.Remove(0, 1);
-                headerType = "sid";
-            }
-
             SocketResponse socketResponse = new SocketResponse();
             try
             {
                 socketResponse = JsonConvert.DeserializeObject<SocketResponse>(response);
-                socketResponse.HeaderType = headerType;
+                if (!string.IsNullOrEmpty(socketResponse.SessionID))
+                {
+                    socketResponse.SocketType = RouteProvider.SID;
+                    _pingInterval = socketResponse.PingInterval;
+                }
             }
             catch (Exception e)
             {
