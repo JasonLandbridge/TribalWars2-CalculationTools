@@ -17,7 +17,6 @@ namespace CalculationTools.WebSocket
         public const string SYSTEM_IDENTIFIED = "System/identified";
         public const string SYSTEM_IDENTIFY = "System/identify";
         public const string SYSTEM_ERROR = "System/error";
-        public const string SYSTEM_WELCOME = "System/welcome";
         public const string MESSAGE_ERROR = "Message/error";
         public const string EXCEPTION_ERROR = "Exception/ErrorException";
 
@@ -30,12 +29,20 @@ namespace CalculationTools.WebSocket
         public const string GET_VILLAGES = "Icon/getVillages";
         public const string PREMIUM_LIST_ITEMS = "Premium/listItems";
         public const string GLOBALINFORMATION_GETINFO = "GlobalInformation/getInfo";
+        public const string EFFECT_GET_EFFECTS = "Effect/getEffects";
+        public const string TRIBE_GET_OWN_INVITATIONS = "TribeInvitation/getOwnInvitations";
+        public const string WHEEL_GETEVENT = "WheelEvent/getEvent";
+        public const string CHARACTER_GETCOLORS = "Character/getColors";
+        public const string CHARACTER_GETINFO = "Character/getInfo";
+        public const string TRIBESKILL_GETINFO = "TribeSkill/getInfo";
+        public const string SYSTEM_GETTIME = "System/getTime";
 
 
         #endregion
 
         #region Receive Types
         public const string SID = "sid";
+        public const string SYSTEM_WELCOME = "System/welcome";
 
         public const string CHARACTER_SELECTED = "Authentication/characterSelected";
         public const string GROUPS = "Group/groups";
@@ -43,7 +50,15 @@ namespace CalculationTools.WebSocket
         public const string ICON_VILLAGES = "Icon/villages";
         public const string PREMIUM_ITEMS = "Premium/items";
         public const string GLOBALINFORMATION_INFO = "GlobalInformation/info";
+        public const string EFFECT_EFFECTS = "Effect/effects";
+        public const string ACHIEVEMENT_PROGRESS = "Achievement/progress";
+        public const string TRIBE_OWN_INVITATIONS = "TribeInvitation/ownInvitations";
+        public const string WHEEL_EVENT = "WheelEvent/event";
+        public const string CHARACTER_COLORS = "Character/colors";
 
+        public const string CHARACTER_INFO = "Character/info";
+        public const string TRIBESKILL_INFO = "TribeSkill/info";
+        public const string SYSTEM_TIME = "System/time";
 
         #endregion
 

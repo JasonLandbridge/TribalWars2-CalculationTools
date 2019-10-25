@@ -303,7 +303,48 @@ namespace CalculationTools.WebSocket
                 case RouteProvider.GLOBALINFORMATION_INFO:
                     //TODO This returns an object containing the incoming support and attacks
                     var globalInfo = ParseDataFromResponse<GlobalInformationDTO>(response);
+                    SendDefaultMessage(RouteProvider.EFFECT_GET_EFFECTS);
+                    break;
+
+                case RouteProvider.EFFECT_EFFECTS:
+                    // Returns the current effect on the player, such as recruitment or resource boost
+                    SendDefaultMessage(RouteProvider.TRIBE_GET_OWN_INVITATIONS);
+
+                    break;
+
+                case RouteProvider.ACHIEVEMENT_PROGRESS:
+
+                    break;
+
+                case RouteProvider.TRIBE_OWN_INVITATIONS:
+                    SendDefaultMessage(RouteProvider.WHEEL_GETEVENT);
+                    break;
+
+                case RouteProvider.WHEEL_EVENT:
+                    SendDefaultMessage(RouteProvider.CHARACTER_GETCOLORS);
+                    break;
+
+                case RouteProvider.CHARACTER_COLORS:
+                    SendDefaultMessage(RouteProvider.CHARACTER_GETINFO);
+                    SendDefaultMessage(RouteProvider.TRIBESKILL_GETINFO);
+                    SendDefaultMessage(RouteProvider.SYSTEM_GETTIME);
+                    break;
+
+                case RouteProvider.CHARACTER_INFO:
+                    // All character data
+                    var characterData = ParseDataFromResponse<CharacterDataDTO>(response);
+                    _playerData.SetCharacterData(characterData);
+
+                    // Add this to the last command send to keep alive
                     StartBackgroundWorker();
+                    break;
+
+                case RouteProvider.TRIBESKILL_INFO:
+
+                    break;
+
+                case RouteProvider.SYSTEM_TIME:
+
                     break;
 
                 case RouteProvider.SYSTEM_ERROR:
@@ -374,17 +415,23 @@ namespace CalculationTools.WebSocket
         /// <returns></returns>
         private T ParseDataFromResponse<T>(string response)
         {
-            JObject jsonObject = (JObject)JsonConvert.DeserializeObject(response);
+            JsonSerializerSettings serializerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            JObject jsonObject = (JObject)JsonConvert.DeserializeObject(response, serializerSettings);
 
             if (jsonObject["data"].Any())
             {
                 try
                 {
-                    return JsonConvert.DeserializeObject<T>(jsonObject["data"].ToString());
+                    string data = jsonObject["data"].ToString();
+                    return JsonConvert.DeserializeObject<T>(data, serializerSettings);
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e, $"Could not parse type {typeof(T)} with data object in string:{Environment.NewLine}{response}");
+                    Log.Error(e, $"Could not parse type {typeof(T)} with data object in string:{Environment.NewLine}{response} - {e.Message}");
                 }
             }
 

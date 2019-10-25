@@ -15,5 +15,6 @@ namespace CalculationTools.Common.Data
 
         event EventHandler LoginDataIsUpdated;
         void SetGroups(IList<IGroup> groupList);
+        void SetCharacterData(ICharacterData characterData);
     }
 }

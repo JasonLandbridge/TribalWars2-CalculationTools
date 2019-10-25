@@ -81,6 +81,14 @@ namespace CalculationTools.Data
 
         }
 
+        public void SetCharacterData(ICharacterData characterData)
+        {
+            if (characterData == null) return;
+
+            CharacterData cData = new CharacterData(characterData);
+
+        }
+
         #endregion Methods
     }
 }
