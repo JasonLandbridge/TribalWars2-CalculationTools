@@ -226,4 +226,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Tabs\" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 ﻿using AutoUpdaterDotNET;
+using CalculationTools.App.Views;
 using CalculationTools.Core;
 using SimpleInjector;
 using System;
@@ -71,6 +72,9 @@ namespace CalculationTools.App
 
             IoC.Container.Register<BattleSimulatorView>(Lifestyle.Singleton);
             IoC.Container.Register<BattleSimulatorViewModel>(Lifestyle.Singleton);
+
+            IoC.Container.Register<AttackPlannerView>(Lifestyle.Singleton);
+            IoC.Container.Register<AttackPlannerViewModel>(Lifestyle.Singleton);
 
             IoC.Container.Register<BattleInput>(Lifestyle.Singleton);
             IoC.Container.Register<BattleInputViewModel>(Lifestyle.Singleton);

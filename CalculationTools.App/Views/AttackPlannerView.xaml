@@ -1,0 +1,36 @@
+﻿<UserControl
+    x:Class="CalculationTools.App.Views.AttackPlannerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CalculationTools.App.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <StackPanel Orientation="Vertical" Background="White">
+
+        <StackPanel Orientation="Horizontal">
+            <CheckBox  Margin="5"/>
+            <TextBox Text="Start village" Margin="5"/>
+            <TextBox Text="Target village" Margin="5"/>
+            <TextBox Text="Slowest unit" Margin="5"/>
+            <TextBox Text="Arrive at" Margin="5"/>
+            <Label Content="Send at"/>
+
+        </StackPanel>
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="130" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="150" />
+
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+        </Grid>
+    </StackPanel>
+</UserControl>

@@ -1,4 +1,5 @@
 ﻿using System;
+using CalculationTools.App.Views;
 using CalculationTools.Core;
 
 namespace CalculationTools.App
@@ -10,11 +11,12 @@ namespace CalculationTools.App
     {
         #region Constructors
 
-        public MainWindow(MainWindowViewModel mainWindowViewModel, BattleSimulatorView battleSimulatorView)
+        public MainWindow(MainWindowViewModel mainWindowViewModel, BattleSimulatorView battleSimulatorView, AttackPlannerView attackPlannerView)
         {
             InitializeComponent();
             DataContext = mainWindowViewModel;
-            BattleSimulator.Content = battleSimulatorView;
+            this.BattleSimulator.Content = battleSimulatorView;
+            this.AttackPlanner.Content = attackPlannerView;
         }
 
         #endregion Constructors

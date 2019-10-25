@@ -11,121 +11,124 @@
     Height="1180"
     mc:Ignorable="d" Closed="Window_Closed">
 
-	<DockPanel LastChildFill="False">
-		<!--  Menu  -->
-		<Menu DockPanel.Dock="Top">
-			<MenuItem Height="25" Header="_File">
-				<MenuItem Header="_Open" />
-				<MenuItem Header="_Close" />
-				<MenuItem Header="_Save" />
-			</MenuItem>
-			<MenuItem Height="25" Header="_Load Preset" />
-			<MenuItem
+    <DockPanel LastChildFill="False">
+        <!--  Menu  -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Height="25" Header="_File">
+                <MenuItem Header="_Open" />
+                <MenuItem Header="_Close" />
+                <MenuItem Header="_Save" />
+            </MenuItem>
+            <MenuItem Height="25" Header="_Load Preset" />
+            <MenuItem
                 Height="25"
                 Command="{Binding OpenSettingsCommand}"
                 Header="_Settings" />
-			<MenuItem
+            <MenuItem
                 Height="25"
                 Command="{Binding ConnectToTW2Command}"
                 Header="_Connect To TW2" />
-		</Menu>
-		<StatusBar DockPanel.Dock="Bottom">
-			<StatusBarItem>
-				<TextBlock Name="lblCursorPosition" />
-			</StatusBarItem>
-		</StatusBar>
-		<!--  Main Grid  -->
-		<GroupBox DockPanel.Dock="Left" Header="Battle Simulator">
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="lblCursorPosition" />
+            </StatusBarItem>
+        </StatusBar>
+        <!--  Main Grid  -->
+        <GroupBox DockPanel.Dock="Left" Header="Battle Simulator">
 
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="75" />
-					<ColumnDefinition Width="75" />
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
-					<RowDefinition Height="Auto" />
-				</Grid.RowDefinitions>
-				<sync:TreeViewAdv
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="75" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <sync:TreeViewAdv
                     Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Margin="0,5" />
-				<Button
+                <Button
                     Grid.Row="1"
                     Grid.Column="0"
                     Content="Save" />
-				<Button
+                <Button
                     Grid.Row="1"
                     Grid.Column="1"
                     Content="Load" />
-			</Grid>
-		</GroupBox>
+            </Grid>
+        </GroupBox>
 
-		<!--  Tabs  -->
-		<TabControl
+        <!--  Tabs  -->
+        <TabControl
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             DockPanel.Dock="Left">
-			<TabItem x:Name="TabBattleSimulator" Header="Battle Simulator">
-				<ContentControl x:Name="BattleSimulator" />
-			</TabItem>
-			<TabItem Header="Farm Tracker">
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="Auto" />
-					</Grid.ColumnDefinitions>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="40" />
-					</Grid.RowDefinitions>
-					<CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TabItem x:Name="TabBattleSimulator" Header="Battle Simulator">
+                <ContentControl x:Name="BattleSimulator" />
+            </TabItem>
+            <TabItem x:Name="TabAttackPlanner" Header="Attack Planner" >
+                <ContentControl x:Name="AttackPlanner" />
+            </TabItem>
+            <TabItem Header="Farm Tracker">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-					<Label
+                    <Label
                         Grid.Row="0"
                         Grid.Column="1"
                         VerticalAlignment="Center"
                         Content="City Name" />
-					<Label
+                    <Label
                         Grid.Row="0"
                         Grid.Column="2"
                         VerticalAlignment="Center"
                         Content=" Timber Camp" />
-					<Label
+                    <Label
                         Grid.Row="0"
                         Grid.Column="3"
                         VerticalAlignment="Center"
                         Content="Clay Pit" />
-					<Label
+                    <Label
                         Grid.Row="0"
                         Grid.Column="4"
                         VerticalAlignment="Center"
                         Content="Iron Mine" />
-					<Label
+                    <Label
                         Grid.Row="0"
                         Grid.Column="5"
                         VerticalAlignment="Center"
                         Content="Warehouse" />
-					<DatePicker Grid.Row="0" Grid.Column="6" />
-					<Button
+                    <DatePicker Grid.Row="0" Grid.Column="6" />
+                    <Button
                         Grid.Row="0"
                         Grid.Column="7"
                         Height="20"
                         VerticalAlignment="Center"
                         Content="Reset" />
-				</Grid>
+                </Grid>
 
-			</TabItem>
-			<TabItem Header="Unit Calculator" />
-			<TabItem Header="Building Calculator" />
-			<TabItem Header="Loyalty Calculator" />
-		</TabControl>
-	</DockPanel>
+            </TabItem>
+            <TabItem Header="Unit Calculator" />
+            <TabItem Header="Building Calculator" />
+            <TabItem Header="Loyalty Calculator" />
+        </TabControl>
+    </DockPanel>
 </Window>

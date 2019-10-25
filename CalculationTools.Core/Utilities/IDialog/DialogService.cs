@@ -44,7 +44,15 @@ namespace CalculationTools.Core
 
                 if (e.DialogResult.HasValue)
                 {
-                    dialog.DialogResult = e.DialogResult;
+                    try
+                    {
+                        dialog.DialogResult = e.DialogResult;
+
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception);
+                    }
                 }
                 else
                 {

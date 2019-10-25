@@ -5,6 +5,9 @@
     <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Views\AttackPlannerView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\BattleSimulatorView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -31,6 +34,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Views\AttackPlannerView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\BattleSimulatorView.xaml">
       <SubType>Designer</SubType>
     </Page>
