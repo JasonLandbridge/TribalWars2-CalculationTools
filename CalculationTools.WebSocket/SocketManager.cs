@@ -50,7 +50,7 @@ namespace CalculationTools.WebSocket
                     (sender, args) =>
                     {
                         ConnectionLog = SocketClient.ConnectionLog;
-                        ConnectionLogUpdated.Invoke(this, EventArgs.Empty);
+                        ConnectionLogUpdated?.Invoke(this, EventArgs.Empty);
                     };
             }
 
@@ -69,7 +69,7 @@ namespace CalculationTools.WebSocket
         {
             if (useAccessToken)
             {
-                connectData.AccessToken = ConnectResult.AccessToken;
+                connectData.AccessToken = ConnectResult?.AccessToken;
             }
 
             GetSocketClient().SetupConnection(connectData);

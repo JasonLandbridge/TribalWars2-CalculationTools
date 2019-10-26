@@ -86,7 +86,7 @@ namespace CalculationTools.Data
             if (characterData == null) return;
 
             // TODO make conversion
-            CharacterData cData = new CharacterData(characterData);
+            CharacterData cData = characterData as CharacterData;
 
         }
 
