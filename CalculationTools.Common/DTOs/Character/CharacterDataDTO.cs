@@ -1,9 +1,8 @@
-﻿using CalculationTools.Common;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CalculationTools.WebSocket
+namespace CalculationTools.Common
 {
     public class CharacterDataDTO : ICharacterData
     {
@@ -60,8 +59,6 @@ namespace CalculationTools.WebSocket
         public IList<int> NewThreadIds { get; set; }
 
 
-        [JsonIgnore]
-        public IList<IVillage> Villages => VillagesDTO.ToList<IVillage>();
 
         [JsonProperty("villages")]
         public List<VillageDTO> VillagesDTO { get; set; }
@@ -82,5 +79,12 @@ namespace CalculationTools.WebSocket
 
         [JsonProperty("has_second_village")]
         public bool HasSecondVillage { get; set; }
+
+        [JsonIgnore]
+        public IList<IVillage> Villages
+        {
+            get => VillagesDTO.ToList<IVillage>();
+            set => VillagesDTO = new List<VillageDTO>((IEnumerable<VillageDTO>)value);
+        }
     }
 }

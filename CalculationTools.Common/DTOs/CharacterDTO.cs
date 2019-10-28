@@ -1,7 +1,6 @@
-﻿using CalculationTools.Common;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace CalculationTools.WebSocket
+namespace CalculationTools.Common
 {
     public class CharacterDTO : ICharacter
     {

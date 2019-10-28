@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Config.Net" Version="4.13.7" />
     <PackageReference Include="Fody" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>

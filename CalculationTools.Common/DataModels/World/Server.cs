@@ -1,4 +1,4 @@
-﻿namespace CalculationTools.Common.DataModels.World
+﻿namespace CalculationTools.Common
 {
     public class Server
     {

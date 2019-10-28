@@ -1,9 +1,6 @@
-﻿
+﻿using Newtonsoft.Json;
 
-using CalculationTools.Common;
-using Newtonsoft.Json;
-
-namespace CalculationTools.WebSocket
+namespace CalculationTools.Common
 {
     public class WorldDTO : IWorld
     {

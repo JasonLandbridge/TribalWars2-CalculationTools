@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
 
-namespace CalculationTools.WebSocket
+namespace CalculationTools.Common
 {
     public class SystemErrorDTO
     {

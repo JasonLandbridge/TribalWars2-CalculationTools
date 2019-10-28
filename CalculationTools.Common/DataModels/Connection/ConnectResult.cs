@@ -1,4 +1,4 @@
-﻿namespace CalculationTools.Common.Connection
+﻿namespace CalculationTools.Common
 {
     public class ConnectResult
     {

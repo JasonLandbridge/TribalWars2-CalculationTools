@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using CalculationTools.Common;
+﻿using CalculationTools.Common;
+using System.Collections.Generic;
 
 namespace CalculationTools.Data
 {
@@ -21,21 +21,13 @@ namespace CalculationTools.Data
         public IList<IReport> NewReportIds { get; }
         public int NewPosts { get; set; }
         public IList<int> NewThreadIds { get; set; }
-        public IList<IVillage> Villages { get; }
+        public IList<IVillage> Villages { get; set; }
         public int ChapelVillage { get; set; }
         public bool HasChapel { get; set; }
         public bool ChapelInQueue { get; set; }
         public IList<string> TribeRights { get; set; }
         public bool HasSecondVillage { get; set; }
 
-        public CharacterData()
-        {
 
-        }
-
-        public CharacterData(ICharacterData characterData)
-        {
-
-        }
     }
 }

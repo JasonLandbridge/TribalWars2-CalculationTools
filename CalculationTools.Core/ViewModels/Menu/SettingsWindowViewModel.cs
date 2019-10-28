@@ -1,12 +1,10 @@
 ﻿using CalculationTools.Common;
 using CalculationTools.Common.Data;
-using CalculationTools.Common.DataModels.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using CalculationTools.Common.Connection;
 
 namespace CalculationTools.Core
 {

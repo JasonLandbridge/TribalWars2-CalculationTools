@@ -1,4 +1,5 @@
-﻿using CalculationTools.Common;
+﻿using AutoMapper;
+using CalculationTools.Common;
 using CalculationTools.Common.Data;
 using CalculationTools.Data;
 using CalculationTools.WebSocket;
@@ -38,20 +39,10 @@ namespace CalculationTools.Core
             Container.Register<IDataManager, DataManager>(Lifestyle.Singleton);
             Container.Register<ISocketManager, SocketManager>(Lifestyle.Singleton);
 
+            // Injectable service
+            IMapper mapper = new Mapper(AutoMapperConfig.RegisterMappings());
+            Container.RegisterInstance(typeof(IMapper), mapper);
         }
-
-        public static BattleSimulatorViewModel GetBattleSimulatorViewModel()
-        {
-            return Container.GetInstance<BattleSimulatorViewModel>();
-        }
-
-        public static IDataManager GetDataManager()
-        {
-            return Container.GetInstance<IDataManager>();
-        }
-
-
-        public static SettingsWindowViewModel SettingsWindowViewModel => Container.GetInstance<SettingsWindowViewModel>();
 
         #endregion Methods
     }

@@ -1,5 +1,4 @@
-﻿using CalculationTools.Common.Connection;
-using System;
+﻿using System;
 using System.Text;
 using System.Threading.Tasks;
 

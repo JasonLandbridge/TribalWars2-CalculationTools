@@ -1,9 +1,8 @@
-﻿using CalculationTools.Common;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CalculationTools.WebSocket
+namespace CalculationTools.Common
 {
     public class LoginDataDTO : ILoginData
     {

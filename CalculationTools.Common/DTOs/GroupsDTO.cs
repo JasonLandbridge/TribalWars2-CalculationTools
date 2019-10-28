@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CalculationTools.WebSocket
+namespace CalculationTools.Common
 {
     public class GroupsDTO
     {

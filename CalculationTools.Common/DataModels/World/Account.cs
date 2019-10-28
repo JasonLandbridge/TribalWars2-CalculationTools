@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CalculationTools.Common.Data;
 
 namespace CalculationTools.Common
 {
@@ -23,6 +24,8 @@ namespace CalculationTools.Common
 
         public ConnectData ToConnectData()
         {
+
+
             return new ConnectData
             {
                 Username = Username,

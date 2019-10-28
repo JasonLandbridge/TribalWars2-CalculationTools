@@ -1,4 +1,5 @@
-﻿using CalculationTools.Common;
+﻿using AutoMapper;
+using CalculationTools.Common;
 using CalculationTools.Common.Data;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,13 @@ namespace CalculationTools.Data
 {
     public class PlayerData : BasePropertyChanged, IPlayerData
     {
+        private readonly IMapper _mapper;
+
         #region Constructors
 
-        public PlayerData()
+        public PlayerData(IMapper mapper)
         {
-
+            _mapper = mapper;
         }
 
         #endregion Constructors
@@ -86,7 +89,7 @@ namespace CalculationTools.Data
             if (characterData == null) return;
 
             // TODO make conversion
-            CharacterData cData = characterData as CharacterData;
+            CharacterData cData = _mapper.Map<CharacterData>(characterData);
 
         }
 

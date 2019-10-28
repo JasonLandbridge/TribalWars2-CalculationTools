@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CalculationTools.WebSocket
+namespace CalculationTools.Common
 {
     public class IncomingCommandDTO
     {

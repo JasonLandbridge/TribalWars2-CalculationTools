@@ -1,5 +1,4 @@
 ﻿using CalculationTools.Common;
-using CalculationTools.Common.Connection;
 using CalculationTools.Common.Data;
 using NLog;
 using System;

@@ -1,5 +1,4 @@
 ﻿using CalculationTools.Common;
-using CalculationTools.Common.Connection;
 using CalculationTools.Common.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -219,6 +218,7 @@ namespace CalculationTools.WebSocket
         }
 
         #endregion
+
         #region ParseMethods
         private async void ParseResponseAsync(IWebsocketClient client, string response)
         {
@@ -504,6 +504,7 @@ namespace CalculationTools.WebSocket
                 {
                     message = message.Substring(0, 2000);
                 }
+
                 ConnectionLog.Append(message + Environment.NewLine);
                 ConnectionLogUpdated.Invoke(this, EventArgs.Empty);
 
