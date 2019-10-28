@@ -198,10 +198,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Syncfusion.Shared.WPF">
-      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.3.0.14\precompiledassemblies\netcoreapp3.0\Syncfusion.Shared.WPF.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.3.0.9\precompiledassemblies\netcoreapp3.0\Syncfusion.Shared.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Tools.Wpf">
-      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.3.0.14\precompiledassemblies\netcoreapp3.0\Syncfusion.Tools.Wpf.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.3.0.9\precompiledassemblies\netcoreapp3.0\Syncfusion.Tools.Wpf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
