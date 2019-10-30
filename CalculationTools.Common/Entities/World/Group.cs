@@ -1,6 +1,6 @@
 ﻿using CalculationTools.Common.Data;
 
-namespace CalculationTools.Common
+namespace CalculationTools.Common.Entities.World
 {
     public class VillageGroup : IGroup
     {

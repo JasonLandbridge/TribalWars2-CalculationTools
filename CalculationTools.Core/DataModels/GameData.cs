@@ -1,4 +1,4 @@
-﻿using CalculationTools.Common;
+﻿using CalculationTools.Common.Entities.World;
 using NLog;
 using System;
 using System.Collections.Generic;

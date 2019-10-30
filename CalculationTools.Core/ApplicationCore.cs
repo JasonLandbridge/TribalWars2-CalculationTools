@@ -1,4 +1,6 @@
-﻿namespace CalculationTools.Core
+﻿using CalculationTools.Data;
+
+namespace CalculationTools.Core
 {
     /// <summary>
     /// The root class of the Application Core Domain
@@ -13,7 +15,7 @@
             // Continue adding the dependencies in the IoC container
             IoC.Setup();
 
-
+            DataAccessCore.OnStartUp();
         }
     }
 }

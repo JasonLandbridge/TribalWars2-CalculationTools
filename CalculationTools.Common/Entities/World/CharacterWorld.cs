@@ -1,4 +1,4 @@
-﻿namespace CalculationTools.Common
+﻿namespace CalculationTools.Common.Entities.World
 {
     /// <summary>
     /// In TW2 the world and character class is being used interchangeably.

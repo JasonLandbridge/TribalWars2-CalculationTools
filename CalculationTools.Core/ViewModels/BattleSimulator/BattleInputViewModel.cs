@@ -1,9 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using PropertyChanged;
 
 namespace CalculationTools.Core
 {
@@ -186,7 +184,15 @@ namespace CalculationTools.Core
         public int InputLuck { get; set; }
         public string InputLuckImagePath { get; } = "/Resources/Img/info/info_luck.png";
         public string InputLuckLabel { get; } = "Luck";
+
+        public decimal InputMoraleDecimal
+        {
+            get => InputMorale / 100m;
+            set => InputMorale = (int)Math.Round(value * 100m);
+        }
+
         public int InputMorale { get; set; }
+
         public string InputMoraleImagePath { get; } = "/Resources/Img/info/info_morale.png";
         public string InputMoraleLabel { get; } = "Morale";
         public bool InputNightBonus { get; set; }

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace CalculationTools.Common
+namespace CalculationTools.Common.Entities.World
 {
     public class Village : IVillage
     {

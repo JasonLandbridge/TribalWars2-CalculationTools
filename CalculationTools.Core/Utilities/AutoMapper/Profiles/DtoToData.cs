@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using AutoMapper;
+﻿using AutoMapper;
 using CalculationTools.Common;
+using CalculationTools.Common.Entities.World;
 using CalculationTools.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CalculationTools.Core
 {
@@ -13,7 +14,7 @@ namespace CalculationTools.Core
         {
 
             CreateMap<CharacterDataDTO, ICharacterData>().ReverseMap();
-            CreateMap<CharacterData, ICharacterData>().ReverseMap();
+            CreateMap<ICharacterData, CharacterData>();
 
             CreateMap<List<Village>, IList<IVillage>>().ReverseMap();
             CreateMap<List<VillageDTO>, IList<IVillage>>().ReverseMap();

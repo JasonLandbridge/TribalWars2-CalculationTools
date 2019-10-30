@@ -1,4 +1,4 @@
-﻿namespace CalculationTools.Common
+﻿namespace CalculationTools.Common.Entities.World
 {
     public class Server
     {
