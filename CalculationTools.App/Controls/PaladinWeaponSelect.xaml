@@ -11,28 +11,29 @@
     mc:Ignorable="d">
     <Grid>
         <StackPanel DataContext="{Binding ElementName=parent}" Orientation="Horizontal">
-            <syncfusion:ComboBoxAdv
-                x:Name="InputWeaponType"
-                Width="90"
-                Height="28"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                DisplayMemberPath="Name"
-                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                SelectedIndex="0"
-                SelectedItem="{Binding WeaponType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectionChanged="WeaponName_OnSelectionChanged" />
+           <ComboBox
+               x:Name="InputWeaponType"
+               Width="90"
+               Height="28"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               DisplayMemberPath="Name"
+               ScrollViewer.VerticalScrollBarVisibility="Disabled"
+               SelectedIndex="0"
+               SelectedItem="{Binding WeaponType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+               SelectionChanged="WeaponName_OnSelectionChanged" />
 
-            <syncfusion:ComboBoxAdv
-                x:Name="InputWeaponLevel"
-                Width="35"
-                Height="28"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                SelectedIndex="0"
-                SelectedValue="{Binding WeaponLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectionChanged="WeaponLevel_OnSelectionChanged" />
+           <ComboBox
+               x:Name="InputWeaponLevel"
+               Width="35"
+               Height="28"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               ScrollViewer.VerticalScrollBarVisibility="Disabled"
+               SelectedIndex="0"
+               SelectedValue="{Binding WeaponLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+               SelectionChanged="WeaponLevel_OnSelectionChanged"  />
+
         </StackPanel>
     </Grid>
 </UserControl>

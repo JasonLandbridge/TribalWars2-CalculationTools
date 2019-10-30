@@ -166,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.5.7" />
-    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.5.71" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="3.6.0" />
     <PackageReference Include="Fody" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -195,14 +195,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CalculationTools.Core\CalculationTools.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Syncfusion.Shared.WPF">
-      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.3.0.9\precompiledassemblies\netcoreapp3.0\Syncfusion.Shared.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.Tools.Wpf">
-      <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\17.3.0.9\precompiledassemblies\netcoreapp3.0\Syncfusion.Tools.Wpf.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Controls\PaladinWeaponSelect.xaml.cs">

@@ -4,10 +4,8 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:app="clr-namespace:CalculationTools.App"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:sync="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
-	xmlns:sync1="http://schemas.syncfusion.com/wpf"
+	xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
@@ -71,25 +69,24 @@
 									<Grid.RowDefinitions>
 										<RowDefinition Height="30" />
 									</Grid.RowDefinitions>
-									<sync:UpDown
+
+									<xctk:IntegerUpDown 
 										Grid.Row="0"
 										Grid.Column="0"
 										Width="120"
 										Margin="5,2.5"
-										MaxValue="99999"
-										MinValue="0"
-										NumberDecimalDigits="0"
-										Step="1"
+										Maximum="99999"
+										Minimum="0"
+										Increment="1"
 										Value="{Binding NumberOnAttack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-									<sync:UpDown
+									<xctk:IntegerUpDown 
 										Grid.Row="0"
 										Grid.Column="1"
 										Width="120"
 										Margin="5,2.5"
-										MaxValue="99999"
-										MinValue="0"
-										NumberDecimalDigits="0"
-										Step="1"
+										Maximum="99999"
+										Minimum="0"
+										Increment="1"
 										Value="{Binding NumberOnDefense, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 								</Grid>
 							</DataTemplate>
@@ -162,7 +159,7 @@
 						Margin="0,0,0,5"
 						ImagePath="{Binding InputChurchImagePath}" />
 
-					<sync1:ComboBoxAdv
+					<ComboBox
 						x:Name="InputComboChurchAtk"
 						Grid.Row="0"
 						Grid.Column="1"
@@ -176,7 +173,7 @@
 						SelectedValue="{Binding InputAtkChurch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						SelectionChanged="InputComboChurchAtk_OnSelectionChanged" />
 
-					<sync1:ComboBoxAdv
+					<ComboBox
 						x:Name="InputComboChurchDef"
 						Grid.Row="0"
 						Grid.Column="2"
@@ -189,6 +186,7 @@
 						SelectedIndex="1"
 						SelectedValue="{Binding InputDefChurch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						SelectionChanged="InputComboChurchDef_OnSelectionChanged" />
+
 					<!--  Wall input rows  -->
 					<app:InputRowHeader
 						x:Name="InputWallHeader"
@@ -198,15 +196,14 @@
 						Margin="0,0,0,5"
 						ImagePath="{Binding InputWallImagePath}" />
 
-					<sync:UpDown
+					<xctk:IntegerUpDown 
 						Grid.Row="1"
 						Grid.Column="2"
 						Width="120"
 						Margin="5,5"
-						MaxValue="20"
-						MinValue="0"
-						NumberDecimalDigits="0"
-						Step="1"
+						Maximum="20"
+						Minimum="0"
+						Increment="1"
 						Value="{Binding InputWall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 				</Grid>
 			</GroupBox>
@@ -235,19 +232,17 @@
 						Margin="0,0,0,5"
 						ImagePath="{Binding InputMoraleImagePath}" />
 
-					<sync:PercentTextBox
+					<xctk:IntegerUpDown
 						Grid.Row="0"
 						Grid.Column="1"
 						Width="120"
 						Margin="5,5"
 						HorizontalAlignment="Center"
 						HorizontalContentAlignment="Center"
-						MaxValue="100"
-						MinValue="1"
-						PercentDecimalDigits="0"
-						PercentValue="{Binding InputMorale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-						PercentageSymbol="%"
-						TextSelectionOnFocus="True" />
+						FormatString="P0"
+						Maximum="100"
+						Minimum="1"
+						Value="{Binding InputMorale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 					<!--  Luck input rows  -->
 
@@ -259,15 +254,14 @@
 						Margin="0,0,0,5"
 						ImagePath="{Binding InputLuckImagePath}" />
 
-					<sync:UpDown
+					<xctk:IntegerUpDown 
 						Grid.Row="1"
 						Grid.Column="1"
 						Width="120"
 						Margin="5,5"
-						MaxValue="15"
-						MinValue="-15"
-						NumberDecimalDigits="0"
-						Step="1"
+						Maximum="15"
+						Minimum="-15"
+						Increment="1"
 						Value="{Binding InputLuck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 					<!--  Weapon Mastery input rows  -->
@@ -280,15 +274,14 @@
 						Margin="0,0,0,5"
 						ImagePath="{Binding InputWeaponMasteryImagePath}" />
 
-					<sync:UpDown
+					<xctk:IntegerUpDown 
 						Grid.Row="2"
 						Grid.Column="1"
 						Width="120"
 						Margin="5,5"
-						MaxValue="5"
-						MinValue="0"
-						NumberDecimalDigits="0"
-						Step="1"
+						Maximum="5"
+						Minimum="0"
+						Increment="1"
 						Value="{Binding InputWeaponMastery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 					<!--  Nightbonus input rows  -->
@@ -308,10 +301,7 @@
 				</Grid>
 			</GroupBox>
 
-
 		</StackPanel>
 	</ScrollViewer>
-
-
 
 </UserControl>
