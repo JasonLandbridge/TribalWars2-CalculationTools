@@ -21,7 +21,7 @@ namespace CalculationTools.Data
         public IList<IReport> NewReportIds { get; }
         public int NewPosts { get; set; }
         public IList<int> NewThreadIds { get; set; }
-        public IList<IVillage> Villages { get; set; }
+        public List<IVillage> Villages { get; set; }
         public int ChapelVillage { get; set; }
         public bool HasChapel { get; set; }
         public bool ChapelInQueue { get; set; }

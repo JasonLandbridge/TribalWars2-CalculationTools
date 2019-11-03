@@ -5,6 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CalculationToolsDB.db" />
+    <None Remove="CalculationToolsDB.db-shm" />
+    <None Remove="CalculationToolsDB.db-wal" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="CalculationToolsDB.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Config.Net" Version="4.13.7" />
     <PackageReference Include="Fody" Version="6.0.2">

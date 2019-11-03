@@ -6,10 +6,12 @@ namespace CalculationTools.Data
     {
         public static void OnStartUp()
         {
-            using (DatabaseContext dbContext = new DatabaseContext())
-            {
-                dbContext.Database.Migrate();
-            }
+            //using (CalculationToolsDBContext calculationToolsDbContext = new CalculationToolsDBContext())
+            //{
+            //    calculationToolsDbContext.Database.Migrate();
+            //}
+
+
         }
     }
 }
