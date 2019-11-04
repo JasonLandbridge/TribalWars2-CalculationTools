@@ -13,7 +13,7 @@ namespace CalculationTools.Common.Entities.World
         public string DefaultWorld { get; set; } = string.Empty;
 
         public List<CharacterWorld> WorldList { get; set; } = new List<CharacterWorld>();
-
+        public CharacterWorld SelectedWorld { get; set; }
         /// <summary>
         /// Is this account to be confirmed working.
         /// </summary>
@@ -29,7 +29,8 @@ namespace CalculationTools.Common.Entities.World
             {
                 Username = Username,
                 Password = Password,
-                ServerCountryCode = ServerCountryCode
+                ServerCountryCode = ServerCountryCode,
+                WorldID = SelectedWorld?.WorldId
             };
         }
     }

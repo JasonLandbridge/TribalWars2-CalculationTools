@@ -1,11 +1,10 @@
 ﻿using CalculationTools.Common;
-using CalculationTools.Common.Data;
+using CalculationTools.Common.Entities.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using CalculationTools.Common.Entities.World;
 
 namespace CalculationTools.Core
 {
@@ -37,7 +36,7 @@ namespace CalculationTools.Core
                 WorldList = _playerData.CharacterWorlds;
                 if (WorldList != null && WorldList.Count > 0)
                 {
-                    DefaultWorld = WorldList[0].WorldId;
+                    SelectedWorld = WorldList[0].WorldId;
                 }
             };
 
@@ -81,7 +80,7 @@ namespace CalculationTools.Core
             set => SelectedAccount.Username = value;
         }
 
-        public string DefaultWorld
+        public string SelectedWorld
         {
             get => SelectedAccount?.DefaultWorld;
             set => SelectedAccount.DefaultWorld = value;
@@ -90,12 +89,7 @@ namespace CalculationTools.Core
         public List<CharacterWorld> WorldList
         {
             get => SelectedAccount?.WorldList;
-            set
-            {
-
-                SelectedAccount.WorldList = value;
-
-            }
+            set => SelectedAccount.WorldList = value;
         }
 
         #endregion
@@ -124,6 +118,7 @@ namespace CalculationTools.Core
 
         public void OnDialogOpen()
         {
+            // Retrieve list of stored accounts from the settings file. 
             Accounts = _settings.GetAccounts();
 
             if (Accounts.Count > 0)
@@ -148,6 +143,7 @@ namespace CalculationTools.Core
                 Password = Password,
                 ServerCountryCode = ServerCountryCode
             };
+
             ConnectResult result = new ConnectResult();
             try
             {

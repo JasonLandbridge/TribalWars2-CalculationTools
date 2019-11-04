@@ -9,6 +9,7 @@ namespace CalculationTools.Common
         public string Password { get; set; } = string.Empty;
 
         public string ServerCountryCode { get; set; } = string.Empty;
+        public string WorldID { get; set; } = string.Empty;
 
         public Uri Uri => new Uri($"wss://{ServerCountryCode}.tribalwars2.com/socket.io/?platform=desktop&EIO=3&transport=websocket");
 

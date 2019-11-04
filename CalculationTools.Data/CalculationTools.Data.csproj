@@ -5,14 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="CalculationToolsDB.db" />
     <None Remove="CalculationToolsDB.db-shm" />
     <None Remove="CalculationToolsDB.db-wal" />
+    <None Remove="CalculationToolsDB.sqlite" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="CalculationToolsDB.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="CalculationToolsDB.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

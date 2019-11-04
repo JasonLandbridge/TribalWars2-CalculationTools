@@ -1,5 +1,4 @@
 ﻿using CalculationTools.Common;
-using CalculationTools.Common.Data;
 using Newtonsoft.Json;
 using nucs.JsonSettings;
 using System.Collections.Generic;

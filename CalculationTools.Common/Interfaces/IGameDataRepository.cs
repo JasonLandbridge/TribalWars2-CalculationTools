@@ -2,7 +2,7 @@
 
 namespace CalculationTools.Common
 {
-    public interface ICalculationToolsDataStore
+    public interface IGameDataRepository
     {
         void UpdateVillages(List<IVillage> villages);
     }

@@ -1,4 +1,5 @@
-﻿using CalculationTools.Common.Entities.World;
+﻿using System;
+using CalculationTools.Common.Entities.World;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalculationTools.Data
@@ -7,9 +8,15 @@ namespace CalculationTools.Data
     {
         public DbSet<Village> Villages { get; set; }
 
+        public CalculationToolsDBContext()
+        {
 
-        public CalculationToolsDBContext(DbContextOptions options) : base(options) { }
+        }
 
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            string connectionString = $"Data Source={AppDomain.CurrentDomain.BaseDirectory}CalculationToolsDB.sqlite";
+            optionsBuilder.UseSqlite(connectionString);
+        }
     }
 }

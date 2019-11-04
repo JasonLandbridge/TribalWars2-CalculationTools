@@ -1,5 +1,4 @@
 ﻿using CalculationTools.Common;
-using CalculationTools.Common.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -268,7 +267,7 @@ namespace CalculationTools.WebSocket
 
                 case RouteProvider.LOGIN_SUCCESS:
                     var loginDto = ParseLoginSuccess(response);
-                    SendMessageAsync(RouteProvider.SelectCharacter(loginDto));
+                    SendMessageAsync(RouteProvider.SelectCharacter(loginDto, ConnectData));
                     break;
 
                 case RouteProvider.CHARACTER_SELECTED:

@@ -1,4 +1,5 @@
-﻿using CalculationTools.Common.Data;
+﻿
+using CalculationTools.Common;
 
 namespace CalculationTools.Core
 {

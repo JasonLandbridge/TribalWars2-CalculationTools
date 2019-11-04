@@ -2,10 +2,10 @@
 using CalculationTools.App.Views;
 using CalculationTools.Core;
 using SimpleInjector;
+using SimpleInjector.Lifestyles;
 using System;
 using System.Diagnostics;
 using System.Windows;
-using SimpleInjector.Lifestyles;
 
 namespace CalculationTools.App
 {
@@ -55,22 +55,22 @@ namespace CalculationTools.App
             dialogService.Register<SettingsWindowViewModel, SettingsWindow>();
 
             IoC.Container.Options.DefaultScopedLifestyle = new ThreadScopedLifestyle();
-            IoC.Container.Options.AllowOverridingRegistrations = true;
+
             // Register dependencies
             IoC.Container.Register<IDialogService>(() => dialogService, Lifestyle.Singleton);
 
             IoC.Container.Register<ApplicationViewModel>(Lifestyle.Singleton);
 
-            IoC.Container.Register<MainWindow>(Lifestyle.Singleton);
+            IoC.Container.Register<MainWindow>();
             IoC.Container.Register<MainWindowViewModel>(Lifestyle.Singleton);
 
-            IoC.Container.Register<SettingsWindow>(Lifestyle.Scoped);
+            IoC.Container.Register<SettingsWindow>(Lifestyle.Transient);
             IoC.Container.Register<SettingsWindowViewModel>(Lifestyle.Singleton);
 
-            IoC.Container.Register<UnitImportWidow>(Lifestyle.Scoped);
+            IoC.Container.Register<UnitImportWidow>(Lifestyle.Transient);
             IoC.Container.Register<UnitImportWindowViewModel>(Lifestyle.Singleton);
 
-            IoC.Container.Register<ConnectionWindow>(Lifestyle.Scoped);
+            IoC.Container.Register<ConnectionWindow>(Lifestyle.Transient);
             IoC.Container.Register<ConnectionWindowViewModel>(Lifestyle.Singleton);
 
             IoC.Container.Register<BattleSimulatorView>(Lifestyle.Singleton);

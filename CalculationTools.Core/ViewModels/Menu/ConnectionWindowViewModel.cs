@@ -1,5 +1,4 @@
 ﻿using CalculationTools.Common;
-using CalculationTools.Common.Data;
 using CalculationTools.Common.Entities.World;
 using System;
 using System.Collections.Generic;
@@ -44,7 +43,8 @@ namespace CalculationTools.Core
             {
                 IsConnecting = true;
                 _socketManager.ConnectionLogUpdated += UpdateConnectionLog;
-                await _socketManager.StartConnection(SelectedAccount.ToConnectData());
+                var connectData = SelectedAccount.ToConnectData();
+                await _socketManager.StartConnection(connectData);
             }
         }
 
@@ -76,21 +76,7 @@ namespace CalculationTools.Core
         #region Events
 
         public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
-        public void OnDialogOpen()
-        {
-            Accounts = _settings.GetAccounts(true);
 
-            if (Accounts.Count > 0)
-            {
-                SelectedAccount = Accounts.Last();
-
-                SelectedAccount.PropertyChanged += (sender, args) =>
-                {
-                    _settings.SetAccount(SelectedAccount);
-                };
-            }
-
-        }
 
         #endregion Events
 
@@ -105,6 +91,16 @@ namespace CalculationTools.Core
         public List<Account> Accounts { get; set; } = new List<Account>();
         public Account SelectedAccount { get; set; } = new Account();
 
+        public List<CharacterWorld> WorldList
+        {
+            get => SelectedAccount?.WorldList;
+            set => SelectedAccount.WorldList = value;
+        }
+        public CharacterWorld SelectedWorld
+        {
+            get => SelectedAccount?.SelectedWorld;
+            set => SelectedAccount.SelectedWorld = value;
+        }
         public string ConnectionLog { get; set; }
 
         #region Commands
@@ -134,7 +130,21 @@ namespace CalculationTools.Core
         #endregion Properties
 
         #region Methods
+        public void OnDialogOpen()
+        {
+            Accounts = _settings.GetAccounts(true);
 
+            if (Accounts.Count > 0)
+            {
+                SelectedAccount = Accounts.Last();
+
+                SelectedAccount.PropertyChanged += (sender, args) =>
+                {
+                    _settings.SetAccount(SelectedAccount);
+                };
+            }
+
+        }
         #endregion Methods
 
     }

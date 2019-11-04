@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CalculationTools.Common;
-using CalculationTools.Common.Data;
 using CalculationTools.Data;
 using CalculationTools.WebSocket;
 using Microsoft.EntityFrameworkCore;
@@ -33,16 +32,15 @@ namespace CalculationTools.Core
             Container.Register<IDataManager, DataManager>(Lifestyle.Singleton);
             Container.Register<ISocketManager, SocketManager>(Lifestyle.Singleton);
 
+            Container.Register<IGameDataRepository, GameDataRepository>(Lifestyle.Singleton);
+            Container.Register<CalculationToolsDBContext>(Lifestyle.Scoped);
+
+
             // Injectable service
             IMapper mapper = new Mapper(AutoMapperConfig.RegisterMappings());
             Container.RegisterInstance(typeof(IMapper), mapper);
 
-            SetupDatabaseDI();
-
-            // Container.Register<CalculationToolsDBContext>(Lifestyle.Scoped);
-
-            //Container.Register(() => new LazyDBContextProvider(() => new CalculationToolsDBContext()), Lifestyle.Scoped);
-            //Container.Register<ICalculationToolsDataStore, CalculationToolsDataStore>(Lifestyle.Singleton);
+            // SetupDatabaseDI();
         }
 
         public static void SetupDatabaseDI()
@@ -60,12 +58,6 @@ namespace CalculationTools.Core
 
             // Ensures framework components are cross wired.
             provider.UseSimpleInjector(Container);
-
-            // Register the database context
-            Container.Register<ICalculationToolsDataStore, CalculationToolsDataStore>(Lifestyle.Scoped);
-            Container.Register<CalculationToolsDBContext>(Lifestyle.Scoped);
-
-            Container.Register<IServiceScopeFactory>(Lifestyle.Scoped);
         }
 
         #endregion Methods

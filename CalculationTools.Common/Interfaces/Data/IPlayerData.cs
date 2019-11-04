@@ -1,8 +1,8 @@
-﻿using System;
+﻿using CalculationTools.Common.Entities.World;
+using System;
 using System.Collections.Generic;
-using CalculationTools.Common.Entities.World;
 
-namespace CalculationTools.Common.Data
+namespace CalculationTools.Common
 {
     public interface IPlayerData
     {

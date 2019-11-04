@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using CalculationTools.Common.Entities.World;
+﻿using CalculationTools.Common.Entities.World;
+using System.Collections.Generic;
 
-namespace CalculationTools.Common.Data
+namespace CalculationTools.Common
 {
     public interface ISettings
     {
