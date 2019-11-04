@@ -1,5 +1,4 @@
-﻿using CalculationTools.Common.Data;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace CalculationTools.Common
 {

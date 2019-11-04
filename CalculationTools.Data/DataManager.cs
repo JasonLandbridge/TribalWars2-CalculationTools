@@ -1,9 +1,9 @@
-﻿using CalculationTools.Common.Data;
-using nucs.JsonSettings;
+﻿using nucs.JsonSettings;
 using nucs.JsonSettings.Autosave;
 using System;
 using System.Diagnostics;
 using System.IO;
+using CalculationTools.Common;
 
 namespace CalculationTools.Data
 {

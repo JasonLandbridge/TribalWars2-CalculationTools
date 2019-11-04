@@ -131,8 +131,16 @@ namespace CalculationTools.WebSocket
             };
             return AddMsg(JsonConvert.SerializeObject(jsonObject));
         }
-        public static string SelectCharacter(LoginDataDTO loginDto)
+        public static string SelectCharacter(LoginDataDTO loginDto, ConnectData connectData = null)
         {
+            // Use default world
+            string worldId = loginDto.Characters[0].WorldId;
+
+            if (connectData != null)
+            {
+                worldId = connectData.WorldID;
+            }
+
             var jsonObject = new
             {
                 id = Id,
@@ -140,7 +148,7 @@ namespace CalculationTools.WebSocket
                 data = new
                 {
                     id = loginDto.PlayerId,
-                    world_id = loginDto.Characters[0].WorldId
+                    world_id = worldId
                 },
                 headers = MsgHeader
 

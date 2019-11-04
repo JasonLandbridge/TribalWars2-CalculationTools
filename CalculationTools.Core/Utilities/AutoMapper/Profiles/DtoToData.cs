@@ -21,6 +21,7 @@ namespace CalculationTools.Core
 
             CreateMap<VillageDTO, IVillage>().ReverseMap();
             CreateMap<Village, IVillage>().ReverseMap();
+            CreateMap<Village, VillageDTO>().ReverseMap();
 
 
         }

@@ -20,7 +20,7 @@ namespace CalculationTools.Common
         IList<IReport> NewReportIds { get; }
         int NewPosts { get; set; }
         IList<int> NewThreadIds { get; set; }
-        IList<IVillage> Villages { get; set; }
+        List<IVillage> Villages { get; set; }
         int ChapelVillage { get; set; }
         bool HasChapel { get; set; }
         bool ChapelInQueue { get; set; }

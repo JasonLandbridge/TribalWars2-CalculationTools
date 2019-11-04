@@ -14,17 +14,22 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Margin="5" Content="Choose an account to connect with:" />
+            <Label
+                Height="25"
+                Margin="5"
+                Content="Choose an account to connect with:" />
             <ComboBox
                 Grid.Column="1"
-                Width="300"
+                Width="175"
+                Height="25"
                 Margin="5"
                 HorizontalAlignment="Left"
                 IsEnabled="{Binding IsAccountSelectionEnabled}"
@@ -38,15 +43,33 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-
-            <Button
+            <!--  Selected world list  -->
+            <ComboBox
                 Grid.Column="2"
+                Width="100"
+                Height="25"
+                Margin="10"
+                HorizontalAlignment="Left"
+                ItemsSource="{Binding WorldList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedWorld}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel IsEnabled="{Binding AllowLogin}" Orientation="Horizontal">
+                            <TextBlock Text="{Binding FullWorldName}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <!--  Disconnect button  -->
+            <Button
+                Grid.Column="3"
                 Width="100"
                 Margin="5"
                 Command="{Binding DisconnectCommand}"
                 Content="Disconnect" />
+            <!--  Connect button  -->
             <Button
-                Grid.Column="3"
+                Grid.Column="4"
                 Width="100"
                 Margin="5"
                 Command="{Binding ConnectCommand}"
@@ -55,10 +78,10 @@
         <Label Margin="5" Content="The connection log will be displayed here: " />
         <TextBox
             Height="300"
+            Margin="5"
             AcceptsReturn="True"
             FontFamily="Courier New"
             FontSize="14"
-            Margin="5"
             HorizontalScrollBarVisibility="Auto"
             IsReadOnly="True"
             Text="{Binding ConnectionLog, Mode=OneWay}"

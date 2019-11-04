@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CalculationTools.Common;
-using CalculationTools.Common.Data;
 using CalculationTools.Common.Entities.World;
 using System;
 using System.Collections.Generic;
@@ -11,12 +10,14 @@ namespace CalculationTools.Data
     public class PlayerData : BasePropertyChanged, IPlayerData
     {
         private readonly IMapper _mapper;
+        private readonly IGameDataRepository _gameDataRepository;
 
         #region Constructors
 
-        public PlayerData(IMapper mapper)
+        public PlayerData(IMapper mapper, IGameDataRepository gameDataRepository)
         {
             _mapper = mapper;
+            _gameDataRepository = gameDataRepository;
         }
 
         #endregion Constructors
@@ -91,6 +92,9 @@ namespace CalculationTools.Data
 
             // TODO make conversion
             CharacterData cData = _mapper.Map<CharacterData>(characterData);
+
+            _gameDataRepository.UpdateVillages(characterData.Villages);
+
 
         }
 

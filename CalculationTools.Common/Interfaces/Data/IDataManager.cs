@@ -1,4 +1,4 @@
-﻿namespace CalculationTools.Common.Data
+﻿namespace CalculationTools.Common
 {
     public interface IDataManager
     {

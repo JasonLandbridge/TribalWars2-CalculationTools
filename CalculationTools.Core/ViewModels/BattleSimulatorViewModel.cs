@@ -1,7 +1,7 @@
-﻿using CalculationTools.Common.Data;
-using CalculationTools.Core.Extensions;
+﻿using CalculationTools.Core.Extensions;
 using System.Windows.Input;
 using System.Windows.Media;
+using CalculationTools.Common;
 
 namespace CalculationTools.Core
 {

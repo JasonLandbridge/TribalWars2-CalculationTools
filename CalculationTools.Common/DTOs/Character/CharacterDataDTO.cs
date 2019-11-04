@@ -81,7 +81,7 @@ namespace CalculationTools.Common
         public bool HasSecondVillage { get; set; }
 
         [JsonIgnore]
-        public IList<IVillage> Villages
+        public List<IVillage> Villages
         {
             get => VillagesDTO.ToList<IVillage>();
             set => VillagesDTO = new List<VillageDTO>((IEnumerable<VillageDTO>)value);
