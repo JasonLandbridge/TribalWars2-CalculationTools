@@ -1,5 +1,4 @@
-﻿using CalculationTools.Common.Entities.World;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace CalculationTools.Common

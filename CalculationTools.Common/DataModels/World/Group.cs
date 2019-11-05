@@ -1,4 +1,4 @@
-﻿namespace CalculationTools.Common.Entities.World
+﻿namespace CalculationTools.Common
 {
     public class VillageGroup : IGroup
     {

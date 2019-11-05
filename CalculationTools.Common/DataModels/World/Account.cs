@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CalculationTools.Common.Entities.World
+namespace CalculationTools.Common
 {
     public class Account : BasePropertyChanged
     {

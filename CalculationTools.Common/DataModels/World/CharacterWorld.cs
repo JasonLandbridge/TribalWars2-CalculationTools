@@ -1,4 +1,4 @@
-﻿namespace CalculationTools.Common.Entities.World
+﻿namespace CalculationTools.Common
 {
     /// <summary>
     /// In TW2 the world and character class is being used interchangeably.
@@ -9,7 +9,7 @@
         #region Fields
 
         private string _characterWorldName = string.Empty;
-        private string _characterWorldID = string.Empty;
+        private string _characterWorldWorldCode = string.Empty;
 
         #endregion
 
@@ -21,19 +21,19 @@
 
         public CharacterWorld(IWorld world)
         {
-            Id = world.Id;
+            // WorldCode = world.Id;
             Name = world.Name;
             Full = world.Full;
         }
 
         public CharacterWorld(ICharacter character)
         {
+            WorldCode = character.WorldId;
             CharacterId = character.CharacterId;
             CharacterName = character.CharacterName;
             CharacterOwnerId = character.CharacterOwnerId;
             CharacterOwnerName = character.CharacterOwnerName;
             AllowLogin = character.AllowLogin;
-            WorldId = character.WorldId;
             WorldName = character.WorldName;
         }
 
@@ -55,7 +55,7 @@
 
         #region IWorld Properties
 
-        public string Id { get => _characterWorldID; set => _characterWorldID = value; }
+        public string WorldCode { get => _characterWorldWorldCode; set => _characterWorldWorldCode = value; }
 
         public string Name { get => _characterWorldName; set => _characterWorldName = value; }
         public bool Full { get; set; }
@@ -65,11 +65,10 @@
         #region ICharacter Properties
         public int CharacterId { get; set; }
         public string CharacterName { get; set; }
+        public string WorldId { get; set; }
         public int CharacterOwnerId { get; set; }
         public string CharacterOwnerName { get; set; }
         public bool AllowLogin { get; set; }
-
-        public string WorldId { get => _characterWorldID; set => _characterWorldID = value; }
 
         public string WorldName { get => _characterWorldName; set => _characterWorldName = value; }
 

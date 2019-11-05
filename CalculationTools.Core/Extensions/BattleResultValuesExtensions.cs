@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Media;
 
-namespace CalculationTools.Core.Extensions
+namespace CalculationTools.Core
 {
     public static class BattleResultValuesExtensions
     {

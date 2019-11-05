@@ -1,6 +1,7 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
 
-namespace CalculationTools.Common.Entities.World
+namespace CalculationTools.Common
 {
     public class Village : IVillage
     {
@@ -9,6 +10,7 @@ namespace CalculationTools.Common.Entities.World
         public int X { get; set; }
         public int Y { get; set; }
 
+        [NotMapped]
         public Point Position => new Point(X, Y);
     }
 }

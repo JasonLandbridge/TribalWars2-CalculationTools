@@ -5,7 +5,7 @@ namespace CalculationTools.Common
     public class WorldDTO : IWorld
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string WorldCode { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

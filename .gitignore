@@ -14,3 +14,5 @@ CalculationTools.Tests/WebSocketTests.cs
 CalculationTools.Tests/
 
 Builds/
+
+CalculationTools.Data/CalculationToolsDB.db

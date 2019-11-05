@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CalculationTools.Common;
-using CalculationTools.Common.Entities.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +33,8 @@ namespace CalculationTools.Data
         {
             get
             {
-                List<CharacterWorld> worldList =
-                    Characters.Select(character => new CharacterWorld(character)).ToList();
-                return worldList;
+                //TODO retrieve from database
+                return new List<CharacterWorld>();
             }
         }
 
@@ -46,9 +44,6 @@ namespace CalculationTools.Data
         public string Name { get; set; }
         public int PlayerId { get; set; }
         public List<VillageGroup> VillageGroups { get; set; } = new List<VillageGroup>();
-
-        private List<ICharacter> Characters { get; set; }
-        private List<IWorld> Worlds { get; set; }
 
         #endregion Properties
 
@@ -74,11 +69,9 @@ namespace CalculationTools.Data
 
             Name = loginData.Name;
             PlayerId = loginData.PlayerId;
-            // Convert from IList<IWorld> to List<World>
 
-            Worlds = loginData.Worlds?.ToList();
-            Characters = loginData.Characters?.ToList();
-
+            _gameDataRepository.UpdateWorlds(loginData.Worlds?.ToList());
+            _gameDataRepository.UpdateWorlds(loginData.Characters?.ToList());
 
             LastUpdatedLoginData = DateTime.Now;
 

@@ -5,5 +5,7 @@ namespace CalculationTools.Common
     public interface IGameDataRepository
     {
         void UpdateVillages(List<IVillage> villages);
+        void UpdateWorlds(List<IWorld> worlds);
+        void UpdateWorlds(List<ICharacter> characters);
     }
 }

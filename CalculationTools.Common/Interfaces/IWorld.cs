@@ -2,7 +2,7 @@
 {
     public interface IWorld
     {
-        string Id { get; set; }
+        string WorldCode { get; set; }
         string Name { get; set; }
         bool Full { get; set; }
     }

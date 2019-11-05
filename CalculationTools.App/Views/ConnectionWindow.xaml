@@ -79,6 +79,8 @@
         <TextBox
             Height="300"
             Margin="5"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
             AcceptsReturn="True"
             FontFamily="Courier New"
             FontSize="14"

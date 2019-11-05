@@ -5,13 +5,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="CalculationToolsDB.db-shm" />
-    <None Remove="CalculationToolsDB.db-wal" />
-    <None Remove="CalculationToolsDB.sqlite" />
+    <Compile Remove="Migrations\20191104193650_AddedServerAndWorldEntities.cs" />
+    <Compile Remove="Migrations\20191104193650_AddedServerAndWorldEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191105134123_AddedCharacterTable.cs" />
+    <Compile Remove="Migrations\20191105134123_AddedCharacterTable.Designer.cs" />
+    <Compile Remove="Migrations\20191105135521_AddedCharacterServerAndWorldTables.cs" />
+    <Compile Remove="Migrations\20191105135521_AddedCharacterServerAndWorldTables.Designer.cs" />
+    <Compile Remove="Migrations\20191105142030_AddedCharacterServerAndWorldTables.cs" />
+    <Compile Remove="Migrations\20191105142030_AddedCharacterServerAndWorldTables.Designer.cs" />
+    <Compile Remove="Migrations\20191105205454_UpdatedRelationshipsServerWorldAndCharacter.cs" />
+    <Compile Remove="Migrations\20191105205454_UpdatedRelationshipsServerWorldAndCharacter.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="CalculationToolsDB.sqlite">
+    <None Remove="CalculationToolsDB.db" />
+    <None Remove="CalculationToolsDB.db-shm" />
+    <None Remove="CalculationToolsDB.db-wal" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="CalculationToolsDB.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

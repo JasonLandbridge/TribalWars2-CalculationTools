@@ -1,5 +1,4 @@
 ﻿using CalculationTools.Common;
-using CalculationTools.Common.Entities.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -137,7 +136,7 @@ namespace CalculationTools.Core
             if (Accounts.Count > 0)
             {
                 SelectedAccount = Accounts.Last();
-
+                SelectedWorld = SelectedAccount.SelectedWorld;
                 SelectedAccount.PropertyChanged += (sender, args) =>
                 {
                     _settings.SetAccount(SelectedAccount);

@@ -1,5 +1,4 @@
-﻿using CalculationTools.Core.Extensions;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using System.Windows.Media;
 using CalculationTools.Common;
 
