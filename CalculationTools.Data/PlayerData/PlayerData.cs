@@ -43,15 +43,11 @@ namespace CalculationTools.Data
         public DateTime LastUpdatedLoginData { get; set; }
         public string Name { get; set; }
         public int PlayerId { get; set; }
+        public int CharacterId { get; set; }
 
         #endregion Properties
 
         #region Methods
-
-        public void SetGroups(IList<IGroup> groupList)
-        {
-            _gameDataRepository.UpdateGroups(groupList.ToList());
-        }
 
         public void SetLoginData(ILoginData loginData)
         {
@@ -69,6 +65,11 @@ namespace CalculationTools.Data
 
         }
 
+        public void SetActiveCharacterId(int characterId)
+        {
+            CharacterId = characterId;
+        }
+
         public void SetCharacterData(ICharacterData characterData)
         {
             if (characterData == null) return;
@@ -76,11 +77,20 @@ namespace CalculationTools.Data
             // TODO make conversion
             CharacterData cData = _mapper.Map<CharacterData>(characterData);
 
-            _gameDataRepository.UpdateVillages(characterData.Villages);
+            // Add the owning characterId of this village
+            foreach (IVillage village in cData.Villages)
+            {
+                village.CharacterId = CharacterId;
+            }
+
+            _gameDataRepository.UpdateVillages(cData.Villages);
 
 
         }
-
+        public void SetGroups(IList<IGroup> groupList)
+        {
+            _gameDataRepository.UpdateGroups(groupList.ToList());
+        }
         #endregion Methods
     }
 }

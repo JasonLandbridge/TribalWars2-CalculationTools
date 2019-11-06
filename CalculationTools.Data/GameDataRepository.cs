@@ -2,10 +2,8 @@
 using CalculationTools.Common;
 using Castle.Core.Internal;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace CalculationTools.Data
 {
@@ -162,13 +160,17 @@ namespace CalculationTools.Data
         {
             if (villages.Count == 0) { return; }
 
-            using (var db = new CalculationToolsDBContext())
+            foreach (IVillage village in villages)
             {
-                foreach (IVillage village in villages)
+                using (var db = new CalculationToolsDBContext())
                 {
-                    db.Villages.Add(_mapper.Map<Village>(village));
+                    var villageEntity = _mapper.Map<Village>(village);
+                    db.Attach(villageEntity);
+                    // db.Entry(villageEntity).Property("CharacterId").CurrentValue = group.CharacterId;
+
+                    db.Villages.Add(villageEntity);
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
         }
 

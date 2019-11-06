@@ -1,6 +1,7 @@
 ﻿using CalculationTools.Common;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -30,6 +31,9 @@ namespace CalculationTools.Core
             CloseCommand = new RelayCommand(() => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs()));
             CheckAccountCommand = new RelayCommand(CheckAccountCredentials);
 
+            AddAccountCommand = new RelayCommand(AddNewAccount);
+            DeleteAccountCommand = new RelayCommand(DeleteAccount);
+
             _playerData.LoginDataIsUpdated += (sender, args) =>
             {
                 WorldList = _playerData.CharacterWorlds;
@@ -40,6 +44,20 @@ namespace CalculationTools.Core
             };
 
         }
+
+        private void DeleteAccount()
+        {
+            _settings.DeleteAccount(SelectedAccount);
+            SyncAccounts();
+        }
+
+        private void AddNewAccount()
+        {
+            _settings.AddAccount();
+
+            SyncAccounts();
+        }
+
         #endregion Constructors
         #region Events
 
@@ -52,7 +70,7 @@ namespace CalculationTools.Core
 
         #region Account
 
-        public List<Account> Accounts { get; set; } = new List<Account>();
+        public ObservableCollection<Account> Accounts { get; set; } = new ObservableCollection<Account>();
 
         public bool CheckLoginButtonEnabled { get; set; } = true;
         public string CheckLoginButtonText { get; set; } = "Check account";
@@ -94,7 +112,7 @@ namespace CalculationTools.Core
         #endregion
 
 
-        #region CommandsWorldList
+        #region Commands
 
         public ICommand CheckAccountCommand { get; set; }
 
@@ -102,6 +120,10 @@ namespace CalculationTools.Core
         /// Close the dialog window without changing anything
         /// </summary>
         public ICommand CloseCommand { get; set; }
+        public ICommand AddAccountCommand { get; set; }
+        public ICommand DeleteAccountCommand { get; set; }
+
+
         #endregion
 
         #region ErrorHandeling
@@ -117,17 +139,17 @@ namespace CalculationTools.Core
 
         public void OnDialogOpen()
         {
+            SyncAccounts();
+        }
+
+        private void SyncAccounts()
+        {
             // Retrieve list of stored accounts from the settings file. 
-            Accounts = _settings.GetAccounts();
+            Accounts = new ObservableCollection<Account>(_settings.GetAccounts());
 
             if (Accounts.Count > 0)
             {
-                SelectedAccount = Accounts.Last();
-
-                SelectedAccount.PropertyChanged += (sender, args) =>
-                {
-                    _settings.SetAccount(SelectedAccount);
-                };
+                LoadAccount(Accounts.Last());
             }
         }
 
@@ -168,5 +190,15 @@ namespace CalculationTools.Core
         }
 
         #endregion Methods
+
+        public void LoadAccount(Account account)
+        {
+            SelectedAccount = account;
+
+            SelectedAccount.PropertyChanged += (sender, args) =>
+            {
+                _settings.SetAccount(SelectedAccount);
+            };
+        }
     }
 }

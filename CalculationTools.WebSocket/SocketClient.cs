@@ -73,7 +73,8 @@ namespace CalculationTools.WebSocket
             {
 
                 Log.Info($"Reconnection happened, type: {type}");
-
+                // TODO Reconnect with command from TW2
+                // Authentication/reconnect
                 switch (type)
                 {
                     case ReconnectionType.Initial:
@@ -266,7 +267,9 @@ namespace CalculationTools.WebSocket
                     break;
 
                 case RouteProvider.CHARACTER_SELECTED:
-                    //TODO do something with data returned
+                    var charSelected = ParseDataFromResponse<CharacterSelectedDTO>(response);
+                    _playerData.SetActiveCharacterId(charSelected.Id);
+
                     SendDefaultMessage(RouteProvider.GET_GAME_DATA);
                     SendDefaultMessage(RouteProvider.GET_GROUPS);
                     break;

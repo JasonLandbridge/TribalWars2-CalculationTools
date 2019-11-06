@@ -15,7 +15,7 @@ namespace CalculationTools.Data
 
         public CalculationToolsDBContext()
         {
-
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -65,7 +65,12 @@ namespace CalculationTools.Data
                 .HasOne(a => a.Character)
                 .WithMany(a => a.Groups);
 
-
+            // Configure Villages
+            modelBuilder.Entity<Village>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<Village>()
+                .HasOne(a => a.Character)
+                .WithMany(a => a.Villages);
 
             // Seed database with initial data
             AddDefaultEntries(modelBuilder);
@@ -73,6 +78,7 @@ namespace CalculationTools.Data
 
         private void AddDefaultEntries(ModelBuilder modelBuilder)
         {
+
 
             // Add standard servers available
             var serverList = new[]

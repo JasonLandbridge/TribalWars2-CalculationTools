@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CalculationTools.Common
 {
@@ -19,7 +20,32 @@ namespace CalculationTools.Common
         /// </summary>
         public bool IsConfirmed { get; set; }
 
-        public string DisplayName => $"{ServerCountryCode} - {Username}";
+        public string DisplayName
+        {
+            get
+            {
+                string displayName = string.Empty;
+
+                if (string.IsNullOrEmpty(ServerCountryCode))
+                {
+                    displayName += "XX - ";
+                }
+                else
+                {
+                    displayName += $"{ServerCountryCode} - ";
+                }
+
+                if (string.IsNullOrEmpty(Username))
+                {
+                    displayName += "Empty Username";
+                }
+                else
+                {
+                    displayName += Username;
+                }
+                return displayName;
+            }
+        }
 
         public ConnectData ToConnectData()
         {

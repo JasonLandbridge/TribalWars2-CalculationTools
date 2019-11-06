@@ -16,5 +16,11 @@ namespace CalculationTools.Common
 
         [JsonProperty("y")]
         public int Y { get; set; }
+
+        /// <summary>
+        /// The CharacterId which owns this village is not send with the response and has to be added separately
+        /// </summary>
+        [JsonIgnore]
+        public int CharacterId { get; set; }
     }
 }

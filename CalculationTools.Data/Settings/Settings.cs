@@ -136,6 +136,14 @@ namespace CalculationTools.Data
             return account;
         }
 
+        public void DeleteAccount(Account account)
+        {
+            if (account != null)
+            {
+                Accounts.Remove(account.AccountID);
+            }
+        }
+
         #endregion   
         #endregion
 

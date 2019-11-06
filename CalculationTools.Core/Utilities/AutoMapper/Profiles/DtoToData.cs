@@ -2,7 +2,6 @@
 using CalculationTools.Common;
 using CalculationTools.Common.Extensions;
 using CalculationTools.Data;
-using System.Collections.Generic;
 
 namespace CalculationTools.Core
 {
@@ -16,17 +15,12 @@ namespace CalculationTools.Core
                 .ReverseMap();
             CreateMap<ICharacterData, CharacterData>();
 
-            CreateMap<List<Village>, IList<IVillage>>()
-                .ReverseMap();
-            CreateMap<List<VillageDTO>, IList<IVillage>>()
-                .ReverseMap();
-
             CreateMap<VillageDTO, IVillage>()
                 .ReverseMap();
             CreateMap<Village, IVillage>()
                 .ReverseMap();
-            CreateMap<Village, VillageDTO>()
-                .ReverseMap();
+
+            CreateMap<VillageDTO, Village>(MemberList.Source);
 
 
             CreateMap<WorldDTO, World>(MemberList.None)
@@ -40,10 +34,8 @@ namespace CalculationTools.Core
             CreateMap<CharacterDTO, Character>(MemberList.Destination)
                 .Ignore(x => x.Id)
                 .Ignore(x => x.Worlds)
-                .Ignore(x => x.Groups);
-
-
-
+                .Ignore(x => x.Groups)
+                .Ignore(x => x.Villages);
 
             CreateMap<GroupDTO, Group>(MemberList.Source);
 

@@ -24,9 +24,10 @@ namespace CalculationTools.Common
 
         List<Account> GetAccounts(bool onlyConfirmed = false);
         void SetAccount(Account account);
-        Account AddAccount(Account account);
+        Account AddAccount(Account account = null);
 
         #endregion
 
+        void DeleteAccount(Account account);
     }
 }

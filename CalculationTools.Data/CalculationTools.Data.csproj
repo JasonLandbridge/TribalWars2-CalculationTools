@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <Content Include="CalculationToolsDB.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

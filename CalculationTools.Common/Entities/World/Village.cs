@@ -9,6 +9,11 @@ namespace CalculationTools.Common
         public string Name { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+        public int Points { get; set; }
+
+        public Character Character { get; set; }
+        public int CharacterId { get; set; }
+
 
         [NotMapped]
         public Point Position => new Point(X, Y);
