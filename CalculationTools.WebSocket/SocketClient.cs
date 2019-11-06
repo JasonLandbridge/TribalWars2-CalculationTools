@@ -224,11 +224,6 @@ namespace CalculationTools.WebSocket
             if (string.IsNullOrEmpty(response))
             {
                 Log.Info("The response was null/empty");
-                //ConnectionResult.TrySetResult(new ConnectResult
-                //{
-                //    IsConnected = false,
-                //    Message = "Received a null/empty answer"
-                //});
                 return;
             }
 

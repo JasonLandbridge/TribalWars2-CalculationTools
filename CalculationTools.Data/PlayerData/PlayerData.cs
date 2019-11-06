@@ -43,7 +43,6 @@ namespace CalculationTools.Data
         public DateTime LastUpdatedLoginData { get; set; }
         public string Name { get; set; }
         public int PlayerId { get; set; }
-        public List<VillageGroup> VillageGroups { get; set; } = new List<VillageGroup>();
 
         #endregion Properties
 
@@ -51,16 +50,7 @@ namespace CalculationTools.Data
 
         public void SetGroups(IList<IGroup> groupList)
         {
-            if (groupList == null) return;
-
-            VillageGroups = new List<VillageGroup>();
-
-            foreach (IGroup group in groupList)
-            {
-                VillageGroups.Add(group as VillageGroup);
-            }
-
-
+            _gameDataRepository.UpdateGroups(groupList.ToList());
         }
 
         public void SetLoginData(ILoginData loginData)

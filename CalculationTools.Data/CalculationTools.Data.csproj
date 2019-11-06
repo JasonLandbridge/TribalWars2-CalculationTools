@@ -15,6 +15,10 @@
     <Compile Remove="Migrations\20191105142030_AddedCharacterServerAndWorldTables.Designer.cs" />
     <Compile Remove="Migrations\20191105205454_UpdatedRelationshipsServerWorldAndCharacter.cs" />
     <Compile Remove="Migrations\20191105205454_UpdatedRelationshipsServerWorldAndCharacter.Designer.cs" />
+    <Compile Remove="Migrations\20191106104227_AddedGroupTable.cs" />
+    <Compile Remove="Migrations\20191106104227_AddedGroupTable.Designer.cs" />
+    <Compile Remove="Migrations\20191106110849_AddedGroupTableForeignKeyColumn.cs" />
+    <Compile Remove="Migrations\20191106110849_AddedGroupTableForeignKeyColumn.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

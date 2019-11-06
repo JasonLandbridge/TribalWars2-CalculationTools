@@ -3,14 +3,16 @@ using System;
 using CalculationTools.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CalculationTools.Data.Migrations
 {
     [DbContext(typeof(CalculationToolsDBContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20191106111040_AddedGroupTable")]
+    partial class AddedGroupTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -10,5 +10,6 @@ namespace CalculationTools.Common
         public int CharacterOwnerId { get; set; }
         public string CharacterOwnerName { get; set; }
         public ICollection<World> Worlds { get; set; }
+        public ICollection<Group> Groups { get; set; }
     }
 }

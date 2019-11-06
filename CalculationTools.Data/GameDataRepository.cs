@@ -2,8 +2,10 @@
 using CalculationTools.Common;
 using Castle.Core.Internal;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace CalculationTools.Data
 {
@@ -130,6 +132,11 @@ namespace CalculationTools.Data
                         worldDBEntity.Character = GetCharacterById(character.CharacterId);
                     }
 
+                    db.Entry(worldDBEntity).State = EntityState.Modified;
+                    db.Entry(worldDBEntity.Character).State = EntityState.Modified;
+                    db.Entry(worldDBEntity.Server).State = EntityState.Modified;
+
+
                 }
                 else
                 {
@@ -176,5 +183,26 @@ namespace CalculationTools.Data
             }
 
         }
+
+
+        public void UpdateGroups(List<IGroup> groupList)
+        {
+            if (groupList.Count == 0) { return; }
+
+            foreach (IGroup group in groupList)
+            {
+                using (var db = new CalculationToolsDBContext())
+                {
+                    var groupEntity = _mapper.Map<Group>(group);
+
+                    db.Attach(groupEntity);
+                    db.Entry(groupEntity).Property("CharacterId").CurrentValue = group.CharacterId;
+                    db.Groups.Add(groupEntity);
+
+                    db.SaveChanges();
+                }
+            }
+        }
+
     }
 }

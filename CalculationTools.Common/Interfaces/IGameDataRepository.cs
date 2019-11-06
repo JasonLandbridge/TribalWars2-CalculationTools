@@ -7,5 +7,6 @@ namespace CalculationTools.Common
         void UpdateVillages(List<IVillage> villages);
         void UpdateWorlds(List<IWorld> worlds);
         void UpdateWorlds(List<ICharacter> characters);
+        void UpdateGroups(List<IGroup> groupList);
     }
 }

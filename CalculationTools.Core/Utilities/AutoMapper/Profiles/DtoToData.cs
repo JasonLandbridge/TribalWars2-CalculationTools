@@ -39,7 +39,15 @@ namespace CalculationTools.Core
 
             CreateMap<CharacterDTO, Character>(MemberList.Destination)
                 .Ignore(x => x.Id)
-                .Ignore(x => x.Worlds);
+                .Ignore(x => x.Worlds)
+                .Ignore(x => x.Groups);
+
+
+
+
+            CreateMap<GroupDTO, Group>(MemberList.Source);
+
+
 
         }
 

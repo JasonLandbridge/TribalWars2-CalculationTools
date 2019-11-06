@@ -10,6 +10,7 @@ namespace CalculationTools.Data
         public DbSet<World> Worlds { get; set; }
         public DbSet<Character> Characters { get; set; }
         public DbSet<Village> Villages { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
 
         public CalculationToolsDBContext()
@@ -56,6 +57,15 @@ namespace CalculationTools.Data
             modelBuilder.Entity<Character>()
                 .HasMany(a => a.Worlds)
                 .WithOne(a => a.Character);
+
+            // Configure groups
+            modelBuilder.Entity<Group>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<Group>()
+                .HasOne(a => a.Character)
+                .WithMany(a => a.Groups);
+
+
 
             // Seed database with initial data
             AddDefaultEntries(modelBuilder);
