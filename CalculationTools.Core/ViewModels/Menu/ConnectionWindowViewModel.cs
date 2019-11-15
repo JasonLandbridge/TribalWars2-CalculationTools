@@ -13,6 +13,7 @@ namespace CalculationTools.Core
         private readonly ISocketManager _socketManager;
         private readonly IGameDataRepository _gameDataRepository;
         private readonly ISettings _settings;
+        private int _characterIndex;
 
         #region Constructors
 
@@ -93,6 +94,18 @@ namespace CalculationTools.Core
         public List<Account> Accounts { get; set; } = new List<Account>();
         public Account SelectedAccount { get; set; } = new Account();
 
+        public int CharacterIndex
+        {
+            get => _characterIndex;
+            set
+            {
+                if (value >= 0)
+                {
+                    _characterIndex = value;
+                }
+            }
+        }
+
         public List<Character> CharacterList
         {
             get => SelectedAccount?.CharacterList?.ToList();
@@ -139,7 +152,7 @@ namespace CalculationTools.Core
             if (Accounts.Count > 0)
             {
                 SelectedAccount = Accounts.First();
-                DefaultCharacter = SelectedAccount.DefaultCharacter;
+                DefaultCharacter = SelectedAccount?.DefaultCharacter;
             }
 
         }

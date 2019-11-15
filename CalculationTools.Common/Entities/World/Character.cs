@@ -5,7 +5,7 @@ namespace CalculationTools.Common
     /// <summary>
     /// The playable characters by the user
     /// </summary>
-    public class Character : ICharacter
+    public class Character : BasePropertyChanged, ICharacter
     {
         /// <summary>
         /// Id is not the same as the TW2 in-game id, see <see cref="CharacterId"/> for that.
@@ -30,9 +30,6 @@ namespace CalculationTools.Common
         public World World { get; set; }
 
         public string WorldId { get; set; }
-
-        public Account DefaultCharacterFor { get; set; }
-        public int? DefaultCharacterForId { get; set; }
 
         public ICollection<Group> Groups { get; set; }
         public ICollection<Village> Villages { get; set; }

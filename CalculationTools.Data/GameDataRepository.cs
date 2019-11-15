@@ -70,6 +70,12 @@ namespace CalculationTools.Data
             if (account == null) { return; }
             using (var db = new CalculationToolsDBContext())
             {
+                if (account.DefaultCharacter != null)
+                    db.Attach(account.DefaultCharacter);
+
+                if (account.OnServer != null)
+                    db.Attach(account.OnServer);
+
                 db.Accounts.Update(account);
                 db.SaveChanges();
             }
@@ -136,7 +142,9 @@ namespace CalculationTools.Data
                 var list = db.Accounts
                     .Include(a => a.OnServer)
                     .Include(a => a.DefaultCharacter)
+                    .ThenInclude(a => a.World)
                     .Include(a => a.CharacterList)
+                    .ThenInclude(a => a.World)
                     .ToList();
 
                 return onlyConfirmed ? list.Where(a => a.IsConfirmed).ToList() : list;

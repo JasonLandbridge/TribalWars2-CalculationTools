@@ -20,12 +20,6 @@ namespace CalculationTools.Data
                 .WithOne(a => a.AccountOwner)
                 .HasForeignKey(a => a.AccountOwnerId);
 
-            builder
-                .HasOne(a => a.DefaultCharacter)
-                .WithOne(b => b.DefaultCharacterFor)
-                .HasForeignKey<Account>(c => c.DefaultCharacterId);
-
-
 
         }
     }

@@ -41,7 +41,7 @@
                         Grid.Column="0"
                         HorizontalAlignment="Stretch"
                         ItemsSource="{Binding Accounts}"
-                        SelectedItem="{Binding SelectedAccount}">
+                        SelectedIndex="{Binding AccountIndex}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -122,11 +122,11 @@
                             Margin="10"
                             HorizontalAlignment="Left"
                             ItemsSource="{Binding CharacterList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                            SelectedItem="{Binding DefaultCharacter}">
+                            SelectedItem="{Binding DefaultCharacter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel IsEnabled="{Binding AllowLogin}" Orientation="Horizontal">
-                                        <TextBlock Text="{Binding FullWorldName}" />
+                                    <StackPanel IsEnabled="{Binding AllowLogin, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Orientation="Horizontal">
+                                        <TextBlock Text="{Binding FullWorldName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>

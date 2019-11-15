@@ -51,11 +51,12 @@
                 Margin="10"
                 HorizontalAlignment="Left"
                 ItemsSource="{Binding CharacterList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding DefaultCharacter}">
+                SelectedIndex="{Binding CharacterIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding DefaultCharacter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel IsEnabled="{Binding AllowLogin}" Orientation="Horizontal">
-                            <TextBlock Text="{Binding FullWorldName}" />
+                        <StackPanel IsEnabled="{Binding AllowLogin, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Orientation="Horizontal">
+                            <TextBlock Text="{Binding FullWorldName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

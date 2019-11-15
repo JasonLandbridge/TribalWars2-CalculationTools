@@ -77,7 +77,7 @@ namespace CalculationTools.Data
         #region Accounts
 
 
-        public int LastLoadedAccountId { get; set; } = 0;
+        public int LastLoadedAccountIndex { get; set; } = 0;
 
 
 

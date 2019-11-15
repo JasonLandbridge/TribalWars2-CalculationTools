@@ -8,7 +8,7 @@
         bool IsDefenseStrengthShown { get; set; }
         bool IsResourcesLostShown { get; set; }
         string FileName { get; set; }
-        int LastLoadedAccountId { get; set; }
+        int LastLoadedAccountIndex { get; set; }
 
         #endregion Properties
 

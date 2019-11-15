@@ -2,7 +2,6 @@
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -18,6 +17,7 @@ namespace CalculationTools.Core
         private readonly IPlayerData _playerData;
         private readonly ISettings _settings;
         private readonly ISocketManager _socketManager;
+        private int _accountIndex;
 
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -51,7 +51,20 @@ namespace CalculationTools.Core
 
         #region Accounts
 
-        public ObservableCollection<Account> Accounts { get; set; } = new ObservableCollection<Account>();
+        public List<Account> Accounts { get; set; } = new List<Account>();
+
+        public int AccountIndex
+        {
+            get => _accountIndex;
+            set
+            {
+                if (value >= 0)
+                {
+                    _accountIndex = value;
+                    LoadAccount(Accounts[_accountIndex]);
+                }
+            }
+        }
 
         public string Username
         {
@@ -73,17 +86,38 @@ namespace CalculationTools.Core
 
         #endregion
 
-        public Account SelectedAccount { get; set; } = new Account();
+        public Account SelectedAccount
+        {
+            get
+            {
+                Account account = null;
+                if (Accounts.ElementAtOrDefault(AccountIndex) != null)
+                {
+                    account = Accounts[AccountIndex];
+                }
+                return account;
+            }
+        }
 
         public List<Character> CharacterList
         {
             get => SelectedAccount?.CharacterList?.ToList();
-            set => SelectedAccount.CharacterList = value;
+            set
+            {
+                SelectedAccount.CharacterList = value;
+                OnPropertyChanged();
+            }
         }
+
         public Character DefaultCharacter
         {
             get => SelectedAccount?.DefaultCharacter;
-            set => SelectedAccount.DefaultCharacter = value;
+            set
+            {
+                SelectedAccount.DefaultCharacter = value;
+                OnPropertyChanged();
+                UpdateAccount();
+            }
         }
 
         public Server OnServer
@@ -137,38 +171,52 @@ namespace CalculationTools.Core
 
         private void SyncAccounts()
         {
-            // Retrieve list of stored accounts from the settings file. 
-            Accounts = new ObservableCollection<Account>(_gameDataRepository.GetAccounts());
+            // Retrieve list of stored accounts from the database. 
+            Accounts = _gameDataRepository.GetAccounts();
 
             if (Accounts.Count > 0)
             {
-                Account account = Accounts.FirstOrDefault(a => a.Id == _settings.LastLoadedAccountId);
+                Account account = Accounts.Last();
 
-                LoadAccount(account ?? Accounts.Last());
+                if (Accounts.ElementAtOrDefault(AccountIndex) != null)
+                {
+                    account = Accounts[AccountIndex];
+                }
+
+                LoadAccount(account);
             }
         }
 
+        /// <summary>
+        /// Loads a given account in the view
+        /// </summary>
+        /// <param name="account">The account to load</param>
         public void LoadAccount(Account account)
         {
-            SelectedAccount = account;
+            if (account == null) { return; }
 
-            _settings.LastLoadedAccountId = SelectedAccount.Id;
+            // Gets the list index and saves it to the settings
+            AccountIndex = Accounts.IndexOf(SelectedAccount);
+            _settings.LastLoadedAccountIndex = AccountIndex;
 
             SelectedAccount.PropertyChanged += (sender, args) =>
             {
                 Account newAccount = sender as Account;
-
                 // If any credentials are changed then reset IsConfirmed.
                 if (SelectedAccount.Username != newAccount.Username ||
-                SelectedAccount.Password != newAccount.Password ||
-                SelectedAccount.ServerCountryCode != newAccount.ServerCountryCode)
+                    SelectedAccount.Password != newAccount.Password ||
+                    SelectedAccount.ServerCountryCode != newAccount.ServerCountryCode)
                 {
                     SelectedAccount.IsConfirmed = false;
                     CheckLoginMessage = "Please revalidate the credentials.";
                 }
-
-                _gameDataRepository.UpdateAccount(SelectedAccount);
+                UpdateAccount();
             };
+        }
+
+        private void UpdateAccount()
+        {
+            _gameDataRepository.UpdateAccount(SelectedAccount);
         }
 
         private async void CheckAccountCredentials()
@@ -215,6 +263,7 @@ namespace CalculationTools.Core
         #region Setup
         public void OnDialogOpen()
         {
+            AccountIndex = _settings.LastLoadedAccountIndex;
             SyncAccounts();
         }
 
@@ -226,10 +275,11 @@ namespace CalculationTools.Core
             AddAccountCommand = new RelayCommand(AddNewAccount);
             DeleteAccountCommand = new RelayCommand(DeleteAccount);
 
+            // Once the credentials have been tested then this event will fire.
             _playerData.LoginDataIsUpdated += (sender, args) =>
             {
                 // Refresh the account from the database
-                SelectedAccount = _gameDataRepository.GetAccount(SelectedAccount.Id);
+                SyncAccounts();
                 CharacterList = SelectedAccount.CharacterList.ToList();
 
                 if (CharacterList.Count > 0)
