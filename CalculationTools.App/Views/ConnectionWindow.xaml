@@ -50,8 +50,8 @@
                 Height="25"
                 Margin="10"
                 HorizontalAlignment="Left"
-                ItemsSource="{Binding WorldList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding SelectedWorld}">
+                ItemsSource="{Binding CharacterList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding DefaultCharacter}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel IsEnabled="{Binding AllowLogin}" Orientation="Horizontal">

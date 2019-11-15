@@ -29,15 +29,6 @@ namespace CalculationTools.Data
 
         #region Properties
 
-        public List<CharacterWorld> CharacterWorlds
-        {
-            get
-            {
-                //TODO retrieve from database
-                return new List<CharacterWorld>();
-            }
-        }
-
         public bool IsLoggedIn { get; set; }
         public DateTime LastUpdated { get; set; }
         public DateTime LastUpdatedLoginData { get; set; }
@@ -56,8 +47,9 @@ namespace CalculationTools.Data
             Name = loginData.Name;
             PlayerId = loginData.PlayerId;
 
-            _gameDataRepository.UpdateWorlds(loginData.Worlds?.ToList());
-            _gameDataRepository.UpdateWorlds(loginData.Characters?.ToList());
+
+            _gameDataRepository.UpdateAccountData(loginData);
+
 
             LastUpdatedLoginData = DateTime.Now;
 

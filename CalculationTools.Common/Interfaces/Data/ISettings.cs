@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CalculationTools.Common
+﻿namespace CalculationTools.Common
 {
     public interface ISettings
     {
@@ -10,6 +8,7 @@ namespace CalculationTools.Common
         bool IsDefenseStrengthShown { get; set; }
         bool IsResourcesLostShown { get; set; }
         string FileName { get; set; }
+        int LastLoadedAccountId { get; set; }
 
         #endregion Properties
 
@@ -22,12 +21,7 @@ namespace CalculationTools.Common
 
         #region Accounts
 
-        List<Account> GetAccounts(bool onlyConfirmed = false);
-        void SetAccount(Account account);
-        Account AddAccount(Account account = null);
-
         #endregion
 
-        void DeleteAccount(Account account);
     }
 }

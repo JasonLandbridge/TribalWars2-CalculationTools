@@ -146,97 +146,97 @@ namespace CalculationTools.Core
             new Server
             {
                 ServerName = "Netherlands",
-                ServerCountryCode = "nl"
+                Id = "nl"
             },
             new Server
             {
                 ServerName = "Germany",
-                ServerCountryCode = "de"
+                Id = "de"
             },
             new Server
             {
                 ServerName = "International",
-                ServerCountryCode = "en"
+                Id = "en"
             },
             new Server
             {
                 ServerName = "Brazil",
-                ServerCountryCode = "br"
+                Id = "br"
             },
             new Server
             {
                 ServerName = "Poland",
-                ServerCountryCode = "pl"
+                Id = "pl"
             },
             new Server
             {
                 ServerName = "France",
-                ServerCountryCode = "fr"
+                Id = "fr"
             },
             new Server
             {
                 ServerName = "Russia",
-                ServerCountryCode = "ru"
+                Id = "ru"
             },
             new Server
             {
                 ServerName = "Beta Server",
-                ServerCountryCode = "beta"
+                Id = "beta"
             },
             new Server
             {
                 ServerName = "United States",
-                ServerCountryCode = "us"
+                Id = "us"
             },
             new Server
             {
                 ServerName = "Spain",
-                ServerCountryCode = "es"
+                Id = "es"
             },
             new Server
             {
                 ServerName = "Italy",
-                ServerCountryCode = "it"
+                Id = "it"
             },
             new Server
             {
                 ServerName = "Greece",
-                ServerCountryCode = "gr"
+                Id = "gr"
             },
             new Server
             {
                 ServerName = "Turkey",
-                ServerCountryCode = "tr"
+                Id = "tr"
             },
             new Server
             {
                 ServerName = "Czech Republic",
-                ServerCountryCode = "cz"
+                Id = "cz"
             },
             new Server
             {
                 ServerName = "Portugal",
-                ServerCountryCode = "pt"
+                Id = "pt"
             },
             new Server
             {
                 ServerName = "Norway",
-                ServerCountryCode = "no"
+                Id = "no"
             },
             new Server
             {
                 ServerName = "Slovakia",
-                ServerCountryCode = "sk"
+                Id = "sk"
             },
             new Server
             {
                 ServerName = "Romania",
-                ServerCountryCode = "ro"
+                Id = "ro"
             },
             new Server
             {
                 ServerName = "Hungary",
-                ServerCountryCode = "hu"
+                Id = "hu"
             },
         };
 

@@ -1,4 +1,6 @@
-﻿namespace CalculationTools.Core
+﻿using CalculationTools.Common;
+
+namespace CalculationTools.Core
 {
     /// <summary>
     /// Used to collect all input values related to the battle simulator

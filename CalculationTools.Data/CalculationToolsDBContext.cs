@@ -1,12 +1,14 @@
 ﻿using CalculationTools.Common;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace CalculationTools.Data
 {
-    public class CalculationToolsDBContext : DbContext
+    public sealed class CalculationToolsDBContext : DbContext
     {
 
         public DbSet<Server> Servers { get; set; }
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<World> Worlds { get; set; }
         public DbSet<Character> Characters { get; set; }
         public DbSet<Village> Villages { get; set; }
@@ -20,7 +22,7 @@ namespace CalculationTools.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = $"Data Source=./CalculationToolsDB.db";
+            string connectionString = "Data Source=./CalculationToolsDB.db";
             optionsBuilder.UseSqlite(connectionString);
             optionsBuilder.EnableSensitiveDataLogging(true);
         }
@@ -29,34 +31,8 @@ namespace CalculationTools.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure Server Table
-            modelBuilder.Entity<Server>()
-                .Property(a => a.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Server>()
-                .HasMany(c => c.Worlds)
-                .WithOne(a => a.Server);
-
-            // Configure worlds table
-            modelBuilder.Entity<World>()
-                .HasKey(a => a.Id);
-            modelBuilder.Entity<World>()
-                .HasOne(e => e.Server)
-                .WithMany(a => a.Worlds);
-            modelBuilder.Entity<World>()
-                .HasOne(e => e.Character)
-                .WithMany(a => a.Worlds);
-
-            // Configure Character Table
-            modelBuilder.Entity<Character>()
-                .Ignore(c => c.Id);
-            modelBuilder.Entity<Character>()
-                .HasKey(a => a.CharacterId);
-            modelBuilder.Entity<Character>()
-                .Property(a => a.CharacterId)
-                .HasColumnName("Id");
-            modelBuilder.Entity<Character>()
-                .HasMany(a => a.Worlds)
-                .WithOne(a => a.Character);
+            // import all separate entity config files
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             // Configure groups
             modelBuilder.Entity<Group>()
@@ -85,106 +61,107 @@ namespace CalculationTools.Data
             {
                 new Server
                 {
-                    ServerName = "International",
-                    ServerCountryCode = "en"
+                    Id = "en",
+                    ServerName = "International"
                 },
                 new Server
                 {
-                    ServerName = "Netherlands",
-                    ServerCountryCode = "nl"
+                    Id = "nl",
+                    ServerName = "Netherlands"
                 },
                 new Server
                 {
-                    ServerName = "Germany",
-                    ServerCountryCode = "de"
+                    Id = "de",
+                    ServerName = "Germany"
                 },
                 new Server
                 {
-                    ServerName = "Brazil",
-                    ServerCountryCode = "br"
+                    Id = "br",
+                    ServerName = "Brazil"
                 },
                 new Server
                 {
-                    ServerName = "Poland",
-                    ServerCountryCode = "pl"
+                    Id = "pl",
+                    ServerName = "Poland"
                 },
                 new Server
                 {
-                    ServerName = "France",
-                    ServerCountryCode = "fr"
+                    Id = "fr",
+                    ServerName = "France"
                 },
                 new Server
                 {
-                    ServerName = "Russia",
-                    ServerCountryCode = "ru"
+                    Id = "ru",
+                    ServerName = "Russia"
                 },
                 new Server
                 {
-                    ServerName = "United States",
-                    ServerCountryCode = "us"
+                    Id = "us",
+                    ServerName = "United States"
                 },
                 new Server
                 {
-                    ServerName = "Spain",
-                    ServerCountryCode = "es"
+                    Id = "es",
+                    ServerName = "Spain"
                 },
                 new Server
                 {
-                    ServerName = "Italy",
-                    ServerCountryCode = "it"
+                    Id = "it",
+                    ServerName = "Italy"
                 },
                 new Server
                 {
-                    ServerName = "Greece",
-                    ServerCountryCode = "gr"
+                    Id = "gr",
+                    ServerName = "Greece"
                 },
                 new Server
                 {
-                    ServerName = "Turkey",
-                    ServerCountryCode = "tr"
+                    Id = "tr",
+                    ServerName = "Turkey"
                 },
                 new Server
                 {
-                    ServerName = "Czech Republic",
-                    ServerCountryCode = "cz"
+                    Id = "cz",
+                    ServerName = "Czech Republic"
                 },
                 new Server
                 {
-                    ServerName = "Portugal",
-                    ServerCountryCode = "pt"
+                    Id = "pt",
+                    ServerName = "Portugal"
                 },
                 new Server
                 {
-                    ServerName = "Norway",
-                    ServerCountryCode = "no"
+                    Id = "no",
+                    ServerName = "Norway"
                 },
                 new Server
                 {
-                    ServerName = "Slovakia",
-                    ServerCountryCode = "sk"
+                    Id = "sk",
+                    ServerName = "Slovakia"
                 },
                 new Server
                 {
-                    ServerName = "Romania",
-                    ServerCountryCode = "ro"
+                    Id = "ro",
+                    ServerName = "Romania"
                 },
                 new Server
                 {
-                    ServerName = "Hungary",
-                    ServerCountryCode = "hu"
+                    Id = "hu",
+                    ServerName = "Hungary"
                 },
                 new Server
                 {
-                    ServerName = "Beta Server",
-                    ServerCountryCode = "beta"
+                    Id = "beta",
+                    ServerName = "Beta Server"
                 },
             };
-            for (int i = 0; i < serverList.Length; i++)
-            {
-                serverList[i].Id = i + 1;
-            }
 
             modelBuilder.Entity<Server>().HasData(serverList);
+
+
+
+
+
         }
 
     }

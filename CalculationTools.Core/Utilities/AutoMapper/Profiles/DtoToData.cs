@@ -28,14 +28,10 @@ namespace CalculationTools.Core
 
             CreateMap<CharacterDTO, World>(MemberList.None)
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.WorldName))
-                .ForMember(dest => dest.WorldCode, opt => opt.MapFrom(src => src.WorldId))
+                .ForMember(dest => dest.WorldId, opt => opt.MapFrom(src => src.WorldId))
                 .ReverseMap();
 
-            CreateMap<CharacterDTO, Character>(MemberList.Destination)
-                .Ignore(x => x.Id)
-                .Ignore(x => x.Worlds)
-                .Ignore(x => x.Groups)
-                .Ignore(x => x.Villages);
+            CreateMap<CharacterDTO, Character>(MemberList.None);
 
             CreateMap<GroupDTO, Group>(MemberList.Source);
 

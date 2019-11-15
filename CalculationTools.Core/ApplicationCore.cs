@@ -1,4 +1,6 @@
-﻿using CalculationTools.Data;
+﻿using System;
+using System.IO;
+using CalculationTools.Data;
 
 namespace CalculationTools.Core
 {
@@ -17,6 +19,14 @@ namespace CalculationTools.Core
 
             using (var db = new CalculationToolsDBContext())
             {
+                try
+                {
+                    db.Database.EnsureDeleted();
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine(e);
+                }
                 db.Database.EnsureCreated();
             }
 

@@ -11,16 +11,19 @@ namespace CalculationTools.Core
     {
         private readonly IDataManager _dataManager;
         private readonly ISocketManager _socketManager;
+        private readonly IGameDataRepository _gameDataRepository;
         private readonly ISettings _settings;
 
         #region Constructors
 
         public ConnectionWindowViewModel(
             IDataManager dataManager,
-            ISocketManager socketManager)
+            ISocketManager socketManager,
+            IGameDataRepository gameDataRepository)
         {
             _dataManager = dataManager;
             _socketManager = socketManager;
+            _gameDataRepository = gameDataRepository;
             _settings = dataManager.Settings;
 
             ConnectCommand = new RelayCommand(StartConnection);
@@ -90,15 +93,15 @@ namespace CalculationTools.Core
         public List<Account> Accounts { get; set; } = new List<Account>();
         public Account SelectedAccount { get; set; } = new Account();
 
-        public List<CharacterWorld> WorldList
+        public List<Character> CharacterList
         {
-            get => SelectedAccount?.WorldList;
-            set => SelectedAccount.WorldList = value;
+            get => SelectedAccount?.CharacterList?.ToList();
+            set => SelectedAccount.CharacterList = value;
         }
-        public CharacterWorld SelectedWorld
+        public Character DefaultCharacter
         {
-            get => SelectedAccount?.SelectedWorld;
-            set => SelectedAccount.SelectedWorld = value;
+            get => SelectedAccount?.DefaultCharacter;
+            set => SelectedAccount.DefaultCharacter = value;
         }
         public string ConnectionLog { get; set; }
 
@@ -131,16 +134,12 @@ namespace CalculationTools.Core
         #region Methods
         public void OnDialogOpen()
         {
-            Accounts = _settings.GetAccounts(true);
+            Accounts = _gameDataRepository.GetAccounts(true);
 
             if (Accounts.Count > 0)
             {
-                SelectedAccount = Accounts.Last();
-                SelectedWorld = SelectedAccount.SelectedWorld;
-                SelectedAccount.PropertyChanged += (sender, args) =>
-                {
-                    _settings.SetAccount(SelectedAccount);
-                };
+                SelectedAccount = Accounts.First();
+                DefaultCharacter = SelectedAccount.DefaultCharacter;
             }
 
         }

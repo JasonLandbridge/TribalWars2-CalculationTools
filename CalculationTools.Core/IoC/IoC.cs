@@ -2,10 +2,8 @@
 using CalculationTools.Common;
 using CalculationTools.Data;
 using CalculationTools.WebSocket;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using NLog;
 using SimpleInjector;
-using System;
 
 namespace CalculationTools.Core
 {
@@ -33,7 +31,6 @@ namespace CalculationTools.Core
             Container.Register<ISocketManager, SocketManager>(Lifestyle.Singleton);
 
             Container.Register<IGameDataRepository, GameDataRepository>(Lifestyle.Singleton);
-
 
             // Injectable service
             IMapper mapper = new Mapper(AutoMapperConfig.RegisterMappings());

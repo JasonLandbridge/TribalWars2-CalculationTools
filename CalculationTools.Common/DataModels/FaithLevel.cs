@@ -1,4 +1,4 @@
-﻿namespace CalculationTools.Core
+﻿namespace CalculationTools.Common
 {
     public class FaithLevel
     {

@@ -76,8 +76,8 @@
                                 Width="250"
                                 Height="30"
                                 ItemsSource="{Binding ServerList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                SelectedValue="{Binding ServerCountryCode}"
-                                SelectedValuePath="ServerCountryCode">
+                                SelectedValue="{Binding OnServer.Id}"
+                                SelectedValuePath="Id">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -121,8 +121,8 @@
                             Height="25"
                             Margin="10"
                             HorizontalAlignment="Left"
-                            ItemsSource="{Binding WorldList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                            SelectedValue="{Binding SelectedWorld}">
+                            ItemsSource="{Binding CharacterList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding DefaultCharacter}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel IsEnabled="{Binding AllowLogin}" Orientation="Horizontal">
@@ -138,7 +138,7 @@
                         Grid.Column="0"
                         Orientation="Horizontal">
                         <Button
-                            Width="50"
+                            Width="90"
                             Height="30"
                             Margin="5"
                             HorizontalAlignment="Stretch"
@@ -146,7 +146,7 @@
                             Command="{Binding DeleteAccountCommand}"
                             Content="Delete" />
                         <Button
-                            Width="50"
+                            Width="90"
                             Height="30"
                             Margin="5"
                             HorizontalAlignment="Stretch"

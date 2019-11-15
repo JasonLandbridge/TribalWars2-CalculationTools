@@ -443,6 +443,8 @@ namespace CalculationTools.WebSocket
 
             ConnectResult.IsConnected = true;
             ConnectResult.AccessToken = loginData?.AccessToken;
+            ConnectResult.TW2AccountId = loginData?.PlayerId;
+
             ConnectionResult.TrySetResult(ConnectResult);
 
             // Send parsed data to the PlayerData to be stored

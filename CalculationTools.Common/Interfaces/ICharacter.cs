@@ -8,8 +8,6 @@
 
         string WorldId { get; set; }
 
-        string WorldName { get; set; }
-
         bool AllowLogin { get; set; }
 
         int CharacterOwnerId { get; set; }

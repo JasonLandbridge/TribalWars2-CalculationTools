@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using nucs.JsonSettings;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CalculationTools.Data
 {
@@ -77,74 +76,12 @@ namespace CalculationTools.Data
 
         #region Accounts
 
-        public virtual Dictionary<int, Account> Accounts { get; set; } = new Dictionary<int, Account>();
 
-        public List<Account> GetAccounts(bool onlyConfirmed = false)
-        {
-            List<Account> listResult = new List<Account>();
+        public int LastLoadedAccountId { get; set; } = 0;
 
-            foreach (KeyValuePair<int, Account> accountPair in Accounts)
-            {
-                Account account = accountPair.Value;
-                account.AccountID = accountPair.Key;
 
-                if (onlyConfirmed)
-                {
-                    if (account.IsConfirmed)
-                    {
-                        listResult.Add(account);
-                    }
-                    continue;
-                }
-                listResult.Add(account);
-            }
 
-            return listResult;
-        }
-
-        public void SetAccount(Account account)
-        {
-            if (Accounts.ContainsKey(account.AccountID))
-            {
-                Accounts[account.AccountID] = account;
-            }
-            else
-            {
-                AddAccount(account);
-            }
-
-            Save();
-        }
-
-        public Account AddAccount(Account account = null)
-        {
-            if (account == null)
-            {
-                account = new Account { ServerCountryCode = "nl" };
-            }
-
-            if (Accounts.Count > 0)
-            {
-                Accounts.Add(Accounts.Keys.Max() + 1, account);
-            }
-            else
-            {
-                Accounts.Add(0, account);
-            }
-
-            Save();
-            return account;
-        }
-
-        public void DeleteAccount(Account account)
-        {
-            if (account != null)
-            {
-                Accounts.Remove(account.AccountID);
-            }
-        }
-
-        #endregion   
+        #endregion
         #endregion
 
         #endregion
@@ -152,7 +89,6 @@ namespace CalculationTools.Data
 
         public void SetDefaultValues()
         {
-            AddAccount();
 
         }
     }
