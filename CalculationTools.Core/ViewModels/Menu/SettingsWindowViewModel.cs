@@ -12,8 +12,7 @@ namespace CalculationTools.Core
     {
         #region Fields
 
-
-        private readonly IGameDataRepository _gameDataRepository;
+        private readonly IDataManager _dataManager;
         private readonly IPlayerData _playerData;
         private readonly ISettings _settings;
         private readonly ISocketManager _socketManager;
@@ -28,11 +27,10 @@ namespace CalculationTools.Core
         public SettingsWindowViewModel(
             IDataManager dataManager,
             IPlayerData playerData,
-            ISocketManager socketManager,
-            IGameDataRepository gameDataRepository)
+            ISocketManager socketManager)
         {
-            _gameDataRepository = gameDataRepository;
-            _settings = dataManager.Settings;
+            _dataManager = dataManager;
+            _settings = _dataManager.Settings;
             _playerData = playerData;
             _socketManager = socketManager;
 
@@ -126,7 +124,7 @@ namespace CalculationTools.Core
             set => SelectedAccount.OnServer = value;
         }
 
-        public List<Server> ServerList => _gameDataRepository.GetServers();
+        public List<Server> ServerList => _dataManager.GetServers();
 
         #endregion
 
@@ -159,20 +157,20 @@ namespace CalculationTools.Core
         #region Accounts
         private void DeleteAccount()
         {
-            _gameDataRepository.DeleteAccount(SelectedAccount);
+            _dataManager.DeleteAccount(SelectedAccount);
             SyncAccounts();
         }
 
         private void AddNewAccount()
         {
-            Account account = _gameDataRepository.AddAccount();
+            Account account = _dataManager.AddAccount();
             SyncAccounts();
         }
 
         private void SyncAccounts()
         {
             // Retrieve list of stored accounts from the database. 
-            Accounts = _gameDataRepository.GetAccounts();
+            Accounts = _dataManager.GetAccounts();
 
             if (Accounts.Count > 0)
             {
@@ -216,7 +214,7 @@ namespace CalculationTools.Core
 
         private void UpdateAccount()
         {
-            _gameDataRepository.UpdateAccount(SelectedAccount);
+            _dataManager.UpdateAccount(SelectedAccount);
         }
 
         private async void CheckAccountCredentials()
@@ -276,7 +274,7 @@ namespace CalculationTools.Core
             DeleteAccountCommand = new RelayCommand(DeleteAccount);
 
             // Once the credentials have been tested then this event will fire.
-            _playerData.LoginDataIsUpdated += (sender, args) =>
+            _dataManager.LoginDataIsUpdated += (sender, args) =>
             {
                 // Refresh the account from the database
                 SyncAccounts();

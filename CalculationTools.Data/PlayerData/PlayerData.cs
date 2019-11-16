@@ -21,11 +21,6 @@ namespace CalculationTools.Data
 
         #endregion Constructors
 
-        #region Events
-
-        public event EventHandler LoginDataIsUpdated;
-
-        #endregion Events
 
         #region Properties
 
@@ -34,51 +29,16 @@ namespace CalculationTools.Data
         public DateTime LastUpdatedLoginData { get; set; }
         public string Name { get; set; }
         public int PlayerId { get; set; }
-        public int CharacterId { get; set; }
 
         #endregion Properties
 
         #region Methods
 
-        public void SetLoginData(ILoginData loginData)
-        {
-            if (loginData == null) return;
-
-            Name = loginData.Name;
-            PlayerId = loginData.PlayerId;
 
 
-            _gameDataRepository.UpdateAccountData(loginData);
 
 
-            LastUpdatedLoginData = DateTime.Now;
 
-            LoginDataIsUpdated.Invoke(this, EventArgs.Empty);
-
-        }
-
-        public void SetActiveCharacterId(int characterId)
-        {
-            CharacterId = characterId;
-        }
-
-        public void SetCharacterData(ICharacterData characterData)
-        {
-            if (characterData == null) return;
-
-            // TODO make conversion
-            CharacterData cData = _mapper.Map<CharacterData>(characterData);
-
-            // Add the owning characterId of this village
-            foreach (IVillage village in cData.Villages)
-            {
-                village.CharacterId = CharacterId;
-            }
-
-            _gameDataRepository.UpdateVillages(cData.Villages);
-
-
-        }
         public void SetGroups(IList<IGroup> groupList)
         {
             _gameDataRepository.UpdateGroups(groupList.ToList());

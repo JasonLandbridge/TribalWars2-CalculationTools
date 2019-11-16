@@ -19,6 +19,7 @@ namespace CalculationTools.WebSocket
 
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
+        private readonly IDataManager _dataManager;
         private readonly IPlayerData _playerData;
 
         private readonly TaskCompletionSource<ConnectResult> ConnectionResult = new TaskCompletionSource<ConnectResult>();
@@ -32,10 +33,10 @@ namespace CalculationTools.WebSocket
 
         #region Constructors
 
-        public SocketClient(IPlayerData playerData)
+        public SocketClient(IPlayerData playerData, IDataManager dataManager)
         {
+            _dataManager = dataManager;
             _playerData = playerData;
-
         }
 
         #endregion Constructors
@@ -268,7 +269,7 @@ namespace CalculationTools.WebSocket
 
                 case RouteProvider.CHARACTER_SELECTED:
                     var charSelected = ParseDataFromResponse<CharacterSelectedDTO>(response);
-                    _playerData.SetActiveCharacterId(charSelected.Id);
+                    _dataManager.SetActiveCharacterId(charSelected.Id);
 
                     SendDefaultMessage(RouteProvider.GET_GAME_DATA);
                     SendDefaultMessage(RouteProvider.GET_GROUPS);
@@ -328,9 +329,9 @@ namespace CalculationTools.WebSocket
                     break;
 
                 case RouteProvider.CHARACTER_INFO:
-                    // All character data
+                    // All the character data of the logged in player
                     var characterData = ParseDataFromResponse<CharacterDataDTO>(response);
-                    _playerData.SetCharacterData(characterData);
+                    _dataManager.SetCharacterData(characterData);
 
                     // Add this to the last command send to keep alive
                     StartBackgroundWorker();
@@ -362,7 +363,8 @@ namespace CalculationTools.WebSocket
                     break;
 
                 default:
-                    StartBackgroundWorker();
+                    AddToConnectionLog($"Received a response on which the parser defaulted: {socketResponse.SocketType}");
+                    //StartBackgroundWorker();
                     //ExitEvent.Set();
                     break;
             }
@@ -377,29 +379,40 @@ namespace CalculationTools.WebSocket
             }
         }
 
+        /// <summary>
+        /// Used to determine the type of response received and to parse the initial connection configuration.
+        /// </summary>
+        /// <param name="response">The response of the websocket</param>
+        /// <returns></returns>
         private SocketResponse ParseSocketResponse(string response)
         {
-
             SocketResponse socketResponse = new SocketResponse();
+
+            JsonSerializerSettings serializerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
             try
             {
-                socketResponse = JsonConvert.DeserializeObject<SocketResponse>(response);
-                if (!string.IsNullOrEmpty(socketResponse.SessionID))
-                {
-                    socketResponse.SocketType = RouteProvider.SID;
-                    _pingInterval = socketResponse.PingInterval;
-                }
+                socketResponse = JsonConvert.DeserializeObject<SocketResponse>(response, serializerSettings);
             }
             catch (Exception e)
             {
-                Log.Error(e, "Could not deserialize the following string:");
+                Log.Error(e, $"Could not deserialize the following string: {Environment.NewLine} {response}");
             }
 
-            // Set parsed values
             if (!string.IsNullOrEmpty(socketResponse.SessionID))
             {
+                socketResponse.SocketType = RouteProvider.SID;
                 ConnectResult.SessionID = socketResponse.SessionID;
             }
+
+            if (socketResponse.PingInterval > 0)
+            {
+                _pingInterval = socketResponse.PingInterval;
+            }
+
 
             return socketResponse;
         }
@@ -448,7 +461,7 @@ namespace CalculationTools.WebSocket
             ConnectionResult.TrySetResult(ConnectResult);
 
             // Send parsed data to the PlayerData to be stored
-            _playerData.SetLoginData(loginData);
+            _dataManager.SetLoginData(loginData);
             return loginData;
         }
 

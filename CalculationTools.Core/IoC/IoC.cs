@@ -2,7 +2,6 @@
 using CalculationTools.Common;
 using CalculationTools.Data;
 using CalculationTools.WebSocket;
-using NLog;
 using SimpleInjector;
 
 namespace CalculationTools.Core
@@ -18,6 +17,10 @@ namespace CalculationTools.Core
         /// The IoC container used to register all dependencies.
         /// </summary>
         public static Container Container { get; } = new Container();
+
+
+        public static IMapper AutoMapperContainer => new Mapper(AutoMapperConfig.RegisterMappings());
+
         #endregion Properties
 
         #region Methods

@@ -18,9 +18,15 @@ namespace CalculationTools.Common
         public int Y { get; set; }
 
         /// <summary>
-        /// The CharacterId which owns this village is not send with the response and has to be added separately
+        /// The CharacterId which owns this village is not send with the response and has to be added separately.
         /// </summary>
         [JsonIgnore]
-        public int CharacterId { get; set; }
+        public int? CharacterId { get; set; }
+
+        /// <summary>
+        /// The World which this village is in, this is not send with the response and has to be added separately.
+        /// </summary>
+        [JsonIgnore]
+        public string WorldId { get; set; }
     }
 }

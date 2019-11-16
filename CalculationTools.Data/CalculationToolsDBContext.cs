@@ -1,11 +1,17 @@
 ﻿using CalculationTools.Common;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 namespace CalculationTools.Data
 {
     public sealed class CalculationToolsDBContext : DbContext
     {
+
+        private readonly string connectionString = "Data Source=./CalculationToolsDB.db";
+
 
         public DbSet<Server> Servers { get; set; }
         public DbSet<Account> Accounts { get; set; }
@@ -17,14 +23,34 @@ namespace CalculationTools.Data
 
         public CalculationToolsDBContext()
         {
+
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                try
+                {
+                    Database.EnsureDeleted();
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+            Database.EnsureCreated();
+        }
+
+        public CalculationToolsDBContext(
+            DbContextOptions<CalculationToolsDBContext> options) : base(options)
+        {
             Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Data Source=./CalculationToolsDB.db";
-            optionsBuilder.UseSqlite(connectionString);
-            optionsBuilder.EnableSensitiveDataLogging(true);
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite(connectionString);
+                optionsBuilder.EnableSensitiveDataLogging(true);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -152,7 +178,27 @@ namespace CalculationTools.Data
 
 
 
+            //TODO DELETE THIS BEFORE COMMITING
+            modelBuilder.Entity<Account>().HasData(
+                new List<Account>{
+                    new Account
+                    {
+                        Id = 1,
+                        Username = "***REMOVED***",
+                        Password = "***REMOVED***",
+                        OnServerId = "en",
+                        IsConfirmed = true
+                    },
+                    new Account
+                    {
+                        Id = 2,
+                        Username = "***REMOVED***",
+                        Password = "***REMOVED***",
+                        OnServerId = "nl",
+                        IsConfirmed = true
 
+                    }
+                });
 
         }
 

@@ -12,7 +12,11 @@ namespace CalculationTools.Common
         public int Points { get; set; }
 
         public Character Character { get; set; }
-        public int CharacterId { get; set; }
+        public int? CharacterId { get; set; }
+
+        public World World { get; set; }
+        public string WorldId { get; set; }
+
 
 
         [NotMapped]

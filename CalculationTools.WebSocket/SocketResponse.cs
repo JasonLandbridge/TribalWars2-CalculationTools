@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace CalculationTools.WebSocket
 {
@@ -19,28 +19,9 @@ namespace CalculationTools.WebSocket
 
         [JsonProperty("pingInterval")]
         public int PingInterval { get; set; }
+
         [JsonProperty("pingTimeout")]
         public int PingTimeout { get; set; }
-
-        [JsonProperty("data")]
-        public SocketData SocketData { get; set; }
-
-
-    }
-
-    public class SocketData
-    {
-        [JsonProperty("message")]
-        public string Message { get; set; }
-
-        [JsonProperty("transport")]
-        public string Transport { get; set; }
-
-        [JsonProperty("host")]
-        public string Host { get; set; }
-
-        [JsonProperty("maintenance")]
-        public bool Maintenance { get; set; }
 
     }
 }

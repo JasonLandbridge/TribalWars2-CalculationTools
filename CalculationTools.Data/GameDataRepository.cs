@@ -2,6 +2,7 @@
 using CalculationTools.Common;
 using Castle.Core.Internal;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,34 +24,36 @@ namespace CalculationTools.Data
 
         #endregion Constructors
 
-        #region Methods
 
-        #region WorldMethods
-
-        public List<World> GetCharacterWorlds(int characterId)
-        {
-            List<World> result = new List<World>();
-
-            //using (var db = new CalculationToolsDBContext())
-            //{
-            //    result = db.Worlds
-            //        .Include(c => c.CharacterWorld)
-            //        .ThenInclude(x => x.Character)
-            //        .Where(i => i.CharacterWorld.Any(c => c.World == ) == characterId)
-
-            //        .AsNoTracking().ToList();
-            //}
-
-            return result;
-        }
+        #region Properties
+        public bool IsInUnitTestMode { get; set; }
+        public DbContextOptions<CalculationToolsDBContext> DbContextOptions { get; set; }
 
         #endregion
 
+        #region Methods
+
+        private CalculationToolsDBContext GetDBContext()
+        {
+            if (IsInUnitTestMode)
+            {
+                if (DbContextOptions != null)
+                {
+                    return new CalculationToolsDBContext(DbContextOptions);
+                }
+                throw new ArgumentNullException(nameof(DbContextOptions), "Make sure to first provide a valid DBContextOptions to use this repository in unit testing.");
+            }
+            return new CalculationToolsDBContext();
+
+        }
+
+
         #region Accounts
+
 
         public Account AddAccount()
         {
-            using (var db = new CalculationToolsDBContext())
+            using (var db = GetDBContext())
             {
                 Account account = new Account
                 {
@@ -68,7 +71,7 @@ namespace CalculationTools.Data
         public void UpdateAccount(Account account)
         {
             if (account == null) { return; }
-            using (var db = new CalculationToolsDBContext())
+            using (var db = GetDBContext())
             {
                 if (account.DefaultCharacter != null)
                     db.Attach(account.DefaultCharacter);
@@ -85,7 +88,7 @@ namespace CalculationTools.Data
         {
             if (accountId > 0)
             {
-                using (var db = new CalculationToolsDBContext())
+                using (var db = GetDBContext())
                 {
                     Account account = db.Accounts.FirstOrDefault(a => a.Id == accountId);
                     if (account != null)
@@ -137,7 +140,7 @@ namespace CalculationTools.Data
 
         public List<Account> GetAccounts(bool onlyConfirmed = false)
         {
-            using (var db = new CalculationToolsDBContext())
+            using (var db = GetDBContext())
             {
                 var list = db.Accounts
                     .Include(a => a.OnServer)
@@ -153,11 +156,25 @@ namespace CalculationTools.Data
 
         #endregion
 
+        #region GetWorld
+
+        public World GetWorld(string worldId)
+        {
+            using (var db = GetDBContext())
+            {
+                return db.Worlds
+                    .AsNoTracking()
+                    .FirstOrDefault(a => a.WorldId == worldId);
+            }
+        }
+
+        #endregion
+
         #region Servers
 
         public List<Server> GetServers()
         {
-            using (var db = new CalculationToolsDBContext())
+            using (var db = GetDBContext())
             {
                 return db.Servers
                     .AsNoTracking()
@@ -167,11 +184,15 @@ namespace CalculationTools.Data
 
         #endregion
 
-        public Character GetCharacterById(int id)
+        public Character GetCharacterById(int id, bool tw2CharacterId = false)
         {
-            using (var db = new CalculationToolsDBContext())
+            using (var db = GetDBContext())
             {
-                return db.Characters.FirstOrDefault(a => a.Id == id);
+                if (tw2CharacterId)
+                {
+                    return db.Characters.AsNoTracking().FirstOrDefault(a => a.CharacterId == id);
+                }
+                return db.Characters.AsNoTracking().FirstOrDefault(a => a.Id == id);
             }
         }
 
@@ -179,7 +200,7 @@ namespace CalculationTools.Data
         {
             if (serverCode.IsNullOrEmpty() || serverCode.Length != 2) { return null; }
 
-            using (var db = new CalculationToolsDBContext())
+            using (var db = GetDBContext())
             {
                 return db.Servers.AsTracking().FirstOrDefault(a => a.Id == serverCode);
             }
@@ -188,21 +209,21 @@ namespace CalculationTools.Data
 
         public void UpdateGroups(List<IGroup> groupList)
         {
-            if (groupList.Count == 0) { return; }
+            //if (groupList.Count == 0) { return; }
 
-            foreach (IGroup group in groupList)
-            {
-                using (var db = new CalculationToolsDBContext())
-                {
-                    var groupEntity = _mapper.Map<Group>(group);
+            //foreach (IGroup group in groupList)
+            //{
+            //    using (var db = GetDBContext())
+            //    {
+            //        var groupEntity = _mapper.Map<Group>(group);
 
-                    db.Attach(groupEntity);
-                    db.Entry(groupEntity).Property("CharacterId").CurrentValue = group.CharacterId;
-                    db.Groups.Add(groupEntity);
+            //        db.Attach(groupEntity);
+            //        db.Entry(groupEntity).Property("CharacterId").CurrentValue = group.CharacterId;
+            //        db.Groups.Add(groupEntity);
 
-                    db.SaveChanges();
-                }
-            }
+            //        db.SaveChanges();
+            //    }
+            //}
         }
 
         public void UpdateVillages(List<IVillage> villages)
@@ -211,21 +232,67 @@ namespace CalculationTools.Data
 
             foreach (IVillage village in villages)
             {
-                using (var db = new CalculationToolsDBContext())
+                using (var db = GetDBContext())
                 {
                     var villageEntity = _mapper.Map<Village>(village);
-                    db.Attach(villageEntity);
-                    // db.Entry(villageEntity).Property("CharacterId").CurrentValue = group.CharacterId;
 
-                    db.Villages.Add(villageEntity);
+                    int characterId = villageEntity.CharacterId ?? default;
+                    Character character = GetCharacterById(characterId, true);
+                    World world = GetWorld(villageEntity.WorldId);
+
+                    var entity = db.Villages.FirstOrDefault(item => item.Id == villageEntity.Id);
+                    if (entity != null)
+                    {
+                        // Make changes on entity
+                        entity.Name = villageEntity.Name;
+                        entity.X = villageEntity.X;
+                        entity.Y = villageEntity.Y;
+                        entity.Points = villageEntity.Points;
+
+                        if (world != null)
+                        {
+                            db.Attach(world);
+                            entity.World = world;
+                            entity.WorldId = world.WorldId;
+                        }
+
+                        if (character != null)
+                        {
+                            db.Attach(character);
+                            entity.Character = character;
+                            entity.CharacterId = character.CharacterId;
+                        }
+                    }
+                    else
+                    {
+                        db.Attach(villageEntity);
+
+                        if (world != null)
+                        {
+                            db.Attach(world);
+                            villageEntity.World = world;
+                            villageEntity.WorldId = world.WorldId;
+                        }
+
+                        if (character != null)
+                        {
+                            db.Attach(character);
+
+                            villageEntity.Character = character;
+                            villageEntity.CharacterId = character.CharacterId;
+
+                        }
+                        db.Add(villageEntity);
+                    }
                     db.SaveChanges();
                 }
+
             }
         }
 
-        public void UpdateAccountData(ILoginData loginData)
+        public void UpdateLoginData(ILoginData loginData)
         {
-            using (var db = new CalculationToolsDBContext())
+            using (var db = GetDBContext())
             {
                 // Update the logged in account
                 Account account = GetAccount(loginData.Name);
@@ -238,68 +305,15 @@ namespace CalculationTools.Data
                 }
             }
 
+            ParseWorlds(loginData);
 
-            List<World> worldList = new List<World>();
+            ParseCharacters(loginData);
+        }
 
-            // TW2 regards used worlds by the player as characters and empty worlds as world objects
-            // This will parse the world data from a characterDTO to a world entities.
-
-            foreach (IWorld world in loginData.Worlds)
-            {
-                worldList.Add(_mapper.Map<World>(world));
-            }
-
-            foreach (ICharacter character in loginData.Characters)
-            {
-                worldList.Add(_mapper.Map<World>(character));
-            }
-
-            // Filter on unique WorldCode, they are duplicates anyway.
-            worldList = worldList.GroupBy(p => p.WorldId)
-                .Select(g => g.First())
-                .ToList();
-
-            if (worldList.Count > 0)
-            {
-                // Add or update the worlds 
-                using (var db = new CalculationToolsDBContext())
-                {
-                    foreach (World world in worldList)
-                    {
-                        var entity = db.Worlds.FirstOrDefault(item => item.WorldId == world.WorldId);
-
-                        if (entity != null)
-                        {
-                            // Make changes on entity
-                            entity.Name = world.Name;
-                            entity.Full = world.Full;
-                            entity.KeyRequired = world.KeyRequired;
-                            entity.Maintenance = world.Maintenance;
-                            entity.OnServerId = GetServer(world.WorldId.Substring(0, 2)).Id;
-                        }
-                        else
-                        {
-                            db.Attach(world);
-                            world.OnServerId = GetServer(world.WorldId.Substring(0, 2)).Id;
-                            db.Worlds.Add(world);
-                        }
-
-
-                        db.SaveChanges();
-                    }
-
-                }
-            }
-            else
-            {
-                //TODO add logger here
-            }
-
-
+        private void ParseCharacters(ILoginData loginData)
+        {
             // Parse the characters
-
             List<Character> characterList = new List<Character>();
-
             foreach (ICharacter character in loginData.Characters)
             {
                 characterList.Add(_mapper.Map<Character>(character));
@@ -308,11 +322,13 @@ namespace CalculationTools.Data
             if (characterList.Count > 0)
             {
                 // Add or update the worlds 
-                using (var db = new CalculationToolsDBContext())
+                using (var db = GetDBContext())
                 {
                     foreach (Character character in characterList)
                     {
-                        var entity = db.Characters.FirstOrDefault(item => item.Id == character.Id);
+                        var entity = db.Characters.FirstOrDefault(
+                            item => item.CharacterId == character.CharacterId &&
+                                    item.WorldId == character.WorldId);
 
                         if (entity != null)
                         {
@@ -331,22 +347,70 @@ namespace CalculationTools.Data
                             {
                                 character.AccountOwnerId = accountOwner.Id;
                             }
-
                             db.Characters.Add(character);
                         }
-
                         db.SaveChanges();
                     }
-
                 }
             }
             else
             {
                 //TODO add logger here
             }
-
-
         }
+
+        private void ParseWorlds(ILoginData loginData)
+        {
+            List<World> worldList = new List<World>();
+
+            // TW2 regards used worlds by the player as characters and empty worlds as world objects
+            // This will parse the world data from a characterDTO to a world entities.
+            foreach (IWorld world in loginData.Worlds)
+            {
+                worldList.Add(_mapper.Map<World>(world));
+            }
+            foreach (ICharacter character in loginData.Characters)
+            {
+                worldList.Add(_mapper.Map<World>(character));
+            }
+
+            // Filter on unique WorldCode, they are duplicates anyway.
+            worldList = worldList.GroupBy(p => p.WorldId)
+                .Select(g => g.First())
+                .ToList();
+            if (worldList.Count > 0)
+            {
+                // Add or update the worlds 
+                using (var db = GetDBContext())
+                {
+                    foreach (World world in worldList)
+                    {
+                        var entity = db.Worlds.FirstOrDefault(item => item.WorldId == world.WorldId);
+                        if (entity != null)
+                        {
+                            // Make changes on entity
+                            entity.Name = world.Name;
+                            entity.Full = world.Full;
+                            entity.KeyRequired = world.KeyRequired;
+                            entity.Maintenance = world.Maintenance;
+                            entity.OnServerId = GetServer(world.WorldId.Substring(0, 2)).Id;
+                        }
+                        else
+                        {
+                            db.Attach(world);
+                            world.OnServerId = GetServer(world.WorldId.Substring(0, 2)).Id;
+                            db.Worlds.Add(world);
+                        }
+                        db.SaveChanges();
+                    }
+                }
+            }
+            else
+            {
+                //TODO add logger here
+            }
+        }
+
         #endregion Methods
 
         #region Methods

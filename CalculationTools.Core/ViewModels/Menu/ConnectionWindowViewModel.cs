@@ -1,4 +1,5 @@
 ﻿using CalculationTools.Common;
+using CalculationTools.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,7 +70,7 @@ namespace CalculationTools.Core
             {
                 IsConnecting = false;
 
-                await _socketManager.StopConnection();
+                await _socketManager.StopConnection(true);
                 _socketManager.ConnectionLogUpdated -= UpdateConnectionLog;
             }
         }

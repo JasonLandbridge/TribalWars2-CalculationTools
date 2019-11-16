@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using CalculationTools.Data;
-
-namespace CalculationTools.Core
+﻿namespace CalculationTools.Core
 {
     /// <summary>
     /// The root class of the Application Core Domain
@@ -16,20 +12,6 @@ namespace CalculationTools.Core
         {
             // Continue adding the dependencies in the IoC container
             IoC.Setup();
-
-            using (var db = new CalculationToolsDBContext())
-            {
-                try
-                {
-                    db.Database.EnsureDeleted();
-                }
-                catch (IOException e)
-                {
-                    Console.WriteLine(e);
-                }
-                db.Database.EnsureCreated();
-            }
-
         }
     }
 }

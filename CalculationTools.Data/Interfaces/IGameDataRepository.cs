@@ -1,9 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using CalculationTools.Common;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
-namespace CalculationTools.Common
+namespace CalculationTools.Data
 {
     public interface IGameDataRepository
     {
+        #region Properties
+
+        DbContextOptions<CalculationToolsDBContext> DbContextOptions { get; set; }
+        bool IsInUnitTestMode { get; set; }
+
+        #endregion Properties
+
         #region Methods
 
         #region Accounts
@@ -20,17 +29,15 @@ namespace CalculationTools.Common
         void UpdateAccount(Account account);
         #endregion
 
-        List<World> GetCharacterWorlds(int characterId);
-
         List<Server> GetServers();
 
         void UpdateGroups(List<IGroup> groupList);
 
         void UpdateVillages(List<IVillage> villages);
 
+        void UpdateLoginData(ILoginData loginData);
 
         #endregion Methods
 
-        void UpdateAccountData(ILoginData loginData);
     }
 }

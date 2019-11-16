@@ -10,11 +10,7 @@ namespace CalculationTools.Common
         int PlayerId { get; set; }
         string Name { get; set; }
 
-        void SetLoginData(ILoginData loginData);
 
-        event EventHandler LoginDataIsUpdated;
         void SetGroups(IList<IGroup> groupList);
-        void SetCharacterData(ICharacterData characterData);
-        void SetActiveCharacterId(int characterId);
     }
 }

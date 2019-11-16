@@ -10,6 +10,7 @@ namespace CalculationTools.WebSocket
     public class SocketManager : BasePropertyChanged, ISocketManager
     {
         private readonly IPlayerData _playerData;
+        private readonly IDataManager _dataManager;
 
         #region Fields
 
@@ -18,9 +19,10 @@ namespace CalculationTools.WebSocket
 
         #endregion Fields
 
-        public SocketManager(IPlayerData playerData)
+        public SocketManager(IPlayerData playerData, IDataManager dataManager)
         {
             _playerData = playerData;
+            _dataManager = dataManager;
         }
 
         #region Properties
@@ -43,7 +45,7 @@ namespace CalculationTools.WebSocket
 
             if (SocketClient == null)
             {
-                SocketClient = new SocketClient(_playerData);
+                SocketClient = new SocketClient(_playerData, _dataManager);
                 SocketClient.ConnectionLogUpdated +=
                     (sender, args) =>
                     {
