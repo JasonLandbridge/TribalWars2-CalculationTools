@@ -84,7 +84,7 @@ namespace CalculationTools.WebSocket
 
         #region Methods
 
-        public static string Login(ConnectData connectData)
+        public static object Login(ConnectData connectData)
         {
             object data;
             if (!string.IsNullOrEmpty(connectData.AccessToken))
@@ -104,34 +104,20 @@ namespace CalculationTools.WebSocket
                 };
             }
 
-            var jsonObject = new
-            {
-                id = Id,
-                type = LOGIN,
-                data,
-                headers = MsgHeader,
-            };
-            return AddMsg(JsonConvert.SerializeObject(jsonObject));
+            return data;
         }
 
-        public static string SystemIdentify()
+        public static object SystemIdentify()
         {
             string fakeUserAgent = new Bogus.DataSets.Internet("en").UserAgent();
-
-            var jsonObject = new
+            return new
             {
-                id = Id,
-                type = SYSTEM_IDENTIFY,
-                data = new
-                {
-                    platform = "browser",
-                    api_version = "10.*.*",
-                    device = fakeUserAgent
-                },
+                platform = "browser",
+                api_version = "10.*.*",
+                device = fakeUserAgent
             };
-            return AddMsg(JsonConvert.SerializeObject(jsonObject));
         }
-        public static string SelectCharacter(LoginDataDTO loginDto, ConnectData connectData = null)
+        public static object SelectCharacter(LoginDataDTO loginDto, ConnectData connectData = null)
         {
             // Use default world
             string worldId = loginDto.Characters[0].WorldId;
@@ -141,19 +127,12 @@ namespace CalculationTools.WebSocket
                 worldId = connectData.WorldID;
             }
 
-            var jsonObject = new
+            return new
             {
-                id = Id,
-                type = SELECT_CHARACTER,
-                data = new
-                {
-                    id = loginDto.PlayerId,
-                    world_id = worldId
-                },
-                headers = MsgHeader
-
+                id = loginDto.PlayerId,
+                world_id = worldId
             };
-            return AddMsg(JsonConvert.SerializeObject(jsonObject));
+
         }
 
         /// <summary>
@@ -161,15 +140,32 @@ namespace CalculationTools.WebSocket
         /// </summary>
         /// <param name="sendType">The message type</param>
         /// <returns>A json formatted message</returns>
-        public static string GetDefaultSendMessage(string sendType)
+        public static string GetDefaultSendMessage(string sendType, object dataObject = null)
         {
 
-            var jsonObject = new
+            object jsonObject;
+
+            if (dataObject != null)
             {
-                id = Id,
-                type = sendType,
-                headers = MsgHeader
-            };
+                jsonObject = new
+                {
+                    id = Id,
+                    type = sendType,
+                    data = dataObject,
+                    headers = MsgHeader
+                };
+            }
+            else
+            {
+                jsonObject = new
+                {
+                    id = Id,
+                    type = sendType,
+                    headers = MsgHeader
+                };
+            }
+
+
             return AddMsg(JsonConvert.SerializeObject(jsonObject));
         }
 
@@ -199,28 +195,6 @@ namespace CalculationTools.WebSocket
 
         #endregion
 
-
-        public static string GetVillages()
-        {
-            var jsonObject = new
-            {
-                id = Id,
-                type = GET_VILLAGES,
-                headers = MsgHeader
-            };
-            return AddMsg(JsonConvert.SerializeObject(jsonObject));
-        }
-
-        public static string GetPremiumListItems()
-        {
-            var jsonObject = new
-            {
-                id = Id,
-                type = PREMIUM_LIST_ITEMS,
-                headers = MsgHeader
-            };
-            return AddMsg(JsonConvert.SerializeObject(jsonObject));
-        }
     }
 
 }

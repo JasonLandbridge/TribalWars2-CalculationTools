@@ -23,18 +23,6 @@ namespace CalculationTools.Data
 
         public CalculationToolsDBContext()
         {
-
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                try
-                {
-                    Database.EnsureDeleted();
-                }
-                catch (IOException e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
             Database.EnsureCreated();
         }
 
@@ -49,7 +37,7 @@ namespace CalculationTools.Data
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlite(connectionString);
-                optionsBuilder.EnableSensitiveDataLogging(true);
+                optionsBuilder.EnableSensitiveDataLogging();
             }
         }
 
@@ -202,5 +190,22 @@ namespace CalculationTools.Data
 
         }
 
+
+        public bool EnsureDeletedAndCreated()
+        {
+            try
+            {
+                Database.EnsureDeleted();
+                Database.EnsureCreated();
+                return true;
+
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return false;
+        }
     }
 }
