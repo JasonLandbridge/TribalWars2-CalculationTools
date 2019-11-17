@@ -41,8 +41,7 @@ namespace CalculationTools.Data
                 {
                     return new CalculationToolsDBContext(DbContextOptions);
                 }
-                throw new ArgumentNullException(nameof(DbContextOptions),
-                    "Make sure to first provide a valid DBContextOptions to use this repository in unit testing.");
+                throw new ArgumentNullException(nameof(DbContextOptions), "Make sure to first provide a valid DBContextOptions to use this repository in unit testing.");
             }
             return new CalculationToolsDBContext();
 
@@ -230,10 +229,6 @@ namespace CalculationTools.Data
         public void UpdateVillages(List<IVillage> villages)
         {
             if (villages.Count == 0) { return; }
-
-            var personsDump = ObjectDumper.Dump(villages, DumpStyle.CSharp);
-
-            Console.WriteLine(personsDump);
 
             foreach (IVillage village in villages)
             {

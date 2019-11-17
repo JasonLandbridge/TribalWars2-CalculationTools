@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CalculationTools.Common;
-using CalculationTools.Common.Socket;
 using CalculationTools.Data;
 using CalculationTools.WebSocket;
 using SimpleInjector;
@@ -33,13 +32,12 @@ namespace CalculationTools.Core
             Container.Register<IPlayerData, PlayerData>(Lifestyle.Singleton);
             Container.Register<IDataManager, DataManager>(Lifestyle.Singleton);
             Container.Register<ISocketManager, SocketManager>(Lifestyle.Singleton);
-            Container.Register<IMessageHandling, MessageHandling>(Lifestyle.Singleton);
 
             Container.Register<IGameDataRepository, GameDataRepository>(Lifestyle.Singleton);
 
             // Injectable service
             IMapper mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-            Container.RegisterInstance(typeof(IMapper), AutoMapperContainer);
+            Container.RegisterInstance(typeof(IMapper), mapper);
 
         }
 

@@ -39,7 +39,5 @@ namespace CalculationTools.Common
         void UpdateAccount(Account account);
 
         #endregion Methods
-
-        void SetActiveWorldId(string worldId);
     }
 }

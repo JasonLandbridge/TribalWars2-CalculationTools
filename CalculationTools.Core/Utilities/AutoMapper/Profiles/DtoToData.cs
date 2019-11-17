@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CalculationTools.Common;
+using CalculationTools.Common.Extensions;
+using CalculationTools.Data;
 
 namespace CalculationTools.Core
 {
@@ -8,6 +10,10 @@ namespace CalculationTools.Core
 
         public DtoToData()
         {
+
+            CreateMap<CharacterDataDTO, ICharacterData>()
+                .ReverseMap();
+            CreateMap<ICharacterData, CharacterData>();
 
             CreateMap<VillageDTO, IVillage>()
                 .ReverseMap();
