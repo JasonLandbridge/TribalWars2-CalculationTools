@@ -11,6 +11,7 @@ namespace CalculationTools.WebSocket
     {
         private readonly IPlayerData _playerData;
         private readonly IDataManager _dataManager;
+        private readonly IMessageHandling _messageHandling;
 
         #region Fields
 
@@ -19,7 +20,10 @@ namespace CalculationTools.WebSocket
 
         #endregion Fields
 
-        public SocketManager(IPlayerData playerData, IDataManager dataManager)
+        public SocketManager(
+            IPlayerData playerData,
+            IDataManager dataManager
+            )
         {
             _playerData = playerData;
             _dataManager = dataManager;
@@ -27,7 +31,10 @@ namespace CalculationTools.WebSocket
 
         #region Properties
 
-
+        /// <summary>
+        /// The last used connection credentials. This will be null is connection was deleted.
+        /// </summary>
+        public ConnectData ConnectData { get; set; }
         public ConnectResult ConnectResult { get; set; } = new ConnectResult();
 
         public StringBuilder ConnectionLog { get; set; } = new StringBuilder();
@@ -45,7 +52,9 @@ namespace CalculationTools.WebSocket
 
             if (SocketClient == null)
             {
-                SocketClient = new SocketClient(_playerData, _dataManager);
+                MessageHandling messageHandling = new MessageHandling(this, _dataManager);
+
+                SocketClient = new SocketClient(_playerData, _dataManager, messageHandling);
                 SocketClient.ConnectionLogUpdated +=
                     (sender, args) =>
                     {
@@ -59,6 +68,7 @@ namespace CalculationTools.WebSocket
 
         public async Task<ConnectResult> TestConnection(ConnectData connectData)
         {
+            ConnectData = connectData;
             ConnectResult connectResult = await GetSocketClient().TestConnectionAsync(connectData);
             await StopConnection(true);
             return connectResult;
@@ -71,6 +81,7 @@ namespace CalculationTools.WebSocket
             {
                 connectData.AccessToken = ConnectResult?.AccessToken;
             }
+            ConnectData = connectData;
 
             GetSocketClient().SetupConnection(connectData);
             ConnectResult = await GetSocketClient().StartConnectionAsync(useAccessToken);
@@ -88,6 +99,7 @@ namespace CalculationTools.WebSocket
             {
                 SocketClient = null;
                 ConnectResult = null;
+                ConnectData = null;
             }
 
             return true;
@@ -98,6 +110,36 @@ namespace CalculationTools.WebSocket
             GetSocketClient().ConnectionLog.Clear();
         }
 
+        public async Task<bool> SendMessageAsync(string message)
+        {
+            return await GetSocketClient().SendMessageAsync(message);
+        }
+
+        public void AddToConnectionLog(string message)
+        {
+            GetSocketClient().AddToConnectionLog(message);
+        }
+
+        public void SetPingInterval(int pingInterval)
+        {
+            GetSocketClient().SetPingInterval(pingInterval);
+        }
+
+
+        public ConnectResult GetConnectResult()
+        {
+            if (GetSocketClient().IsConnected)
+            {
+                return GetSocketClient().ConnectResult;
+            }
+            return null;
+        }
+
+
+        public bool SetConnectionResult()
+        {
+            return GetSocketClient().SetConnectionResult();
+        }
 
         #endregion Methods
     }

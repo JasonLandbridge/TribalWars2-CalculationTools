@@ -12,7 +12,17 @@ namespace CalculationTools.Common
         Task<bool> StopConnection(bool deleteConnection = false);
         StringBuilder ConnectionLog { get; }
 
+        /// <summary>
+        /// The last used connection credentials. This will be null is connection was deleted.
+        /// </summary>
+        ConnectData ConnectData { get; set; }
+
         event EventHandler ConnectionLogUpdated;
         void ClearConnectionLog();
+        Task<bool> SendMessageAsync(string message);
+        void AddToConnectionLog(string message);
+        void SetPingInterval(int pingInterval);
+        ConnectResult GetConnectResult();
+        bool SetConnectionResult();
     }
 }

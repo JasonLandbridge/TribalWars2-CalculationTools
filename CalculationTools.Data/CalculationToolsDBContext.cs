@@ -21,18 +21,6 @@ namespace CalculationTools.Data
 
         public CalculationToolsDBContext()
         {
-
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                try
-                {
-                    Database.EnsureDeleted();
-                }
-                catch (IOException e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
             Database.EnsureCreated();
         }
 
