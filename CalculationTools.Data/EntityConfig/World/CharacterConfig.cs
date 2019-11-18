@@ -10,6 +10,29 @@ namespace CalculationTools.Data
         {
             // Configure Character Table
             builder.HasKey(a => a.Id);
+
+            builder
+                .HasOne(x => x.AccountOwner)
+                .WithMany(x => x.CharacterList)
+                .HasForeignKey(x => x.AccountOwnerId)
+                .IsRequired(false);
+
+            builder
+                .HasOne(x => x.World)
+                .WithMany(x => x.Characters)
+                .HasForeignKey(x => x.WorldId);
+
+            builder
+                .HasMany(x => x.Groups)
+                .WithOne(x => x.Character)
+                .HasForeignKey(x => x.CharacterId)
+                .IsRequired(false);
+
+            builder
+                .HasMany<Village>()
+                .WithOne()
+                .HasForeignKey(x => x.CharacterId)
+                .IsRequired(false);
         }
     }
 

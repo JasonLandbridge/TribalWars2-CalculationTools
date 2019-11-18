@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CalculationTools.Common;
-using CalculationTools.Common.Extensions;
 using CalculationTools.Data;
 
 namespace CalculationTools.Core

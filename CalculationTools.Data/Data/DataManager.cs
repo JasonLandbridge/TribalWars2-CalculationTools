@@ -85,7 +85,7 @@ namespace CalculationTools.Data
             // Add the owning characterId of this village
             foreach (IVillage village in cData.Villages)
             {
-                village.WorldId = WorldId;
+                //village.WorldId = WorldId;
                 village.CharacterId = CharacterId;
             }
 
@@ -145,6 +145,16 @@ namespace CalculationTools.Data
         {
             return _gameDataRepository.GetServers();
         }
+        #endregion
+
+
+        #region Villages
+
+        public List<Village> GetVillages(int characterId = 0)
+        {
+            return _gameDataRepository.GetVillages(characterId);
+        }
+
         #endregion
 
         #endregion Methods

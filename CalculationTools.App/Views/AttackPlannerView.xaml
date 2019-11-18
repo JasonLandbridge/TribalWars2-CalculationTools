@@ -8,18 +8,26 @@
     Width="800"
     Height="450"
     mc:Ignorable="d">
-    <StackPanel Orientation="Vertical" Background="White">
+    <StackPanel Background="White" Orientation="Vertical">
+
+        <ItemsControl Name="icTodoList" ItemsSource="{Binding VillageList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Label Content="{Binding Name}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <StackPanel Orientation="Horizontal">
-            <CheckBox  Margin="5"/>
-            <TextBox Text="Start village" Margin="5"/>
-            <TextBox Text="Target village" Margin="5"/>
-            <TextBox Text="Slowest unit" Margin="5"/>
-            <TextBox Text="Arrive at" Margin="5"/>
-            <Label Content="Send at"/>
+            <CheckBox Margin="5" />
+            <TextBox Margin="5" Text="Start village" />
+            <TextBox Margin="5" Text="Target village" />
+            <TextBox Margin="5" Text="Slowest unit" />
+            <TextBox Margin="5" Text="Arrive at" />
+            <Label Content="Send at" />
 
         </StackPanel>
-        <Grid >
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="130" />
                 <ColumnDefinition Width="150" />

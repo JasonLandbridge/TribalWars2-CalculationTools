@@ -1,13 +1,11 @@
 ﻿using CalculationTools.Common;
+using EntityFrameworkCore.Triggers;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 
 namespace CalculationTools.Data
 {
-    public sealed class CalculationToolsDBContext : DbContext
+    public sealed class CalculationToolsDBContext : DbContextWithTriggers
     {
 
         private readonly string connectionString = "Data Source=./CalculationToolsDB.db";
@@ -48,8 +46,8 @@ namespace CalculationTools.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
+                optionsBuilder.EnableSensitiveDataLogging();
                 optionsBuilder.UseSqlite(connectionString);
-                optionsBuilder.EnableSensitiveDataLogging(true);
             }
         }
 
@@ -178,29 +176,6 @@ namespace CalculationTools.Data
 
 
 
-            //TODO DELETE THIS BEFORE COMMITING
-            modelBuilder.Entity<Account>().HasData(
-                new List<Account>{
-                    new Account
-                    {
-                        Id = 1,
-                        Username = "***REMOVED***",
-                        Password = "***REMOVED***",
-                        OnServerId = "en",
-                        IsConfirmed = true
-                    },
-                    new Account
-                    {
-                        Id = 2,
-                        Username = "***REMOVED***",
-                        Password = "***REMOVED***",
-                        OnServerId = "nl",
-                        IsConfirmed = true
-
-                    }
-                });
-
         }
-
     }
 }

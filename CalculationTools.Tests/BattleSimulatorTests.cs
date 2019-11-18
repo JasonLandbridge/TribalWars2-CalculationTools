@@ -1,5 +1,4 @@
 ﻿using CalculationTools.Core;
-using CalculationTools.WebSocket;
 using Xunit;
 
 namespace CalculationTools.Tests

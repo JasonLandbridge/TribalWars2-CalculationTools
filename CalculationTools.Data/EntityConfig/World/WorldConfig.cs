@@ -18,7 +18,8 @@ namespace CalculationTools.Data
 
             builder
                 .HasOne(e => e.OnServer)
-                .WithMany(a => a.Worlds);
+                .WithMany(a => a.Worlds)
+                .HasForeignKey(x => x.OnServerId);
 
             builder
                 .HasMany(e => e.Characters)

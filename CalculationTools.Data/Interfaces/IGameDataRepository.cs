@@ -33,11 +33,13 @@ namespace CalculationTools.Data
 
         void UpdateGroups(List<IGroup> groupList);
 
-        void UpdateVillages(List<IVillage> villages);
+        bool UpdateVillages(List<IVillage> villages);
 
         void UpdateLoginData(ILoginData loginData);
 
         #endregion Methods
 
+        List<Village> GetVillages(int characterId = 0);
+        void DeleteDB();
     }
 }

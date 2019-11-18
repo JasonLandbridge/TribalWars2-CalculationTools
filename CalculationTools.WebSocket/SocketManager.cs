@@ -49,7 +49,7 @@ namespace CalculationTools.WebSocket
                 SocketClient.ConnectionLogUpdated +=
                     (sender, args) =>
                     {
-                        ConnectionLog = SocketClient.ConnectionLog;
+                        ConnectionLog = SocketClient?.ConnectionLog;
                         ConnectionLogUpdated?.Invoke(this, EventArgs.Empty);
                     };
             }

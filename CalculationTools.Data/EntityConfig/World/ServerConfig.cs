@@ -14,6 +14,7 @@ namespace CalculationTools.Data
             builder
                 .HasMany(c => c.Worlds)
                 .WithOne(a => a.OnServer);
+
             builder
                 .HasMany(c => c.Accounts)
                 .WithOne(a => a.OnServer);

@@ -1,7 +1,5 @@
-﻿using System;
+﻿using CalculationTools.Core;
 using System.Collections.Generic;
-using System.Text;
-using CalculationTools.Core;
 
 namespace CalculationTools.Tests
 {

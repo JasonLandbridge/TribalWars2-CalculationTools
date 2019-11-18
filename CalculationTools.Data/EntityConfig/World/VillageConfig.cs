@@ -12,10 +12,18 @@ namespace CalculationTools.Data
             // Configure Villages
             builder
                 .HasKey(a => a.Id);
+
             builder
                 .HasOne(a => a.Character)
                 .WithMany(a => a.Villages)
-                .HasForeignKey(a => a.CharacterId);
+                .HasForeignKey(a => a.CharacterId)
+                .IsRequired(false);
+
+            builder
+                .HasOne(a => a.Character)
+                .WithMany(a => a.Villages)
+                .HasForeignKey(a => a.CharacterId)
+                .IsRequired(false);
 
         }
     }
