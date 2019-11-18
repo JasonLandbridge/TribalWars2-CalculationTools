@@ -1,4 +1,7 @@
-﻿using System.Windows.Input;
+﻿using CalculationTools.Data;
+using System;
+using System.Reactive.Linq;
+using System.Windows.Input;
 
 namespace CalculationTools.Core
 {
@@ -27,11 +30,18 @@ namespace CalculationTools.Core
 
             ConnectToTW2Command = new RelayCommand(ConnectToTW2);
             OpenSettingsCommand = new RelayCommand(OpenSettings);
+
+            SetupReactions();
+            SetConnectionStatus(false);
         }
 
         #endregion Constructors
 
         #region Properties
+
+        public string ConnectionStatusImage { get; set; }
+        public string ConnectionStatusMessage { get; set; }
+
 
         #region Commands
 
@@ -42,6 +52,31 @@ namespace CalculationTools.Core
         #endregion Properties
 
         #region Methods
+
+        public void SetConnectionStatus(bool status)
+        {
+            string statusString;
+            if (status)
+            {
+                statusString = "online";
+            }
+            else
+            {
+                statusString = "offline";
+            }
+
+            ConnectionStatusImage = $"/Resources/Img/connection_status/{statusString}.png";
+            ConnectionStatusMessage = statusString.ToUpper();
+        }
+        private void SetupReactions()
+        {
+            //Change the status bar online/offline icon when the connection changes
+            Observable
+                .FromEventPattern<bool>(
+                          ev => DataEvents.ConnectionStatus += ev,
+                          ev => DataEvents.ConnectionStatus -= ev)
+                .Subscribe(x => SetConnectionStatus(x.EventArgs));
+        }
 
         public void OpenSettings()
         {

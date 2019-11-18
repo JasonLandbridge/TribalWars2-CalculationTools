@@ -42,5 +42,6 @@ namespace CalculationTools.Common
 
         void SetActiveWorldId(string worldId);
         List<Village> GetVillages(int characterId = 0);
+        void SetConnectionStatus(bool connectionStatus);
     }
 }

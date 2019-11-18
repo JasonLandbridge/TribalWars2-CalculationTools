@@ -283,6 +283,7 @@ namespace CalculationTools.Data
 
                     //Relationships
                     entity.World = world;
+                    entity.WorldId = world.WorldId;
 
                     if (entity.CharacterId != null)
                     {

@@ -8,7 +8,8 @@
     Title="Tribal Wars 2 Calculation Tools"
     Width="1920"
     Height="1180"
-    mc:Ignorable="d" Closed="Window_Closed">
+    Closed="Window_Closed"
+    mc:Ignorable="d">
 
     <DockPanel LastChildFill="False">
         <!--  Menu  -->
@@ -28,11 +29,20 @@
                 Command="{Binding ConnectToTW2Command}"
                 Header="_Connect To TW2" />
         </Menu>
+
+        <!--  StatusBar  -->
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem>
-                <TextBlock Name="lblCursorPosition" />
+            <StatusBarItem HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="100"
+                        Height="25"
+                        Source="{Binding ConnectionStatusImage}" />
+                    <!--<Label Content="{Binding ConnectionStatusMessage}" />-->
+                </StackPanel>
             </StatusBarItem>
         </StatusBar>
+
         <!--  Main Grid  -->
         <GroupBox DockPanel.Dock="Left" Header="Battle Simulator">
 
@@ -69,7 +79,7 @@
             <TabItem x:Name="TabBattleSimulator" Header="Battle Simulator">
                 <ContentControl x:Name="BattleSimulator" />
             </TabItem>
-            <TabItem x:Name="TabAttackPlanner" Header="Attack Planner" >
+            <TabItem x:Name="TabAttackPlanner" Header="Attack Planner">
                 <ContentControl x:Name="AttackPlanner" />
             </TabItem>
             <TabItem Header="Farm Tracker">
@@ -129,5 +139,6 @@
             <TabItem Header="Building Calculator" />
             <TabItem Header="Loyalty Calculator" />
         </TabControl>
+
     </DockPanel>
 </Window>

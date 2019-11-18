@@ -79,13 +79,12 @@ namespace CalculationTools.Data
         {
             if (characterData == null) return;
 
-            // TODO make conversion
             CharacterData cData = _mapper.Map<CharacterData>(characterData);
 
             // Add the owning characterId of this village
             foreach (IVillage village in cData.Villages)
             {
-                //village.WorldId = WorldId;
+                village.WorldId = WorldId;
                 village.CharacterId = CharacterId;
             }
 
@@ -144,6 +143,11 @@ namespace CalculationTools.Data
         public List<Server> GetServers()
         {
             return _gameDataRepository.GetServers();
+        }
+
+        public void SetConnectionStatus(bool connectionStatus)
+        {
+            DataEvents.InvokeConnectionStatus(connectionStatus);
         }
         #endregion
 

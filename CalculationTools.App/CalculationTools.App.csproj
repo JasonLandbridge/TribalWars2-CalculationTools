@@ -38,6 +38,8 @@
     <None Remove="log4net.config" />
     <None Remove="Resources\Img\buildings\buildings_church.png" />
     <None Remove="Resources\Img\buildings\buildings_wall.png" />
+    <None Remove="Resources\Img\connection_status\offline.png" />
+    <None Remove="Resources\Img\connection_status\online.png" />
     <None Remove="Resources\Img\flags\flag_beta.png" />
     <None Remove="Resources\Img\flags\flag_br.png" />
     <None Remove="Resources\Img\flags\flag_cz.png" />
@@ -93,6 +95,8 @@
     <None Remove="Resources\Img\weapons\paladin_weapon.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Img\connection_status\offline.png" />
+    <Resource Include="Resources\Img\connection_status\online.png" />
     <Resource Include="Resources\Img\flags\flag_beta.png" />
     <Resource Include="Resources\Img\flags\flag_br.png" />
     <Resource Include="Resources\Img\flags\flag_cz.png" />

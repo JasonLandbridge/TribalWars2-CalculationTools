@@ -90,6 +90,7 @@ namespace CalculationTools.WebSocket
 
                     _dataManager.SetActiveCharacterId(charSelected.Id);
                     _dataManager.SetActiveWorldId(charSelected.WorldId);
+                    _dataManager.SetConnectionStatus(true);
 
                     SendDefaultMessage(RouteProvider.GET_GAME_DATA);
                     SendDefaultMessage(RouteProvider.GET_GROUPS);
@@ -288,7 +289,6 @@ namespace CalculationTools.WebSocket
             connectResult.TW2AccountId = loginData?.PlayerId;
 
             _socketManager.SetConnectionResult();
-
             // Send parsed data to the PlayerData to be stored
             _dataManager.SetLoginData(loginData);
             return loginData;
@@ -315,6 +315,8 @@ namespace CalculationTools.WebSocket
 
         public async Task<bool> StopConnection()
         {
+            _dataManager.SetConnectionStatus(false);
+
             return await _socketManager.StopConnection(true);
         }
 

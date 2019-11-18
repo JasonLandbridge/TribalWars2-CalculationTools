@@ -1,5 +1,6 @@
 ﻿using CalculationTools.Common;
 using NLog;
+using NLog.Fluent;
 using System;
 using System.Net.WebSockets;
 using System.Text;
@@ -52,7 +53,7 @@ namespace CalculationTools.WebSocket
         public WebsocketClient Client { get; set; }
         public ConnectData ConnectData { get; set; }
         public ConnectResult ConnectResult { get; set; } = new ConnectResult();
-        public bool IsConnected => Client.IsRunning;
+        public bool IsConnected => Client?.IsRunning ?? false;
         public StringBuilder ConnectionLog { get; set; } = new StringBuilder();
 
         public bool ClientHasBeenSetup { get; set; }
@@ -166,23 +167,38 @@ namespace CalculationTools.WebSocket
             return await ConnectionResult.Task;
 
         }
+        /// <summary>
+        /// Will close the current connection to TW2
+        /// </summary>
+        /// <returns>Was the connection closed successfully</returns>
         public async Task<bool> CloseConnection()
         {
-            Log.Info("Closing connection!");
-            AddToConnectionLog("Closing connection");
 
-            if (_keepAlive)
+            if (IsConnected)
             {
-                LastMsgSendTimer.Stop();
+                Log.Info("Closing connection!");
+                AddToConnectionLog("Closing connection");
+
+                if (_keepAlive)
+                {
+                    LastMsgSendTimer.Stop();
+                }
+
+                if (Client != null)
+                {
+                    var result = await Client?.Stop(WebSocketCloseStatus.NormalClosure, "Closed by command");
+                }
+
+            }
+            else
+            {
+                return false;
             }
 
-            if (Client != null)
-            {
-                var result = await Client?.Stop(WebSocketCloseStatus.NormalClosure, "Closed by command");
-            }
 
             PingCount = 0;
             ClientHasBeenSetup = false;
+            _dataManager.SetConnectionStatus(false);
             return true;
         }
 
