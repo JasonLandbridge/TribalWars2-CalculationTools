@@ -12,3 +12,5 @@ Design/Calculators/TW2-BATTLESIM_V0.31.ods
 Builds/
 
 CalculationTools.Data/CalculationToolsDB.db
+
+CalculationTools.Data/SecretData.cs
