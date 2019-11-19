@@ -15,13 +15,16 @@ namespace CalculationTools.WebSocket
         public const string LOGIN = "Authentication/login";
         public const string LOGIN_SUCCESS = "Login/success";
         public const string SYSTEM_IDENTIFIED = "System/identified";
-        public const string SYSTEM_IDENTIFY = "System/identify";
         public const string SYSTEM_ERROR = "System/error";
         public const string MESSAGE_ERROR = "Message/error";
         public const string EXCEPTION_ERROR = "Exception/ErrorException";
 
 
         #region Send Types
+        public const string SYSTEM_IDENTIFY = "System/identify";
+        public const string AUTHENTICATION_RECONNECT = "Authentication/reconnect";
+
+
         public const string SELECT_CHARACTER = "Authentication/selectCharacter";
 
         public const string GET_GAME_DATA = "GameDataBatch/getGameData";
@@ -59,6 +62,13 @@ namespace CalculationTools.WebSocket
         public const string CHARACTER_INFO = "Character/info";
         public const string TRIBESKILL_INFO = "TribeSkill/info";
         public const string SYSTEM_TIME = "System/time";
+
+        #region ErrorMessages
+
+        public const string CHARACTER_SELECTION_FAILED = "Authentication/characterSelectionFailed";
+
+
+        #endregion
 
         #endregion
 
@@ -115,6 +125,18 @@ namespace CalculationTools.WebSocket
                 platform = "browser",
                 api_version = "10.*.*",
                 device = fakeUserAgent
+            };
+        }
+
+
+        public static object AuthenticationReconnect(ConnectData connectData, int characterId)
+        {
+            return new
+            {
+                character = characterId,
+                name = connectData.Username,
+                token = connectData.AccessToken,
+                world = connectData.WorldID,
             };
         }
         public static object SelectCharacter(LoginDataDTO loginDto, ConnectData connectData = null)

@@ -29,7 +29,6 @@ namespace CalculationTools.Core
         public static void Setup()
         {
 
-            Container.Register<IPlayerData, PlayerData>(Lifestyle.Singleton);
             Container.Register<IDataManager, DataManager>(Lifestyle.Singleton);
             Container.Register<ISocketManager, SocketManager>(Lifestyle.Singleton);
             Container.Register<IMessageHandling, MessageHandling>(Lifestyle.Singleton);

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace CalculationTools.Data
 {
@@ -16,13 +17,11 @@ namespace CalculationTools.Data
         private readonly IGameDataRepository _gameDataRepository;
         private readonly IMapper _mapper;
         private readonly Settings _settings = new Settings();
-        public string WorldId;
 
         #endregion Fields
 
         #region Events
 
-        public event EventHandler LoginDataIsUpdated;
 
 
         #endregion Events
@@ -57,7 +56,8 @@ namespace CalculationTools.Data
         #endregion Constructors
 
         #region Properties
-        public int CharacterId { get; set; }
+        public int ActiveCharacterId { get; set; }
+        public string ActiveWorldId { get; set; }
 
         public ISettings Settings => _settings;
 
@@ -71,8 +71,7 @@ namespace CalculationTools.Data
 
             _gameDataRepository.UpdateLoginData(loginData);
 
-            LoginDataIsUpdated.Invoke(this, EventArgs.Empty);
-
+            DataEvents.InvokeLoginDataIsUpdated();
         }
 
         public void SetCharacterData(ICharacterData characterData)
@@ -84,8 +83,8 @@ namespace CalculationTools.Data
             // Add the owning characterId of this village
             foreach (IVillage village in cData.Villages)
             {
-                village.WorldId = WorldId;
-                village.CharacterId = CharacterId;
+                village.WorldId = ActiveWorldId;
+                village.CharacterId = ActiveCharacterId;
             }
 
             _gameDataRepository.UpdateVillages(cData.Villages);
@@ -101,16 +100,6 @@ namespace CalculationTools.Data
         public void UpdateAccount(Account account)
         {
             _gameDataRepository.UpdateAccount(account);
-        }
-
-        public void SetActiveCharacterId(int characterId)
-        {
-            CharacterId = characterId;
-        }
-
-        public void SetActiveWorldId(string worldId)
-        {
-            WorldId = worldId;
         }
 
         #region Account
@@ -160,6 +149,20 @@ namespace CalculationTools.Data
         }
 
         #endregion
+
+        #region Groups
+
+        public void SetGroups(IList<IGroup> groupList)
+        {
+            _gameDataRepository.UpdateGroups(groupList.ToList());
+        }
+
+        #endregion
+
+        public void SetConnectionResult(ConnectResult connectResult)
+        {
+            DataEvents.InvokeConnectionResult(connectResult);
+        }
 
         #endregion Methods
     }

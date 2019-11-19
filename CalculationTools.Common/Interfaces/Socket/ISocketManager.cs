@@ -17,12 +17,13 @@ namespace CalculationTools.Common
         /// </summary>
         ConnectData ConnectData { get; set; }
 
+        bool IsConnected { get; }
+
         event EventHandler ConnectionLogUpdated;
         void ClearConnectionLog();
         Task<bool> SendMessageAsync(string message);
         void AddToConnectionLog(string message);
-        void SetPingInterval(int pingInterval);
+        void SetPingSettings(int pingTimeout, int pingInterval);
         ConnectResult GetConnectResult();
-        bool SetConnectionResult();
     }
 }

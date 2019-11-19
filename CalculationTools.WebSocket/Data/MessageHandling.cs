@@ -30,17 +30,9 @@ namespace CalculationTools.WebSocket
 
         private ConnectData ConnectData => _socketManager.ConnectData;
 
+
+        public bool IsReconnecting { get; set; }
         #region Methods
-
-        /// <summary>
-        /// A helper function which uses the default format for sending messages to the server
-        /// </summary>
-        /// <param name="sendType">The message type</param>
-        public void SendDefaultMessage(string sendType, object dataObject = null)
-        {
-            _socketManager.SendMessageAsync(RouteProvider.GetDefaultSendMessage(sendType, dataObject));
-        }
-
         #region ParseMethods
         public async void ParseResponseAsync(string response)
         {
@@ -61,6 +53,11 @@ namespace CalculationTools.WebSocket
 
             SocketResponse socketResponse = ParseSocketResponse(response);
 
+
+            var errorMessage = new ErrorMessageDTO();
+            var sytemError = new SystemErrorDTO();
+
+
             switch (socketResponse.SocketType)
             {
                 case RouteProvider.SID:
@@ -70,7 +67,18 @@ namespace CalculationTools.WebSocket
 
                 case RouteProvider.SYSTEM_WELCOME:
                     // On system welcome send system identify
-                    SendDefaultMessage(RouteProvider.SYSTEM_IDENTIFY, RouteProvider.SystemIdentify());
+                    if (IsReconnecting)
+                    {
+                        SendDefaultMessage(
+                            RouteProvider.AUTHENTICATION_RECONNECT,
+                            RouteProvider.AuthenticationReconnect(ConnectData, _dataManager.ActiveCharacterId));
+                    }
+                    else
+                    {
+                        SendDefaultMessage(
+                            RouteProvider.SYSTEM_IDENTIFY,
+                            RouteProvider.SystemIdentify());
+                    }
                     break;
 
                 case RouteProvider.SYSTEM_IDENTIFIED:
@@ -88,8 +96,8 @@ namespace CalculationTools.WebSocket
                 case RouteProvider.CHARACTER_SELECTED:
                     var charSelected = ParseDataFromResponse<CharacterSelectedDTO>(response);
 
-                    _dataManager.SetActiveCharacterId(charSelected.Id);
-                    _dataManager.SetActiveWorldId(charSelected.WorldId);
+                    _dataManager.ActiveCharacterId = charSelected.Id;
+                    _dataManager.ActiveWorldId = charSelected.WorldId;
                     _dataManager.SetConnectionStatus(true);
 
                     SendDefaultMessage(RouteProvider.GET_GAME_DATA);
@@ -145,7 +153,7 @@ namespace CalculationTools.WebSocket
 
                 case RouteProvider.CHARACTER_COLORS:
                     SendDefaultMessage(RouteProvider.CHARACTER_GETINFO);
-                    SendDefaultMessage(RouteProvider.TRIBESKILL_GETINFO);
+                    // SendDefaultMessage(RouteProvider.TRIBESKILL_GETINFO);
                     SendDefaultMessage(RouteProvider.SYSTEM_GETTIME);
                     break;
 
@@ -165,19 +173,34 @@ namespace CalculationTools.WebSocket
 
                     break;
 
+
+                case RouteProvider.CHARACTER_SELECTION_FAILED:
+                    errorMessage = ParseDataFromResponse<ErrorMessageDTO>(response);
+                    Log.Error($"Character selection failed: {errorMessage.Message}");
+
+                    await StopConnection();
+                    break;
+
+
                 case RouteProvider.SYSTEM_ERROR:
+                    sytemError = ParseDataFromResponse<SystemErrorDTO>(response);
+
                     ParseSystemError(response);
+                    Log.Error($"Character selection failed: {errorMessage.Message}");
+
+                    await StopConnection();
                     break;
 
                 case RouteProvider.MESSAGE_ERROR:
-                    var errorMessage = ParseDataFromResponse<ErrorMessageDTO>(response);
+                    errorMessage = ParseDataFromResponse<ErrorMessageDTO>(response);
                     Log.Error($"Socket Error: {errorMessage.ErrorCode} - {errorMessage.Message}");
                     await StopConnection();
                     break;
 
                 case RouteProvider.EXCEPTION_ERROR:
-                    var errorMessage2 = ParseDataFromResponse<SystemErrorDTO>(response);
-                    Log.Error($"Server exception error: {errorMessage2.Message}");
+                    sytemError = ParseDataFromResponse<SystemErrorDTO>(response);
+                    Log.Error($"Server exception error: {errorMessage.Message}");
+
                     AddToConnectionLog("THE SERVER IS MOST LIKELY DOWN!");
                     await StopConnection();
                     break;
@@ -238,9 +261,10 @@ namespace CalculationTools.WebSocket
                 }
             }
 
-            if (socketResponse.PingInterval > 0)
+            // The pingTimeout and pingInterval are always send in the same message.
+            if (socketResponse.PingTimeout > 0 && socketResponse.PingInterval > 0)
             {
-                _socketManager.SetPingInterval(socketResponse.PingInterval);
+                _socketManager.SetPingSettings(socketResponse.PingTimeout, socketResponse.PingInterval);
             }
 
             return socketResponse;
@@ -288,9 +312,12 @@ namespace CalculationTools.WebSocket
             connectResult.AccessToken = loginData?.AccessToken;
             connectResult.TW2AccountId = loginData?.PlayerId;
 
-            _socketManager.SetConnectionResult();
-            // Send parsed data to the PlayerData to be stored
+            _socketManager.ConnectData.AccessToken = loginData?.AccessToken;
+
+
+            _dataManager.SetConnectionResult(connectResult);
             _dataManager.SetLoginData(loginData);
+
             return loginData;
         }
 
@@ -304,7 +331,7 @@ namespace CalculationTools.WebSocket
                 connectResult.IsConnected = false;
                 connectResult.Message = systemError.Message;
 
-                _socketManager.SetConnectionResult();
+                _dataManager.SetConnectionResult(connectResult);
             }
 
         }
@@ -312,6 +339,15 @@ namespace CalculationTools.WebSocket
         #endregion
 
         #region SocketClient Helper Methods
+
+        /// <summary>
+        /// A helper function which uses the default format for sending messages to the server
+        /// </summary>
+        /// <param name="sendType">The message type</param>
+        public void SendDefaultMessage(string sendType, object dataObject = null)
+        {
+            _socketManager.SendMessageAsync(RouteProvider.GetDefaultSendMessage(sendType, dataObject));
+        }
 
         public async Task<bool> StopConnection()
         {

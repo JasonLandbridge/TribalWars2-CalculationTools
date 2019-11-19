@@ -1,6 +1,5 @@
 ﻿
 using CalculationTools.Common;
-using CalculationTools.Data;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
@@ -31,14 +30,15 @@ namespace CalculationTools.Core
 
         private void SetupReactions()
         {
-            var villageUpdatedObservable = Observable.FromEventPattern(
-                ev => DataEvents.VillagesUpdated += ev,
-                ev => DataEvents.VillagesUpdated -= ev);
+            Observable
+                .FromEventPattern(
+                    ev => DataEvents.VillagesUpdated += ev,
+                    ev => DataEvents.VillagesUpdated -= ev)
+                .Subscribe(x =>
+                {
+                    VillageList = _dataManager.GetVillages(1);
 
-            villageUpdatedObservable.Subscribe(x =>
-            {
-                VillageList = _dataManager.GetVillages(1);
-            });
+                });
         }
     }
 }

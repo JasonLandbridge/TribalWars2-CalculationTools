@@ -1,8 +1,12 @@
 ﻿using CalculationTools.Common;
+using CalculationTools.Core;
+using CalculationTools.Data;
+using CalculationTools.WebSocket;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
-namespace CalculationTools.Tests
+namespace CalculationTools.Tests.Data
 {
     public static class MockData
     {
@@ -10,7 +14,7 @@ namespace CalculationTools.Tests
         /// This data is copied directly from the server and contains sensitive information so it is not available on GitHub. Ask for directions to create your own test data.
         /// </summary>
         /// <returns></returns>
-        public static ILoginData GetLoginData()
+        public static ILoginData GetILoginData()
         {
             return new LoginDataDTO
             {
@@ -541,5 +545,43 @@ namespace CalculationTools.Tests
              }
             };
         }
+
+
+        #region Dependencies
+
+
+
+        public static DbContextOptions<CalculationToolsDBContext> GetDbContextOptions()
+        {
+            const string connectionString = "Data Source=./DEBUG_CalculationToolsDB.db";
+            var builder = new DbContextOptionsBuilder<CalculationToolsDBContext>();
+            builder.UseSqlite(connectionString);
+            return builder.Options;
+        }
+
+        public static IGameDataRepository GetIGameDataRepository(bool deleteDbBeforeStart = false)
+        {
+            IGameDataRepository _gameDataRepository = new GameDataRepository(IoC.AutoMapperContainer);
+            _gameDataRepository.IsInUnitTestMode = true;
+            _gameDataRepository.DbContextOptions = GetDbContextOptions();
+            _gameDataRepository.DeleteDB();
+            return _gameDataRepository;
+        }
+
+
+        public static SocketManager GetSocketManager(bool deleteDbBeforeStart = false)
+        {
+            IGameDataRepository _gameDataRepository = GetIGameDataRepository();
+            DataManager dataManager = new DataManager(_gameDataRepository, IoC.AutoMapperContainer);
+            return new SocketManager(dataManager);
+        }
+
+        public static CalculationToolsDBContext GetDbContext()
+        {
+            return new CalculationToolsDBContext(GetDbContextOptions());
+        }
+
+        #endregion
+
     }
 }

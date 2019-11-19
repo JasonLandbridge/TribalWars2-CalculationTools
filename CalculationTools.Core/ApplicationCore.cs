@@ -17,13 +17,13 @@ namespace CalculationTools.Core
 
 
             // Rebuild the database on every debug session
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                using (var db = new CalculationToolsDBContext())
-                {
-                    db.Database.EnsureDeleted();
-                }
-            }
+            //if (System.Diagnostics.Debugger.IsAttached)
+            //{
+            //    using (var db = new CalculationToolsDBContext())
+            //    {
+            //        db.Database.EnsureDeleted();
+            //    }
+            //}
         }
     }
 }

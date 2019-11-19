@@ -1,7 +1,6 @@
 ﻿using CalculationTools.Common;
-using CalculationTools.Core;
 using CalculationTools.Data;
-using Microsoft.EntityFrameworkCore;
+using CalculationTools.Tests.Data;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -13,16 +12,7 @@ namespace CalculationTools.Tests
 
         #region Properties
 
-        private static DbContextOptions<CalculationToolsDBContext> dbContextOptions
-        {
-            get
-            {
-                const string connectionString = "Data Source=./DEBUG_CalculationToolsDB.db";
-                var builder = new DbContextOptionsBuilder<CalculationToolsDBContext>();
-                builder.UseSqlite(connectionString);
-                return builder.Options;
-            }
-        }
+
 
         #endregion Properties
 
@@ -39,7 +29,7 @@ namespace CalculationTools.Tests
         [Fact]
         public static void ShouldAddAnAccountInDBAndRetrieveIt()
         {
-            using (var db = GetDbContext())
+            using (var db = MockData.GetDbContext())
             {
                 //Arrange
                 string username = "Jantje";
@@ -65,20 +55,15 @@ namespace CalculationTools.Tests
         public static void ShouldUpdateLoginDataToDbCorrectly()
         {
             //Arrange
-            IGameDataRepository _gameDataRepository = new GameDataRepository(IoC.AutoMapperContainer);
-            _gameDataRepository.IsInUnitTestMode = true;
-            _gameDataRepository.DbContextOptions = dbContextOptions;
-            _gameDataRepository.DeleteDB();
+            IGameDataRepository _gameDataRepository = MockData.GetIGameDataRepository(true);
 
-
-
-            ILoginData loginData = MockData.GetLoginData();
+            ILoginData loginData = MockData.GetILoginData();
 
             // Act
             _gameDataRepository.UpdateLoginData(loginData);
 
 
-            using (var db = GetDbContext())
+            using (var db = MockData.GetDbContext())
             {
                 var characterList = db.Characters.ToList();
 
@@ -104,9 +89,7 @@ namespace CalculationTools.Tests
         public static void ShouldInsertAndUpdateVillages()
         {
             //Arrange
-            IGameDataRepository _gameDataRepository = new GameDataRepository(IoC.AutoMapperContainer);
-            _gameDataRepository.IsInUnitTestMode = true;
-            _gameDataRepository.DbContextOptions = dbContextOptions;
+            IGameDataRepository _gameDataRepository = MockData.GetIGameDataRepository();
 
             List<IVillage> villages = MockData.GetCharacterVillages();
 
@@ -121,10 +104,7 @@ namespace CalculationTools.Tests
         }
 
 
-        private static CalculationToolsDBContext GetDbContext()
-        {
-            return new CalculationToolsDBContext(dbContextOptions);
-        }
+
 
         #endregion Methods
     }

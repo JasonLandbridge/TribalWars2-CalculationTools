@@ -3,6 +3,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -13,7 +14,6 @@ namespace CalculationTools.Core
         #region Fields
 
         private readonly IDataManager _dataManager;
-        private readonly IPlayerData _playerData;
         private readonly ISettings _settings;
         private readonly ISocketManager _socketManager;
         private int _accountIndex;
@@ -26,12 +26,10 @@ namespace CalculationTools.Core
 
         public SettingsWindowViewModel(
             IDataManager dataManager,
-            IPlayerData playerData,
             ISocketManager socketManager)
         {
             _dataManager = dataManager;
             _settings = _dataManager.Settings;
-            _playerData = playerData;
             _socketManager = socketManager;
 
 
@@ -273,22 +271,27 @@ namespace CalculationTools.Core
             AddAccountCommand = new RelayCommand(AddNewAccount);
             DeleteAccountCommand = new RelayCommand(DeleteAccount);
 
-            // Once the credentials have been tested then this event will fire.
-            _dataManager.LoginDataIsUpdated += (sender, args) =>
-            {
-                // Refresh the account from the database
-                SyncAccounts();
-                CharacterList = SelectedAccount.CharacterList.ToList();
 
-                if (CharacterList.Count > 0)
+            // Once the credentials have been tested then this event will fire.
+            Observable
+                .FromEventPattern(
+                    ev => DataEvents.LoginDataIsUpdated += ev,
+                    ev => DataEvents.LoginDataIsUpdated -= ev)
+                .Subscribe(x =>
                 {
-                    DefaultCharacter = CharacterList[0];
-                }
-                else
-                {
-                    ErrorMessage = "No worlds with characters available!";
-                }
-            };
+                    // Refresh the account from the database
+                    SyncAccounts();
+                    CharacterList = SelectedAccount.CharacterList.ToList();
+
+                    if (CharacterList.Count > 0)
+                    {
+                        DefaultCharacter = CharacterList[0];
+                    }
+                    else
+                    {
+                        ErrorMessage = "No worlds with characters available!";
+                    }
+                });
         }
 
         #endregion

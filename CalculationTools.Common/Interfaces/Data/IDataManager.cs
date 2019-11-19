@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CalculationTools.Common
 {
     public interface IDataManager
     {
-        #region Events
-
-        event EventHandler LoginDataIsUpdated;
-
-        #endregion Events
 
         #region Properties
 
+        int ActiveCharacterId { get; set; }
+        string ActiveWorldId { get; set; }
         ISettings Settings { get; }
 
         #endregion Properties
@@ -30,18 +26,19 @@ namespace CalculationTools.Common
         List<Account> GetAccounts(bool onlyConfirmed = false);
 
         List<Server> GetServers();
-        void SetActiveCharacterId(int characterId);
 
-        void SetLoginData(ILoginData loginData);
+        List<Village> GetVillages(int characterId = 0);
+
         void SetCharacterData(ICharacterData characterData);
 
+        void SetConnectionResult(ConnectResult connectResult);
+
+        void SetConnectionStatus(bool connectionStatus);
+
+        void SetLoginData(ILoginData loginData);
         void SetupSettings();
         void UpdateAccount(Account account);
 
         #endregion Methods
-
-        void SetActiveWorldId(string worldId);
-        List<Village> GetVillages(int characterId = 0);
-        void SetConnectionStatus(bool connectionStatus);
     }
 }

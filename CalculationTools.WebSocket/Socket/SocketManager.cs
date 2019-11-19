@@ -9,9 +9,7 @@ namespace CalculationTools.WebSocket
 {
     public class SocketManager : BasePropertyChanged, ISocketManager
     {
-        private readonly IPlayerData _playerData;
         private readonly IDataManager _dataManager;
-        private readonly IMessageHandling _messageHandling;
 
         #region Fields
 
@@ -20,12 +18,8 @@ namespace CalculationTools.WebSocket
 
         #endregion Fields
 
-        public SocketManager(
-            IPlayerData playerData,
-            IDataManager dataManager
-            )
+        public SocketManager(IDataManager dataManager)
         {
-            _playerData = playerData;
             _dataManager = dataManager;
         }
 
@@ -43,6 +37,8 @@ namespace CalculationTools.WebSocket
 
         public event EventHandler ConnectionLogUpdated;
 
+        public bool IsConnected => GetSocketClient() != null && GetSocketClient().IsConnected;
+
         #endregion Properties
 
         #region Methods
@@ -54,7 +50,7 @@ namespace CalculationTools.WebSocket
             {
                 MessageHandling messageHandling = new MessageHandling(this, _dataManager);
 
-                SocketClient = new SocketClient(_playerData, _dataManager, messageHandling);
+                SocketClient = new SocketClient(_dataManager, messageHandling);
                 SocketClient.ConnectionLogUpdated +=
                     (sender, args) =>
                     {
@@ -120,11 +116,10 @@ namespace CalculationTools.WebSocket
             GetSocketClient().AddToConnectionLog(message);
         }
 
-        public void SetPingInterval(int pingInterval)
+        public void SetPingSettings(int pingTimeout, int pingInterval)
         {
-            GetSocketClient().SetPingInterval(pingInterval);
+            GetSocketClient().SetPingSettings(pingTimeout, pingInterval);
         }
-
 
         public ConnectResult GetConnectResult()
         {
@@ -135,11 +130,6 @@ namespace CalculationTools.WebSocket
             return null;
         }
 
-
-        public bool SetConnectionResult()
-        {
-            return GetSocketClient().SetConnectionResult();
-        }
 
         #endregion Methods
     }

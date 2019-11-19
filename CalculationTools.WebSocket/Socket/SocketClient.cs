@@ -1,8 +1,8 @@
 ﻿using CalculationTools.Common;
 using NLog;
-using NLog.Fluent;
 using System;
 using System.Net.WebSockets;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -19,15 +19,21 @@ namespace CalculationTools.WebSocket
 
         private readonly IDataManager _dataManager;
         private readonly IMessageHandling _messageHandling;
-        private readonly IPlayerData _playerData;
 
         private readonly TaskCompletionSource<ConnectResult> ConnectionResult = new TaskCompletionSource<ConnectResult>();
 
         private static readonly object lockObj = new Object();
 
         private bool _keepAlive;
-        private int _pingInterval = 1000;
-        private static readonly Timer LastMsgSendTimer = new Timer(1000);
+        private int _pingInterval = 25000;
+        private int _pingTimeout = 5000;
+
+        /// <summary>
+        /// The first ping is send after <see cref="_pingTimeout"/> has expired, after which a ping will be send every <see cref="_pingInterval"/> until a non-ping message is send. 
+        /// </summary>
+        private bool _firstPingSend;
+
+        private static readonly Timer LastMsgSendTimer = new Timer(200);
 
 
         #endregion Fields
@@ -35,11 +41,9 @@ namespace CalculationTools.WebSocket
         #region Constructors
 
         public SocketClient(
-            IPlayerData playerData,
             IDataManager dataManager,
             IMessageHandling messageHandling)
         {
-            _playerData = playerData;
             _dataManager = dataManager;
             _messageHandling = messageHandling;
         }
@@ -55,6 +59,8 @@ namespace CalculationTools.WebSocket
         public ConnectResult ConnectResult { get; set; } = new ConnectResult();
         public bool IsConnected => Client?.IsRunning ?? false;
         public StringBuilder ConnectionLog { get; set; } = new StringBuilder();
+
+        public bool IsClosingConnection { get; set; }
 
         public bool ClientHasBeenSetup { get; set; }
         public int PingCount { get; set; }
@@ -77,16 +83,16 @@ namespace CalculationTools.WebSocket
 
             Client.ReconnectionHappened.Subscribe(type =>
             {
+                Log.Info($"Reconnection happening with type: {type}");
 
-                Log.Info($"Reconnection happened, type: {type}");
-                // TODO Reconnect with command from TW2
-                // Authentication/reconnect
                 switch (type)
                 {
                     case ReconnectionType.Initial:
+                        _messageHandling.IsReconnecting = false;
+                        break;
 
-                        Log.Info("Server is connected!");
-                        AddToConnectionLog("Server is connected!");
+                    case ReconnectionType.Lost:
+                        _messageHandling.IsReconnecting = true;
                         break;
                 }
             });
@@ -97,6 +103,8 @@ namespace CalculationTools.WebSocket
             });
             Client.MessageReceived.Subscribe(msg =>
             {
+                if (IsClosingConnection) { return; }
+
                 string log = $"Message received: {msg.Text}";
                 Log.Info(log);
                 AddToConnectionLog(log);
@@ -104,6 +112,16 @@ namespace CalculationTools.WebSocket
             });
 
             SetupPingWorker();
+
+            // TODO This does not work with multiple concurrent connections with TW2
+            Observable
+                .FromEventPattern<ConnectResult>(
+                    ev => DataEvents.ConnectionResult += ev,
+                    ev => DataEvents.ConnectionResult -= ev)
+                .Subscribe(x =>
+                {
+                    ConnectionResult.TrySetResult(x.EventArgs);
+                });
 
             ClientHasBeenSetup = true;
             return true;
@@ -116,6 +134,15 @@ namespace CalculationTools.WebSocket
             LastMsgSendTimer.Enabled = true;
             LastMsgSendTimer.Elapsed += async (sender, args) =>
             {
+
+                if (TimeSinceLastMsg.TotalMilliseconds >= _pingTimeout && !_firstPingSend)
+                {
+                    _firstPingSend = true;
+                    await SendMessageAsync("2");
+                    PingCount++;
+                }
+
+
                 if (TimeSinceLastMsg.TotalMilliseconds >= _pingInterval)
                 {
                     if (Client.IsRunning)
@@ -158,6 +185,7 @@ namespace CalculationTools.WebSocket
 
             if (_keepAlive)
             {
+                LastMessageSend = DateTime.Now;
                 LastMsgSendTimer.Start();
             }
 
@@ -173,32 +201,33 @@ namespace CalculationTools.WebSocket
         /// <returns>Was the connection closed successfully</returns>
         public async Task<bool> CloseConnection()
         {
+            IsClosingConnection = true;
+
+            if (_keepAlive)
+            {
+                LastMsgSendTimer.Stop();
+            }
 
             if (IsConnected)
             {
                 Log.Info("Closing connection!");
                 AddToConnectionLog("Closing connection");
 
-                if (_keepAlive)
-                {
-                    LastMsgSendTimer.Stop();
-                }
-
                 if (Client != null)
                 {
                     var result = await Client?.Stop(WebSocketCloseStatus.NormalClosure, "Closed by command");
                 }
-
             }
             else
             {
                 return false;
             }
 
-
             PingCount = 0;
             ClientHasBeenSetup = false;
             _dataManager.SetConnectionStatus(false);
+            IsClosingConnection = false;
+
             return true;
         }
 
@@ -206,19 +235,24 @@ namespace CalculationTools.WebSocket
 
         public async Task<bool> SendMessageAsync(string message)
         {
-            if (!string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(message) && Client != null && Client.IsRunning)
             {
-                if (Client != null && Client.IsRunning)
+
+                string log = $"Message Send:     {message}";
+                AddToConnectionLog(log);
+                Log.Info(log);
+
+                await Client.Send(message);
+
+                // Check if the message was a ping message
+                if (message != "2")
                 {
-                    string log = $"Message Send:     {message}";
-                    AddToConnectionLog(log);
-                    Log.Info(log);
-
-                    await Client.Send(message);
-
-                    LastMessageSend = DateTime.Now;
-                    return true;
+                    _firstPingSend = false;
                 }
+
+                LastMessageSend = DateTime.Now;
+                return true;
+
             }
 
             return false;
@@ -259,20 +293,19 @@ namespace CalculationTools.WebSocket
             }
         }
 
-        public void SetPingInterval(int pingInterval)
+        public void SetPingSettings(int pingTimeout, int pingInterval)
         {
+            if (pingTimeout >= 1000)
+            {
+                _pingTimeout = pingTimeout;
+            }
+
             if (pingInterval >= 1000)
             {
                 _pingInterval = pingInterval;
-                LastMsgSendTimer.Interval = _pingInterval;
             }
         }
 
-
-        public bool SetConnectionResult()
-        {
-            return ConnectionResult.TrySetResult(ConnectResult);
-        }
         #endregion Methods
 
     }
