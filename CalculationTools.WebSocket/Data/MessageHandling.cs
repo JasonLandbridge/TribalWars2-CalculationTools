@@ -119,12 +119,12 @@ namespace CalculationTools.WebSocket
 
                 case RouteProvider.ICON_VILLAGES:
                     //TODO This returns an object containing icon codes
+                    SendDefaultMessage(RouteProvider.GLOBALINFORMATION_GETINFO);
 
                     break;
 
                 case RouteProvider.PREMIUM_ITEMS:
                     //TODO This returns an object containing the usable premium items
-                    SendDefaultMessage(RouteProvider.GLOBALINFORMATION_GETINFO);
                     break;
 
                 case RouteProvider.GLOBALINFORMATION_INFO:
@@ -145,16 +145,24 @@ namespace CalculationTools.WebSocket
 
                 case RouteProvider.TRIBE_OWN_INVITATIONS:
                     SendDefaultMessage(RouteProvider.WHEEL_GETEVENT);
+                    SendDefaultMessage(RouteProvider.CHARACTER_GETCOLORS);
                     break;
 
+                //Optional during Gwendoline's wheel event
                 case RouteProvider.WHEEL_EVENT:
-                    SendDefaultMessage(RouteProvider.CHARACTER_GETCOLORS);
+                    //SendDefaultMessage(RouteProvider.WHEEL_GETPROGRESS);
                     break;
 
                 case RouteProvider.CHARACTER_COLORS:
                     SendDefaultMessage(RouteProvider.CHARACTER_GETINFO);
-                    // SendDefaultMessage(RouteProvider.TRIBESKILL_GETINFO);
+                    // TODO: First check if there is a tribe for this character
+                    // SendDefaultMessage(RouteProvider.TRIBESKILL_GETINFO); 
                     SendDefaultMessage(RouteProvider.SYSTEM_GETTIME);
+                    break;
+
+                //Optional during Gwendoline's wheel event
+                case RouteProvider.WHEELEVENT_PROGRESS:
+
                     break;
 
                 case RouteProvider.CHARACTER_INFO:
@@ -170,6 +178,14 @@ namespace CalculationTools.WebSocket
                     break;
 
                 case RouteProvider.SYSTEM_TIME:
+
+                    //SendDefaultMessage(RouteProvider.DAILYLOGINBONUS_GETINFO);
+                    //SendDefaultMessage(RouteProvider.QUEST_GETQUESTLINES);
+                    // TODO Get Coordinates from active village and start from there.
+                    //SendDefaultMessage(RouteProvider.MAP_GETVILLAGESBYAREA);
+
+
+
 
                     break;
 
@@ -335,6 +351,9 @@ namespace CalculationTools.WebSocket
             }
 
         }
+
+
+
 
         #endregion
 

@@ -25,5 +25,6 @@ namespace CalculationTools.Common
         void AddToConnectionLog(string message);
         void SetPingSettings(int pingTimeout, int pingInterval);
         ConnectResult GetConnectResult();
+        Task<string> Emit(string message, int id);
     }
 }

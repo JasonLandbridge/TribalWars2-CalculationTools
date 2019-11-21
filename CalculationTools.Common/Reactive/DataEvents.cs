@@ -14,6 +14,11 @@ namespace CalculationTools.Common
 
         public static event EventHandler VillagesUpdated;
 
+        /// <summary>
+        /// Will be fired once all the initial loading data from the server has been completed 
+        /// </summary>
+        public static event EventHandler TW2DataLoadingCompleted;
+
         #endregion Events
 
         #region Methods
@@ -36,6 +41,11 @@ namespace CalculationTools.Common
         public static void InvokeVillagesUpdated()
         {
             VillagesUpdated?.Invoke(null, EventArgs.Empty);
+        }
+
+        public static void InvokeTW2DataLoadingCompleted()
+        {
+            TW2DataLoadingCompleted?.Invoke(null, EventArgs.Empty);
         }
 
         #endregion Methods

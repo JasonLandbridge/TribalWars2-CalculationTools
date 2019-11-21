@@ -4,9 +4,10 @@ using System;
 using System.Net.WebSockets;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Websocket.Client;
+using Timer = System.Timers.Timer;
 
 namespace CalculationTools.WebSocket
 {
@@ -178,6 +179,7 @@ namespace CalculationTools.WebSocket
                 };
             }
 
+
             //AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
             //AssemblyLoadContext.Default.Unloading += DefaultOnUnloading;
 
@@ -243,7 +245,6 @@ namespace CalculationTools.WebSocket
                 Log.Info(log);
 
                 await Client.Send(message);
-
                 // Check if the message was a ping message
                 if (message != "2")
                 {
@@ -257,6 +258,31 @@ namespace CalculationTools.WebSocket
 
             return false;
         }
+
+
+        public async Task<string> Emit(string message, int id)
+        {
+            if (id == 0) { return string.Empty; }
+
+            var exitEvent = new ManualResetEvent(false);
+            string response = string.Empty;
+
+            var disposable = Client.MessageReceived
+                 .Where(msg => msg.Text.Contains($"\"id\":{id}"))
+                 .Subscribe(info =>
+             {
+                 response = info.Text;
+                 exitEvent.Set();
+             });
+
+            await SendMessageAsync(message);
+
+            exitEvent.WaitOne(TimeSpan.FromSeconds(30));
+            disposable.Dispose();
+
+            return response;
+        }
+
 
         /// <summary>
         /// Will login with the <see cref="ConnectData"/> and disconnect again when a result has been returned.

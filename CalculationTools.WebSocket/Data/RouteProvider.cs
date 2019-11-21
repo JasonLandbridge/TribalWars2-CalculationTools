@@ -35,11 +35,17 @@ namespace CalculationTools.WebSocket
         public const string EFFECT_GET_EFFECTS = "Effect/getEffects";
         public const string TRIBE_GET_OWN_INVITATIONS = "TribeInvitation/getOwnInvitations";
         public const string WHEEL_GETEVENT = "WheelEvent/getEvent";
+        public const string WHEEL_GETPROGRESS = "WheelEvent/getProgress";
         public const string CHARACTER_GETCOLORS = "Character/getColors";
         public const string CHARACTER_GETINFO = "Character/getInfo";
         public const string TRIBESKILL_GETINFO = "TribeSkill/getInfo";
         public const string SYSTEM_GETTIME = "System/getTime";
 
+        public const string DAILYLOGINBONUS_GETINFO = "DailyLoginBonus/getInfo";
+        public const string QUEST_GETQUESTLINES = "Quest/getQuestLines";
+        public const string MAP_GETVILLAGESBYAREA = "Map/getVillagesByArea";
+
+        public const string AUTOCOMPLETION_AUTOCOMPLETE = "Autocompletion/autocomplete";
 
         #endregion
 
@@ -58,10 +64,14 @@ namespace CalculationTools.WebSocket
         public const string TRIBE_OWN_INVITATIONS = "TribeInvitation/ownInvitations";
         public const string WHEEL_EVENT = "WheelEvent/event";
         public const string CHARACTER_COLORS = "Character/colors";
+        public const string WHEELEVENT_PROGRESS = "WheelEvent/progress";
 
         public const string CHARACTER_INFO = "Character/info";
         public const string TRIBESKILL_INFO = "TribeSkill/info";
         public const string SYSTEM_TIME = "System/time";
+
+        public const string AUTOCOMPLETION_RESULTS = "Autocomplete/results";
+
 
         #region ErrorMessages
 

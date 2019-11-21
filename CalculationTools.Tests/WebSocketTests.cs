@@ -2,6 +2,7 @@
 using CalculationTools.Data;
 using CalculationTools.Tests.Data;
 using CalculationTools.WebSocket;
+using System;
 using System.Threading;
 using Xunit;
 
@@ -61,7 +62,13 @@ namespace CalculationTools.Tests
             //Act
             ConnectResult result1 = await socketManager.StartConnection(validCredentials);
 
-            Thread.Sleep(60000);
+            Thread.Sleep(6000);
+
+            string result = await socketManager
+                 .GetSocketClient()
+                 .Emit(RouteProvider.GetDefaultSendMessage(RouteProvider.SYSTEM_GETTIME), RouteProvider.Id - 1);
+
+            Thread.Sleep(600000);
 
             //Assert
             Assert.True(socketManager.IsConnected);
@@ -69,6 +76,45 @@ namespace CalculationTools.Tests
 
         }
 
+        [Fact]
+        public static async void TestSocketRepository()
+        {
+            //Arrange
+            SocketManager socketManager = MockData.GetSocketManager(true);
+            SocketRepository socketRepository = new SocketRepository(socketManager);
 
+            Account account = SecretData.GetValidTestAccount();
+            ConnectData validCredentials = new ConnectData
+            {
+                Username = account.Username,
+                Password = account.Password,
+                ServerCountryCode = "en",
+                WorldID = "en48"
+            };
+
+
+            //Act
+            ConnectResult result1 = await socketManager.StartConnection(validCredentials);
+
+            Thread.Sleep(6000);
+
+            var systemTime = await socketRepository.GetSystemTimeAsync();
+            var villageList = await socketRepository.GetVillagesByAutocomplete("ka");
+
+            Thread.Sleep(6000);
+
+            systemTime = await socketRepository.GetSystemTimeAsync();
+
+            Thread.Sleep(6000);
+
+            systemTime = await socketRepository.GetSystemTimeAsync();
+
+            Thread.Sleep(600000);
+
+            //Assert
+            Assert.True(socketManager.IsConnected);
+            await socketManager.StopConnection(true);
+
+        }
     }
 }

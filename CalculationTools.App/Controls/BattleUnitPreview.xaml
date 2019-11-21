@@ -54,7 +54,7 @@
 
         <!--  Unit Amount row  -->
         <StackPanel Visibility="{Binding UnitAmountVisibility, Converter={StaticResource BoolToVis}}">
-            <app:BattleResultRow DataContext="{Binding UnitAmount}"  />
+            <app:BattleResultRow DataContext="{Binding UnitAmount}" />
         </StackPanel>
 
         <!--  Units Lost row  -->

@@ -131,6 +131,13 @@ namespace CalculationTools.WebSocket
         }
 
 
+        bool ISocketManager.IsConnected => IsConnected;
+
+
+        public async Task<string> Emit(string message, int id)
+        {
+            return await GetSocketClient().Emit(message, id);
+        }
         #endregion Methods
     }
 }

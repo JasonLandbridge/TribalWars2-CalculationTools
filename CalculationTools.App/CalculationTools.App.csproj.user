@@ -5,6 +5,9 @@
     <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Controls\CitySelector.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\AttackPlannerView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -34,6 +37,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Controls\CitySelector.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\AttackPlannerView.xaml">
       <SubType>Designer</SubType>
     </Page>

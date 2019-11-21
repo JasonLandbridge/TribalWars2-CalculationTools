@@ -5,12 +5,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CalculationTools.App.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:wpf="http://wpfcontrols.com/"
+    xmlns:controls="clr-namespace:CalculationTools.App.Controls"
     Width="800"
     Height="450"
     mc:Ignorable="d">
+
     <StackPanel Background="White" Orientation="Vertical">
 
-        <ItemsControl Name="icTodoList" ItemsSource="{Binding VillageList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+        <controls:CitySelector />
+
+        <ItemsControl ItemsSource="{Binding VillageList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Label Content="{Binding Name}" />
