@@ -18,15 +18,19 @@ namespace CalculationTools.Core
             _dataManager = dataManager;
 
             SetupReactions();
+
+
+            AttackPlannerRows.Add(new AttackPlannerRowViewModel
+            {
+                IsChecked = true,
+                VillageOrigin = new VillageSelectorViewModel()
+            });
+
         }
 
-        public List<Village> VillageList { get; set; } = new List<Village>
-        {
-            new Village
-            {
-                Name = "TEST TEST TEST"
-            }
-        };
+        public List<AttackPlannerRowViewModel> AttackPlannerRows { get; set; } = new List<AttackPlannerRowViewModel>();
+
+
 
         private void SetupReactions()
         {
@@ -36,8 +40,7 @@ namespace CalculationTools.Core
                     ev => DataEvents.VillagesUpdated -= ev)
                 .Subscribe(x =>
                 {
-                    VillageList = _dataManager.GetVillages(1);
-
+                    // VillageList = _dataManager.GetVillages(1);
                 });
         }
     }

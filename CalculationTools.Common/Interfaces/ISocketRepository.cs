@@ -7,6 +7,6 @@ namespace CalculationTools.Common
     public interface ISocketRepository
     {
         Task<DateTime> GetSystemTimeAsync();
-        Task<List<VillageDTO>> GetVillagesByAutocomplete(string nameToSearch);
+        Task<List<IVillage>> GetVillagesByAutocomplete(string nameToSearch);
     }
 }

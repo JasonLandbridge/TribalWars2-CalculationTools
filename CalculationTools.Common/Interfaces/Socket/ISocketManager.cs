@@ -26,5 +26,6 @@ namespace CalculationTools.Common
         void SetPingSettings(int pingTimeout, int pingInterval);
         ConnectResult GetConnectResult();
         Task<string> Emit(string message, int id);
+        string GetCurrentWorldId();
     }
 }

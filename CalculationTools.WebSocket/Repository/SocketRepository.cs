@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CalculationTools.Common;
+﻿using CalculationTools.Common;
 using CalculationTools.Common.DTOs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace CalculationTools.WebSocket.Repository
+namespace CalculationTools.WebSocket
 {
     public class SocketRepository : ISocketRepository
     {
@@ -43,7 +43,7 @@ namespace CalculationTools.WebSocket.Repository
             return DateTime.UnixEpoch.AddSeconds(systemTime.Time + systemTime.Offset);
         }
 
-        public async Task<List<VillageDTO>> GetVillagesByAutocomplete(string nameToSearch)
+        public async Task<List<IVillage>> GetVillagesByAutocomplete(string nameToSearch)
         {
 
             object data = new VillageAutocompleteDTO
@@ -64,7 +64,13 @@ namespace CalculationTools.WebSocket.Repository
 
             var autocompleteDto = ParseDataFromResponse<AutocompleteDTO>(response);
 
-            return autocompleteDto.Result.Village.ToList();
+            //Set the worldId for each village
+            foreach (VillageDTO villageDto in autocompleteDto.Result.Village)
+            {
+                villageDto.WorldId = _socketManager.GetCurrentWorldId();
+            }
+
+            return autocompleteDto.Result.Village.ToList<IVillage>();
         }
 
 

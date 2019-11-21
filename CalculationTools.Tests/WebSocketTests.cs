@@ -2,7 +2,6 @@
 using CalculationTools.Data;
 using CalculationTools.Tests.Data;
 using CalculationTools.WebSocket;
-using System;
 using System.Threading;
 using Xunit;
 

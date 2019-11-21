@@ -18,7 +18,6 @@ namespace CalculationTools.WebSocket
 
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-        private readonly IDataManager _dataManager;
         private readonly IMessageHandling _messageHandling;
 
         private readonly TaskCompletionSource<ConnectResult> ConnectionResult = new TaskCompletionSource<ConnectResult>();
@@ -41,11 +40,8 @@ namespace CalculationTools.WebSocket
 
         #region Constructors
 
-        public SocketClient(
-            IDataManager dataManager,
-            IMessageHandling messageHandling)
+        public SocketClient(IMessageHandling messageHandling)
         {
-            _dataManager = dataManager;
             _messageHandling = messageHandling;
         }
 
@@ -227,7 +223,9 @@ namespace CalculationTools.WebSocket
 
             PingCount = 0;
             ClientHasBeenSetup = false;
-            _dataManager.SetConnectionStatus(false);
+
+            DataEvents.InvokeConnectionStatus(false);
+
             IsClosingConnection = false;
 
             return true;

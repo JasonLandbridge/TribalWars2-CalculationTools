@@ -9,7 +9,6 @@ namespace CalculationTools.WebSocket
 {
     public class SocketManager : BasePropertyChanged, ISocketManager
     {
-        private readonly IDataManager _dataManager;
 
         #region Fields
 
@@ -18,9 +17,8 @@ namespace CalculationTools.WebSocket
 
         #endregion Fields
 
-        public SocketManager(IDataManager dataManager)
+        public SocketManager()
         {
-            _dataManager = dataManager;
         }
 
         #region Properties
@@ -48,9 +46,9 @@ namespace CalculationTools.WebSocket
 
             if (SocketClient == null)
             {
-                MessageHandling messageHandling = new MessageHandling(this, _dataManager);
 
-                SocketClient = new SocketClient(_dataManager, messageHandling);
+
+                SocketClient = new SocketClient();
                 SocketClient.ConnectionLogUpdated +=
                     (sender, args) =>
                     {
@@ -138,6 +136,13 @@ namespace CalculationTools.WebSocket
         {
             return await GetSocketClient().Emit(message, id);
         }
+
+        public string GetCurrentWorldId()
+        {
+            return GetSocketClient().ConnectData.WorldID;
+
+        }
+
         #endregion Methods
     }
 }

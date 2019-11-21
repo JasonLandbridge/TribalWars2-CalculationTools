@@ -13,8 +13,6 @@
 
     <StackPanel Background="White" Orientation="Vertical">
 
-        <controls:CitySelector />
-
         <ItemsControl ItemsSource="{Binding VillageList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -23,15 +21,22 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <StackPanel Orientation="Horizontal">
-            <CheckBox Margin="5" />
-            <TextBox Margin="5" Text="Start village" />
-            <TextBox Margin="5" Text="Target village" />
-            <TextBox Margin="5" Text="Slowest unit" />
-            <TextBox Margin="5" Text="Arrive at" />
-            <Label Content="Send at" />
+        <!-- Attack Planner rows -->
+        <ItemsControl ItemsSource="{Binding AttackPlannerRows, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Margin="5" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        < DataContext="{Binding VillageOrigin}" />
+                        <TextBox Margin="5" Text="Target village" />
+                        <TextBox Margin="5" Text="Slowest unit" />
+                        <TextBox Margin="5" Text="Arrive at" />
+                        <Label Content="Send at" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
-        </StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="130" />

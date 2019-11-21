@@ -1,18 +1,16 @@
-﻿using System.Collections;
+﻿using CalculationTools.Common;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Controls;
-using CalculationTools.Common;
 
 namespace CalculationTools.App.Controls
 {
     /// <summary>
-    /// Interaction logic for CitySelector.xaml
+    /// Interaction logic for VillageSelector.xaml
     /// </summary>
-    public partial class CitySelector : UserControl
+    public partial class VillageSelector : UserControl
     {
 
-        public CitySelector()
+        public VillageSelector()
         {
             InitializeComponent();
             //SuggestBox.DataContext = this;

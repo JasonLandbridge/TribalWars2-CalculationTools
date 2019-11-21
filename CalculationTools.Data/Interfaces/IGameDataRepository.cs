@@ -1,6 +1,7 @@
 ﻿using CalculationTools.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CalculationTools.Data
 {
@@ -36,6 +37,8 @@ namespace CalculationTools.Data
         bool UpdateVillages(List<IVillage> villages);
 
         void UpdateLoginData(ILoginData loginData);
+
+        Task<List<Village>> GetVillagesByAutocompleteAsync(string villageName);
 
         #endregion Methods
 

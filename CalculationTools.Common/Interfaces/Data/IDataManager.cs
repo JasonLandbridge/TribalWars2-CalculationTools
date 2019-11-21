@@ -33,8 +33,6 @@ namespace CalculationTools.Common
 
         void SetConnectionResult(ConnectResult connectResult);
 
-        void SetConnectionStatus(bool connectionStatus);
-
         void SetLoginData(ILoginData loginData);
         void SetupSettings();
         void UpdateAccount(Account account);

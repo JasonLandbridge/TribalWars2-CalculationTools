@@ -134,10 +134,6 @@ namespace CalculationTools.Data
             return _gameDataRepository.GetServers();
         }
 
-        public void SetConnectionStatus(bool connectionStatus)
-        {
-            DataEvents.InvokeConnectionStatus(connectionStatus);
-        }
         #endregion
 
 

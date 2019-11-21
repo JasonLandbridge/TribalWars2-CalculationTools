@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CalculationTools.Data
 {
@@ -13,13 +14,22 @@ namespace CalculationTools.Data
         #region Fields
 
         private readonly IMapper _mapper;
+        private readonly ISocketRepository _socketRepository;
+
+        private bool _isConnected = false;
+
+
         #endregion Fields
 
         #region Constructors
 
-        public GameDataRepository(IMapper mapper)
+        public GameDataRepository(ISocketRepository socketRepository, IMapper mapper)
         {
             _mapper = mapper;
+            _socketRepository = socketRepository;
+
+            // Keep track of the connection status
+            DataEvents.ConnectionStatus += (sender, b) => { _isConnected = b; };
         }
 
         #endregion Constructors
@@ -315,6 +325,23 @@ namespace CalculationTools.Data
                     return db.Villages.ToList();
                 }
 
+            }
+        }
+
+        public async Task<List<Village>> GetVillagesByAutocompleteAsync(string villageName)
+        {
+            if (string.IsNullOrEmpty(villageName)) { return new List<Village>(); }
+
+            if (_isConnected)
+            {
+                var villages = await _socketRepository.GetVillagesByAutocomplete(villageName);
+
+                UpdateVillages(villages);
+            }
+
+            using (var db = GetDBContext())
+            {
+                return db.Villages.Where(x => x.Name.StartsWith(villageName)).ToList();
             }
         }
 

@@ -98,7 +98,7 @@ namespace CalculationTools.WebSocket
 
                     _dataManager.ActiveCharacterId = charSelected.Id;
                     _dataManager.ActiveWorldId = charSelected.WorldId;
-                    _dataManager.SetConnectionStatus(true);
+                    DataEvents.InvokeConnectionStatus(true);
 
                     SendDefaultMessage(RouteProvider.GET_GAME_DATA);
                     SendDefaultMessage(RouteProvider.GET_GROUPS);
@@ -370,7 +370,7 @@ namespace CalculationTools.WebSocket
 
         public async Task<bool> StopConnection()
         {
-            _dataManager.SetConnectionStatus(false);
+            DataEvents.InvokeConnectionStatus(false);
 
             return await _socketManager.StopConnection(true);
         }
