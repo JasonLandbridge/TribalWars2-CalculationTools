@@ -8,5 +8,7 @@ namespace CalculationTools.Common
     {
         Task<DateTime> GetSystemTimeAsync();
         Task<List<IVillage>> GetVillagesByAutocomplete(string nameToSearch);
+        Task<bool> EstablishConnection(ConnectData connectData);
+        event EventHandler<LoginDataDTO> LoginDataAvailable;
     }
 }

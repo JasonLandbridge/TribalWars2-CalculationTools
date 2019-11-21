@@ -1,6 +1,7 @@
-﻿using CalculationTools.Tests.Data;
+﻿using CalculationTools.Common;
+using CalculationTools.Data;
+using CalculationTools.Tests.Data;
 using CalculationTools.WebSocket;
-using CalculationTools.WebSocket.Repository;
 using Xunit;
 
 namespace CalculationTools.Tests
@@ -12,7 +13,7 @@ namespace CalculationTools.Tests
         public static void GetIdShouldReturnCorrectIds()
         {
             //Arrange
-            SocketManager socketManager = MockData.GetSocketManager(true);
+            SocketManager socketManager = MockData.GetSocketManager();
             SocketRepository socketRepository = new SocketRepository(socketManager);
 
             string test =
@@ -24,6 +25,32 @@ namespace CalculationTools.Tests
 
             // Assert
             Assert.NotNull(result);
+
+        }
+
+
+        [Fact]
+        public static async void EstablishConnectionTestIfConnecting()
+        {
+            //Arrange
+            ISocketRepository socketRepository = MockData.GetISocketRepository(true);
+            Account account = SecretData.GetValidTestAccount();
+
+            // Fill in your own valid test account here
+            ConnectData validCredentials = new ConnectData
+            {
+                Username = account.Username,
+                Password = account.Password,
+                ServerCountryCode = "en",
+                SelectedCharacter = account.DefaultCharacter
+            };
+
+            //Act
+            var result = await socketRepository.EstablishConnection(validCredentials);
+
+            //Assert
+            Assert.True(result);
+
 
         }
     }

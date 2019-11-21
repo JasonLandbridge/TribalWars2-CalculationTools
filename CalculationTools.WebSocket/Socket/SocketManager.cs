@@ -34,8 +34,15 @@ namespace CalculationTools.WebSocket
         private SocketClient SocketClient { get; set; }
 
         public event EventHandler ConnectionLogUpdated;
+        public int ActiveCharacterId { get; set; }
+        public string ActiveWorldId { get; set; }
 
         public bool IsConnected => GetSocketClient() != null && GetSocketClient().IsConnected;
+
+        /// <summary>
+        /// Once the SocketClient has logged in then the SocketClient will be re-connecting instead of starting a new connection. 
+        /// </summary>
+        public bool IsReconnecting { get; set; }
 
         #endregion Properties
 
@@ -47,7 +54,6 @@ namespace CalculationTools.WebSocket
             if (SocketClient == null)
             {
 
-
                 SocketClient = new SocketClient();
                 SocketClient.ConnectionLogUpdated +=
                     (sender, args) =>
@@ -55,6 +61,8 @@ namespace CalculationTools.WebSocket
                         ConnectionLog = SocketClient?.ConnectionLog;
                         ConnectionLogUpdated?.Invoke(this, EventArgs.Empty);
                     };
+                SocketClient.IsReconnecting += (sender, b) => { IsReconnecting = b; };
+
             }
 
             return SocketClient;

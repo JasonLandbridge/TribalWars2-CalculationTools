@@ -27,7 +27,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Margin="5" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        < DataContext="{Binding VillageOrigin}" />
+                        <controls:VillageSelector DataContext="{Binding VillageOrigin}" />
                         <TextBox Margin="5" Text="Target village" />
                         <TextBox Margin="5" Text="Slowest unit" />
                         <TextBox Margin="5" Text="Arrive at" />

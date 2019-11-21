@@ -9,7 +9,6 @@ namespace CalculationTools.WebSocket
     {
         private static int _id;
 
-
         #region Fields
 
         public const string LOGIN = "Authentication/login";
@@ -149,20 +148,17 @@ namespace CalculationTools.WebSocket
                 world = connectData.WorldID,
             };
         }
-        public static object SelectCharacter(LoginDataDTO loginDto, ConnectData connectData = null)
+        public static object SelectCharacter(ICharacter selectedCharacter)
         {
-            // Use default world
-            string worldId = loginDto.Characters[0].WorldId;
-
-            if (connectData != null)
+            if (selectedCharacter == null)
             {
-                worldId = connectData.WorldID;
+                return null;
             }
 
             return new
             {
-                id = loginDto.PlayerId,
-                world_id = worldId
+                id = selectedCharacter.CharacterId,
+                world_id = selectedCharacter.WorldId
             };
 
         }

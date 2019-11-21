@@ -11,6 +11,8 @@ namespace CalculationTools.Common
         public string ServerCountryCode { get; set; } = string.Empty;
         public string WorldID { get; set; } = string.Empty;
 
+        public ICharacter SelectedCharacter { get; set; }
+
         public Uri Uri => new Uri($"wss://{ServerCountryCode}.tribalwars2.com/socket.io/?platform=desktop&EIO=3&transport=websocket");
 
         public string AccessToken { get; set; } = string.Empty;

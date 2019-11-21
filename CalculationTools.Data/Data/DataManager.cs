@@ -56,23 +56,12 @@ namespace CalculationTools.Data
         #endregion Constructors
 
         #region Properties
-        public int ActiveCharacterId { get; set; }
-        public string ActiveWorldId { get; set; }
 
         public ISettings Settings => _settings;
 
         #endregion Properties
 
         #region Methods
-
-        public void SetLoginData(ILoginData loginData)
-        {
-            if (loginData == null) return;
-
-            _gameDataRepository.UpdateLoginData(loginData);
-
-            DataEvents.InvokeLoginDataIsUpdated();
-        }
 
         public void SetCharacterData(ICharacterData characterData)
         {
@@ -83,8 +72,8 @@ namespace CalculationTools.Data
             // Add the owning characterId of this village
             foreach (IVillage village in cData.Villages)
             {
-                village.WorldId = ActiveWorldId;
-                village.CharacterId = ActiveCharacterId;
+                // village.WorldId = ActiveWorldId;
+                // village.CharacterId = ActiveCharacterId;
             }
 
             _gameDataRepository.UpdateVillages(cData.Villages);

@@ -18,8 +18,6 @@ namespace CalculationTools.WebSocket
 
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-        private readonly IMessageHandling _messageHandling;
-
         private readonly TaskCompletionSource<ConnectResult> ConnectionResult = new TaskCompletionSource<ConnectResult>();
 
         private static readonly object lockObj = new Object();
@@ -40,9 +38,9 @@ namespace CalculationTools.WebSocket
 
         #region Constructors
 
-        public SocketClient(IMessageHandling messageHandling)
+        public SocketClient()
         {
-            _messageHandling = messageHandling;
+
         }
 
         #endregion Constructors
@@ -65,6 +63,9 @@ namespace CalculationTools.WebSocket
         public TimeSpan TimeSinceLastMsg => DateTime.Now.Subtract(LastMessageSend);
         #endregion Properties
 
+
+        public event EventHandler<bool> IsReconnecting;
+
         #region Methods
 
         #region Connection
@@ -85,11 +86,11 @@ namespace CalculationTools.WebSocket
                 switch (type)
                 {
                     case ReconnectionType.Initial:
-                        _messageHandling.IsReconnecting = false;
+                        IsReconnecting?.Invoke(this, false);
                         break;
 
                     case ReconnectionType.Lost:
-                        _messageHandling.IsReconnecting = true;
+                        IsReconnecting?.Invoke(this, true);
                         break;
                 }
             });
@@ -105,7 +106,7 @@ namespace CalculationTools.WebSocket
                 string log = $"Message received: {msg.Text}";
                 Log.Info(log);
                 AddToConnectionLog(log);
-                _messageHandling.ParseResponseAsync(msg.Text);
+                //_messageHandling.ParseResponseAsync(msg.Text);
             });
 
             SetupPingWorker();
@@ -189,8 +190,11 @@ namespace CalculationTools.WebSocket
 
             await Client.Start();
 
-
-            return await ConnectionResult.Task;
+            return new ConnectResult
+            {
+                IsConnected = Client.IsRunning,
+                Message = "Client is connected to TribalWars2"
+            };
 
         }
         /// <summary>

@@ -19,6 +19,14 @@ namespace CalculationTools.Common
 
         bool IsConnected { get; }
 
+        /// <summary>
+        /// Once the SocketClient has logged in then the SocketClient will be re-connecting instead of starting a new connection. 
+        /// </summary>
+        bool IsReconnecting { get; set; }
+
+        int ActiveCharacterId { get; set; }
+        string ActiveWorldId { get; set; }
+
         event EventHandler ConnectionLogUpdated;
         void ClearConnectionLog();
         Task<bool> SendMessageAsync(string message);

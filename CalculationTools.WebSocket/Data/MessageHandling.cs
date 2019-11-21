@@ -67,37 +67,22 @@ namespace CalculationTools.WebSocket
 
                 case RouteProvider.SYSTEM_WELCOME:
                     // On system welcome send system identify
-                    if (IsReconnecting)
-                    {
-                        SendDefaultMessage(
-                            RouteProvider.AUTHENTICATION_RECONNECT,
-                            RouteProvider.AuthenticationReconnect(ConnectData, _dataManager.ActiveCharacterId));
-                    }
-                    else
-                    {
-                        SendDefaultMessage(
-                            RouteProvider.SYSTEM_IDENTIFY,
-                            RouteProvider.SystemIdentify());
-                    }
+
                     break;
 
                 case RouteProvider.SYSTEM_IDENTIFIED:
                     // Once system has been identified then send login credentials
-                    SendDefaultMessage(RouteProvider.LOGIN, RouteProvider.Login(ConnectData));
                     break;
 
                 case RouteProvider.LOGIN_SUCCESS:
-                    var loginDto = ParseLoginSuccess(response);
 
-                    object dataObject = RouteProvider.SelectCharacter(loginDto, ConnectData);
-                    SendDefaultMessage(RouteProvider.SELECT_CHARACTER, dataObject);
                     break;
 
                 case RouteProvider.CHARACTER_SELECTED:
                     var charSelected = ParseDataFromResponse<CharacterSelectedDTO>(response);
 
-                    _dataManager.ActiveCharacterId = charSelected.Id;
-                    _dataManager.ActiveWorldId = charSelected.WorldId;
+                    //_dataManager.ActiveCharacterId = charSelected.Id;
+                    // _dataManager.ActiveWorldId = charSelected.WorldId;
                     DataEvents.InvokeConnectionStatus(true);
 
                     SendDefaultMessage(RouteProvider.GET_GAME_DATA);
@@ -228,6 +213,11 @@ namespace CalculationTools.WebSocket
             }
         }
 
+        private void SendDefaultMessage(string characterGetcolors)
+        {
+
+        }
+
         private static string CleanResponse(string response)
         {
             // Remove the Socket.io identifier string from the start
@@ -322,18 +312,6 @@ namespace CalculationTools.WebSocket
         private LoginDataDTO ParseLoginSuccess(string response)
         {
             var loginData = ParseDataFromResponse<LoginDataDTO>(response);
-            ConnectResult connectResult = _socketManager.GetConnectResult();
-
-            connectResult.IsConnected = true;
-            connectResult.AccessToken = loginData?.AccessToken;
-            connectResult.TW2AccountId = loginData?.PlayerId;
-
-            _socketManager.ConnectData.AccessToken = loginData?.AccessToken;
-
-
-            _dataManager.SetConnectionResult(connectResult);
-            _dataManager.SetLoginData(loginData);
-
             return loginData;
         }
 
@@ -359,14 +337,7 @@ namespace CalculationTools.WebSocket
 
         #region SocketClient Helper Methods
 
-        /// <summary>
-        /// A helper function which uses the default format for sending messages to the server
-        /// </summary>
-        /// <param name="sendType">The message type</param>
-        public void SendDefaultMessage(string sendType, object dataObject = null)
-        {
-            _socketManager.SendMessageAsync(RouteProvider.GetDefaultSendMessage(sendType, dataObject));
-        }
+
 
         public async Task<bool> StopConnection()
         {

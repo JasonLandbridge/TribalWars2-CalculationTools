@@ -30,6 +30,10 @@ namespace CalculationTools.Data
 
             // Keep track of the connection status
             DataEvents.ConnectionStatus += (sender, b) => { _isConnected = b; };
+
+            // Store LoginData once its available
+            _socketRepository.LoginDataAvailable += (sender, dto) => UpdateLoginData(dto);
+
         }
 
         #endregion Constructors
@@ -42,6 +46,40 @@ namespace CalculationTools.Data
         #endregion
 
         #region Methods
+
+
+        public async void EstablishConnection(ConnectData connectData)
+        {
+            // Find the correct character to login with
+            using (var db = GetDBContext())
+            {
+                var account = db.Accounts
+                                .Include(x => x.OnServer)
+                                .Include(x => x.DefaultCharacter)
+                                .FirstOrDefault(x => x.Username == connectData.Username &&
+                                                     x.Password == connectData.Password &&
+                                                     x.OnServer.Id == connectData.WorldID);
+
+                if (account != null)
+                {
+                    if (account.DefaultCharacter != null)
+                    {
+                        connectData.SelectedCharacter = account.DefaultCharacter;
+                    }
+                    else
+                    {
+                        connectData.SelectedCharacter = db.Characters
+                            .FirstOrDefault(x => x.AccountOwner == account &&
+                                                 x.AllowLogin);
+                    }
+                }
+
+            }
+
+            await _socketRepository.EstablishConnection(connectData);
+
+        }
+
 
         public void DeleteDB()
         {
@@ -365,6 +403,8 @@ namespace CalculationTools.Data
             ParseWorlds(loginData);
 
             ParseCharacters(loginData);
+
+            DataEvents.InvokeLoginDataIsUpdated();
         }
 
         private void ParseCharacters(ILoginData loginData)

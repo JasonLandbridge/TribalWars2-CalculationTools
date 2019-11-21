@@ -15,7 +15,7 @@ namespace CalculationTools.Tests
         public static async void CheckCredentialsWithValidAndInValidAndReturnTrue()
         {
             //Arrange
-            SocketManager socketManager = MockData.GetSocketManager(true);
+            SocketManager socketManager = MockData.GetSocketManager();
 
             ConnectData wrongCredentials = new ConnectData
             {
@@ -46,7 +46,7 @@ namespace CalculationTools.Tests
         public static async void StartConnectionAndTestConnectionDuration()
         {
             //Arrange
-            SocketManager socketManager = MockData.GetSocketManager(true);
+            SocketManager socketManager = MockData.GetSocketManager();
 
             Account account = SecretData.GetValidTestAccount();
             ConnectData validCredentials = new ConnectData
@@ -79,7 +79,7 @@ namespace CalculationTools.Tests
         public static async void TestSocketRepository()
         {
             //Arrange
-            SocketManager socketManager = MockData.GetSocketManager(true);
+            SocketManager socketManager = MockData.GetSocketManager();
             SocketRepository socketRepository = new SocketRepository(socketManager);
 
             Account account = SecretData.GetValidTestAccount();

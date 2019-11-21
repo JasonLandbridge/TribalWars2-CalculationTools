@@ -7,8 +7,6 @@ namespace CalculationTools.Common
 
         #region Properties
 
-        int ActiveCharacterId { get; set; }
-        string ActiveWorldId { get; set; }
         ISettings Settings { get; }
 
         #endregion Properties
@@ -33,7 +31,6 @@ namespace CalculationTools.Common
 
         void SetConnectionResult(ConnectResult connectResult);
 
-        void SetLoginData(ILoginData loginData);
         void SetupSettings();
         void UpdateAccount(Account account);
 
