@@ -11,36 +11,7 @@ namespace CalculationTools.Tests
     {
 
 
-        [Fact]
-        public static async void CheckCredentialsWithValidAndInValidAndReturnTrue()
-        {
-            //Arrange
-            SocketManager socketManager = MockData.GetSocketManager();
 
-            ConnectData wrongCredentials = new ConnectData
-            {
-                Username = new Bogus.DataSets.Hacker().Phrase(),
-                Password = new Bogus.DataSets.Hacker().Phrase(),
-                ServerCountryCode = "en",
-            };
-
-            Account account = SecretData.GetValidTestAccount();
-            ConnectData validCredentials = new ConnectData
-            {
-                Username = account.Username,
-                Password = account.Password,
-                ServerCountryCode = "en",
-            };
-
-            //Act
-            ConnectResult result1 = await socketManager.TestConnection(wrongCredentials);
-            ConnectResult result2 = await socketManager.TestConnection(validCredentials);
-
-            //Assert
-            Assert.False(result1.IsConnected);
-            Assert.True(result2.IsConnected);
-
-        }
 
         [Fact]
         public static async void StartConnectionAndTestConnectionDuration()

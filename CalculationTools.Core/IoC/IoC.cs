@@ -20,8 +20,6 @@ namespace CalculationTools.Core
 
         public static IMapper AutoMapperContainer => new Mapper(AutoMapperConfig.RegisterMappings());
 
-        public static SocketClient GetSocketClient => Container.GetInstance<SocketClient>();
-
         #endregion Properties
 
         #region Methods
@@ -35,6 +33,7 @@ namespace CalculationTools.Core
 
             Container.Register<IGameDataRepository, GameDataRepository>(Lifestyle.Singleton);
             Container.Register<ISocketRepository, SocketRepository>(Lifestyle.Singleton);
+            Container.Register<IErrorMessageHandling, ErrorMessageHandling>(Lifestyle.Singleton);
 
             // Injectable service
             IMapper mapper = new Mapper(AutoMapperConfig.RegisterMappings());

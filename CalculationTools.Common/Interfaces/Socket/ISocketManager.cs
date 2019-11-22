@@ -6,7 +6,6 @@ namespace CalculationTools.Common
 {
     public interface ISocketManager
     {
-        Task<ConnectResult> TestConnection(ConnectData connectData);
         Task<ConnectResult> StartConnection(ConnectData connectData, bool useAccessToken = true);
 
         Task<bool> StopConnection(bool deleteConnection = false);
@@ -31,7 +30,6 @@ namespace CalculationTools.Common
         void ClearConnectionLog();
         Task<bool> SendMessageAsync(string message);
         void AddToConnectionLog(string message);
-        void SetPingSettings(int pingTimeout, int pingInterval);
         ConnectResult GetConnectResult();
         Task<string> Emit(string message, int id);
         string GetCurrentWorldId();

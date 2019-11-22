@@ -31,6 +31,9 @@ namespace CalculationTools.Common
 
         public string WorldId { get; set; }
 
+        public Account DefaultCharacterFor { get; set; }
+        public int? DefaultCharacterForId { get; set; }
+
         public ICollection<Group> Groups { get; set; }
         public ICollection<Village> Villages { get; set; }
 

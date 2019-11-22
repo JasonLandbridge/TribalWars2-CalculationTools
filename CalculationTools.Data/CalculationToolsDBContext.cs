@@ -163,18 +163,23 @@ namespace CalculationTools.Data
 
             modelBuilder.Entity<Server>().HasData(serverList);
 
-            //Add default accounts for testing purposes
-            List<Account> accountList = SecretData.GetAccounts();
-            accountList.Add(new Account
-            {
-                Id = 999888,
-                Username = "FAKENAME",
-                Password = "aQFtbSafasf4ydfndnf+@MZ5DP)32BAe6",
-                OnServerId = "nl",
-                IsConfirmed = true
-            });
+            //modelBuilder.Entity<Character>().HasData(SecretData.GetCharacters());
 
-            modelBuilder.Entity<Account>().HasData(accountList);
+            ////Add default accounts for testing purposes
+            //List<Account> accountList = SecretData.GetAccounts();
+            //accountList.Add(new Account
+            //{
+            //    Id = 999888,
+            //    Username = "FAKENAME",
+            //    Password = "aQFtbSafasf4ydfndnf+@MZ5DP)32BAe6",
+            //    OnServerId = "nl",
+            //    IsConfirmed = true
+            //});
+
+            //modelBuilder.Entity<Account>().HasData(accountList);
+
+
+
 
         }
     }

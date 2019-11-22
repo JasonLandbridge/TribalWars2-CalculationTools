@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CalculationTools.Data
 {
@@ -89,6 +90,11 @@ namespace CalculationTools.Data
         public void UpdateAccount(Account account)
         {
             _gameDataRepository.UpdateAccount(account);
+        }
+
+        public async Task<ConnectResult> TestAccountASync(Account account)
+        {
+            return await _gameDataRepository.TestAccountASync(account);
         }
 
         #region Account

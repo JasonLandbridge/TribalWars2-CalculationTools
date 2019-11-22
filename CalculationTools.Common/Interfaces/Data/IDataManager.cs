@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CalculationTools.Common
 {
@@ -33,6 +34,9 @@ namespace CalculationTools.Common
 
         void SetupSettings();
         void UpdateAccount(Account account);
+
+        Task<ConnectResult> TestAccountASync(Account account);
+
 
         #endregion Methods
     }

@@ -1,9 +1,9 @@
 ﻿using CalculationTools.Common;
+using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Net.WebSockets;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Websocket.Client;
@@ -11,7 +11,7 @@ using Timer = System.Timers.Timer;
 
 namespace CalculationTools.WebSocket
 {
-    public class SocketClient : BasePropertyChanged
+    public class SocketClient : BasePropertyChanged, IDisposable
     {
 
         #region Fields
@@ -25,6 +25,7 @@ namespace CalculationTools.WebSocket
         private bool _keepAlive;
         private int _pingInterval = 25000;
         private int _pingTimeout = 5000;
+        private string _sessionId = "";
 
         /// <summary>
         /// The first ping is send after <see cref="_pingTimeout"/> has expired, after which a ping will be send every <see cref="_pingInterval"/> until a non-ping message is send. 
@@ -32,20 +33,21 @@ namespace CalculationTools.WebSocket
         private bool _firstPingSend;
 
         private static readonly Timer LastMsgSendTimer = new Timer(200);
-
+        private readonly IErrorMessageHandling _errorMessageHandling;
 
         #endregion Fields
 
         #region Constructors
 
-        public SocketClient()
+        public SocketClient(IErrorMessageHandling errorMessageHandling)
         {
-
+            _errorMessageHandling = errorMessageHandling;
+            _errorMessageHandling.AddToConnectionLogEvent += (sender, s) => AddToConnectionLog(s);
         }
 
         #endregion Constructors
 
-        public event EventHandler ConnectionLogUpdated;
+        public event EventHandler<string> ConnectionLogUpdated;
 
         #region Properties
 
@@ -53,7 +55,6 @@ namespace CalculationTools.WebSocket
         public ConnectData ConnectData { get; set; }
         public ConnectResult ConnectResult { get; set; } = new ConnectResult();
         public bool IsConnected => Client?.IsRunning ?? false;
-        public StringBuilder ConnectionLog { get; set; } = new StringBuilder();
 
         public bool IsClosingConnection { get; set; }
 
@@ -75,13 +76,13 @@ namespace CalculationTools.WebSocket
             ConnectData = connectData;
             Client = new WebsocketClient(ConnectData.Uri)
             {
-                ReconnectTimeoutMs = (int)TimeSpan.FromSeconds(60).TotalMilliseconds
+                ReconnectTimeoutMs = (int)TimeSpan.FromSeconds(60).TotalMilliseconds,
+                IsReconnectionEnabled = shouldReconnect
             };
-            Client.IsReconnectionEnabled = shouldReconnect;
 
             Client.ReconnectionHappened.Subscribe(type =>
             {
-                Log.Info($"Reconnection happening with type: {type}");
+                AddToConnectionLog($"Reconnection happening with type: {type}");
 
                 switch (type)
                 {
@@ -94,20 +95,31 @@ namespace CalculationTools.WebSocket
                         break;
                 }
             });
-            Client.DisconnectionHappened.Subscribe(async type =>
-            {
-                Log.Info("Connection was disconnected by server");
-                await CloseConnection();
-            });
-            Client.MessageReceived.Subscribe(msg =>
-            {
-                if (IsClosingConnection) { return; }
 
-                string log = $"Message received: {msg.Text}";
-                Log.Info(log);
-                AddToConnectionLog(log);
-                //_messageHandling.ParseResponseAsync(msg.Text);
-            });
+            Client.DisconnectionHappened
+                .Subscribe(async type =>
+                {
+                    AddToConnectionLog("Connection was disconnected by server");
+                    await CloseConnection();
+                });
+
+            Client.MessageReceived
+                .Subscribe(msg =>
+                {
+                    if (IsClosingConnection) { return; }
+
+                    MessageReceived(msg.Text);
+                });
+
+            // Apply connection settings
+            Client.MessageReceived
+                .Where(x => x?.Text != null && x.Text.StartsWith("0{\"sid\":"))
+                .Subscribe(msg =>
+                {
+                    if (IsClosingConnection) { return; }
+
+                    ParseSocketResponse(msg.Text);
+                });
 
             SetupPingWorker();
 
@@ -123,6 +135,13 @@ namespace CalculationTools.WebSocket
 
             ClientHasBeenSetup = true;
             return true;
+        }
+
+        private void MessageReceived(string response)
+        {
+            AddToConnectionLog($"Message received: {response}");
+
+            _errorMessageHandling.ParseResponseAsync(response);
         }
 
         public void SetupPingWorker()
@@ -212,7 +231,6 @@ namespace CalculationTools.WebSocket
 
             if (IsConnected)
             {
-                Log.Info("Closing connection!");
                 AddToConnectionLog("Closing connection");
 
                 if (Client != null)
@@ -241,11 +259,6 @@ namespace CalculationTools.WebSocket
         {
             if (!string.IsNullOrEmpty(message) && Client != null && Client.IsRunning)
             {
-
-                string log = $"Message Send:     {message}";
-                AddToConnectionLog(log);
-                Log.Info(log);
-
                 await Client.Send(message);
                 // Check if the message was a ping message
                 if (message != "2")
@@ -254,6 +267,7 @@ namespace CalculationTools.WebSocket
                 }
 
                 LastMessageSend = DateTime.Now;
+                AddToConnectionLog($"Message Send:     {message}");
                 return true;
 
             }
@@ -286,56 +300,81 @@ namespace CalculationTools.WebSocket
         }
 
 
-        /// <summary>
-        /// Will login with the <see cref="ConnectData"/> and disconnect again when a result has been returned.
-        /// </summary>
-        /// <param name="connectData">Connection credentials</param>
-        /// <returns></returns>
-        public async Task<ConnectResult> TestConnectionAsync(ConnectData connectData)
-        {
-            // Ensure connection has been closed
-            await CloseConnection();
-            SetupConnection(connectData, false);
-
-            ConnectResult result = await StartConnectionAsync(false);
-
-            Log.Debug($"Returning result from TestConnection: {result}");
-            await CloseConnection();
-
-            return result;
-        }
-
         #endregion
 
         public void AddToConnectionLog(string message)
         {
             lock (lockObj)
             {
+                // Filter out the header
+                string header = SocketUtilities.ParseHeaderStringFromResponse(message);
+                if (!string.IsNullOrEmpty(header))
+                {
+                    message = message.Replace(header, string.Empty);
+                }
+
+                // Filter out the msg tag
+                message = message.Replace("\"msg\",", string.Empty);
+
+                // Limit the message length
                 if (message.Length > 2000)
                 {
                     message = message.Substring(0, 2000);
                 }
 
-                ConnectionLog.Append(message + Environment.NewLine);
-                ConnectionLogUpdated.Invoke(this, EventArgs.Empty);
+                Log.Info(message);
+                ConnectionLogUpdated.Invoke(this, message + Environment.NewLine);
             }
         }
 
-        public void SetPingSettings(int pingTimeout, int pingInterval)
+
+        /// <summary>
+        /// Used to determine the type of response received and to parse the initial connection configuration.
+        /// </summary>
+        /// <param name="response">The response of the websocket</param>
+        /// <returns></returns>
+        private void ParseSocketResponse(string response)
         {
-            if (pingTimeout >= 1000)
+            if (string.IsNullOrEmpty(response) || !response.StartsWith("0{\"sid\":")) { return; }
+
+            response = SocketUtilities.CleanResponse(response);
+
+            SocketResponse socketResponse = new SocketResponse();
+
+            JsonSerializerSettings serializerSettings = new JsonSerializerSettings
             {
-                _pingTimeout = pingTimeout;
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            try
+            {
+                socketResponse = JsonConvert.DeserializeObject<SocketResponse>(response, serializerSettings);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, $"Could not deserialize the following string in {nameof(ParseSocketResponse)}: {Environment.NewLine} {response}");
             }
 
-            if (pingInterval >= 1000)
+            if (!string.IsNullOrEmpty(socketResponse.SessionID))
             {
-                _pingInterval = pingInterval;
+                _sessionId = socketResponse.SessionID;
             }
+
+            // The pingTimeout and pingInterval are always send in the same message.
+            if (socketResponse.PingTimeout > 1000 && socketResponse.PingInterval > 1000)
+            {
+                _pingTimeout = socketResponse.PingTimeout;
+                _pingInterval = socketResponse.PingInterval;
+            }
+
         }
 
         #endregion Methods
-
+        public void Dispose()
+        {
+            LastMsgSendTimer.Stop();
+            CloseConnection().Wait(5000);
+        }
     }
 
 

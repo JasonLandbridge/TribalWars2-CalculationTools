@@ -575,13 +575,19 @@ namespace CalculationTools.Tests.Data
 
         public static ISocketRepository GetISocketRepository(bool deleteDbBeforeStart = false)
         {
-            return new SocketRepository(GetSocketManager());
+            return new SocketRepository(GetSocketManager(deleteDbBeforeStart));
         }
 
-
-        public static SocketManager GetSocketManager()
+        public static IDataManager GetDataManager(bool deleteDbBeforeStart = false)
         {
-            return new SocketManager();
+            return new DataManager(
+                GetIGameDataRepository(deleteDbBeforeStart),
+                IoC.AutoMapperContainer);
+        }
+
+        public static SocketManager GetSocketManager(bool deleteDbBeforeStart = false)
+        {
+            return new SocketManager(new ErrorMessageHandling());
         }
 
         public static CalculationToolsDBContext GetDbContext()

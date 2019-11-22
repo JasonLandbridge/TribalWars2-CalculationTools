@@ -33,6 +33,13 @@ namespace CalculationTools.Data
                 .WithOne()
                 .HasForeignKey(x => x.CharacterId)
                 .IsRequired(false);
+
+            builder
+                .HasOne(a => a.DefaultCharacterFor)
+                .WithOne(a => a.DefaultCharacter)
+                .HasForeignKey<Character>(a => a.DefaultCharacterForId)
+                .IsRequired(false);
+
         }
     }
 

@@ -20,7 +20,7 @@ namespace CalculationTools.Tests
                 "42[\"msg\",{\"id\":15,\"type\":\"System/getTime\",\"headers\":{\"traveltimes\":[[\"browser_send\",1574343907381]]}}]";
 
             //Act
-            int? result = socketRepository.GetId(test);
+            int? result = SocketUtilities.GetId(test);
 
 
             // Assert
@@ -36,17 +36,8 @@ namespace CalculationTools.Tests
             ISocketRepository socketRepository = MockData.GetISocketRepository(true);
             Account account = SecretData.GetValidTestAccount();
 
-            // Fill in your own valid test account here
-            ConnectData validCredentials = new ConnectData
-            {
-                Username = account.Username,
-                Password = account.Password,
-                ServerCountryCode = "en",
-                SelectedCharacter = account.DefaultCharacter
-            };
-
             //Act
-            var result = await socketRepository.EstablishConnection(validCredentials);
+            var result = await socketRepository.EstablishConnection(account);
 
             //Assert
             Assert.True(result);

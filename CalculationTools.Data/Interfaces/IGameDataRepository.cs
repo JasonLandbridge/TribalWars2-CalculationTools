@@ -44,5 +44,15 @@ namespace CalculationTools.Data
 
         List<Village> GetVillages(int characterId = 0);
         void DeleteDB();
+        Task<bool> EstablishConnection(Account account);
+        void InsertOrUpdateAccount(Account account = null);
+        Task<ConnectResult> TestAccountASync(Account account);
+
+        /// <summary>
+        /// Returns the account with the given username.
+        /// </summary>
+        /// <param name="username">The username connected to the account</param>
+        /// <returns></returns>
+        Account GetAccount(string username);
     }
 }

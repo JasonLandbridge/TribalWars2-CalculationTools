@@ -1,7 +1,5 @@
 ﻿using CalculationTools.Common;
 using CalculationTools.Common.DTOs;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -10,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace CalculationTools.WebSocket
 {
+    /// <summary>
+    /// The only place that interacts with this repository is the GameDataRepository
+    /// </summary>
     public class SocketRepository : ISocketRepository
     {
         #region Fields
@@ -28,20 +29,115 @@ namespace CalculationTools.WebSocket
 
         #endregion Constructors
 
-        public event EventHandler<LoginDataDTO> LoginDataAvailable;
+        #region Events
+
+
+
+        #endregion
 
         #region Methods
 
 
-        public async Task<bool> EstablishConnection(ConnectData connectData)
+        public async Task<bool> EstablishConnection(Account account)
         {
-            await _socketManager.StartConnection(connectData);
+            await LoginWithAccount(account);
 
-            await SendAccountAuthentication(connectData);
-            await SendSystemIdentify();
-            await SendCharacterSelect(connectData.SelectedCharacter);
+            await Task.Delay(GetRandomDelay());
 
+            await SendGetGameData();
+            await SendGetGroups();
+
+            await SendStandardMessage(RouteProvider.PREMIUM_LIST_ITEMS);
+            await SendStandardMessage(RouteProvider.ICON_GETVILLAGES);
+
+            await SendGetGlobalInformation();
+
+            await SendStandardMessage(RouteProvider.EFFECT_GET_EFFECTS);
+
+            await SendStandardMessage(RouteProvider.TRIBE_GET_OWN_INVITATIONS);
+
+            await SendStandardMessage(RouteProvider.WHEEL_GETEVENT);
+            await SendStandardMessage(RouteProvider.WHEEL_GETPROGRESS);
+
+            await SendStandardMessage(RouteProvider.CHARACTER_GETCOLORS);
+
+            await SendGetCharacterInfo();
+
+            //TODO Request tribe data based on the active character
+
+            await GetSystemTimeAsync();
+
+            await SendStandardMessage(RouteProvider.INVITEPLATER_GETINFO);
+
+            await SendStandardMessage(RouteProvider.AUTHENTICATION_COMPLETELOGIN);
+
+            await _socketManager.StopConnection(true);
             return true;
+        }
+
+
+        /// <summary>
+        /// Will attempt to login with the account provided, if in test-mode then the connection will be closed immediately after.
+        /// </summary>
+        /// <param name="account">The account with which to login</param>
+        /// <param name="testMode">Will close the connection immediately after if true</param>
+        /// <returns>The connection result</returns>
+        public async Task<ConnectResult> LoginWithAccount(Account account, bool testMode = false)
+        {
+            // Make sure to reset the connection and deleting it.
+            await _socketManager.StopConnection(true);
+
+            ConnectResult result = await _socketManager.StartConnection(account.ToConnectData());
+
+            if (!result.IsConnected) { return result; }
+
+            result = await SendAccountAuthentication(account.ToConnectData());
+
+            await SendSystemIdentify();
+
+            result.IsConnected = await SendCharacterSelect(account.DefaultCharacter);
+
+            if (testMode)
+            {
+                await _socketManager.StopConnection(true);
+            }
+            else
+            {
+                DataEvents.InvokeConnectionStatus(true);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// This will request the incoming commands and the events on the player
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> SendGetGlobalInformation()
+        {
+            var response = await SendStandardMessage(RouteProvider.GLOBALINFORMATION_GETINFO);
+            var globalInfo = SocketUtilities.ParseDataFromResponse<GlobalInformationDTO>(response);
+
+            //TODO Store commands in DB
+            return true;
+        }
+
+        private async Task<bool> SendGetGameData()
+        {
+            var response = await SendStandardMessage(RouteProvider.GET_GAME_DATA);
+
+            // TODO Extract WorldConfig
+
+            return !string.IsNullOrEmpty(response);
+        }
+
+        private async Task<bool> SendGetGroups()
+        {
+            var response = await SendStandardMessage(RouteProvider.GET_GROUPS);
+            var groups = SocketUtilities.ParseDataFromResponse<GroupsDTO>(response)?.Groups?.ToList();
+
+            DataEvents.InvokeGroupsDataAvailable(groups.ToList<IGroup>());
+            return groups.Count > 0;
         }
 
         private async Task<bool> SendCharacterSelect(ICharacter selectedCharacter)
@@ -51,7 +147,7 @@ namespace CalculationTools.WebSocket
             object dataObject = RouteProvider.SelectCharacter(selectedCharacter);
 
             var response = await SendStandardMessage(RouteProvider.SELECT_CHARACTER, dataObject);
-            var charSelected = ParseDataFromResponse<CharacterSelectedDTO>(response);
+            var charSelected = SocketUtilities.ParseDataFromResponse<CharacterSelectedDTO>(response);
 
             _socketManager.ActiveCharacterId = charSelected.OwnerId;
             _socketManager.ActiveWorldId = charSelected.WorldId;
@@ -59,21 +155,38 @@ namespace CalculationTools.WebSocket
             return true;
         }
 
+        private async Task<bool> SendGetCharacterInfo()
+        {
+            var response = await SendStandardMessage(RouteProvider.CHARACTER_GETINFO);
+
+            var characterData = SocketUtilities.ParseDataFromResponse<CharacterDataDTO>(response);
+            if (characterData != null)
+            {
+                foreach (IVillage village in characterData.Villages)
+                {
+                    village.CharacterId = _socketManager.ActiveCharacterId;
+                    village.WorldId = _socketManager.ActiveWorldId;
+                }
+
+                DataEvents.InvokeCharacterDataAvailable(characterData);
+            }
+
+            return characterData != null;
+        }
+
+
         public async Task<DateTime> GetSystemTimeAsync()
         {
-            string message = RouteProvider.GetDefaultSendMessage(RouteProvider.SYSTEM_GETTIME);
-            int? id = GetId(message);
 
-            string response = await _socketManager.Emit(message, id ?? default);
+            string response = await SendStandardMessage(RouteProvider.SYSTEM_GETTIME);
 
-            var systemTime = ParseDataFromResponse<SystemTimeDTO>(response);
+            var systemTime = SocketUtilities.ParseDataFromResponse<SystemTimeDTO>(response);
 
             return DateTime.UnixEpoch.AddSeconds(systemTime.Time + systemTime.Offset);
         }
 
         public async Task<List<IVillage>> GetVillagesByAutocomplete(string nameToSearch)
         {
-
             object data = new VillageAutocompleteDTO
             {
                 Types = new List<string>
@@ -84,13 +197,9 @@ namespace CalculationTools.WebSocket
                 Amount = 5
             };
 
+            string response = await SendStandardMessage(RouteProvider.AUTOCOMPLETION_AUTOCOMPLETE, data);
 
-            string message = RouteProvider.GetDefaultSendMessage(RouteProvider.AUTOCOMPLETION_AUTOCOMPLETE, data);
-            int? id = GetId(message);
-
-            string response = await _socketManager.Emit(message, id ?? default);
-
-            var autocompleteDto = ParseDataFromResponse<AutocompleteDTO>(response);
+            var autocompleteDto = SocketUtilities.ParseDataFromResponse<AutocompleteDTO>(response);
 
             //Set the worldId for each village
             foreach (VillageDTO villageDto in autocompleteDto.Result.Village)
@@ -101,9 +210,9 @@ namespace CalculationTools.WebSocket
             return autocompleteDto.Result.Village.ToList<IVillage>();
         }
 
-        public async Task<bool> SendAccountAuthentication(ConnectData connectData)
+        public async Task<ConnectResult> SendAccountAuthentication(ConnectData connectData)
         {
-            string response = string.Empty;
+            string response;
 
             if (_socketManager.IsReconnecting)
             {
@@ -116,7 +225,7 @@ namespace CalculationTools.WebSocket
                 response = await SendStandardMessage(RouteProvider.LOGIN, RouteProvider.Login(connectData));
             }
 
-            var loginData = ParseDataFromResponse<LoginDataDTO>(response);
+            var loginData = SocketUtilities.ParseDataFromResponse<LoginDataDTO>(response);
 
             ConnectResult connectResult = _socketManager.GetConnectResult();
 
@@ -126,100 +235,47 @@ namespace CalculationTools.WebSocket
 
             _socketManager.ConnectData.AccessToken = loginData?.AccessToken;
 
-            LoginDataAvailable?.Invoke(this, loginData);
+            DataEvents.InvokeLoginDataAvailable(loginData);
             DataEvents.InvokeConnectionResult(connectResult);
 
-            return true;
+            return connectResult;
         }
 
+
+        public async Task<List<IVillage>> SendGetVillagesByArea(int x, int y, int width = 25, int height = 25)
+        {
+            object dataObject = new
+            {
+                height,
+                width,
+                x,
+                y,
+            };
+
+            var response = await SendStandardMessage(RouteProvider.MAP_GETVILLAGESBYAREA, dataObject);
+            var villageList = SocketUtilities.ParseDataFromResponse<VillagesDTO>(response).Villages;
+
+            return villageList.ToList<IVillage>();
+        }
 
         public async Task<bool> SendSystemIdentify()
         {
-            string response = string.Empty;
-
-            response = await SendStandardMessage(RouteProvider.SYSTEM_IDENTIFY, RouteProvider.SystemIdentify());
+            string response = await SendStandardMessage(
+                RouteProvider.SYSTEM_IDENTIFY,
+                RouteProvider.SystemIdentify());
 
             return true;
         }
 
+        private int GetRandomDelay(int maxValue = 1000)
+        {
+            Random rnd = new Random();
+
+            return rnd.Next(maxValue);
+        }
+
         #region Helpers
-        public int? GetId(string message)
-        {
-            const string idStr = "\"id\":";
 
-            if (message.Contains(idStr))
-            {
-                int startIndex = message.IndexOf(idStr, StringComparison.Ordinal) + idStr.Length;
-                int endIndex = message.IndexOf(',', startIndex, 10);
-
-                if (startIndex > -1 && endIndex > -1)
-                {
-                    string value = message.Substring(startIndex, endIndex - startIndex);
-
-                    if (value == "null")
-                    {
-                        return null;
-                    }
-
-                    if (value.All(char.IsDigit))
-                    {
-                        bool result = int.TryParse(value, out int intResult);
-
-                        if (intResult > 0)
-                        {
-                            return intResult;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
-        private static string CleanResponse(string response)
-        {
-            // Remove the Socket.io identifier string from the start
-            var digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-            response = response.TrimStart(digits);
-
-            //Clean off the outer msg tag since 99% are messages anyway
-            if (response.StartsWith("[\"msg\",") && response.EndsWith("]"))
-            {
-                response = response.Replace("[\"msg\",", "");
-                response = response.Remove(response.Length - 1, 1);
-            }
-
-            return response;
-        }
-
-        public static T ParseDataFromResponse<T>(string response)
-        {
-            if (string.IsNullOrEmpty(response)) { return default; }
-
-            response = CleanResponse(response);
-
-            JsonSerializerSettings serializerSettings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            try
-            {
-                JObject jsonObject = (JObject)JsonConvert.DeserializeObject(response, serializerSettings);
-                if (jsonObject["data"].Any())
-                {
-                    string data = jsonObject["data"].ToString();
-                    return JsonConvert.DeserializeObject<T>(data, serializerSettings);
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, $"Could not parse type {typeof(T)} with data object in string:{Environment.NewLine}{response} - {e.Message}");
-            }
-
-
-            Log.Error($"Could not find data object in JsonString: {response}");
-
-            return default;
-        }
 
         /// <summary>
         /// A helper function which uses the default format for sending messages to the server
@@ -237,7 +293,7 @@ namespace CalculationTools.WebSocket
         /// <returns>The response to that message from TW2</returns>
         private async Task<string> SendMessageAsync(string message)
         {
-            int? id = GetId(message);
+            int? id = SocketUtilities.GetId(message);
 
             return await _socketManager.Emit(message, id ?? default);
 

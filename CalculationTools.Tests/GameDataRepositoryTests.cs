@@ -7,48 +7,67 @@ using Xunit;
 
 namespace CalculationTools.Tests
 {
-    public static class DatabaseTests
+    public static class GameDataRepositoryTests
     {
 
-        #region Properties
+
+        [Fact]
+        public static async void FullTW2DataHarvest()
+        {
+            //Arrange
+            IGameDataRepository _gameDataRepository = MockData.GetIGameDataRepository(true);
+            Account account = SecretData.GetValidTestAccount();
+
+            //Act
+            _gameDataRepository.InsertOrUpdateAccount(account);
+            await _gameDataRepository.TestAccountASync(account);
+            Account foundAccount = _gameDataRepository.GetAccount(account.Id);
+
+            //Assert
+            Assert.NotNull(foundAccount);
+            Assert.NotNull(foundAccount.TW2AccountID);
+
+            //Act
+            var result = await _gameDataRepository.EstablishConnection(foundAccount);
+
+            //Assert
+            Assert.True(result);
+
+        }
 
 
+        [Fact]
+        public static async void CheckCredentialsWithValidAndInValidAndReturnTrue()
+        {
+            //Arrange
+            IGameDataRepository _gameDataRepository = MockData.GetIGameDataRepository(true);
 
-        #endregion Properties
+            Account wrongAccount = new Account
+            {
+                Username = new Bogus.DataSets.Hacker().Phrase(),
+                Password = new Bogus.DataSets.Hacker().Phrase(),
+                OnServerId = "en"
+            };
+            Account validAccount = SecretData.GetValidTestAccount();
 
-        #region Methods
+            //Act
+            ConnectResult result1 = await _gameDataRepository.TestAccountASync(wrongAccount);
+            ConnectResult result2 = await _gameDataRepository.TestAccountASync(validAccount);
 
+            //Assert
+            Assert.False(result1.IsConnected);
+            Assert.True(result2.IsConnected);
+
+        }
+
+
+        #region ParseMockData
         [Fact]
         public static void ShouldStoreAllIncomingDataCorrectly()
         {
             ShouldUpdateLoginDataToDbCorrectly();
 
             ShouldInsertAndUpdateVillages();
-        }
-
-        [Fact]
-        public static void ShouldAddAnAccountInDBAndRetrieveIt()
-        {
-            using (var db = MockData.GetDbContext())
-            {
-                //Arrange
-                string username = "Jantje";
-                db.Accounts.Add(new Account
-                {
-                    Id = 0,
-                    Username = username,
-                    Password = "pietje",
-                    IsConfirmed = false,
-                    OnServerId = "nl",
-                });
-
-                // Act
-                db.SaveChanges();
-
-                //Assert
-                Account account = db.Accounts.FirstOrDefault(x => x.Username == username);
-                Assert.NotNull(account);
-            }
         }
 
         [Fact]
@@ -85,6 +104,7 @@ namespace CalculationTools.Tests
             }
         }
 
+
         [Fact]
         public static void ShouldInsertAndUpdateVillages()
         {
@@ -103,9 +123,7 @@ namespace CalculationTools.Tests
 
         }
 
+        #endregion
 
-
-
-        #endregion Methods
     }
 }

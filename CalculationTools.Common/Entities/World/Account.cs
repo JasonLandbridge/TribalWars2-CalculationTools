@@ -52,9 +52,6 @@ namespace CalculationTools.Common
 
         #region NotMapped
 
-        [NotMapped]
-        public string ServerCountryCode => OnServer?.Id;
-
         /// <summary>
         /// The formatted name for this account in the format of {ServerCountryCode} - {Username}.
         /// </summary>
@@ -65,13 +62,13 @@ namespace CalculationTools.Common
             {
                 string displayName = string.Empty;
 
-                if (string.IsNullOrEmpty(ServerCountryCode))
+                if (string.IsNullOrEmpty(OnServerId))
                 {
                     displayName += "XX - ";
                 }
                 else
                 {
-                    displayName += $"{ServerCountryCode.ToUpper()} - ";
+                    displayName += $"{OnServerId.ToUpper()} - ";
                 }
 
                 if (string.IsNullOrEmpty(Username))
@@ -86,6 +83,8 @@ namespace CalculationTools.Common
             }
         }
 
+        [NotMapped]
+        public string AccessToken { get; set; } = string.Empty;
         #endregion
 
         #endregion Properties
@@ -102,8 +101,10 @@ namespace CalculationTools.Common
             {
                 Username = Username,
                 Password = Password,
-                ServerCountryCode = ServerCountryCode,
-                WorldID = DefaultCharacter?.World?.WorldId
+                ServerCountryCode = OnServerId,
+                WorldID = DefaultCharacter?.World?.WorldId,
+                SelectedCharacter = DefaultCharacter,
+                AccessToken = AccessToken
             };
         }
 

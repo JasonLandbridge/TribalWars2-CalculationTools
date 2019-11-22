@@ -23,7 +23,9 @@ namespace CalculationTools.Data
 
             builder
                 .HasOne(a => a.DefaultCharacter)
-                .WithOne();
+                .WithOne(a => a.DefaultCharacterFor)
+                .HasForeignKey<Account>(x => x.DefaultCharacterId)
+                .IsRequired(false);
         }
     }
 

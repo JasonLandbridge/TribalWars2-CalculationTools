@@ -15,7 +15,6 @@ namespace CalculationTools.Core
 
         private readonly IDataManager _dataManager;
         private readonly ISettings _settings;
-        private readonly ISocketManager _socketManager;
         private int _accountIndex;
 
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
@@ -25,13 +24,10 @@ namespace CalculationTools.Core
         #region Constructors
 
         public SettingsWindowViewModel(
-            IDataManager dataManager,
-            ISocketManager socketManager)
+            IDataManager dataManager)
         {
             _dataManager = dataManager;
             _settings = _dataManager.Settings;
-            _socketManager = socketManager;
-
 
             SetupEvents();
         }
@@ -119,7 +115,12 @@ namespace CalculationTools.Core
         public Server OnServer
         {
             get => SelectedAccount?.OnServer;
-            set => SelectedAccount.OnServer = value;
+            set
+            {
+                SelectedAccount.OnServer = value;
+                OnPropertyChanged();
+                UpdateAccount();
+            }
         }
 
         public List<Server> ServerList => _dataManager.GetServers();
@@ -201,7 +202,7 @@ namespace CalculationTools.Core
                 // If any credentials are changed then reset IsConfirmed.
                 if (SelectedAccount.Username != newAccount.Username ||
                     SelectedAccount.Password != newAccount.Password ||
-                    SelectedAccount.ServerCountryCode != newAccount.ServerCountryCode)
+                    SelectedAccount.OnServerId != newAccount.OnServerId)
                 {
                     SelectedAccount.IsConfirmed = false;
                     CheckLoginMessage = "Please revalidate the credentials.";
@@ -220,23 +221,14 @@ namespace CalculationTools.Core
             CheckLoginButtonText = "Checking credentials";
             CheckLoginButtonEnabled = false;
 
-            ConnectData connectData = new ConnectData
-            {
-                Username = Username,
-                Password = Password,
-                ServerCountryCode = OnServer.Id
-            };
-
-            ConnectResult result = new ConnectResult();
             try
             {
-                result = await _socketManager.TestConnection(connectData);
+                ConnectResult result = await _dataManager.TestAccountASync(SelectedAccount);
+
                 CheckLoginMessage = result.IsConnected ?
                     "The credentials were successful!" :
                     "The credentials failed! Please try again.";
-                SelectedAccount.IsConfirmed = result.IsConnected;
-                SelectedAccount.TW2AccountID = result.TW2AccountId;
-
+                SyncAccounts();
             }
             catch (Exception e)
             {

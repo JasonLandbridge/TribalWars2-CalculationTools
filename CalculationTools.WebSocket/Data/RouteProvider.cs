@@ -28,7 +28,7 @@ namespace CalculationTools.WebSocket
 
         public const string GET_GAME_DATA = "GameDataBatch/getGameData";
         public const string GET_GROUPS = "Group/getGroups";
-        public const string GET_VILLAGES = "Icon/getVillages";
+        public const string ICON_GETVILLAGES = "Icon/getVillages";
         public const string PREMIUM_LIST_ITEMS = "Premium/listItems";
         public const string GLOBALINFORMATION_GETINFO = "GlobalInformation/getInfo";
         public const string EFFECT_GET_EFFECTS = "Effect/getEffects";
@@ -43,6 +43,8 @@ namespace CalculationTools.WebSocket
         public const string DAILYLOGINBONUS_GETINFO = "DailyLoginBonus/getInfo";
         public const string QUEST_GETQUESTLINES = "Quest/getQuestLines";
         public const string MAP_GETVILLAGESBYAREA = "Map/getVillagesByArea";
+        public const string INVITEPLATER_GETINFO = "InvitePlayer/getInfo";
+        public const string AUTHENTICATION_COMPLETELOGIN = "Authentication/completeLogin";
 
         public const string AUTOCOMPLETION_AUTOCOMPLETE = "Autocompletion/autocomplete";
 
@@ -177,9 +179,9 @@ namespace CalculationTools.WebSocket
             {
                 jsonObject = new
                 {
-                    id = Id,
                     type = sendType,
                     data = dataObject,
+                    id = Id,
                     headers = MsgHeader
                 };
             }
@@ -187,8 +189,8 @@ namespace CalculationTools.WebSocket
             {
                 jsonObject = new
                 {
-                    id = Id,
                     type = sendType,
+                    id = Id,
                     headers = MsgHeader
                 };
             }

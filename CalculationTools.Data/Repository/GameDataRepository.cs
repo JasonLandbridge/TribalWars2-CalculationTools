@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 namespace CalculationTools.Data
@@ -29,10 +30,29 @@ namespace CalculationTools.Data
             _socketRepository = socketRepository;
 
             // Keep track of the connection status
-            DataEvents.ConnectionStatus += (sender, b) => { _isConnected = b; };
+            Observable.FromEventPattern<bool>(
+                    h => DataEvents.ConnectionStatus += h,
+                    h => DataEvents.ConnectionStatus -= h)
+                .Subscribe(x => _isConnected = x.EventArgs);
 
             // Store LoginData once its available
-            _socketRepository.LoginDataAvailable += (sender, dto) => UpdateLoginData(dto);
+            Observable.FromEventPattern<ILoginData>(
+                h => DataEvents.LoginDataAvailable += h,
+                h => DataEvents.LoginDataAvailable -= h)
+                .Subscribe(x => UpdateLoginData(x.EventArgs));
+
+            // Store Group once its available
+            Observable.FromEventPattern<List<IGroup>>(
+                h => DataEvents.GroupsDataAvailable += h,
+                h => DataEvents.GroupsDataAvailable -= h)
+                .Subscribe(x => UpdateGroups(x.EventArgs));
+
+            // Store the characterData once its available
+            Observable.FromEventPattern<ICharacterData>(
+                h => DataEvents.CharacterDataAvailable += h,
+                h => DataEvents.CharacterDataAvailable -= h)
+                .Subscribe(x => UpdateCharacterData(x.EventArgs));
+
 
         }
 
@@ -47,37 +67,21 @@ namespace CalculationTools.Data
 
         #region Methods
 
-
-        public async void EstablishConnection(ConnectData connectData)
+        /// <summary>
+        /// Establishes a connection with TW2 to start retrieving data
+        /// </summary>
+        /// <param name="account">The account credentials used to start the connection.</param>
+        /// <returns>Whether the connection was successful.</returns>
+        public async Task<bool> EstablishConnection(Account account)
         {
-            // Find the correct character to login with
-            using (var db = GetDBContext())
+            account = GetAccount(account.Id);
+
+            if (account == null)
             {
-                var account = db.Accounts
-                                .Include(x => x.OnServer)
-                                .Include(x => x.DefaultCharacter)
-                                .FirstOrDefault(x => x.Username == connectData.Username &&
-                                                     x.Password == connectData.Password &&
-                                                     x.OnServer.Id == connectData.WorldID);
-
-                if (account != null)
-                {
-                    if (account.DefaultCharacter != null)
-                    {
-                        connectData.SelectedCharacter = account.DefaultCharacter;
-                    }
-                    else
-                    {
-                        connectData.SelectedCharacter = db.Characters
-                            .FirstOrDefault(x => x.AccountOwner == account &&
-                                                 x.AllowLogin);
-                    }
-                }
-
+                return false;
             }
 
-            await _socketRepository.EstablishConnection(connectData);
-
+            return await _socketRepository.EstablishConnection(account);
         }
 
 
@@ -107,6 +111,29 @@ namespace CalculationTools.Data
 
         #region Accounts
 
+        public async Task<ConnectResult> TestAccountASync(Account account)
+        {
+            ConnectResult result = await _socketRepository.LoginWithAccount(account, true);
+
+            await using (var db = GetDBContext())
+            {
+                Character defaultCharacter = db.Characters.FirstOrDefault(x => x.AccountOwnerId == account.Id && x.AllowLogin);
+
+                account = db.Accounts.Find(account.Id);
+                account.IsConfirmed = result.IsConnected;
+                account.TW2AccountID = result.TW2AccountId;
+
+                if (defaultCharacter != null)
+                {
+                    account.DefaultCharacter = defaultCharacter;
+                    account.DefaultCharacterId = defaultCharacter.Id;
+                }
+
+                db.SaveChanges();
+            }
+
+            return result;
+        }
 
         public Account AddAccount()
         {
@@ -140,6 +167,50 @@ namespace CalculationTools.Data
                 db.SaveChanges();
             }
         }
+
+
+        public void InsertOrUpdateAccount(Account account = null)
+        {
+            using (var db = GetDBContext())
+            {
+
+                if (account == null)
+                {
+                    account = new Account
+                    {
+                        // By default create a Dutch server
+                        OnServerId = GetServer("nl").Id
+                    };
+
+                    db.Accounts.Add(account);
+                }
+                else
+                {
+                    Account foundAccount = db.Accounts.Find(account.Id);
+                    if (foundAccount != null)
+                    {
+                        _mapper.Map(account, foundAccount);
+
+                        if (account.DefaultCharacter != null)
+                        {
+                            db.Attach(account.DefaultCharacter);
+                        }
+
+                        if (account.OnServer != null)
+                            db.Attach(account.OnServer);
+
+                    }
+                    else
+                    {
+                        db.Add(account);
+                    }
+
+                }
+
+                db.SaveChanges();
+            }
+        }
+
 
         public bool DeleteAccount(int accountId)
         {
@@ -274,21 +345,39 @@ namespace CalculationTools.Data
 
         public void UpdateGroups(List<IGroup> groupList)
         {
-            //if (groupList.Count == 0) { return; }
+            if (groupList.Count == 0) { return; }
 
-            //foreach (IGroup group in groupList)
-            //{
-            //    using (var db = GetDBContext())
-            //    {
-            //        var groupEntity = _mapper.Map<Group>(group);
+            using (var db = GetDBContext())
+            {
+                foreach (IGroup group in groupList)
+                {
+                    var newGroup = _mapper.Map<Group>(group);
 
-            //        db.Attach(groupEntity);
-            //        db.Entry(groupEntity).Property("CharacterId").CurrentValue = group.CharacterId;
-            //        db.Groups.Add(groupEntity);
+                    var groupEntity = db.Groups
+                        .Include(x => x.Character)
+                        .FirstOrDefault(x => x.Id == newGroup.Id);
 
-            //        db.SaveChanges();
-            //    }
-            //}
+                    if (groupEntity != null)
+                    {
+                        if (groupEntity == newGroup) { continue; }
+
+                        db.Update(groupEntity);
+                        groupEntity.Name = newGroup.Name;
+                        groupEntity.Icon = newGroup.Icon;
+                        groupEntity.CharacterId = newGroup.CharacterId;
+                    }
+                    else
+                    {
+                        groupEntity = newGroup;
+                        db.Groups.Add(groupEntity);
+                        groupEntity.Character = db.Characters
+                            .FirstOrDefault(x => x.CharacterId == groupEntity.CharacterId);
+                        groupEntity.CharacterId = groupEntity.Character.CharacterId;
+                    }
+
+                    db.SaveChanges();
+                }
+            }
         }
 
         #region Village
@@ -313,8 +402,13 @@ namespace CalculationTools.Data
                     int characterId = villageEntity.CharacterId ?? default;
 
                     var entity = db.Villages.FirstOrDefault(item => item.Id == villageEntity.Id);
-                    if (entity != null && entity != villageEntity)
+                    if (entity != null)
                     {
+                        if (entity == villageEntity)
+                        {
+                            continue;
+                        }
+
                         db.Update(entity);
 
                         // Make changes on entity
@@ -385,6 +479,9 @@ namespace CalculationTools.Data
 
 
         #endregion
+
+
+        #region ProcessTW2Data
         public void UpdateLoginData(ILoginData loginData)
         {
             using (var db = GetDBContext())
@@ -407,6 +504,17 @@ namespace CalculationTools.Data
             DataEvents.InvokeLoginDataIsUpdated();
         }
 
+
+        public void UpdateCharacterData(ICharacterData characterData)
+        {
+            if (characterData == null) { return; }
+
+            UpdateVillages(characterData.Villages);
+
+        }
+
+
+        #endregion
         private void ParseCharacters(ILoginData loginData)
         {
             // Parse the characters
