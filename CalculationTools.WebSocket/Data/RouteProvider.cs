@@ -45,8 +45,14 @@ namespace CalculationTools.WebSocket
         public const string MAP_GETVILLAGESBYAREA = "Map/getVillagesByArea";
         public const string INVITEPLATER_GETINFO = "InvitePlayer/getInfo";
         public const string AUTHENTICATION_COMPLETELOGIN = "Authentication/completeLogin";
+        public const string CRM_GETINTERSTITIALS = "Crm/getInterstitials";
+
+
+
 
         public const string AUTOCOMPLETION_AUTOCOMPLETE = "Autocompletion/autocomplete";
+
+
 
         #endregion
 
@@ -70,6 +76,9 @@ namespace CalculationTools.WebSocket
         public const string CHARACTER_INFO = "Character/info";
         public const string TRIBESKILL_INFO = "TribeSkill/info";
         public const string SYSTEM_TIME = "System/time";
+
+        public const string CRM_INTERSTITIALS = "Crm/interstitials";
+
 
         public const string AUTOCOMPLETION_RESULTS = "Autocomplete/results";
 
@@ -128,18 +137,6 @@ namespace CalculationTools.WebSocket
             return data;
         }
 
-        public static object SystemIdentify()
-        {
-            string fakeUserAgent = new Bogus.DataSets.Internet("en").UserAgent();
-            return new
-            {
-                platform = "browser",
-                api_version = "10.*.*",
-                device = fakeUserAgent
-            };
-        }
-
-
         public static object AuthenticationReconnect(ConnectData connectData, int characterId)
         {
             return new
@@ -170,10 +167,10 @@ namespace CalculationTools.WebSocket
         /// </summary>
         /// <param name="sendType">The message type</param>
         /// <returns>A json formatted message</returns>
-        public static string GetDefaultSendMessage(string sendType, object dataObject = null)
+        public static SocketMessage GetDefaultSendMessage(string sendType, object dataObject = null)
         {
-
             object jsonObject;
+            int MsgId = Id;
 
             if (dataObject != null)
             {
@@ -181,7 +178,7 @@ namespace CalculationTools.WebSocket
                 {
                     type = sendType,
                     data = dataObject,
-                    id = Id,
+                    id = MsgId,
                     headers = MsgHeader
                 };
             }
@@ -190,13 +187,16 @@ namespace CalculationTools.WebSocket
                 jsonObject = new
                 {
                     type = sendType,
-                    id = Id,
+                    id = MsgId,
                     headers = MsgHeader
                 };
             }
 
-
-            return AddMsg(JsonConvert.SerializeObject(jsonObject));
+            return new SocketMessage
+            {
+                Message = AddMsg(JsonConvert.SerializeObject(jsonObject)),
+                Id = MsgId
+            };
         }
 
 

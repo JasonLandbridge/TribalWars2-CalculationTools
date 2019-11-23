@@ -1,5 +1,6 @@
 ﻿using CalculationTools.Common;
 using CalculationTools.Data;
+using CalculationTools.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;

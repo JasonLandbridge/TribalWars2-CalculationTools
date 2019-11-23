@@ -1,7 +1,6 @@
 ﻿using CalculationTools.Common;
 using EntityFrameworkCore.Triggers;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace CalculationTools.Data
@@ -16,6 +15,7 @@ namespace CalculationTools.Data
         public DbSet<Account> Accounts { get; set; }
         public DbSet<World> Worlds { get; set; }
         public DbSet<Character> Characters { get; set; }
+        public DbSet<Tribe> Tribes { get; set; }
         public DbSet<Village> Villages { get; set; }
         public DbSet<Group> Groups { get; set; }
 
@@ -162,22 +162,6 @@ namespace CalculationTools.Data
             };
 
             modelBuilder.Entity<Server>().HasData(serverList);
-
-            //modelBuilder.Entity<Character>().HasData(SecretData.GetCharacters());
-
-            ////Add default accounts for testing purposes
-            //List<Account> accountList = SecretData.GetAccounts();
-            //accountList.Add(new Account
-            //{
-            //    Id = 999888,
-            //    Username = "FAKENAME",
-            //    Password = "aQFtbSafasf4ydfndnf+@MZ5DP)32BAe6",
-            //    OnServerId = "nl",
-            //    IsConfirmed = true
-            //});
-
-            //modelBuilder.Entity<Account>().HasData(accountList);
-
 
 
 

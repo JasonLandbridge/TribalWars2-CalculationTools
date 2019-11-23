@@ -1,8 +1,9 @@
-﻿using System;
+﻿using CalculationTools.Common;
+using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CalculationTools.Common
+namespace CalculationTools.WebSocket
 {
     public interface ISocketManager
     {
@@ -28,10 +29,10 @@ namespace CalculationTools.Common
 
         event EventHandler ConnectionLogUpdated;
         void ClearConnectionLog();
-        Task<bool> SendMessageAsync(string message);
+        Task<bool> SendMessageAsync(SocketMessage message);
         void AddToConnectionLog(string message);
         ConnectResult GetConnectResult();
-        Task<string> Emit(string message, int id);
+        Task<SocketMessage> Emit(SocketMessage message);
         string GetCurrentWorldId();
     }
 }

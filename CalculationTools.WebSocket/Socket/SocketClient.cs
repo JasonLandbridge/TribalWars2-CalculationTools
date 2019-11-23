@@ -155,8 +155,9 @@ namespace CalculationTools.WebSocket
                 if (TimeSinceLastMsg.TotalMilliseconds >= _pingTimeout && !_firstPingSend)
                 {
                     _firstPingSend = true;
-                    await SendMessageAsync("2");
+                    await SendMessageAsync(SocketMessage.ToPing());
                     PingCount++;
+                    return;
                 }
 
 
@@ -164,7 +165,7 @@ namespace CalculationTools.WebSocket
                 {
                     if (Client.IsRunning)
                     {
-                        await SendMessageAsync("2");
+                        await SendMessageAsync(SocketMessage.ToPing());
                         PingCount++;
                     }
                 }
@@ -255,19 +256,20 @@ namespace CalculationTools.WebSocket
 
 
 
-        public async Task<bool> SendMessageAsync(string message)
+        public async Task<bool> SendMessageAsync(SocketMessage message)
         {
-            if (!string.IsNullOrEmpty(message) && Client != null && Client.IsRunning)
+            if (message.IsMessageValid && Client != null && Client.IsRunning)
             {
-                await Client.Send(message);
+                await Client.Send(message.Message);
+
                 // Check if the message was a ping message
-                if (message != "2")
+                if (!message.IsMessagePing)
                 {
                     _firstPingSend = false;
                 }
 
                 LastMessageSend = DateTime.Now;
-                AddToConnectionLog($"Message Send:     {message}");
+                AddToConnectionLog($"Message Send:     {message.Message}");
                 return true;
 
             }
@@ -276,27 +278,38 @@ namespace CalculationTools.WebSocket
         }
 
 
-        public async Task<string> Emit(string message, int id)
+        public async Task<SocketMessage> Emit(SocketMessage message)
         {
-            if (id == 0) { return string.Empty; }
+            if (!message.IsMessageValid)
+            {
+                message.IsMessageSendSuccessfully = false;
+                return message;
+            }
 
-            var exitEvent = new ManualResetEvent(false);
-            string response = string.Empty;
+            if (message.IsResponseExpected)
+            {
+                var exitEvent = new ManualResetEvent(false);
 
-            var disposable = Client.MessageReceived
-                 .Where(msg => msg.Text.Contains($"\"id\":{id}"))
-                 .Subscribe(info =>
-             {
-                 response = info.Text;
-                 exitEvent.Set();
-             });
+                var disposable = Client.MessageReceived
+                     .Where(msg => msg.Text.Contains($"\"id\":{message.Id}"))
+                     .Subscribe(info =>
+                     {
+                         message.Response = info.Text;
+                         exitEvent.Set();
 
-            await SendMessageAsync(message);
+                     });
 
-            exitEvent.WaitOne(TimeSpan.FromSeconds(30));
-            disposable.Dispose();
+                message.IsMessageSendSuccessfully = await SendMessageAsync(message);
 
-            return response;
+                exitEvent.WaitOne(TimeSpan.FromSeconds(5));
+                disposable.Dispose();
+            }
+            else
+            {
+                message.IsMessageSendSuccessfully = await SendMessageAsync(message);
+            }
+
+            return message;
         }
 
 

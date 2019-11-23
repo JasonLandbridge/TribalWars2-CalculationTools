@@ -34,9 +34,9 @@ namespace CalculationTools.Tests
 
             Thread.Sleep(6000);
 
-            string result = await socketManager
-                 .GetSocketClient()
-                 .Emit(RouteProvider.GetDefaultSendMessage(RouteProvider.SYSTEM_GETTIME), RouteProvider.Id - 1);
+            SocketMessage message = RouteProvider.GetDefaultSendMessage(RouteProvider.SYSTEM_GETTIME);
+
+            var result = await socketManager.Emit(message);
 
             Thread.Sleep(600000);
 

@@ -2,6 +2,7 @@
 using CalculationTools.Common;
 using CalculationTools.Data;
 using CalculationTools.WebSocket;
+using CalculationTools.WebSocket.Interfaces;
 using SimpleInjector;
 
 namespace CalculationTools.Core

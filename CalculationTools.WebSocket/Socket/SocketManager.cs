@@ -69,9 +69,9 @@ namespace CalculationTools.WebSocket
             ConnectionLog.Clear();
         }
 
-        public async Task<string> Emit(string message, int id)
+        public async Task<SocketMessage> Emit(SocketMessage message)
         {
-            return await GetSocketClient().Emit(message, id);
+            return await GetSocketClient().Emit(message);
         }
 
         public ConnectResult GetConnectResult()
@@ -109,7 +109,7 @@ namespace CalculationTools.WebSocket
             return SocketClient;
         }
 
-        public async Task<bool> SendMessageAsync(string message)
+        public async Task<bool> SendMessageAsync(SocketMessage message)
         {
             return await GetSocketClient().SendMessageAsync(message);
         }

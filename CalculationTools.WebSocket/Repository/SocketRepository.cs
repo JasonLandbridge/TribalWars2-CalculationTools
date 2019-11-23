@@ -3,6 +3,7 @@ using CalculationTools.Common.DTOs;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace CalculationTools.WebSocket
 
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private readonly ISocketManager _socketManager;
-
+        private IVillage activeVillage = null;
         #endregion Fields
 
         #region Constructors
@@ -40,7 +41,9 @@ namespace CalculationTools.WebSocket
 
         public async Task<bool> EstablishConnection(Account account)
         {
-            await LoginWithAccount(account);
+            ConnectResult connectResult = await LoginWithAccount(account);
+
+            if (!connectResult.IsConnected) { return false; }
 
             await Task.Delay(GetRandomDelay());
 
@@ -67,11 +70,11 @@ namespace CalculationTools.WebSocket
 
             await GetSystemTimeAsync();
 
-            await SendStandardMessage(RouteProvider.INVITEPLATER_GETINFO);
+            await SendCompleteLogin();
 
-            await SendStandardMessage(RouteProvider.AUTHENTICATION_COMPLETELOGIN);
+            await SendGetVillageByArea(activeVillage);
 
-            await _socketManager.StopConnection(true);
+            // await _socketManager.StopConnection(true);
             return true;
         }
 
@@ -109,6 +112,34 @@ namespace CalculationTools.WebSocket
             return result;
         }
 
+
+
+
+        #region SendData
+
+
+        private async Task<bool> SendGetVillageByArea(IVillage village)
+        {
+            const int mapChunkSize = 25;
+            var coordinates = GameFormulas.ScaledGridCoordinates(village);
+
+            foreach (Point coordinate in coordinates)
+            {
+                object data = new
+                {
+                    x = coordinate.X * mapChunkSize,
+                    y = coordinate.Y * mapChunkSize,
+                    width = mapChunkSize,
+                    height = mapChunkSize
+                };
+
+                var response = await SendStandardMessage(RouteProvider.MAP_GETVILLAGESBYAREA, data);
+
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// This will request the incoming commands and the events on the player
         /// </summary>
@@ -116,7 +147,7 @@ namespace CalculationTools.WebSocket
         private async Task<bool> SendGetGlobalInformation()
         {
             var response = await SendStandardMessage(RouteProvider.GLOBALINFORMATION_GETINFO);
-            var globalInfo = SocketUtilities.ParseDataFromResponse<GlobalInformationDTO>(response);
+            var globalInfo = SocketUtilities.ParseDataFromResponse<GlobalInformationDTO>(response.Response);
 
             //TODO Store commands in DB
             return true;
@@ -128,13 +159,13 @@ namespace CalculationTools.WebSocket
 
             // TODO Extract WorldConfig
 
-            return !string.IsNullOrEmpty(response);
+            return response.IsResponseValid;
         }
 
         private async Task<bool> SendGetGroups()
         {
             var response = await SendStandardMessage(RouteProvider.GET_GROUPS);
-            var groups = SocketUtilities.ParseDataFromResponse<GroupsDTO>(response)?.Groups?.ToList();
+            var groups = SocketUtilities.ParseDataFromResponse<GroupsDTO>(response.Response)?.Groups?.ToList();
 
             DataEvents.InvokeGroupsDataAvailable(groups.ToList<IGroup>());
             return groups.Count > 0;
@@ -147,7 +178,7 @@ namespace CalculationTools.WebSocket
             object dataObject = RouteProvider.SelectCharacter(selectedCharacter);
 
             var response = await SendStandardMessage(RouteProvider.SELECT_CHARACTER, dataObject);
-            var charSelected = SocketUtilities.ParseDataFromResponse<CharacterSelectedDTO>(response);
+            var charSelected = SocketUtilities.ParseDataFromResponse<CharacterSelectedDTO>(response.Response);
 
             _socketManager.ActiveCharacterId = charSelected.OwnerId;
             _socketManager.ActiveWorldId = charSelected.WorldId;
@@ -155,11 +186,34 @@ namespace CalculationTools.WebSocket
             return true;
         }
 
+        /// <summary>
+        /// This is send at the end of the login procedure to notify the server that all has been completed. 
+        /// </summary>
+        /// <returns>Was this message and response successful</returns>
+        private async Task<bool> SendCompleteLogin()
+        {
+
+            List<SocketMessage> messages = new List<SocketMessage>
+            {
+                SocketMessage.FromRoute(RouteProvider.INVITEPLATER_GETINFO),
+                SocketMessage.FromRoute(RouteProvider.AUTHENTICATION_COMPLETELOGIN, false),
+                SocketMessage.FromRoute(RouteProvider.CRM_GETINTERSTITIALS, new {device_type = "desktop"})
+            };
+
+            var results = await SendMessageBatchAsync(messages);
+
+            // If no response is returned then the complete login was succesfull
+            //  DataEvents.InvokeCharacterDataAvailable(string.IsNullOrEmpty(response));
+
+            return true; //string.IsNullOrEmpty(response);
+        }
+
+
         private async Task<bool> SendGetCharacterInfo()
         {
             var response = await SendStandardMessage(RouteProvider.CHARACTER_GETINFO);
 
-            var characterData = SocketUtilities.ParseDataFromResponse<CharacterDataDTO>(response);
+            var characterData = SocketUtilities.ParseDataFromResponse<CharacterDataDTO>(response.Response);
             if (characterData != null)
             {
                 foreach (IVillage village in characterData.Villages)
@@ -171,16 +225,22 @@ namespace CalculationTools.WebSocket
                 DataEvents.InvokeCharacterDataAvailable(characterData);
             }
 
+            // Take the first village as the active village, its unclear how TW2 determines te active village.
+            // This is done somewhere in javascript but not communicated through websockets.
+            // TODO Find out how the active village is determined
+            activeVillage = characterData.Villages[0];
+
             return characterData != null;
         }
 
+        #endregion
 
         public async Task<DateTime> GetSystemTimeAsync()
         {
 
-            string response = await SendStandardMessage(RouteProvider.SYSTEM_GETTIME);
+            var response = await SendStandardMessage(RouteProvider.SYSTEM_GETTIME);
 
-            var systemTime = SocketUtilities.ParseDataFromResponse<SystemTimeDTO>(response);
+            var systemTime = SocketUtilities.ParseDataFromResponse<SystemTimeDTO>(response.Response);
 
             return DateTime.UnixEpoch.AddSeconds(systemTime.Time + systemTime.Offset);
         }
@@ -197,9 +257,9 @@ namespace CalculationTools.WebSocket
                 Amount = 5
             };
 
-            string response = await SendStandardMessage(RouteProvider.AUTOCOMPLETION_AUTOCOMPLETE, data);
+            var response = await SendStandardMessage(RouteProvider.AUTOCOMPLETION_AUTOCOMPLETE, data);
 
-            var autocompleteDto = SocketUtilities.ParseDataFromResponse<AutocompleteDTO>(response);
+            var autocompleteDto = SocketUtilities.ParseDataFromResponse<AutocompleteDTO>(response.Response);
 
             //Set the worldId for each village
             foreach (VillageDTO villageDto in autocompleteDto.Result.Village)
@@ -212,7 +272,7 @@ namespace CalculationTools.WebSocket
 
         public async Task<ConnectResult> SendAccountAuthentication(ConnectData connectData)
         {
-            string response;
+            var response = new SocketMessage();
 
             if (_socketManager.IsReconnecting)
             {
@@ -225,7 +285,7 @@ namespace CalculationTools.WebSocket
                 response = await SendStandardMessage(RouteProvider.LOGIN, RouteProvider.Login(connectData));
             }
 
-            var loginData = SocketUtilities.ParseDataFromResponse<LoginDataDTO>(response);
+            var loginData = SocketUtilities.ParseDataFromResponse<LoginDataDTO>(response.Response);
 
             ConnectResult connectResult = _socketManager.GetConnectResult();
 
@@ -253,18 +313,25 @@ namespace CalculationTools.WebSocket
             };
 
             var response = await SendStandardMessage(RouteProvider.MAP_GETVILLAGESBYAREA, dataObject);
-            var villageList = SocketUtilities.ParseDataFromResponse<VillagesDTO>(response).Villages;
+            var villageList = SocketUtilities.ParseDataFromResponse<VillagesDTO>(response.Response).Villages;
 
             return villageList.ToList<IVillage>();
         }
 
         public async Task<bool> SendSystemIdentify()
         {
-            string response = await SendStandardMessage(
-                RouteProvider.SYSTEM_IDENTIFY,
-                RouteProvider.SystemIdentify());
+            string fakeUserAgent = new Bogus.DataSets.Internet("en").UserAgent();
 
-            return true;
+            object data = new
+            {
+                platform = "browser",
+                api_version = "10.*.*",
+                device = fakeUserAgent
+            };
+
+            var response = await SendStandardMessage(RouteProvider.SYSTEM_IDENTIFY, data);
+
+            return response.IsResponseValid;
         }
 
         private int GetRandomDelay(int maxValue = 1000)
@@ -281,7 +348,7 @@ namespace CalculationTools.WebSocket
         /// A helper function which uses the default format for sending messages to the server
         /// </summary>
         /// <param name="sendType">The message type</param>
-        public async Task<string> SendStandardMessage(string sendType, object dataObject = null)
+        public async Task<SocketMessage> SendStandardMessage(string sendType, object dataObject = null)
         {
             return await SendMessageAsync(RouteProvider.GetDefaultSendMessage(sendType, dataObject));
         }
@@ -291,13 +358,21 @@ namespace CalculationTools.WebSocket
         /// </summary>
         /// <param name="message">The message to be send</param>
         /// <returns>The response to that message from TW2</returns>
-        private async Task<string> SendMessageAsync(string message)
+        private async Task<SocketMessage> SendMessageAsync(SocketMessage message)
         {
-            int? id = SocketUtilities.GetId(message);
+            // int? id = SocketUtilities.GetId(message);
 
-            return await _socketManager.Emit(message, id ?? default);
+            return await _socketManager.Emit(message);
 
         }
+
+        private async Task<List<SocketMessage>> SendMessageBatchAsync(List<SocketMessage> messages)
+        {
+            var result = await Task.WhenAll(messages.Select(SendMessageAsync));
+
+            return result.ToList();
+        }
+
         #endregion
         #endregion Methods
 

@@ -39,6 +39,9 @@ namespace CalculationTools.Common
 
         public static event EventHandler<ICharacterData> CharacterDataAvailable;
 
+
+        public static event EventHandler<bool> LoginComplete;
+
         #endregion Events
 
         #region Methods
@@ -81,6 +84,11 @@ namespace CalculationTools.Common
         public static void InvokeCharacterDataAvailable(ICharacterData characterData, object sender = null)
         {
             CharacterDataAvailable?.Invoke(sender, characterData);
+        }
+
+        public static void InvokeCharacterDataAvailable(bool success, object sender = null)
+        {
+            LoginComplete?.Invoke(sender, success);
         }
 
         #endregion Methods
